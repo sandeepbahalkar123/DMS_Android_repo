@@ -144,8 +144,7 @@ public class ItemListActivity extends AppCompatActivity implements ConnectionLis
                 public void onClick(View v) {
                     if (mTwoPane) {
                         //Sample request
-//                        Context context = v.getContext();
-//                        mConnectionFactory = new ConnectionFactory(context, this, null, true, DmsConstants.REGISTRATION_CODE);
+//                        mConnectionFactory = new ConnectionFactory(ItemListActivity.this, ItemListActivity.this, null, true, DmsConstants.REGISTRATION_CODE);
 //                        mConnectionFactory.setHeaderParams();
 //                        mConnectionFactory.setUrl(Config.URL_REGISTER_USER );
 //                        mConnectionFactory.createConnection(DmsConstants.REGISTRATION_CODE);
