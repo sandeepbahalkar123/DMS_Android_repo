@@ -21,7 +21,9 @@ public class Config {
 
     }
 
-    public static final String URL_REGISTER_USER = BASE_URL + "users/";
+    //Declared all URL used in app here
+    public static final String URL_LOGIN = BASE_URL + "token";
+    public static final String URL_SHOW_SEARCHRESULT = BASE_URL + "result/ShowSearchResults";
 
 
 }
