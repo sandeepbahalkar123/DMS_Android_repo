@@ -94,7 +94,7 @@ public class ItemListActivity extends AppCompatActivity implements ConnectionLis
 
 //                if (customResponse instanceof RegistrationModel) {
 //                    RegistrationModel model = (RegistrationModel) customResponse;
-//                }
+//                }git
                 break;
 
             case ConnectionListener.PARSE_ERR0R:

@@ -13,10 +13,10 @@ public class Config {
     static {
         if (DEV_BUILD) {
 
-            BASE_URL = "https://qa-api.plancess.com/";
+            BASE_URL = "http://192.168.0.25:88/mobapi/api/";
         } else {
             //TODO: production base url will be added once its ready
-            BASE_URL = "https://api.plancess.com/";
+            BASE_URL = "";
         }
 
     }
