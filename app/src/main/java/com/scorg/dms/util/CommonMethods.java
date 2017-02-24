@@ -50,10 +50,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class CommonMethods {
 
-    private static final String TAG="Dms/Common";
+    private static final String TAG = "Dms/Common";
     private static boolean encryptionIsOn = true;
-    private static String aBuffer="";
-
+    private static String aBuffer = "";
 
 
     public static void showToast(Context context, String error) {
@@ -117,9 +116,6 @@ public class CommonMethods {
     }
 
 
-
-
-
     //create the new folder in sd card & write the data in text file which is created in that folder.
     public static void DmsLogWriteFile(String title, String text, boolean textAppend) {
         try {
@@ -148,12 +144,11 @@ public class CommonMethods {
                 IvParameterSpec ivParameterSpec = new IvParameterSpec(keyBytes);
                 cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
 
-                FileOutputStream fos = new FileOutputStream(file,textAppend);
+                FileOutputStream fos = new FileOutputStream(file, textAppend);
                 CipherOutputStream cos = new CipherOutputStream(fos, cipher);
                 osw = new OutputStreamWriter(cos, "UTF-8");
-            }
-            else    // not encryptionIsOn
-                osw = new FileWriter(file,textAppend);
+            } else    // not encryptionIsOn
+                osw = new FileWriter(file, textAppend);
 
             BufferedWriter out = new BufferedWriter(osw);
             out.write("************" + getCurrentDateTime() + "************" + title + ": " + text + "\n");
@@ -161,9 +156,10 @@ public class CommonMethods {
 
 
         } catch (Exception e) {
-				System.out.println("Encryption Exception "+e);
+            System.out.println("Encryption Exception " + e);
         }
     }
+
     private static byte[] getKey(String password) {
         String key = "";
         while (key.length() < 16)
@@ -172,12 +168,12 @@ public class CommonMethods {
     }
 
     // read the whole file data with previous data also
-    public static String DmsLogReadFile(){
+    public static String DmsLogReadFile() {
 
         try {
             byte[] keyBytes = getKey("password");
 
-            File file = new File(Environment.getExternalStorageDirectory().getPath() + "/", DmsConstants.DMS_LOG_FOLDER +"/"+ DmsConstants.DMS_LOG_FILE);
+            File file = new File(Environment.getExternalStorageDirectory().getPath() + "/", DmsConstants.DMS_LOG_FOLDER + "/" + DmsConstants.DMS_LOG_FILE);
             InputStreamReader isr;
             if (encryptionIsOn) {
                 Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -188,25 +184,22 @@ public class CommonMethods {
                 FileInputStream fis = new FileInputStream(file);
                 CipherInputStream cis = new CipherInputStream(fis, cipher);
                 isr = new InputStreamReader(cis, "UTF-8");
-            }
-            else
+            } else
                 isr = new FileReader(file);
 
             BufferedReader in = new BufferedReader(isr);
             //	    		String line = in.readLine();
             StringBuffer s = new StringBuffer();
             int cr = 0;
-            while ((cr = in.read()) != -1)
-            {
+            while ((cr = in.read()) != -1) {
                 s.append((char) cr);
             }
             aBuffer = s.toString();
-			CommonMethods.Log(TAG,"Text read: "+aBuffer);
+            CommonMethods.Log(TAG, "Text read: " + aBuffer);
             in.close();
             return aBuffer;
-        }
-        catch (Exception e) {
-            System.out.println("Decryption Exception "+e);
+        } catch (Exception e) {
+            System.out.println("Decryption Exception " + e);
         }
         return aBuffer;
     }
@@ -265,28 +258,28 @@ public class CommonMethods {
         String hrStr = (hr < 10 ? "0" : "") + hr;
         String mnStr = (mn < 10 ? "0" : "") + mn;
         String secStr = (sec < 10 ? "0" : "") + sec;
-        float hour=(float) Integer.parseInt(hrStr);
-        float minuite=(float) Integer.parseInt(mnStr);
-        if(minuite>0){
-            minuite=minuite/60;
+        float hour = (float) Integer.parseInt(hrStr);
+        float minuite = (float) Integer.parseInt(mnStr);
+        if (minuite > 0) {
+            minuite = minuite / 60;
         }
 
-        float finalvalue=hour+minuite;
+        float finalvalue = hour + minuite;
         return "" + new DecimalFormat("##.##").format(finalvalue);
     }
 
-    public static boolean comparedTwoTimezone(String serverdatetimezone){
-        String str1=serverdatetimezone.substring(0,serverdatetimezone.indexOf(" "));
-        String str2=serverdatetimezone.substring(serverdatetimezone.indexOf(" ")+1,serverdatetimezone.indexOf("+"));
-        String finalserverdatestr=str1+"T"+str2+"Z";
-        boolean flag=false;
+    public static boolean comparedTwoTimezone(String serverdatetimezone) {
+        String str1 = serverdatetimezone.substring(0, serverdatetimezone.indexOf(" "));
+        String str2 = serverdatetimezone.substring(serverdatetimezone.indexOf(" ") + 1, serverdatetimezone.indexOf("+"));
+        String finalserverdatestr = str1 + "T" + str2 + "Z";
+        boolean flag = false;
         Date ds = new Date();
         DateTime d = new DateTime(ds);
         DateTime e = new DateTime(finalserverdatestr/*"2016-02-24T07:35:00Z"*/);  //2016-02-24 07:35:00+0000
-        if(e.toLocalDateTime().isAfter(d.toLocalDateTime()) ){
-            flag=true;
+        if (e.toLocalDateTime().isAfter(d.toLocalDateTime())) {
+            flag = true;
 //            System.out.println("After" + e.toLocalDateTime().isAfter(d.toLocalDateTime()));
-        }else{
+        } else {
 //            System.out.println("Before"+e.toLocalDateTime().isBefore(d.toLocalDateTime()));
         }
         return flag;
@@ -353,12 +346,12 @@ public class CommonMethods {
         return mDiff;
     }
 
-    public static void dateDifference(Date startDate, Date endDate){
+    public static void dateDifference(Date startDate, Date endDate) {
         //milliseconds
         long different = endDate.getTime() - startDate.getTime();
 
         System.out.println("startDate : " + startDate);
-        System.out.println("endDate : "+ endDate);
+        System.out.println("endDate : " + endDate);
         System.out.println("difference : " + different);
 
         long secondsInMilli = 1000;
@@ -385,8 +378,6 @@ public class CommonMethods {
     }
 
 
-
-
     public static String printKeyHash(Activity context) {
         PackageInfo packageInfo;
         String key = null;
@@ -410,8 +401,7 @@ public class CommonMethods {
             }
         } catch (PackageManager.NameNotFoundException e1) {
             Log.e("Name not found", e1.toString());
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             Log.e("No such an algorithm", e.toString());
         } catch (Exception e) {
             Log.e("Exception", e.toString());
@@ -420,15 +410,12 @@ public class CommonMethods {
         return key;
     }
 
-    public static void Log(String tag, String message){
+    public static void Log(String tag, String message) {
         Log.d(tag, message);
     }
 
 
-
-
-
-    public static String yyyy_dd__mm_To_Words(String date){
+    public static String yyyy_dd__mm_To_Words(String date) {
         String output = "";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {

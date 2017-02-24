@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.scorg.dms.R;
+import com.scorg.dms.model.responsemodel.LoginResponseModel;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.util.NetworkUtil;
@@ -284,24 +285,23 @@ public class RequestManager extends ConnectRequest implements Connector, Request
     public void parseJson(String data) {
         try {
 
-            Log.d(TAG, data);
+            Log.e(TAG, data);
 
             Gson gson = new Gson();
 
             switch (this.mDataTag) {
-
                 case DmsConstants.REGISTRATION_CODE: //This is sample code
 //                    RegistrationModel  registrationModel = gson.fromJson(data, RegistrationModel.class);
 //                    this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, registrationModel, mOldDataTag);
                     break;
-
-
+                case DmsConstants.LOGIN_CODE: //This is sample code
+                    LoginResponseModel loginResponseModel = gson.fromJson(data, LoginResponseModel.class);
+                    this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, loginResponseModel, mOldDataTag);
+                    break;
             }
 
         } catch (JsonSyntaxException e) {
-
             Log.d(TAG, "JsonException" + e.getMessage());
-
             mConnectionListener.onResponse(ConnectionListener.PARSE_ERR0R, null, mOldDataTag);
         }
 

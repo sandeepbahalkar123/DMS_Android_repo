@@ -42,11 +42,23 @@ public class ConnectionFactory extends ConnectRequest {
     }
 
     public void setHeaderParams() {
+
         Map<String, String> headerParams = new HashMap<>();
+
+        String status = DmsConstants.TRUE;
+
+        String login = DmsPreferencesManager.getString(DmsConstants.LOGIN_SUCCESS, mContext);
+
+        if (status.equalsIgnoreCase(login)) {
+            headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_JSON);
+        } else {
+            headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_URL_ENCODED);
+        }
+
         headerParams.put(DmsConstants.DEVICEID, device.getDeviceId());
         headerParams.put(DmsConstants.OS, device.getOS());
         headerParams.put(DmsConstants.OSVERSION, device.getOSVersion());
-        headerParams.put(DmsConstants.DEVICETYPE, device.getDeviceType());
+        //  headerParams.put(DmsConstants.DEVICETYPE, device.getDeviceType());
 //        headerParams.put(DmsConstants.ACCESS_TOKEN, "");
         this.mHeaderParams = headerParams;
     }
@@ -71,9 +83,9 @@ public class ConnectionFactory extends ConnectRequest {
             case DmsConstants.REGISTRATION_CODE://This is sample code
                 connector = new RequestManager(mContext, mConnectionListener, DmsConstants.REGISTRATION_CODE, mViewById, isProgressBarShown, mOldDataTag, Request.Method.POST);
                 break;
-
-
-
+            case DmsConstants.LOGIN_CODE://This is sample code
+                connector = new RequestManager(mContext, mConnectionListener, DmsConstants.LOGIN_CODE, mViewById, isProgressBarShown, mOldDataTag, Request.Method.POST);
+                break;
             default:
                 Log.d(TAG, "default_circle " + type);
                 break;

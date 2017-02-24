@@ -2,23 +2,27 @@ package com.scorg.dms.model.responsemodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.scorg.dms.interfaces.CustomResponse;
 
-public class LoginResponseModel {
+import java.io.Serializable;
 
-@SerializedName("common")
-@Expose
-private Common common;
-@SerializedName("data")
-@Expose
-private LoginResponseData loginResponseData;
+public class LoginResponseModel implements CustomResponse, Serializable {
 
-public Common getCommon() {
-return common;
-}
+    @SerializedName("common")
+    @Expose
+    private Common common;
 
-public void setCommon(Common common) {
-this.common = common;
-}
+    @SerializedName("data")
+    @Expose
+    private LoginResponseData loginResponseData;
+
+    public Common getCommon() {
+        return common;
+    }
+
+    public void setCommon(Common common) {
+        this.common = common;
+    }
 
     public LoginResponseData getLoginResponseData() {
         return loginResponseData;
@@ -26,5 +30,13 @@ this.common = common;
 
     public void setLoginResponseData(LoginResponseData loginResponseData) {
         this.loginResponseData = loginResponseData;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginResponseModel{" +
+                "common=" + common +
+                ", loginResponseData=" + loginResponseData +
+                '}';
     }
 }

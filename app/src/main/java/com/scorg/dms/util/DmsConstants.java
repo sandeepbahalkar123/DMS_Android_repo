@@ -30,6 +30,20 @@ public class DmsConstants {
     public static final String PHONE = "Phone";
 
 
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String GRANT_TYPE_KEY = "grant_type";
+    public static final String APPLICATION_URL_ENCODED = "application/x-www-form-urlencoded; charset=UTF-8";
+    public static final String APPLICATION_JSON = "application/json";
+
+
+    //--- Request Params
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String LOGIN_SUCCESS = "LOGIN_SUCCESS";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+
+
     //Please do not change following strings anyhow beacuse patterns are used will be the same for timezone
     public static final String UTCTEXT = "2015-12-30T07:01:29.533000"; //need to replace this string with server date object
     public static final String UTCPATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS";
@@ -53,14 +67,11 @@ public class DmsConstants {
     public static final String UTCPATTERN_TESTING_CONVERT = "yyyy-MM-dd HH:mm:ss";
     public static final String UTCPATTERN_TESTING_OLD_REPORT = "yyyy-MM-dd HH:mm:ss.SSSSSS'+'ss:ss";  //old datetime format from server for report
     public static final String FINALPATTERN_OLD_REPORT = "MMM dd yyyy, hh:mm a";
-    public static final int NO_OF_TIMES_HIT=15; //if dashboad or report status not=generated
+    public static final int NO_OF_TIMES_HIT = 15; //if dashboad or report status not=generated
 
     // Connection codes
     public static final int REGISTRATION_CODE = 0;
-
-
-
-
+    public static final int LOGIN_CODE = 1;
 
 
 }
