@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.scorg.dms.R;
+import com.scorg.dms.adapters.PatientListAdapter;
 import com.scorg.dms.dummy.DummyContent;
 import com.scorg.dms.fragment.ItemDetailFragment;
 import com.scorg.dms.interfaces.ConnectionListener;
@@ -25,6 +26,9 @@ import com.scorg.dms.network.ConnectionFactory;
 import com.scorg.dms.ui.ItemDetailActivity;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * An activity representing a list of Items. This activity
@@ -37,12 +41,17 @@ import java.util.List;
 public class PatientList extends AppCompatActivity {
 
 
+    @BindView(R.id.item_list)
+    RecyclerView mPatientListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.item_patient_list);
-
+        setContentView(R.layout.activity_item_list);
+        ButterKnife.bind(this);
+        mPatientListView.setAdapter(new PatientListAdapter(DummyContent.ITEMS,this));
 
     }
+
 
 }

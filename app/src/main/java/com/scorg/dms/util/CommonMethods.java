@@ -12,9 +12,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.scorg.dms.R;
@@ -427,6 +429,22 @@ public class CommonMethods {
             e.printStackTrace();
         }
         return output;
+    }
+
+    public static View loadView(int resourceName, Context mActivity) {
+
+        LayoutInflater inflater = (LayoutInflater) mActivity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        // param.gravity = Gravity.CENTER;
+        View child = inflater.inflate(resourceName, null);
+        LinearLayout l1 = new LinearLayout(mActivity);
+        child.setLayoutParams(param);
+
+        l1.setLayoutParams(param);
+        l1.addView(child);
+        return l1;
     }
 }
 

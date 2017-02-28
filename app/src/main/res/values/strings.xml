@@ -32,6 +32,7 @@
     <string name="visit_date">Visit Date:</string>
     <string name="admission_date">Admission Date:</string>
     <string name="discharge_date">Discharge Date:</string>
+    <string name="more">More</string>
 
 
 </resources>
