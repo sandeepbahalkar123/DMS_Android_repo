@@ -49,7 +49,7 @@ public class PatientList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
         ButterKnife.bind(this);
-        mPatientListView.setAdapter(new PatientListAdapter(DummyContent.ITEMS,this));
+        mPatientListView.setAdapter(new PatientListAdapter(DummyContent.ITEMS, this));
 
     }
 

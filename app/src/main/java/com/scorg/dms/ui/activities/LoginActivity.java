@@ -91,8 +91,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectionListen
             mConnectionFactory.setPostParams(testParams);
             mConnectionFactory.setUrl(Config.URL_LOGIN);
             mConnectionFactory.createConnection(DmsConstants.LOGIN_CODE);
-            Intent intent = new Intent(this, PatientList.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, PatientList.class);
+//            startActivity(intent);
         }
     }
 

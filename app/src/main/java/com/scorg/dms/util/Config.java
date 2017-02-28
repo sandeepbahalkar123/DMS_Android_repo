@@ -22,7 +22,7 @@ public class Config {
     }
 
     //Declared all URL used in app here
-    public static final String URL_LOGIN = BASE_URL + "token";
+    public static final String URL_LOGIN = BASE_URL + "userLogin";
     public static final String URL_SHOW_SEARCHRESULT = BASE_URL + "result/ShowSearchResults";
 
 

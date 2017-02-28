@@ -32,11 +32,11 @@
 
     <LinearLayout
         android:id="@+id/contentLayout"
-
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/item_patient_content" />
+        <!--<include layout="@layout/item_patient_content" />-->
     </LinearLayout>
 
     <TextView

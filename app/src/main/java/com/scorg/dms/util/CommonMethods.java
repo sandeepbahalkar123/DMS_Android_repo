@@ -413,7 +413,7 @@ public class CommonMethods {
     }
 
     public static void Log(String tag, String message) {
-        Log.d(tag, message);
+        Log.e(tag, message);
     }
 
 
