@@ -6,37 +6,51 @@ import com.scorg.dms.interfaces.CustomResponse;
 
 import java.io.Serializable;
 
-public class LoginResponseModel implements CustomResponse, Serializable {
+public class LoginResponseModel implements Serializable, CustomResponse {
 
-    @SerializedName("common")
+    @SerializedName("access_token")
     @Expose
-    private Common common;
-
-    @SerializedName("data")
+    private String accessToken;
+    @SerializedName("token_type")
     @Expose
-    private LoginResponseData loginResponseData;
+    private String tokenType;
+    @SerializedName("expires_in")
+    @Expose
+    private Integer expiresIn;
+    @SerializedName("refresh_token")
+    @Expose
+    private String refreshToken;
 
-    public Common getCommon() {
-        return common;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setCommon(Common common) {
-        this.common = common;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
-    public LoginResponseData getLoginResponseData() {
-        return loginResponseData;
+    public String getTokenType() {
+        return tokenType;
     }
 
-    public void setLoginResponseData(LoginResponseData loginResponseData) {
-        this.loginResponseData = loginResponseData;
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
     }
 
-    @Override
-    public String toString() {
-        return "LoginResponseModel{" +
-                "common=" + common +
-                ", loginResponseData=" + loginResponseData +
-                '}';
+    public Integer getExpiresIn() {
+        return expiresIn;
     }
+
+    public void setExpiresIn(Integer expiresIn) {
+        this.expiresIn = expiresIn;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
 }

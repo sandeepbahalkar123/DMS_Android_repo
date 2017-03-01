@@ -88,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionListen
             testParams.put(DmsConstants.GRANT_TYPE_KEY, DmsConstants.PASSWORD);
             testParams.put(DmsConstants.USERNAME, mUserName.getText().toString());
             testParams.put(DmsConstants.PASSWORD, mPassword.getText().toString());
+            testParams.put(DmsConstants.CLIENT_ID_KEY, DmsConstants.CLIENT_ID_VALUE);
             mConnectionFactory.setPostParams(testParams);
             mConnectionFactory.setUrl(Config.URL_LOGIN);
             mConnectionFactory.createConnection(DmsConstants.LOGIN_CODE);
@@ -124,12 +125,12 @@ public class LoginActivity extends AppCompatActivity implements ConnectionListen
 
         switch (responseResult) {
             case ConnectionListener.RESPONSE_OK:
-                DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.TRUE, this);
-
                 if (customResponse instanceof LoginResponseModel) {
                     LoginResponseModel model = (LoginResponseModel) customResponse;
-                    Intent intent = new Intent(this, PatientList.class);
-                    startActivity(intent);
+                    DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.TRUE, this);
+                    DmsPreferencesManager.putString(DmsConstants.ACCESS_TOKEN, model.getAccessToken(), this);
+                    DmsPreferencesManager.putString(DmsConstants.TOKEN_TYPE, model.getTokenType(), this);
+                    DmsPreferencesManager.putString(DmsConstants.REFRESH_TOKEN, model.getRefreshToken(), this);
                 }
                 break;
 

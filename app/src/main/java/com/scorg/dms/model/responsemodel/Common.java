@@ -39,12 +39,5 @@ public class Common {
         this.statusMessage = statusMessage;
     }
 
-    @Override
-    public String toString() {
-        return "Common{" +
-                "success=" + success +
-                ", statusCode=" + statusCode +
-                ", statusMessage='" + statusMessage + '\'' +
-                '}';
-    }
+
 }

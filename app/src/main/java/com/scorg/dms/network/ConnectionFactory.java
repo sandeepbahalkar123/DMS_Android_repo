@@ -45,17 +45,20 @@ public class ConnectionFactory extends ConnectRequest {
 
         Map<String, String> headerParams = new HashMap<>();
 
-        String status = DmsConstants.TRUE;
+        String authorizationString = "";
+        String contentType = DmsPreferencesManager.getString(DmsConstants.LOGIN_SUCCESS, mContext);
 
-        String login = DmsPreferencesManager.getString(DmsConstants.LOGIN_SUCCESS, mContext);
-
-        if (status.equalsIgnoreCase(login)) {
+        if (contentType.equalsIgnoreCase(DmsConstants.TRUE)) {
+            authorizationString = DmsPreferencesManager.getString(DmsConstants.TOKEN_TYPE, mContext)
+                    + " " + DmsPreferencesManager.getString(DmsConstants.ACCESS_TOKEN, mContext);
             headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_JSON);
         } else {
             headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_URL_ENCODED);
         }
 
+        headerParams.put(DmsConstants.AUTHORIZATION, authorizationString);
         headerParams.put(DmsConstants.DEVICEID, device.getDeviceId());
+
         headerParams.put(DmsConstants.OS, device.getOS());
         headerParams.put(DmsConstants.OSVERSION, device.getOSVersion());
         //  headerParams.put(DmsConstants.DEVICETYPE, device.getDeviceType());
