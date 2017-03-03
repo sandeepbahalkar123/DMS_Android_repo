@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class AnnotationListData {
 
-@SerializedName("searchResult")
+@SerializedName("lstAnnotations")
 @Expose
 private List<AnnotationList> annotationLists = null;
 
