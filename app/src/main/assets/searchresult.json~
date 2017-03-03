@@ -1,0 +1,23 @@
+{
+  "common": {
+    "success": 1,
+    "statusCode": 200,
+    "statusMessage": ""
+  },
+  "data": {
+    "searchResult": [
+      {
+        "patientId": 1,
+        "patientName": "Hemant Pahariya",
+        "patientFileData": [
+          {
+            "fileType": "IPD",
+            "referenceId": 1010,
+            "admissionDate": "12-12-2016 02:30 PM",
+            "dischargeDate": "15-12-2016 06:45 PM"
+          }
+        ]
+      }
+    ]
+  }
+}

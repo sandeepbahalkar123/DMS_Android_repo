@@ -446,5 +446,54 @@ public class CommonMethods {
         l1.addView(child);
         return l1;
     }
+
+
+    /**
+     * The method will return the date and time in requested format
+     *
+     * @param selectedDateTime to be converted to requested format
+     * @param requestedFormat  the format in which the provided datetime needs to be changed
+     * @param formatString     differentiate parameter to format date or time
+     * @return formated date or time
+     */
+    public static String formatDateTime(String selectedDateTime, String requestedFormat, String currentDateFormat, String formatString) {
+
+        if (formatString.equalsIgnoreCase(DmsConstants.TIME)) {
+            SimpleDateFormat ft = new SimpleDateFormat(DmsConstants.DATE_PATTERN.HH_MM);
+            Date dateObj = null;
+
+            try {
+                dateObj = ft.parse(selectedDateTime);
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            long millis = dateObj.getTime();
+            SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat(requestedFormat);
+            return simpleDateFormatObj.format(millis);
+
+        }//if
+        else if (formatString.equalsIgnoreCase(DmsConstants.DATE)) {
+            SimpleDateFormat ft = new SimpleDateFormat(currentDateFormat);
+            Date dateObj = null;
+
+            try {
+                dateObj = ft.parse(selectedDateTime);
+
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat(requestedFormat);
+            return simpleDateFormatObj.format(dateObj);
+
+
+        }
+        return null;
+
+    }
+
 }
 

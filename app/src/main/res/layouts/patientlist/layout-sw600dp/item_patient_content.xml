@@ -1,181 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/opdLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="horizontal"
+        android:padding="@dimen/dp2">
 
         <LinearLayout
-
-            android:layout_width="@dimen/dp0"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/opd"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_button"
+                android:gravity="center"
+                android:text="111"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/opdValue"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp0"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/dp5"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/rounded_button" />
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/user_name" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp0"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/dp5"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/rounded_button" />
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/user_name" />
-            </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp5"
+                android:gravity="center_vertical"
+                android:text="@string/user_name" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="@dimen/dp0"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp0"
+            <TextView
+                android:id="@+id/opdVisitDate"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:text="@string/visit_date" />
 
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/visit_date" />
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/visit_date" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp0"
+            <TextView
+                android:id="@+id/opdVisitDateValue"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/admission_date" />
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/admission_date" />
-            </LinearLayout>
+                android:gravity="center_vertical"
+                android:text="@string/visit_date" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="@dimen/dp0"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp0"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp0"
-                android:layout_weight="1"
-
-                android:orientation="horizontal">
-
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/discharge_date" />
-
-                <TextView
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/admission_date" />
-            </LinearLayout>
-        </LinearLayout>
+            android:orientation="horizontal"></LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp0"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp0"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
+            <CheckBox
+                android:id="@+id/opdCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ipdLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ipd"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_button"
+                android:gravity="center"
+                android:text="111"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/ipdValue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp5"
+                android:gravity="center_vertical"
+                android:text="@string/user_name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ipdAdmissionDate"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/admission_date" />
+
+            <TextView
+                android:id="@+id/ipdAdmissionDateValue"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/visit_date" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ipdDischargeDate"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/discharge_date" />
+
+            <TextView
+                android:id="@+id/ipdDischargeDateValue"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/visit_date" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/ipdCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/moreOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:text="@string/more"
+        android:textColor="@color/cobalt_blue" />
 
 </LinearLayout>

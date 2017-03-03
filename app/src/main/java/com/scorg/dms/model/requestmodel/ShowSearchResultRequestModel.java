@@ -4,11 +4,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.scorg.dms.interfaces.CustomResponse;
 
-public class ShowSearchResultRequestModel implements CustomResponse{
+public class ShowSearchResultRequestModel implements CustomResponse {
 
     @SerializedName("patientId")
     @Expose
-    private Long patientId;
+    private String patientId;
     @SerializedName("patientName")
     @Expose
     private String patientName;
@@ -17,7 +17,7 @@ public class ShowSearchResultRequestModel implements CustomResponse{
     private String fileType;
     @SerializedName("referenceId")
     @Expose
-    private Long referenceId;
+    private String referenceId;
     @SerializedName("dateType")
     @Expose
     private String dateType;
@@ -31,12 +31,22 @@ public class ShowSearchResultRequestModel implements CustomResponse{
     @Expose
     private String annotationText;
 
-    public Long getPatientId() {
+    private String[] DocTypeId;
+
+    public String getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Long patientId) {
+    public void setPatientId(String patientId) {
         this.patientId = patientId;
+    }
+
+    public String getReferenceId() {
+        return referenceId;
+    }
+
+    public void setReferenceId(String referenceId) {
+        this.referenceId = referenceId;
     }
 
     public String getPatientName() {
@@ -55,13 +65,6 @@ public class ShowSearchResultRequestModel implements CustomResponse{
         this.fileType = fileType;
     }
 
-    public Long getReferenceId() {
-        return referenceId;
-    }
-
-    public void setReferenceId(Long referenceId) {
-        this.referenceId = referenceId;
-    }
 
     public String getDateType() {
         return dateType;
@@ -95,4 +98,25 @@ public class ShowSearchResultRequestModel implements CustomResponse{
         this.annotationText = annotationText;
     }
 
+    public String[] getDocTypeId() {
+        return DocTypeId;
+    }
+
+    public void setDocTypeId(String[] docTypeId) {
+        DocTypeId = docTypeId;
+    }
+
+    @Override
+    public String toString() {
+        return "ShowSearchResultRequestModel{" +
+                "patientId=" + patientId +
+                ", patientName='" + patientName + '\'' +
+                ", fileType='" + fileType + '\'' +
+                ", referenceId=" + referenceId +
+                ", dateType='" + dateType + '\'' +
+                ", fromDate='" + fromDate + '\'' +
+                ", toDate='" + toDate + '\'' +
+                ", annotationText='" + annotationText + '\'' +
+                '}';
+    }
 }

@@ -15,9 +15,9 @@ public class DmsConstants {
     public static String BUTTON_TEXT_COLOR = "#FFFFFF";
     public static String TEXT_COLOR = "#000000";
 
-    public static final String DEVICEID = "deviceId";
-    public static final String OS = "os";
-    public static final String OSVERSION = "osVersion";
+    public static final String DEVICEID = "Device-Id";
+    public static final String OS = "OS";
+    public static final String OSVERSION = "OS-Version";
     public static final String DEVICETYPE = "deviceType";
     public static final String ACCESS_TOKEN = "accessToken";
     public static final String TOKEN_TYPE = "token_type";
@@ -36,7 +36,7 @@ public class DmsConstants {
     public static final String AUTHORIZATION = "Authorization";
     public static final String GRANT_TYPE_KEY = "grant_type";
     public static final String APPLICATION_URL_ENCODED = "application/x-www-form-urlencoded; charset=UTF-8";
-    public static final String APPLICATION_JSON = "application/json";
+    public static final String APPLICATION_JSON = "application/json; charset=utf-8";
 
 
     //--- Request Params
@@ -50,6 +50,22 @@ public class DmsConstants {
 
     // Connection codes
     public static final int REGISTRATION_CODE = 0;
-    public static final int LOGIN_CODE = 1;
+    public static final int TASK_LOGIN_CODE = 1;
+    public static final int TASK_PATIENT_LIST = 2;
 
+
+    public static class DATE_PATTERN {
+        public static String YYYY_MM_DD = "yyyy-MM-dd";
+        public static String YYYY_MM_DD_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
+        public static String DD_MM_YYYY_hh_mm = "dd-MM-yyyy hh:mm aa";
+
+        public static String HH_MM = "hh:mm";
+        public static String EEE_MMM_DD_MMM = "EEEE dd MMM yyyy HH:mm";
+        public final static String yyyy_MM_dd = "yyyy-MM-dd";
+        public final static String DD_MM_YYYY = "dd/MM/yyyy";
+        public final static String EEEE_dd_MMM_yyyy_hh_mm_a = "EEEE dd MMM yyyy | hh:mm a";
+    }
+
+    public static final String TIME = "time";
+    public static final String DATE = "date";
 }

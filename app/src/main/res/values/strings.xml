@@ -33,6 +33,10 @@
     <string name="admission_date">Admission Date:</string>
     <string name="discharge_date">Discharge Date:</string>
     <string name="more">More</string>
+    <string name="less">Less</string>
+    <string name="opd">OPD</string>
+    <string name="ipd">IPD</string>
+    <string name="uhid">UHID</string>
 
 
 </resources>

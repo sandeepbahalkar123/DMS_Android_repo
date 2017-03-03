@@ -1,42 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="?attr/actionBarSize"
+    android:padding="@dimen/dp2"
+    android:orientation="horizontal">
 
+    <TextView
+        android:id="@+id/uhid"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/rounded_button"
+        android:gravity="center"
+        android:text="111"
+        android:textColor="@color/white" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/userName"
+        android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp0"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp5"
+        android:gravity="center_vertical"
+        android:text="@string/user_name" />
 
-        <TextView
-            android:id="@+id/uhid"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/dp5"
-            android:background="@drawable/rounded_button"
-            android:text="111"
-            android:textColor="@color/white" />
-
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="@dimen/dp0"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="@string/user_name"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/contentLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--<include layout="@layout/item_patient_content" />-->
+       <include layout="@layout/item_patient_content" />
     </LinearLayout>
 
     <TextView
@@ -47,5 +40,5 @@
         android:gravity="right"
         android:text="@string/more"
         android:textColor="@color/cobalt_blue" />
-
+-->
 </LinearLayout>
