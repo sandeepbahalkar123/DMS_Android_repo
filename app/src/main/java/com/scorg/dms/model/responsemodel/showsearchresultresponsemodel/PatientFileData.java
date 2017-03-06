@@ -1,4 +1,4 @@
-package com.scorg.dms.model.responsemodel;
+package com.scorg.dms.model.responsemodel.showsearchresultresponsemodel;
 
 /**
  * Created by sandeep on 2/22/17.
@@ -6,9 +6,6 @@ package com.scorg.dms.model.responsemodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PatientFileData {
 

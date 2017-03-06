@@ -1,7 +1,6 @@
 package com.scorg.dms.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.scorg.dms.R;
-import com.scorg.dms.dummy.DummyContent;
-import com.scorg.dms.model.responsemodel.Common;
-import com.scorg.dms.model.responsemodel.PatientFileData;
-import com.scorg.dms.ui.activities.PatientList;
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 
@@ -25,7 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

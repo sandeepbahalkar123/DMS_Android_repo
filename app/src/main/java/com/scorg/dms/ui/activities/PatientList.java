@@ -1,5 +1,6 @@
 package com.scorg.dms.ui.activities;
 
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -39,21 +40,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ExpandableListView;
+
+
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
 import com.scorg.dms.adapters.PatientExpandableListAdapter;
-import com.scorg.dms.adapters.PatientListAdapter;
-import com.scorg.dms.dummy.DummyContent;
-import com.scorg.dms.fragment.ItemDetailFragment;
 import com.scorg.dms.helpers.patients.PatientsHelper;
-import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
-import com.scorg.dms.model.responsemodel.PatientFileData;
-import com.scorg.dms.model.responsemodel.SearchResult;
-import com.scorg.dms.model.responsemodel.ShowSearchResultResponseModel;
-import com.scorg.dms.network.ConnectRequest;
-import com.scorg.dms.network.ConnectionFactory;
+import com.scorg.dms.model.responsemodel.s
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.ui.ItemDetailActivity;
 
 import java.util.ArrayList;
