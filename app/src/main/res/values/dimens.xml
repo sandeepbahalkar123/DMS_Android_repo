@@ -17,4 +17,5 @@
     <dimen name="margin_large">40dp</dimen>
     <dimen name="height_xsmall">80dp</dimen>
     <dimen name="dp0">0dp</dimen>
+    <dimen name="uhid">8dp</dimen>
 </resources>

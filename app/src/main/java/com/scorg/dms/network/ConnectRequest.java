@@ -20,4 +20,5 @@ public class ConnectRequest {
     protected boolean isProgressBarShown;
     protected int mOldDataTag;
     protected String mURL;
+    protected int reqPostOrGet;
 }

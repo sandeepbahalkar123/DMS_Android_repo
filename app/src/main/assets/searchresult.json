@@ -1,0 +1,89 @@
+{
+  "data": {
+    "searchResult": [
+      {
+        "patientFileData": [
+          {
+            "dischargeDate": "15-12-2016 06:45 PM",
+            "admissionDate": "12-12-2016 02:30 PM",
+            "referenceId": 1010,
+            "fileType": "IPD"
+          },
+          {
+            "dischargeDate": "15-12-2016 06:45 PM",
+            "admissionDate": "12-12-2016 02:30 PM",
+            "referenceId": 9191,
+            "fileType": "OPD"
+          }
+        ],
+        "patientId": 1,
+        "patientName": "Hemant Pahariya"
+      },
+      {
+        "patientFileData": [
+          {
+            "dischargeDate": "23-01-2017 01:16 PM",
+            "admissionDate": "25-12-2016 01:16 PM",
+            "referenceId": 1222,
+            "fileType": "IPD"
+          }
+        ],
+        "patientId": 7,
+        "patientName": "Dipesh Rane"
+      },
+      {
+        "patientFileData": [
+          {
+            "dischargeDate": "23-01-2017 05:12 PM",
+            "admissionDate": "25-12-2016 05:12 PM",
+            "referenceId": 1237,
+            "fileType": "OPD"
+          }
+        ],
+        "patientId": 15,
+        "patientName": "Shama Pokarna"
+      },
+      {
+        "patientFileData": [
+          {
+            "dischargeDate": "23-01-2017 07:02 PM",
+            "admissionDate": "25-12-2016 07:02 PM",
+            "referenceId": 1242,
+            "fileType": "IPD"
+          }
+        ],
+        "patientId": 20,
+        "patientName": "Boppana Roy"
+      },
+      {
+        "patientFileData": [
+          {
+            "dischargeDate": "24-01-2017 04:19 PM",
+            "admissionDate": "26-12-2016 04:19 PM",
+            "referenceId": 1247,
+            "fileType": "IPD"
+          }
+        ],
+        "patientId": 25,
+        "patientName": "Pravin Chopade"
+      },
+      {
+        "patientFileData": [
+          {
+            "dischargeDate": "24-01-2017 05:32 PM",
+            "admissionDate": "26-01-2016 05:32 PM",
+            "referenceId": 2260,
+            "fileType": "IPD"
+          }
+        ],
+        "patientId": 27,
+        "patientName": "Souvik Sarkar"
+      }
+    ]
+  },
+  "common": {
+    "statusCode": 200,
+    "success": 1,
+    "statusMessage": ""
+  }
+}

@@ -37,8 +37,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.scorg.dms.R;
+import com.scorg.dms.helpers.login.LoginHelper;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.CustomResponse;
+import com.scorg.dms.interfaces.HelperResponse;
+import com.scorg.dms.model.responsemodel.Common;
 import com.scorg.dms.model.responsemodel.LoginResponseModel;
 import com.scorg.dms.network.ConnectRequest;
 import com.scorg.dms.network.ConnectionFactory;
@@ -56,9 +59,9 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements ConnectionListener {
+public class LoginActivity extends AppCompatActivity implements HelperResponse {
 
-    private String TAG = "LoginActivity";
+    String TAG = this.getClass().getSimpleName();
 
     @BindView(R.id.userName)
     EditText mUserName;
@@ -66,34 +69,23 @@ public class LoginActivity extends AppCompatActivity implements ConnectionListen
     @BindView(R.id.password)
     EditText mPassword;
 
-    private ConnectionFactory mConnectionFactory;
+    private LoginHelper mLoginHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         ButterKnife.bind(this);
+
+        mLoginHelper = new LoginHelper(this, this);
 
     }
 
 
     @OnClick(R.id.loginButton)
     public void doLogin() {
-
         if (!validate()) {
-            mConnectionFactory = new ConnectionFactory(this, this, null, true, DmsConstants.LOGIN_CODE);
-            mConnectionFactory.setHeaderParams();
-            Map<String, String> testParams = new HashMap<String, String>();
-            testParams.put(DmsConstants.GRANT_TYPE_KEY, DmsConstants.PASSWORD);
-            testParams.put(DmsConstants.USERNAME, mUserName.getText().toString());
-            testParams.put(DmsConstants.PASSWORD, mPassword.getText().toString());
-            testParams.put(DmsConstants.CLIENT_ID_KEY, DmsConstants.CLIENT_ID_VALUE);
-            mConnectionFactory.setPostParams(testParams);
-            mConnectionFactory.setUrl(Config.URL_LOGIN);
-            mConnectionFactory.createConnection(DmsConstants.LOGIN_CODE);
-//            Intent intent = new Intent(this, PatientList.class);
-//            startActivity(intent);
+            mLoginHelper.doAppLogin(mUserName.getText().toString(), mPassword.getText().toString());
         }
     }
 
@@ -119,40 +111,21 @@ public class LoginActivity extends AppCompatActivity implements ConnectionListen
     }
 
     @Override
-    public void onResponse(int responseResult, CustomResponse customResponse, int mOldDataTag) {
+    public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
 
-        CommonMethods.Log(TAG, customResponse.toString());
-
-        switch (responseResult) {
-            case ConnectionListener.RESPONSE_OK:
-                if (customResponse instanceof LoginResponseModel) {
-                    LoginResponseModel model = (LoginResponseModel) customResponse;
-                    DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.TRUE, this);
-                    DmsPreferencesManager.putString(DmsConstants.ACCESS_TOKEN, model.getAccessToken(), this);
-                    DmsPreferencesManager.putString(DmsConstants.TOKEN_TYPE, model.getTokenType(), this);
-                    DmsPreferencesManager.putString(DmsConstants.REFRESH_TOKEN, model.getRefreshToken(), this);
-                }
-                break;
-
-            case ConnectionListener.PARSE_ERR0R:
-                CommonMethods.Log(TAG, "parse error");
-                break;
-
-            case ConnectionListener.SERVER_ERROR:
-                CommonMethods.Log(TAG, "server error");
-                break;
-
-            default:
-                CommonMethods.Log(TAG, "default error");
-                break;
-
-        }
+        Intent intent = new Intent(this, PatientList.class);
+        startActivity(intent);
 
     }
 
     @Override
-    public void onTimeout(ConnectRequest request) {
+    public void onParseError(int mOldDataTag, String errorMessage) {
+        CommonMethods.showToast(this, errorMessage);
+    }
 
+    @Override
+    public void onServerError(int mOldDataTag, String serverErrorMessage) {
+        CommonMethods.showToast(this, serverErrorMessage);
     }
 }
 

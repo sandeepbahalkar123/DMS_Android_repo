@@ -25,6 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.scorg.dms.R;
 import com.scorg.dms.model.responsemodel.LoginResponseModel;
+import com.scorg.dms.model.responsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.util.NetworkUtil;
@@ -112,6 +113,9 @@ public class RequestManager extends ConnectRequest implements Connector, Request
         JSONObject jsonObject = null;
         try {
             String jsonString = gson.toJson(customResponse);
+
+            CommonMethods.Log(TAG, "jsonRequest:--" + jsonString);
+
             if (!jsonString.equals("null"))
                 jsonObject = new JSONObject(jsonString);
         } catch (JSONException e) {
@@ -294,9 +298,13 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 //                    RegistrationModel  registrationModel = gson.fromJson(data, RegistrationModel.class);
 //                    this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, registrationModel, mOldDataTag);
                     break;
-                case DmsConstants.LOGIN_CODE: //This is sample code
+                case DmsConstants.TASK_LOGIN_CODE: //This is for login
                     LoginResponseModel loginResponseModel = gson.fromJson(data, LoginResponseModel.class);
                     this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, loginResponseModel, mOldDataTag);
+                    break;
+                case DmsConstants.TASK_PATIENT_LIST: //This is for patient list
+                    ShowSearchResultResponseModel showSearchResultResponseModel = gson.fromJson(data, ShowSearchResultResponseModel.class);
+                    this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, showSearchResultResponseModel, mOldDataTag);
                     break;
             }
 

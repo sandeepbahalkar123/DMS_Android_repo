@@ -53,6 +53,7 @@
                     android:backgroundTint="@color/white"
                     android:hint="@string/user_name"
                     android:inputType="textCapWords"
+
                     android:textColor="@color/white"
                     android:textColorHint="@color/white" />
             </android.support.design.widget.TextInputLayout>

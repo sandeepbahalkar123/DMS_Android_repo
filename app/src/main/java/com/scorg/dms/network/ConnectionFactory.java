@@ -15,6 +15,7 @@ import com.scorg.dms.interfaces.Connector;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.singleton.Device;
+import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 
 import java.util.HashMap;
@@ -26,13 +27,14 @@ public class ConnectionFactory extends ConnectRequest {
     Connector connector = null;
     private Device device;
 
-    public ConnectionFactory(Context context, ConnectionListener connectionListener, View viewById, boolean isProgressBarShown, int mOldDataTag) {
+    public ConnectionFactory(Context context, ConnectionListener connectionListener, View viewById, boolean isProgressBarShown, int mOldDataTag, int reqPostOrGet) {
         super();
         this.mConnectionListener = connectionListener;
         this.mContext = context;
         this.mViewById = viewById;
         this.isProgressBarShown = isProgressBarShown;
         this.mOldDataTag = mOldDataTag;
+        this.reqPostOrGet = reqPostOrGet;
 
         device = Device.getInstance(mContext);
     }
@@ -63,6 +65,7 @@ public class ConnectionFactory extends ConnectRequest {
         headerParams.put(DmsConstants.OSVERSION, device.getOSVersion());
         //  headerParams.put(DmsConstants.DEVICETYPE, device.getDeviceType());
 //        headerParams.put(DmsConstants.ACCESS_TOKEN, "");
+        CommonMethods.Log(TAG, "setHeaderParams:" + headerParams.toString());
         this.mHeaderParams = headerParams;
     }
 
@@ -80,19 +83,25 @@ public class ConnectionFactory extends ConnectRequest {
     }
 
     public Connector createConnection(int type) {
-        switch (type) {
+        /*switch (type) {
 
             //write cases for different APIS
             case DmsConstants.REGISTRATION_CODE://This is sample code
                 connector = new RequestManager(mContext, mConnectionListener, DmsConstants.REGISTRATION_CODE, mViewById, isProgressBarShown, mOldDataTag, Request.Method.POST);
                 break;
-            case DmsConstants.LOGIN_CODE://This is sample code
-                connector = new RequestManager(mContext, mConnectionListener, DmsConstants.LOGIN_CODE, mViewById, isProgressBarShown, mOldDataTag, Request.Method.POST);
+            case DmsConstants.LOGIN_CODE://This is for login
+                //  connector = new RequestManager(mContext, mConnectionListener, DmsConstants.LOGIN_CODE, mViewById, isProgressBarShown, mOldDataTag, Request.Method.POST);
+                connector = new RequestManager(mContext, mConnectionListener, type, mViewById, isProgressBarShown, mOldDataTag, reqPostOrGet);
+                break;
+            case DmsConstants.PATIENT_LIST://This is for patient list
+                connector = new RequestManager(mContext, mConnectionListener, type, mViewById, isProgressBarShown, mOldDataTag, reqPostOrGet);
                 break;
             default:
                 Log.d(TAG, "default_circle " + type);
                 break;
-        }
+        }*/
+
+        connector = new RequestManager(mContext, mConnectionListener, type, mViewById, isProgressBarShown, mOldDataTag, reqPostOrGet);
 
         if (customResponse != null) connector.setPostParams(customResponse);
 

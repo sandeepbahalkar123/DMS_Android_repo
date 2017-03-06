@@ -18,15 +18,16 @@ import com.scorg.dms.ui.ItemListActivity;
 import com.scorg.dms.ui.activities.PatientList;
 import com.scorg.dms.util.CommonMethods;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by riteshpandhurkar on 24/2/17.
  */
 
-public class PatientListAdapter extends RecyclerView.Adapter<PatientListAdapter.ViewHolder> {
+public class PatientListAdapter {/*extends RecyclerView.Adapter<PatientListAdapter.ViewHolder> {
 
-    private final List<DummyContent.DummyItem> mValues;
+    private final ArrayList<DummyContent.DummyItem> mValues;
     private PatientList mActivity;
 
     public PatientListAdapter(List<DummyContent.DummyItem> items) {
@@ -87,6 +88,29 @@ public class PatientListAdapter extends RecyclerView.Adapter<PatientListAdapter.
         return mValues.size();
     }
 
+  *//*  public class ViewHolder extends RecyclerView.ViewHolder {
+        public final View mView;
+        public final TextView mIdView;
+        public final TextView mContentView;
+        public final TextView mMoreOption;
+        public final LinearLayout mContentLayout;
+        public DummyContent.DummyItem mItem;
+
+        public ViewHolder(View view) {
+            super(view);
+            mView = view;
+            mIdView = (TextView) view.findViewById(R.id.uhid);
+            mContentView = (TextView) view.findViewById(R.id.userName);
+            mMoreOption = (TextView) view.findViewById(R.id.moreOption);
+            mContentLayout = (LinearLayout) view.findViewById(R.id.contentLayout);
+        }
+
+        @Override
+        public String toString() {
+            return super.toString() + " '" + mContentView.getText() + "'";
+        }
+    }*//*
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
@@ -109,6 +133,5 @@ public class PatientListAdapter extends RecyclerView.Adapter<PatientListAdapter.
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
-
-
+ */
 }
