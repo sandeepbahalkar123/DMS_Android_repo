@@ -155,7 +155,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
                     manageChild(null);
                     childViewHolder.moreOption.setText(moreText);
                 } else {
-                    String groupName = (String) v.getTag();
+                      String groupName = (String) v.getTag();
                     manageChild(groupName);
                     childViewHolder.moreOption.setText(lessText);
                 }

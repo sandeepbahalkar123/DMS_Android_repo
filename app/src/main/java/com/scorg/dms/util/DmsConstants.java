@@ -68,4 +68,11 @@ public class DmsConstants {
 
     public static final String TIME = "time";
     public static final String DATE = "date";
+    public static final String BLANK = "";
+
+    public static class TIME_STAMPS {
+        public static int ONE_SECONDS = 1000;
+        public static int TWO_SECONDS = 2000;
+        public static int THREE_SECONDS = 3000;
+    }
 }

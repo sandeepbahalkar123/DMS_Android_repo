@@ -28,6 +28,8 @@ public class LoginHelper implements ConnectionListener {
     String TAG = this.getClass().getSimpleName();
     Context mContext;
     HelperResponse mHelperResponseManager;
+    private String userName;
+    private String password;
 
     public LoginHelper(Context context, HelperResponse loginActivity1) {
         this.mContext = context;
@@ -48,6 +50,8 @@ public class LoginHelper implements ConnectionListener {
                     DmsPreferencesManager.putString(DmsConstants.ACCESS_TOKEN, model.getAccessToken(), mContext);
                     DmsPreferencesManager.putString(DmsConstants.TOKEN_TYPE, model.getTokenType(), mContext);
                     DmsPreferencesManager.putString(DmsConstants.REFRESH_TOKEN, model.getRefreshToken(), mContext);
+                    DmsPreferencesManager.putString(DmsConstants.USERNAME, userName, mContext);
+                    DmsPreferencesManager.putString(DmsConstants.PASSWORD, password, mContext);
                     mHelperResponseManager.onSuccess(mOldDataTag, model);
                 }
                 break;
@@ -79,6 +83,8 @@ public class LoginHelper implements ConnectionListener {
 
 
     public void doAppLogin(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
         ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_LOGIN_CODE, Request.Method.POST);
         mConnectionFactory.setHeaderParams();
         Map<String, String> testParams = new HashMap<String, String>();
