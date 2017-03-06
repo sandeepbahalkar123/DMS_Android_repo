@@ -1,4 +1,4 @@
-package com.scorg.dms.model.responsemodel;
+package com.scorg.dms.model.responsemodel.showsearchresultresponsemodel;
 
 /**
  * Created by sandeep on 2/22/17.

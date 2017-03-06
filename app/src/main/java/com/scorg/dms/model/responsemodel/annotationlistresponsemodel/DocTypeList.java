@@ -1,9 +1,9 @@
-package com.scorg.dms.model.requestmodel;
+package com.scorg.dms.model.responsemodel.annotationlistresponsemodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DocTypeRequest {
+public class DocTypeList {
 
 @SerializedName("typeId")
 @Expose
@@ -11,9 +11,6 @@ private Integer typeId;
 @SerializedName("typeName")
 @Expose
 private String typeName;
-@SerializedName("abbreviation")
-@Expose
-private String abbreviation;
 
 public Integer getTypeId() {
 return typeId;
@@ -29,14 +26,6 @@ return typeName;
 
 public void setTypeName(String typeName) {
 this.typeName = typeName;
-}
-
-public String getAbbreviation() {
-return abbreviation;
-}
-
-public void setAbbreviation(String abbreviation) {
-this.abbreviation = abbreviation;
 }
 
 }

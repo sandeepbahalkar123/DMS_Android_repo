@@ -1,9 +1,9 @@
-package com.scorg.dms.model.responsemodel;
+package com.scorg.dms.model.requestmodel.getpdfdatarequestmodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DocTypeList {
+public class DocTypeRequest {
 
 @SerializedName("typeId")
 @Expose
@@ -11,6 +11,9 @@ private Integer typeId;
 @SerializedName("typeName")
 @Expose
 private String typeName;
+@SerializedName("abbreviation")
+@Expose
+private String abbreviation;
 
 public Integer getTypeId() {
 return typeId;
@@ -26,6 +29,14 @@ return typeName;
 
 public void setTypeName(String typeName) {
 this.typeName = typeName;
+}
+
+public String getAbbreviation() {
+return abbreviation;
+}
+
+public void setAbbreviation(String abbreviation) {
+this.abbreviation = abbreviation;
 }
 
 }

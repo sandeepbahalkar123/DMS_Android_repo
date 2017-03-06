@@ -1,14 +1,13 @@
-package com.scorg.dms.model.requestmodel;
+package com.scorg.dms.model.responsemodel.filetreeresponsemodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.scorg.dms.model.responsemodel.DocType;
 
-public class LstDocTypeRequest {
+public class LstDocType {
 
 @SerializedName("docType")
 @Expose
-private DocTypeRequest docTypeRequest;
+private DocType docType;
 @SerializedName("createdDate")
 @Expose
 private String createdDate;
@@ -16,15 +15,15 @@ private String createdDate;
 @Expose
 private Integer pageCount;
 
-public DocTypeRequest getDocTypeRequest() {
-    return docTypeRequest;
+public DocType getDocType() {
+return docType;
 }
 
-public void setDocTypeRequest(DocTypeRequest docTypeRequest) {
-    this.docTypeRequest = docTypeRequest;
+public void setDocType(DocType docType) {
+this.docType = docType;
 }
 
-    public String getCreatedDate() {
+public String getCreatedDate() {
 return createdDate;
 }
 

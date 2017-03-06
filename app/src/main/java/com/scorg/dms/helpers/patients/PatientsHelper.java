@@ -4,13 +4,11 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
-import com.scorg.dms.model.requestmodel.ShowSearchResultRequestModel;
-import com.scorg.dms.model.responsemodel.SearchResult;
-import com.scorg.dms.model.responsemodel.ShowSearchResultResponseModel;
+import com.scorg.dms.model.requestmodel.showsearchresultrequestmodel.ShowSearchResultRequestModel;
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.network.ConnectRequest;
 import com.scorg.dms.network.ConnectionFactory;
 import com.scorg.dms.util.CommonMethods;
@@ -19,7 +17,6 @@ import com.scorg.dms.util.DmsConstants;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 /**
  * Created by riteshpandhurkar on 1/3/17.

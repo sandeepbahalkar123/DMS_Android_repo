@@ -1,4 +1,4 @@
-package com.scorg.dms.model.requestmodel;
+package com.scorg.dms.model.requestmodel.filetreerequestmodel;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

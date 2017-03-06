@@ -1,9 +1,8 @@
-package com.scorg.dms.model.requestmodel;
+package com.scorg.dms.model.requestmodel.getpdfdatarequestmodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.scorg.dms.interfaces.CustomResponse;
-import com.scorg.dms.model.responsemodel.LstDocType;
 
 import java.util.List;
 

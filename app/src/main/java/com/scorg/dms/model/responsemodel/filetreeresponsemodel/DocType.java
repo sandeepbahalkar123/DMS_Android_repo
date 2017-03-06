@@ -1,4 +1,4 @@
-package com.scorg.dms.model.responsemodel;
+package com.scorg.dms.model.responsemodel.filetreeresponsemodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
