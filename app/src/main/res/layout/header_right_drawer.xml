@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_add"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleTextColor="@color/dcr_toolbar"
+            app:theme="@style/ToolbarColoredBackArrow"
+            app:popupTheme="@style/AppTheme">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                android:layout_gravity="left"
+                android:textColor="@color/dcr_toolbar"
+                android:id="@+id/reset" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter"
+                android:layout_gravity="center"
+                android:textColor="@color/dcr_toolbar"
+                android:id="@+id/toolbar_title" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apply"
+                android:layout_gravity="right"
+                android:textColor="@color/dcr_toolbar"
+                android:id="@+id/apply" />
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_xsmall"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/padding_small"
+                android:weightSum="6">
+                <Spinner
+                    android:id="@+id/spinner_selectId"
+                    android:layout_width="@dimen/width_xsmall"
+                    android:layout_height="@dimen/margin_large"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:layout_weight="3"
+                    android:textColor="@color/dcr_customer_name"
+                    android:layout_below="@+id/include1"
+                    android:layout_centerHorizontal="true"
+                    />
+
+                <EditText
+                    android:id="@+id/et_uhid"
+                    android:layout_width="@dimen/margin_crate"
+                    android:layout_height="@dimen/margin_large"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_gravity="center"
+                    android:imeOptions="actionNext"
+                    android:textStyle="bold"
+                    android:hint="@string/UHID"
+                    android:paddingRight="@dimen/padding_very_tiny"
+                    android:gravity="left|center_vertical"
+                    android:layout_weight="3"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:textColor="@color/black"
+                    android:layout_below="@+id/include1"
+                    android:layout_centerHorizontal="true"
+                    />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/grey_200"
+                android:layout_marginTop="@dimen/padding_small"
+                android:weightSum="6">
+
+
+                <Spinner
+                    android:layout_width="@dimen/margin_crate"
+                    android:layout_height="@dimen/margin_large"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:spinnerMode="dropdown"
+                    android:gravity="center"
+                    android:layout_weight="6"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:textColor="@color/black"
+                    android:layout_below="@+id/include1"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/spinner_admissionDate" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/grey_200"
+                android:weightSum="6">
+                <EditText
+                    android:id="@+id/et_fromdate"
+                    android:layout_width="@dimen/width_xsmall"
+                    android:layout_height="@dimen/margin_large"
+                    android:hint="@string/from"
+                    android:editable="false"
+                    android:drawableRight="@drawable/ic_action_close"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/padding_tiny"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_marginBottom="@dimen/padding_small"
+
+                    android:layout_weight="3"
+                    android:layout_below="@+id/include1"
+                    android:layout_centerHorizontal="true"
+                    />
+
+                <EditText
+                    android:id="@+id/et_todate"
+                    android:layout_width="@dimen/margin_crate"
+                    android:layout_height="@dimen/margin_large"
+                    android:ellipsize="end"
+                    android:drawableRight="@drawable/ic_action_close"
+                    android:singleLine="true"
+                    android:editable="false"
+                    android:layout_marginTop="@dimen/padding_tiny"
+                    android:imeOptions="actionNext"
+                    android:textStyle="bold"
+                    android:hint="@string/to"
+                    android:paddingRight="@dimen/padding_very_tiny"
+                    android:gravity="left|center_vertical"
+                    android:layout_weight="3"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:textColor="@color/black"
+                    android:layout_below="@+id/include1"
+                    android:layout_centerHorizontal="true"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_xsmall"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/padding_small"
+
+                android:weightSum="6">
+
+
+                <EditText
+                    android:id="@+id/et_searchPatientName"
+                    android:layout_width="@dimen/margin_crate"
+                    android:layout_height="@dimen/margin_large"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_gravity="center"
+                    android:digits="0,1,2,3,4,5,6,7,8,9,*,qwertzuiopasdfghjklyxcvbnm,_,-"
+                    android:imeOptions="actionNext"
+                    android:textStyle="bold"
+                    android:drawableRight="@drawable/ic_action_close"
+                    android:hint="@string/searchbyPatient"
+                    android:paddingRight="@dimen/padding_very_tiny"
+                    android:gravity="left|center_vertical"
+                    android:layout_weight="6"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:textColor="@color/black"
+                    android:layout_below="@+id/include1"
+                    android:layout_centerHorizontal="true"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_xsmall"
+                android:background="@color/grey_200"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/padding_small"
+                android:weightSum="6">
+
+
+                <EditText
+                    android:id="@+id/et_annotation"
+                    android:layout_width="@dimen/margin_crate"
+                    android:layout_height="@dimen/margin_large"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_gravity="center"
+                    android:imeOptions="actionNext"
+                    android:textStyle="bold"
+                    android:drawableRight="@drawable/ic_action_close"
+                    android:hint="@string/enterAnnotation"
+                    android:paddingRight="@dimen/padding_very_tiny"
+                    android:gravity="left|center_vertical"
+                    android:layout_weight="6"
+                    android:layout_margin="@dimen/padding_small"
+                    android:textColor="@color/black"
+                    android:layout_below="@+id/include1"
+                    android:layout_centerHorizontal="true"
+                    />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_xsmall"
+                android:background="@color/white"
+                android:orientation="horizontal"
+
+                android:layout_marginTop="@dimen/padding_small"
+                android:weightSum="6">
+
+
+                <EditText
+                    android:id="@+id/et_search_annotation"
+                    android:layout_width="@dimen/margin_crate"
+                    android:layout_height="@dimen/margin_large"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_gravity="center"
+                    android:imeOptions="actionNext"
+                    android:textStyle="bold"
+                    android:digits="0,1,2,3,4,5,6,7,8,9,qwertzuiopasdfghjklyxcvbnm,_,-"
+                    android:drawableRight="@drawable/ic_action_close"
+                    android:hint="@string/searchAnnotation"
+                    android:paddingRight="@dimen/padding_very_tiny"
+                    android:gravity="left|center_vertical"
+                    android:layout_weight="6"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:textColor="@color/black"
+                    android:layout_below="@+id/include1"
+                    android:layout_centerHorizontal="true"
+                    />
+            </TableRow>
+
+
+
+
+        </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/lvExp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ExpandableListView>
+
+        <Button
+            android:id="@+id/setTags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SetTags"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            app:reverseLayout="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        </android.support.v7.widget.RecyclerView>
+
+
+
+</LinearLayout>
