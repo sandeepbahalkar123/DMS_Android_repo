@@ -8,4 +8,6 @@
     android:childIndicator="@color/white"
     android:divider="@android:color/black"
     android:dividerHeight="@dimen/dp1"
-    android:groupIndicator="@android:color/holo_red_dark" />
+    android:groupIndicator="@android:color/holo_red_dark"
+    android:paddingLeft="@dimen/dp4"
+    android:paddingRight="@dimen/dp4" />
