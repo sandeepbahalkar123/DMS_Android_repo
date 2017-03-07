@@ -21,6 +21,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -48,10 +49,11 @@ import android.widget.ExpandableListView;
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
 import com.scorg.dms.adapters.PatientExpandableListAdapter;
+import com.scorg.dms.fragment.TagAdapter;
 import com.scorg.dms.helpers.patients.PatientsHelper;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
-import com.scorg.dms.model.responsemodel.s
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.ui.ItemDetailActivity;
@@ -91,16 +93,19 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     private EditText et_annotation;
     private EditText et_search_annotation;
     Spinner spinSelectedID;
-    DatePickerDialog.OnDateSetListener date;
-    DatePickerDialog.OnDateSetListener date1;
+    DatePickerDialog.OnDateSetListener fromDate;
+    DatePickerDialog.OnDateSetListener toDate;
     private Spinner spinner_admissionDate;
     private String selected_id;
     private String admission_date;
     private String[] array_id;
     private Context mContext;
     Calendar myCalendar;
+    ArrayList<String> mTagsList = new ArrayList<String>();
     private Custom_Spin_Adapter custom_spinner_adapter;
     private PatientsHelper mPatientsHelper;
+    private RecyclerView.Adapter mAdapter;
+    RecyclerView recycleTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +120,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
         mPatientsHelper = new PatientsHelper(this, this);
         mPatientsHelper.doGetPatientList();
-
+  //floating button click listener
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,24 +128,36 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
             }
         });
 
-
+// setting adapter for spinner in header view of right drawer
         custom_spinner_adapter = new Custom_Spin_Adapter(this, array_id, getResources().getStringArray(R.array.select_id));
         spinSelectedID.setAdapter(custom_spinner_adapter);
         custom_spinner_adapter = new Custom_Spin_Adapter(this, array_id, getResources().getStringArray(R.array.admission_date));
         spinner_admissionDate.setAdapter(custom_spinner_adapter);
 
 
+        //
         setTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validateForm(selected_id,et_uhid.getText().toString(),admission_date,et_fromdate.getText().toString(),et_todate.getText().toString(),et_searchPatientName.getText().toString(),et_search_annotation.getText().toString()));
+                if(validateForm(selected_id,et_uhid.getText().toString(),admission_date,et_fromdate.getText().toString(),et_todate.getText().toString(),et_searchPatientName.getText().toString(),et_search_annotation.getText().toString()))
+                {
+                    mTagsList.add(selected_id);
+                    mTagsList.add(et_uhid.getText().toString());
+                    mTagsList.add(admission_date);
+                    mTagsList.add(et_fromdate.getText().toString());
+                    mTagsList.add(et_todate.getText().toString());
+                    mTagsList.add(et_searchPatientName.getText().toString());
+                    mTagsList.add(et_search_annotation.getText().toString());
+                    mAdapter = new TagAdapter(mContext,mTagsList);
+                    recycleTag.setAdapter(mAdapter);
+                }
 
             }
         });
      et_fromdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(PatientList.this, date, myCalendar
+                new DatePickerDialog(PatientList.this, fromDate, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
@@ -149,13 +166,13 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         et_todate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(PatientList.this, date1, myCalendar
+                new DatePickerDialog(PatientList.this, toDate, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
             }
         });
-
+// spinner click listener
         spinSelectedID.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -172,7 +189,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
             }
         });
-
+     // spinner click listener
         spinner_admissionDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -189,27 +206,18 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
             }
         });
-
+//// right navigation drawer clickListener
         rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                // Handle Right navigation view item clicks here.
-                //  int id = item.getItemId();
 
-               /* if (id == R.id.nav_settings) {
-                    Toast.makeText(MainActivity.this, "Right Drawer - Settings", Toast.LENGTH_SHORT).show();
-                } else if (id == R.id.nav_logout) {
-                    Toast.makeText(MainActivity.this, "Right Drawer - Logout", Toast.LENGTH_SHORT).show();
-                } else if (id == R.id.nav_help) {
-                    Toast.makeText(MainActivity.this, "Right Drawer - Help", Toast.LENGTH_SHORT).show();
-                } else if (id == R.id.nav_about) {
-                    Toast.makeText(MainActivity.this, "Right Drawer - About", Toast.LENGTH_SHORT).show();
-                }*/
 
                 drawer.closeDrawer(GravityCompat.END);
                 return true;
             }
         });
+
+        // left navigation drawer clickListener
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -236,10 +244,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
             }
         });
     }
-
+/// registering all UI components of activity
     private void init() {
             myCalendar = Calendar.getInstance();
-        date = new DatePickerDialog.OnDateSetListener() {
+        fromDate = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -248,11 +256,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+                updateLabelFromdate();
             }
 
         };
-        date1 = new DatePickerDialog.OnDateSetListener() {
+        toDate = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -261,20 +269,23 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel1();
+                updateLabelToDate();
             }
 
         };
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+        recycleTag = (RecyclerView)findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        layoutManager.setReverseLayout(true);
+        recycleTag.setLayoutManager(layoutManager);
         rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
         headerView = rightNavigationView.getHeaderView(0);
         setTags = (Button) headerView.findViewById(R.id.setTags) ;
@@ -288,32 +299,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         et_search_annotation = (EditText) headerView.findViewById(R.id.et_search_annotation);
         leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
-       /* date = new DatePickerDialog.OnDateSetListener() {
 
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-
-        };
-        date1 = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel1();
-            }
-
-        };*/
     }
 
 
@@ -350,7 +336,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     public void onServerError(int mOldDataTag, String serverErrorMessage) {
 
     }
-    private void updateLabel() {
+    private void updateLabelFromdate() {
 
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -358,7 +344,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         et_fromdate.setText(sdf.format(myCalendar.getTime()));
 
     }
-    private void updateLabel1() {
+    private void updateLabelToDate() {
 
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -366,8 +352,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
         et_todate.setText(sdf.format(myCalendar.getTime()));
     }
+
+
+    //validation for right drawer fields
     public boolean validateForm(String selectid, String uhid, String admissionDate, String fromDate, String toDate, String patientName, String annotation) {
-        boolean valid = true;
+        boolean valid = false;
         et_uhid.setError(null);
         et_todate.setError(null);
         et_fromdate.setError(null);
@@ -376,45 +365,39 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
        if(selectid.equals("Select")){
            custom_spinner_adapter = (Custom_Spin_Adapter) spinSelectedID.getAdapter();
            View selectedView = spinSelectedID.getSelectedView();
-           custom_spinner_adapter.setError(selectedView, "Error");
-           showMessageDialog(PatientList.this, "Error", "Please select Id.");
+           custom_spinner_adapter.setError(selectedView,  getResources().getString(R.string.Error));
+           showMessageDialog(PatientList.this,  getResources().getString(R.string.Error), getResources().getString(R.string.selectID));
            valid = false;
 
        }
-      else  if (uhid.length() <= 1)
-       {
+      else  if (uhid.length() <= 1) {
             setErrorMsg(getResources().getString(R.string.UHID), et_uhid, true);
             valid = false;
-        } else if (admissionDate.equals("Select"))
-       {
+       }else if (admissionDate.equals("Select")) {
            custom_spinner_adapter = (Custom_Spin_Adapter) spinner_admissionDate.getAdapter();
            View selectedView = spinner_admissionDate.getSelectedView();
-           custom_spinner_adapter.setError(selectedView, "Error");
-           showMessageDialog(PatientList.this, "Error", "Select Date Type");
+           custom_spinner_adapter.setError(selectedView,  getResources().getString(R.string.Error));
+           showMessageDialog(PatientList.this, getResources().getString(R.string.Error), getResources().getString(R.string.DateType));
            valid = false;
-        }
-       else  if (fromDate.length() <= 1)
-       {
+        }else  if (fromDate.length() <= 1) {
            setErrorMsg(getResources().getString(R.string.selectFromDate), et_fromdate, true);
            valid = false;
-       }
-       else  if (toDate.length() <= 1)
-       {
+       }else  if (toDate.length() <= 1) {
            setErrorMsg(getResources().getString(R.string.selectToDate), et_todate, true);
            valid = false;
-       }
-       else  if (!patientName.matches("[a-zA-Z.? ]*"))
-       {
+       }else  if (!patientName.matches("[a-zA-Z.? ]*")) {
            setErrorMsg(getResources().getString(R.string.patientName), et_searchPatientName, true);
            valid = false;
-       }
-       else  if (!annotation.matches("[a-zA-Z.? ]*"))
-       {
+       }else  if (!annotation.matches("[a-zA-Z.? ]*")) {
            setErrorMsg(getResources().getString(R.string.annotation), et_search_annotation, true);
            valid = false;
+       }else{
+           valid=true;
        }
         return valid;
     }
+
+    //set error msg method for validation
     public void setErrorMsg(String msg, EditText et, boolean isRequestFocus) {
         int ecolor = Color.RED; // whatever color you want
         ForegroundColorSpan fgcspan = new ForegroundColorSpan(ecolor);
@@ -426,7 +409,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
         et.setError(ssbuilder);
     }
-
+ //show dialog  for validation
     public static Dialog showMessageDialog(Activity activity, String dialogHeader, String dialogMessage) {
         final Dialog dialog = new Dialog(activity, R.style.DialogStyle);
 

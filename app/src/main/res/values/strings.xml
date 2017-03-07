@@ -16,10 +16,11 @@
     <string name="sign_up_hospital_name">Sign up for hospital name</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="title_activity_login">Sign in</string>
-
+    <string name="selectID">Select ID</string>
+    <string name="Error">Error</string>
     <string name="DateType">Select Date Type</string>
-    <string name="patientName">Select Date Type</string>
-    <string name="annotation">Select Date Type</string>
+    <string name="patientName">Enter patient name</string>
+    <string name="annotation">Enter annotation</string>
     <string name="selectFromDate">Enter from date</string>
     <string name="selectToDate">Enter to date</string>
     <string name="UHID">Enter UHID</string>
