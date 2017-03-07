@@ -1,4 +1,4 @@
-package com.scorg.dms.model.requestmodel;
+package com.scorg.dms.model.requestmodel.showsearchresultrequestmodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

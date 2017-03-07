@@ -4,12 +4,23 @@
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="item_width">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="padding_small">10dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="center_margin">100dp</dimen>
     <dimen name="dp24">24dp</dimen>
     <dimen name="dp12">12dp</dimen>
+    <dimen name="margin_crate">80dp</dimen>
+    <dimen name="padding_tiny">5dp</dimen>
+    <dimen name="width_xsmall">80dp</dimen>
+    <dimen name="margin_large">40dp</dimen>
+    <dimen name="height_xsmall">80dp</dimen>
     <dimen name="dp0">0dp</dimen>
     <dimen name="uhid">8dp</dimen>
+    <dimen name="margin_tiny">5dp</dimen>
+    <dimen name="text_medium">20sp</dimen>
+    <dimen name="padding_medium">15dp</dimen>
+    <dimen name="text_small">15sp</dimen>
+    <dimen name="button_height">40dp</dimen>
 </resources>

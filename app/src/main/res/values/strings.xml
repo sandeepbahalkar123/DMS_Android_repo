@@ -7,13 +7,28 @@
     <string name="roboto_regular">roboto_regular.ttf</string>
     <string name="roboto_light">roboto_light.ttf</string>
     <string name="roboto_medium">roboto_medium.ttf</string>
-
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <dimen name="padding_very_tiny">3dp</dimen>
     <string name="login">LOG IN</string>
     <string name="user_name">User Name</string>
     <string name="password">Password</string>
     <string name="sign_up_hospital_name">Sign up for hospital name</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="selectID">Select ID</string>
+    <string name="Error">Error</string>
+    <string name="DateType">Select Date Type</string>
+    <string name="patientName">Enter patient name</string>
+    <string name="annotation">Enter annotation</string>
+    <string name="selectFromDate">Enter from date</string>
+    <string name="selectToDate">Enter to date</string>
+    <string name="UHID">Enter UHID</string>
+    <string name="searchbyPatient">Search By Patient Name</string>
+    <string name="enterAnnotation">Enter Annotation</string>
+    <string name="searchAnnotation">Search Annotation</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -43,5 +58,39 @@
     <string name="selected_1">Selected 1:</string>
     <string name="selected_2">Selected 2:</string>
 
+    <string name="dialog_message_text">message</string>
 
+    <string-array name="select_id">
+        <item>Select</item>
+        <item>IPD</item>
+        <item>OPD</item>
+        <item>UHID</item>
+    </string-array>
+
+    <string-array name="admission_date">
+        <item>Select</item>
+        <item>IPD-Admission Date</item>
+        <item>IPD-Discharge Date</item>
+        <item>OPD-Visit Date</item>
+    </string-array>
+
+
+    <string-array name="ids">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+    <item>10</item>
+    <item>11</item>
+    <item>12</item>
+    <item>13</item>
+    <item>14</item>
+    <item>15</item>
+    </string-array>
 </resources>

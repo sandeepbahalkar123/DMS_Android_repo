@@ -1,8 +1,9 @@
-package com.scorg.dms.model.responsemodel;
+package com.scorg.dms.model.responsemodel.annotationlistresponsemodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.scorg.dms.interfaces.CustomResponse;
+import com.scorg.dms.model.responsemodel.Common;
 
 import java.io.Serializable;
 

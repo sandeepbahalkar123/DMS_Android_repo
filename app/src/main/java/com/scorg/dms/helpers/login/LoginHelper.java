@@ -3,15 +3,13 @@ package com.scorg.dms.helpers.login;
 import android.content.Context;
 
 import com.android.volley.Request;
-import com.scorg.dms.R;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
-import com.scorg.dms.model.responsemodel.LoginResponseModel;
+import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.network.ConnectRequest;
 import com.scorg.dms.network.ConnectionFactory;
 import com.scorg.dms.preference.DmsPreferencesManager;
-import com.scorg.dms.ui.activities.LoginActivity;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.Config;
 import com.scorg.dms.util.DmsConstants;
