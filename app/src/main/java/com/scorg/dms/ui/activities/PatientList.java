@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -57,6 +58,7 @@ import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFi
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.ui.ItemDetailActivity;
+import com.scorg.dms.util.DmsConstants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,7 +87,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     NavigationView leftNavigationView;
     NavigationView rightNavigationView;
     View headerView;
-    Button setTags;
+    TextView tvApply;
+    TextView tvReset;
     private EditText et_uhid;
     private EditText et_fromdate;
     private EditText et_todate;
@@ -111,6 +114,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         mContext = getApplicationContext();
 
         init();
@@ -131,27 +136,71 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 // setting adapter for spinner in header view of right drawer
         custom_spinner_adapter = new Custom_Spin_Adapter(this, array_id, getResources().getStringArray(R.array.select_id));
         spinSelectedID.setAdapter(custom_spinner_adapter);
-        custom_spinner_adapter = new Custom_Spin_Adapter(this, array_id, getResources().getStringArray(R.array.admission_date));
-        spinner_admissionDate.setAdapter(custom_spinner_adapter);
 
 
         //
-        setTags.setOnClickListener(new View.OnClickListener() {
+        tvApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validateForm(selected_id,et_uhid.getText().toString(),admission_date,et_fromdate.getText().toString(),et_todate.getText().toString(),et_searchPatientName.getText().toString(),et_search_annotation.getText().toString()))
+                mTagsList.clear();
+                if(validateForm(selected_id,et_uhid.getText().toString(),admission_date,et_fromdate.getText().toString(),et_todate.getText().toString(),et_searchPatientName.getText().toString(),et_annotation.getText().toString()))
                 {
-                    mTagsList.add(selected_id);
-                    mTagsList.add(et_uhid.getText().toString());
-                    mTagsList.add(admission_date);
-                    mTagsList.add(et_fromdate.getText().toString());
-                    mTagsList.add(et_todate.getText().toString());
-                    mTagsList.add(et_searchPatientName.getText().toString());
-                    mTagsList.add(et_search_annotation.getText().toString());
+
+                    //adding field values to generate tags in recycler view
+                    if(!selected_id.equals(getResources().getString(R.string.Select))) {
+                        mTagsList.add(DmsConstants.fileType+"|"+selected_id);
+                    }
+
+                    if(!et_uhid.getText().toString().equalsIgnoreCase("")) {
+
+                        mTagsList.add(DmsConstants.ID+"|"+et_uhid.getText().toString());
+                    }
+
+                    if(!admission_date.equals(getResources().getString(R.string.Select))) {
+                        mTagsList.add(DmsConstants.DocTypeId+"|"+admission_date);
+                    }
+
+                    if(!et_fromdate.getText().toString().equalsIgnoreCase("")) {
+                        mTagsList.add(DmsConstants.fromDate+"|"+et_fromdate.getText().toString());
+
+                    }
+
+                    if(!et_todate.getText().toString().equalsIgnoreCase("")) {
+
+                        mTagsList.add(DmsConstants.toDate+"|"+et_todate.getText().toString());
+
+                    }
+
+                    if(!et_searchPatientName.getText().toString().equalsIgnoreCase("")) {
+                        mTagsList.add(DmsConstants.patientName+"|"+et_searchPatientName.getText().toString());
+
+                    }
+
+                    if(!et_annotation.getText().toString().equalsIgnoreCase("")) {
+                        mTagsList.add(DmsConstants.annotationText+"|"+et_annotation.getText().toString());
+
+                    }
+
+                    Log.e("TAg========","gggg"+et_todate.getText().toString());
+
                     mAdapter = new TagAdapter(mContext,mTagsList);
                     recycleTag.setAdapter(mAdapter);
+                    drawer.closeDrawer(GravityCompat.END);
                 }
 
+            }
+        });
+
+        tvReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_uhid.setText("");
+                et_fromdate.setText("");
+                et_todate.setText("");
+                et_search_annotation.setText("");
+                et_searchPatientName.setText("");
+                spinner_admissionDate.setSelection(0);
+                spinSelectedID.setSelection(0);
             }
         });
      et_fromdate.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +228,29 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
                 int indexSselectedId =  adapterView.getSelectedItemPosition();
                 array_id = getResources().getStringArray(R.array.select_id);
                 selected_id = array_id[indexSselectedId];
-                Toast.makeText(PatientList.this, ""+selected_id, Toast.LENGTH_SHORT).show();
+                if(selected_id.equals(getResources().getString(R.string.Select))){
+                    spinner_admissionDate.setSelection(0);
+                    spinner_admissionDate.setEnabled(false);
+                }
+
+              else  if(selected_id.equals(getResources().getString(R.string._ipd))){
+                    spinner_admissionDate.setEnabled(true);
+                    custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.IPD));
+                    spinner_admissionDate.setAdapter(custom_spinner_adapter);
+                    et_uhid.setHint(getResources().getString(R.string.IPD));
+
+                }else if(selected_id.equals(getResources().getString(R.string._opd))){
+                    spinner_admissionDate.setEnabled(true);
+                    custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.OPD));
+                    spinner_admissionDate.setAdapter(custom_spinner_adapter);
+                    et_uhid.setHint(getResources().getString(R.string.OPD));
+                }else if(selected_id.equals(getResources().getString(R.string._uhid))){
+                    spinner_admissionDate.setEnabled(true);
+                    custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.admission_date));
+                    spinner_admissionDate.setAdapter(custom_spinner_adapter);
+
+                }
+
 
 
             }
@@ -196,7 +267,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
                 int indexSselectedId =  adapterView.getSelectedItemPosition();
                 array_id = getResources().getStringArray(R.array.admission_date);
                 admission_date = array_id[indexSselectedId];
-                Toast.makeText(PatientList.this, ""+admission_date, Toast.LENGTH_SHORT).show();
 
 
             }
@@ -246,6 +316,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     }
 /// registering all UI components of activity
     private void init() {
+        int width = getResources().getDisplayMetrics().widthPixels/2;
             myCalendar = Calendar.getInstance();
         fromDate = new DatePickerDialog.OnDateSetListener() {
 
@@ -280,15 +351,25 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
+
         recycleTag = (RecyclerView)findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         layoutManager.setReverseLayout(true);
         recycleTag.setLayoutManager(layoutManager);
+        leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
         rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
         headerView = rightNavigationView.getHeaderView(0);
-        setTags = (Button) headerView.findViewById(R.id.setTags) ;
+
+        DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) rightNavigationView.getLayoutParams();
+        params.width = width;
+
+        DrawerLayout.LayoutParams leftParams = (android.support.v4.widget.DrawerLayout.LayoutParams) leftNavigationView.getLayoutParams();
+        leftParams.width = width;
+        rightNavigationView.setLayoutParams(params);
+        leftNavigationView.setLayoutParams(leftParams);
+
         spinSelectedID = (Spinner)headerView.findViewById(R.id.spinner_selectId) ;
         spinner_admissionDate = (Spinner) headerView.findViewById(R.id.spinner_admissionDate);
         et_uhid = (EditText) headerView.findViewById(R.id.et_uhid);
@@ -297,8 +378,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         et_searchPatientName = (EditText) headerView.findViewById(R.id.et_searchPatientName);
         et_annotation = (EditText) headerView.findViewById(R.id.et_annotation);
         et_search_annotation = (EditText) headerView.findViewById(R.id.et_search_annotation);
-        leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
-
+        tvApply = (TextView)headerView.findViewById(R.id.apply);
+        tvReset = (TextView)headerView.findViewById(R.id.reset);
 
     }
 
@@ -338,7 +419,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     }
     private void updateLabelFromdate() {
 
-        String myFormat = "dd/MM/yy"; //In which you need put here
+        String myFormat = DmsConstants.DATEFORMAT; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         et_fromdate.setText(sdf.format(myCalendar.getTime()));
@@ -346,7 +427,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     }
     private void updateLabelToDate() {
 
-        String myFormat = "dd/MM/yy"; //In which you need put here
+        String myFormat = DmsConstants.DATEFORMAT; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
 
@@ -357,39 +438,20 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     //validation for right drawer fields
     public boolean validateForm(String selectid, String uhid, String admissionDate, String fromDate, String toDate, String patientName, String annotation) {
         boolean valid = false;
-        et_uhid.setError(null);
+
         et_todate.setError(null);
         et_fromdate.setError(null);
         et_searchPatientName.setError(null);
-        et_search_annotation.setError(null);
-       if(selectid.equals("Select")){
-           custom_spinner_adapter = (Custom_Spin_Adapter) spinSelectedID.getAdapter();
-           View selectedView = spinSelectedID.getSelectedView();
-           custom_spinner_adapter.setError(selectedView,  getResources().getString(R.string.Error));
-           showMessageDialog(PatientList.this,  getResources().getString(R.string.Error), getResources().getString(R.string.selectID));
-           valid = false;
+        et_annotation.setError(null);
 
-       }
-      else  if (uhid.length() <= 1) {
-            setErrorMsg(getResources().getString(R.string.UHID), et_uhid, true);
-            valid = false;
-       }else if (admissionDate.equals("Select")) {
-           custom_spinner_adapter = (Custom_Spin_Adapter) spinner_admissionDate.getAdapter();
-           View selectedView = spinner_admissionDate.getSelectedView();
-           custom_spinner_adapter.setError(selectedView,  getResources().getString(R.string.Error));
-           showMessageDialog(PatientList.this, getResources().getString(R.string.Error), getResources().getString(R.string.DateType));
+     if (toDate.equals(fromDate)) {
+           setErrorMsg(getResources().getString(R.string.selectFromDate), et_todate, true);
            valid = false;
-        }else  if (fromDate.length() <= 1) {
-           setErrorMsg(getResources().getString(R.string.selectFromDate), et_fromdate, true);
-           valid = false;
-       }else  if (toDate.length() <= 1) {
-           setErrorMsg(getResources().getString(R.string.selectToDate), et_todate, true);
-           valid = false;
-       }else  if (!patientName.matches("[a-zA-Z.? ]*")) {
+       }else  if (!patientName.matches("[a-zA-Z. ]*")) {
            setErrorMsg(getResources().getString(R.string.patientName), et_searchPatientName, true);
            valid = false;
-       }else  if (!annotation.matches("[a-zA-Z.? ]*")) {
-           setErrorMsg(getResources().getString(R.string.annotation), et_search_annotation, true);
+       }else  if (!annotation.matches("[a-zA-Z. ]*")) {
+           setErrorMsg(getResources().getString(R.string.annotation), et_annotation, true);
            valid = false;
        }else{
            valid=true;

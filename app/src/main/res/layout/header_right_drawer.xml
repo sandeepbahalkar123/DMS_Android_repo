@@ -9,7 +9,7 @@
             android:id="@+id/toolbar_add"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/black"
             app:titleTextColor="@color/dcr_toolbar"
             app:theme="@style/ToolbarColoredBackArrow"
             app:popupTheme="@style/AppTheme">
@@ -17,10 +17,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reset"
-                android:layout_gravity="left"
+                android:textSize="@dimen/text_small"
+                android:drawableLeft="@drawable/ic_action_close"
+                android:gravity="center_vertical|left"
                 android:textColor="@color/dcr_toolbar"
                 android:id="@+id/reset" />
             <TextView
+                android:textSize="@dimen/text_small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Filter"
@@ -28,9 +31,12 @@
                 android:textColor="@color/dcr_toolbar"
                 android:id="@+id/toolbar_title" />
             <TextView
+                android:textSize="@dimen/text_small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Apply"
+                android:drawableLeft="@drawable/ic_action_close"
+                android:gravity="center_vertical|left"
                 android:layout_gravity="right"
                 android:textColor="@color/dcr_toolbar"
                 android:id="@+id/apply" />
@@ -62,32 +68,37 @@
                     android:layout_below="@+id/include1"
                     android:layout_centerHorizontal="true"
                     />
-
-                <EditText
-                    android:id="@+id/et_uhid"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="3"
                     android:layout_width="@dimen/margin_crate"
                     android:layout_height="@dimen/margin_large"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:layout_gravity="center"
-                    android:imeOptions="actionNext"
-                    android:textStyle="bold"
-                    android:hint="@string/UHID"
-                    android:paddingRight="@dimen/padding_very_tiny"
-                    android:gravity="left|center_vertical"
-                    android:layout_weight="3"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_marginLeft="@dimen/padding_small"
-                    android:textColor="@color/black"
-                    android:layout_below="@+id/include1"
-                    android:layout_centerHorizontal="true"
-                    />
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/et_uhid"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:layout_gravity="center"
+                        android:imeOptions="actionNext"
+                        android:textStyle="bold"
+                        android:paddingBottom="@dimen/text_margin_large"
+                        android:layout_marginRight="@dimen/padding_small"
+                        android:layout_marginLeft="@dimen/padding_small"
+                        android:textColor="@color/black"
+                        android:layout_centerHorizontal="true"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+
+
             </TableRow>
 
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/margin_small"
                 android:orientation="horizontal"
                 android:background="@color/grey_200"
                 android:layout_marginTop="@dimen/padding_small"
@@ -96,7 +107,7 @@
 
                 <Spinner
                     android:layout_width="@dimen/margin_crate"
-                    android:layout_height="@dimen/margin_large"
+                    android:layout_height="@dimen/margin_l"
                     android:singleLine="true"
                     android:textStyle="bold"
                     android:spinnerMode="dropdown"
@@ -113,50 +124,60 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/margin_small"
                 android:orientation="horizontal"
                 android:background="@color/grey_200"
                 android:weightSum="6">
-                <EditText
-                    android:id="@+id/et_fromdate"
-                    android:layout_width="@dimen/width_xsmall"
-                    android:layout_height="@dimen/margin_large"
-                    android:hint="@string/from"
-                    android:editable="false"
-                    android:drawableRight="@drawable/ic_action_close"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="@dimen/padding_tiny"
-                    android:layout_marginLeft="@dimen/padding_small"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_marginBottom="@dimen/padding_small"
-
+                <android.support.design.widget.TextInputLayout
                     android:layout_weight="3"
-                    android:layout_below="@+id/include1"
-                    android:layout_centerHorizontal="true"
-                    />
-
-                <EditText
-                    android:id="@+id/et_todate"
                     android:layout_width="@dimen/margin_crate"
                     android:layout_height="@dimen/margin_large"
-                    android:ellipsize="end"
-                    android:drawableRight="@drawable/ic_action_close"
-                    android:singleLine="true"
-                    android:editable="false"
-                    android:layout_marginTop="@dimen/padding_tiny"
-                    android:imeOptions="actionNext"
-                    android:textStyle="bold"
-                    android:hint="@string/to"
-                    android:paddingRight="@dimen/padding_very_tiny"
-                    android:gravity="left|center_vertical"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/et_fromdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:focusableInTouchMode="false"
+                        android:singleLine="true"
+                        android:layout_gravity="center"
+                        android:imeOptions="actionNext"
+                        android:textStyle="bold"
+                        android:hint="@string/from"
+                        android:paddingBottom="@dimen/text_margin_large"
+                        android:layout_marginRight="@dimen/padding_small"
+                        android:layout_marginLeft="@dimen/padding_small"
+                        android:textColor="@color/black"
+                        android:layout_centerHorizontal="true"
+                        />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
                     android:layout_weight="3"
-                    android:layout_marginBottom="@dimen/padding_small"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_marginLeft="@dimen/padding_small"
-                    android:textColor="@color/black"
-                    android:layout_below="@+id/include1"
-                    android:layout_centerHorizontal="true"
-                    />
+                    android:layout_width="@dimen/margin_crate"
+                    android:layout_height="@dimen/margin_large"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/et_todate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:focusableInTouchMode="false"
+                        android:layout_gravity="center"
+                        android:imeOptions="actionNext"
+                        android:textStyle="bold"
+                        android:hint="@string/to"
+                        android:paddingBottom="@dimen/text_margin_large"
+                        android:layout_marginRight="@dimen/padding_small"
+                        android:layout_marginLeft="@dimen/padding_small"
+                        android:textColor="@color/black"
+                        android:layout_centerHorizontal="true"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+
             </TableRow>
 
             <TableRow
@@ -165,31 +186,35 @@
                 android:background="@color/white"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/padding_small"
-
                 android:weightSum="6">
-
-
-                <EditText
-                    android:id="@+id/et_searchPatientName"
-                    android:layout_width="@dimen/margin_crate"
-                    android:layout_height="@dimen/margin_large"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:layout_gravity="center"
-                    android:digits="0,1,2,3,4,5,6,7,8,9,*,qwertzuiopasdfghjklyxcvbnm,_,-"
-                    android:imeOptions="actionNext"
-                    android:textStyle="bold"
-                    android:drawableRight="@drawable/ic_action_close"
-                    android:hint="@string/searchbyPatient"
-                    android:paddingRight="@dimen/padding_very_tiny"
-                    android:gravity="left|center_vertical"
+                <android.support.design.widget.TextInputLayout
                     android:layout_weight="6"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_marginLeft="@dimen/padding_small"
-                    android:textColor="@color/black"
-                    android:layout_below="@+id/include1"
-                    android:layout_centerHorizontal="true"
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_large"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/et_searchPatientName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:layout_gravity="center"
+                        android:imeOptions="actionNext"
+                        android:textStyle="bold"
+                        android:hint="@string/searchbyPatient"
+                        android:paddingBottom="@dimen/text_margin_large"
+                        android:layout_marginRight="@dimen/padding_small"
+                        android:layout_marginLeft="@dimen/padding_small"
+                        android:textColor="@color/black"
+                        android:drawableRight="@drawable/ic_action_close"
+
+                        android:layout_centerHorizontal="true"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+
+
             </TableRow>
 
             <TableRow
@@ -197,30 +222,35 @@
                 android:layout_height="@dimen/height_xsmall"
                 android:background="@color/grey_200"
                 android:orientation="horizontal"
-                android:visibility="gone"
                 android:layout_marginTop="@dimen/padding_small"
                 android:weightSum="6">
-
-
-                <EditText
-                    android:id="@+id/et_annotation"
-                    android:layout_width="@dimen/margin_crate"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight="3"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_large"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:layout_gravity="center"
-                    android:imeOptions="actionNext"
-                    android:textStyle="bold"
-                    android:drawableRight="@drawable/ic_action_close"
-                    android:hint="@string/enterAnnotation"
-                    android:paddingRight="@dimen/padding_very_tiny"
-                    android:gravity="left|center_vertical"
-                    android:layout_weight="6"
-                    android:layout_margin="@dimen/padding_small"
-                    android:textColor="@color/black"
-                    android:layout_below="@+id/include1"
-                    android:layout_centerHorizontal="true"
-                    />
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/et_annotation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:layout_gravity="center"
+                        android:imeOptions="actionNext"
+                        android:textStyle="bold"
+                        android:hint="@string/enterAnnotation"
+                        android:paddingBottom="@dimen/text_margin_large"
+                        android:layout_marginRight="@dimen/padding_small"
+                        android:layout_marginLeft="@dimen/padding_small"
+                        android:textColor="@color/black"
+                        android:drawableRight="@drawable/ic_action_close"
+                        android:layout_centerHorizontal="true"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+
+
             </TableRow>
 
 
@@ -229,32 +259,36 @@
                 android:layout_height="@dimen/height_xsmall"
                 android:background="@color/white"
                 android:orientation="horizontal"
-
                 android:layout_marginTop="@dimen/padding_small"
                 android:weightSum="6">
 
-
-                <EditText
-                    android:id="@+id/et_search_annotation"
-                    android:layout_width="@dimen/margin_crate"
-                    android:layout_height="@dimen/margin_large"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:layout_gravity="center"
-                    android:imeOptions="actionNext"
-                    android:textStyle="bold"
-                    android:digits="0,1,2,3,4,5,6,7,8,9,qwertzuiopasdfghjklyxcvbnm,_,-"
-                    android:drawableRight="@drawable/ic_action_close"
-                    android:hint="@string/searchAnnotation"
-                    android:paddingRight="@dimen/padding_very_tiny"
-                    android:gravity="left|center_vertical"
+                <android.support.design.widget.TextInputLayout
                     android:layout_weight="6"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_marginLeft="@dimen/padding_small"
-                    android:textColor="@color/black"
-                    android:layout_below="@+id/include1"
-                    android:layout_centerHorizontal="true"
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_large"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/et_search_annotation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:layout_gravity="center"
+                        android:imeOptions="actionNext"
+                        android:textStyle="bold"
+                        android:hint="@string/searchAnnotation"
+                        android:paddingBottom="@dimen/text_margin_large"
+                        android:layout_marginRight="@dimen/padding_small"
+                        android:layout_marginLeft="@dimen/padding_small"
+                        android:textColor="@color/black"
+                        android:drawableRight="@drawable/ic_action_close"
+                        android:layout_centerHorizontal="true"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+
+
             </TableRow>
 
 
@@ -268,19 +302,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></ExpandableListView>
 
-        <Button
-            android:id="@+id/setTags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SetTags"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            app:reverseLayout="false"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-        </android.support.v7.widget.RecyclerView>
+
 
 
 

@@ -21,7 +21,7 @@
     <string name="DateType">Select Date Type</string>
     <string name="patientName">Enter patient name</string>
     <string name="annotation">Enter annotation</string>
-    <string name="selectFromDate">Enter from date</string>
+    <string name="selectFromDate">Date cannot be same</string>
     <string name="selectToDate">Enter to date</string>
     <string name="UHID">Enter UHID</string>
     <string name="searchbyPatient">Search By Patient Name</string>
@@ -45,6 +45,12 @@
     </string>
 
     <string name="visit_date">Visit Date:</string>
+    <string name="_ipd">IPD</string>
+    <string name="_opd">OPD</string>
+    <string name="_uhid">UHID</string>
+    <string name="OPD">Enter OPD</string>
+    <string name="IPD">Enter IPD</string>
+    <string name="Select">Select</string>
     <string name="admission_date">Admission Date:</string>
     <string name="discharge_date">Discharge Date:</string>
     <string name="more">More</string>
@@ -70,7 +76,15 @@
         <item>OPD-Visit Date</item>
     </string-array>
 
-
+    <string-array name="IPD">
+        <item>Select</item>
+        <item>IPD-Admission Date</item>
+        <item>IPD-Discharge Date</item>
+    </string-array>
+    <string-array name="OPD">
+        <item>Select</item>
+        <item>OPD-Visit Date</item>
+    </string-array>
     <string-array name="ids">
     <item>0</item>
     <item>1</item>

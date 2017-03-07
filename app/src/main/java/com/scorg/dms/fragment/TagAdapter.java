@@ -33,6 +33,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
         mDataSet = list;
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -58,7 +59,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(TagAdapter.ViewHolder holder, final int position){
 
-            holder.mTextView.setText(String.valueOf(mDataSet.get(position)));
+            holder.mTextView.setText(String.valueOf(mDataSet.get(position).split("\\|")[1]));
 
 
 
@@ -92,7 +93,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 // Get the clicked item label
-                String itemLabel = String.valueOf(mDataSet.get(position));
+                String itemLabel = String.valueOf(mDataSet.get(position).split("\\|")[0]);
 
                 // Remove the item on remove/button click
                 mDataSet.remove(position);

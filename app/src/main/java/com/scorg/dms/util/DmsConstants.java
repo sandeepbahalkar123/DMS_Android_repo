@@ -14,10 +14,21 @@ public class DmsConstants {
     public static String BUTTON_COLOR = "#E4422C";
     public static String BUTTON_TEXT_COLOR = "#FFFFFF";
     public static String TEXT_COLOR = "#000000";
+    public static final String ID = "_id";
+
+    public static final String patientName = "patientName";
+    public static final String fileType = "fileType";
+    public static final String referenceId = "referenceId";
+    public static final String dateType = "dateType";
+    public static final String fromDate = "fromDate";
+    public static final String toDate = "toDate";
+    public static final String annotationText = "annotationText";
+    public static final String DocTypeId = "DocTypeId";
 
     public static final String DEVICEID = "Device-Id";
     public static final String OS = "OS";
     public static final String OSVERSION = "OS-Version";
+    public static final String DATEFORMAT = "dd/MM/yy";
     public static final String DEVICETYPE = "deviceType";
     public static final String ACCESS_TOKEN = "accessToken";
     public static final String TOKEN_TYPE = "token_type";
