@@ -177,6 +177,7 @@
         android:layout_gravity="right"
         android:gravity="right"
         android:text="@string/more"
+        android:layout_marginRight="@dimen/dp4"
         android:textColor="@color/cobalt_blue" />
 
 </LinearLayout>

@@ -14,7 +14,7 @@
             android:id="@+id/uhid"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button"
+            android:background="@drawable/rounded_button_blue"
             android:gravity="center"
             android:paddingBottom="@dimen/uhid"
             android:paddingTop="@dimen/uhid"

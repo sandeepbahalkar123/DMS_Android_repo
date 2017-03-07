@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/dp10"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/dp0"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center|right"
+            android:text="@string/selected_1" />
+
+        <TextView
+            android:id="@+id/selectedOne"
+            android:layout_width="@dimen/dp0"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp5"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/selected_1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/dp0"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center|right"
+            android:text="@string/selected_1" />
+
+        <TextView
+            android:id="@+id/selectedTwo"
+            android:layout_width="@dimen/dp0"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp5"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/selected_1" />
+    </LinearLayout>
+
+    <!--  <LinearLayout
+          android:visibility="gone"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:orientation="horizontal">
+
+          <Button
+              android:id="@+id/compare"
+              android:layout_width="@dimen/dp0"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:background="@drawable/rounded_button_blue"
+              android:gravity="center"
+              android:text="@string/compare"
+              android:textColor="@color/white" />
+
+          <Button
+              android:id="@+id/cancel"
+              android:layout_width="@dimen/dp0"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dp5"
+              android:layout_weight="1"
+              android:background="@drawable/rounded_button_blue"
+              android:gravity="center"
+              android:text="@string/cancel"
+              android:textColor="@color/white" />
+
+      </LinearLayout>-->
+
+</LinearLayout>
