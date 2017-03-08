@@ -1,9 +1,19 @@
 package com.scorg.dms.util;
 
+import android.graphics.Color;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.widget.EditText;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Calendar;
+
 /**
  * @author Sandeep Bahalkar
  */
 public class DmsConstants {
+
     public static final String DMS_LOG_FOLDER = "DMS_LOG";
     public static final String DMS_LOG_FILE = "DMS_LOG_FILE.txt";
 
@@ -86,4 +96,23 @@ public class DmsConstants {
         public static int TWO_SECONDS = 2000;
         public static int THREE_SECONDS = 3000;
     }
+    public static void setErrorMsg(String msg, EditText et, boolean isRequestFocus) {
+        int ecolor = Color.RED; // whatever color you want
+        ForegroundColorSpan fgcspan = new ForegroundColorSpan(ecolor);
+        SpannableStringBuilder ssbuilder = new SpannableStringBuilder(msg);
+        ssbuilder.setSpan(fgcspan, 0, msg.length(), 0);
+        if (isRequestFocus) {
+            et.requestFocus();
+        }
+
+        et.setError(ssbuilder);
+    }
+    public static String updateLabel(Calendar mCalendar) {
+
+        String myFormat = DATEFORMAT; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        return (sdf.format(mCalendar.getTime()));
+    }
+
 }

@@ -1,9 +1,6 @@
-package com.scorg.dms.fragment;
+package com.scorg.dms.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.EmbossMaskFilter;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +9,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.scorg.dms.R;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -63,32 +57,6 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
 
 
 
-
-        // Generate a random color
-        int color = getRandomHSVColor();
-
-        // Set a random color for TextView background
-       // holder.mTextView.setBackgroundColor(getLighterColor(color));
-
-        // Set a text color for TextView
-       // holder.mTextView.setTextColor(getReverseColor(color));
-
-        // Set a gradient background for RelativeLayout
-     //   holder.mRelativeLayout.setBackground(getGradientDrawable());
-
-        // Emboss the TextView text
-       // applyEmbossMaskFilter(holder.mTextView);
-
-        // Set a click listener for TextView
-        holder.mTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*String animal = mDataSet.get(position);
-                Toast.makeText(mContext,animal,Toast.LENGTH_SHORT).show();*/
-            }
-        });
-
-        // Set a click listener for item remove button
         holder.mRemoveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,68 +108,6 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
         return mDataSet.size();
     }
 
-    // Custom method to apply emboss mask filter to TextView
-    protected void applyEmbossMaskFilter(TextView tv){
-        EmbossMaskFilter embossFilter = new EmbossMaskFilter(
-                new float[]{1f, 5f, 1f}, // direction of the light source
-                0.8f, // ambient light between 0 to 1
-                8, // specular highlights
-                7f // blur before applying lighting
-        );
-       // tv.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
-      //  tv.getPaint().setMaskFilter(embossFilter);
-    }
 
-    // Custom method to generate random HSV color
-    protected int getRandomHSVColor(){
-        // Generate a random hue value between 0 to 360
-        int hue = mRandom.nextInt(361);
-        // We make the color depth full
-        float saturation = 1.0f;
-        // We make a full bright color
-        float value = 1.0f;
-        // We avoid color transparency
-        int alpha = 255;
-        // Finally, generate the color
-        int color = Color.HSVToColor(alpha, new float[]{hue, saturation, value});
-        // Return the color
-        return color;
-    }
 
-    // Custom method to create a GradientDrawable object
-    protected GradientDrawable getGradientDrawable(){
-        GradientDrawable gradient = new GradientDrawable();
-        gradient.setGradientType(GradientDrawable.SWEEP_GRADIENT);
-        gradient.setColors(new int[]{getRandomHSVColor(), getRandomHSVColor(),getRandomHSVColor()});
-        return gradient;
-    }
-
-    // Custom method to get a darker color
-    protected int getDarkerColor(int color){
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = 0.8f *hsv[2];
-        return Color.HSVToColor(hsv);
-    }
-
-    // Custom method to get a lighter color
-    protected int getLighterColor(int color){
-        float[] hsv = new float[3];
-        Color.colorToHSV(color,hsv);
-        hsv[2] = 0.2f + 0.8f * hsv[2];
-        return Color.HSVToColor(hsv);
-    }
-
-    // Custom method to get reverse color
-    protected int getReverseColor(int color){
-        float[] hsv = new float[3];
-        Color.RGBToHSV(
-                Color.red(color), // Red value
-                Color.green(color), // Green value
-                Color.blue(color), // Blue value
-                hsv
-        );
-        hsv[0] = (hsv[0] + 180) % 360;
-        return Color.HSVToColor(hsv);
-    }
 }

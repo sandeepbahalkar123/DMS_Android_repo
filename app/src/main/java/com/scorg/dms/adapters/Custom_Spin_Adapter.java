@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.scorg.dms.R;
 
 
@@ -14,14 +13,14 @@ import com.scorg.dms.R;
  * Created by root on 22/6/16.
  */
 public class Custom_Spin_Adapter extends BaseAdapter {
-    Context context;
-    String[] ids;
+    Context mContext;
+    String[] spinIds;
     String[] choice;
 
 
     public Custom_Spin_Adapter(Context context, String[] ids , String[] spinner_data) {
-        this.context = context;
-        this.ids=ids;
+        this.mContext = context;
+        this.spinIds=ids;
         this.choice = spinner_data;
     }
 
@@ -46,7 +45,7 @@ public class Custom_Spin_Adapter extends BaseAdapter {
 
         if (convertView == null)
         {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
+            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             view = layoutInflater.inflate(R.layout.layout_custom_spinner_layout, null);
         }
 
