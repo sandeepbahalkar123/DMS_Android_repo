@@ -8,28 +8,28 @@ public class ShowSearchResultRequestModel implements CustomResponse {
 
     @SerializedName("patientId")
     @Expose
-    private String patientId;
+    private String patientId = "";
     @SerializedName("patientName")
     @Expose
-    private String patientName;
+    private String patientName = "";
     @SerializedName("fileType")
     @Expose
-    private String fileType;
+    private String fileType = "";
     @SerializedName("referenceId")
     @Expose
-    private String referenceId;
+    private String referenceId = "";
     @SerializedName("dateType")
     @Expose
-    private String dateType;
+    private String dateType = "";
     @SerializedName("fromDate")
     @Expose
-    private String fromDate;
+    private String fromDate = "";
     @SerializedName("toDate")
     @Expose
-    private String toDate;
+    private String toDate = "";
     @SerializedName("annotationText")
     @Expose
-    private String annotationText;
+    private String annotationText = "";
 
     private String[] DocTypeId;
 

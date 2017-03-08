@@ -34,7 +34,8 @@
         </activity>
         <activity
             android:name=".ui.activities.PatientList"
-            android:label="@string/patient_list"></activity>
+            android:label="@string/patient_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.activities.LoginActivity"
             android:label="@string/title_activity_login"

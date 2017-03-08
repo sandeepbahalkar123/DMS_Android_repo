@@ -26,14 +26,16 @@ public class DmsConstants {
     public static String TEXT_COLOR = "#000000";
     public static final String ID = "_id";
 
-    public static final String patientName = "patientName";
-    public static final String fileType = "fileType";
-    public static final String referenceId = "referenceId";
-    public static final String dateType = "dateType";
-    public static final String fromDate = "fromDate";
-    public static final String toDate = "toDate";
-    public static final String annotationText = "annotationText";
-    public static final String DocTypeId = "DocTypeId";
+    public static class PATIENT_LIST_PARAMS {
+        public static final String PATIENT_NAME = "patientName";
+        public static final String FILE_TYPE = "fileType";
+        public static final String referenceId = "referenceId";
+        public static final String DATE_TYPE = "dateType";
+        public static final String FROM_DATE = "fromDate";
+        public static final String TO_DATE = "toDate";
+        public static final String annotationText = "annotationText";
+        public static final String DOCTYPE_ID = "DocTypeId";
+    }
 
     public static final String DEVICEID = "Device-Id";
     public static final String OS = "OS";
@@ -96,6 +98,7 @@ public class DmsConstants {
         public static int TWO_SECONDS = 2000;
         public static int THREE_SECONDS = 3000;
     }
+
     public static void setErrorMsg(String msg, EditText et, boolean isRequestFocus) {
         int ecolor = Color.RED; // whatever color you want
         ForegroundColorSpan fgcspan = new ForegroundColorSpan(ecolor);
