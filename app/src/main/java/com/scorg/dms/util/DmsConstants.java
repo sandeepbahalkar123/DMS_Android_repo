@@ -36,6 +36,14 @@ public class DmsConstants {
         public static final String annotationText = "annotationText";
         public static final String DOCTYPE_ID = "DocTypeId";
     }
+    public static final String patientName = "patientName";
+    public static final String fileType = "fileType";
+    public static final String referenceId = "referenceId";
+    public static final String dateType = "dateType";
+    public static final String fromDate = "fromDate";
+    public static final String toDate = "toDate";
+    public static final String annotationText = "annotationText";
+    public static final String DocTypeId = "DocTypeId";
 
     public static final String DEVICEID = "Device-Id";
     public static final String OS = "OS";
