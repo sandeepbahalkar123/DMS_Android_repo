@@ -1,9 +1,11 @@
-package com.scorg.dms.fragment;
+package com.scorg.dms.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.EmbossMaskFilter;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,41 +17,48 @@ import android.widget.Toast;
 
 
 import com.scorg.dms.R;
+import com.scorg.dms.util.CommonMethods;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
  * Created by jeetal on 2/3/17.
  */
 
-public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
-    private ArrayList<String> mDataSet;
+public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
+    private Handler mAddedTagsEventHandler;
+    private HashMap<String, String> mAddedTagsForFiltering;
+    private ArrayList<String> mTagsDataSet;
     private Context mContext;
     LayoutInflater inflater;
     private Random mRandom = new Random();
+    private String TAG = this.getClass().getName();
 
-    public TagAdapter(Context context, ArrayList<String> list){
-        mDataSet = list;
+    public TagAdapter(Context context, ArrayList<String> list, HashMap<String, String> mAddedTagsForFiltering, Handler mAddedTagsEventHandler) {
+        mTagsDataSet = list;
         mContext = context;
+        this.mAddedTagsForFiltering = mAddedTagsForFiltering;
+        this.mAddedTagsEventHandler = mAddedTagsEventHandler;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTextView;
         public ImageButton mRemoveButton;
         public RelativeLayout mRelativeLayout;
-        public ViewHolder(View v){
+
+        public ViewHolder(View v) {
             super(v);
             mTextView = (TextView) v.findViewById(R.id.tv_dispalydetails);
             mRemoveButton = (ImageButton) v.findViewById(R.id.ib_remove);
-           // mRelativeLayout = (RelativeLayout) v.findViewById(R.id.rl);
+            // mRelativeLayout = (RelativeLayout) v.findViewById(R.id.rl);
         }
     }
 
     @Override
-    public TagAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public TagAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new View
         View v = inflater.inflate(R.layout.tag_row_item, parent, false);
         TagAdapter.ViewHolder vh = new TagAdapter.ViewHolder(v);
@@ -57,27 +66,25 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(TagAdapter.ViewHolder holder, final int position){
+    public void onBindViewHolder(TagAdapter.ViewHolder holder, final int position) {
 
-            holder.mTextView.setText(String.valueOf(mDataSet.get(position).split("\\|")[1]));
-
-
+        holder.mTextView.setText(String.valueOf(mTagsDataSet.get(position).split("\\|")[1]));
 
 
         // Generate a random color
         int color = getRandomHSVColor();
 
         // Set a random color for TextView background
-       // holder.mTextView.setBackgroundColor(getLighterColor(color));
+        // holder.mTextView.setBackgroundColor(getLighterColor(color));
 
         // Set a text color for TextView
-       // holder.mTextView.setTextColor(getReverseColor(color));
+        // holder.mTextView.setTextColor(getReverseColor(color));
 
         // Set a gradient background for RelativeLayout
-     //   holder.mRelativeLayout.setBackground(getGradientDrawable());
+        //   holder.mRelativeLayout.setBackground(getGradientDrawable());
 
         // Emboss the TextView text
-       // applyEmbossMaskFilter(holder.mTextView);
+        // applyEmbossMaskFilter(holder.mTextView);
 
         // Set a click listener for TextView
         holder.mTextView.setOnClickListener(new View.OnClickListener() {
@@ -93,10 +100,10 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 // Get the clicked item label
-                String itemLabel = String.valueOf(mDataSet.get(position).split("\\|")[0]);
+                String itemLabel = String.valueOf(mTagsDataSet.get(position).split("\\|")[0]);
 
                 // Remove the item on remove/button click
-                mDataSet.remove(position);
+                mTagsDataSet.remove(position);
 
                 /*
                     public final void notifyItemRemoved (int position)
@@ -127,33 +134,40 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
                         positionStart : Position of the first item that has changed
                         itemCount : Number of items that have changed
                 */
-                notifyItemRangeChanged(position,mDataSet.size());
+                notifyItemRangeChanged(position, mTagsDataSet.size());
+
+                mAddedTagsForFiltering.remove(itemLabel);
+
+                mAddedTagsEventHandler.sendMessage(new Message());
+
+                CommonMethods.Log(TAG, mAddedTagsForFiltering.toString());
+
 
                 // Show the removed item label
-                Toast.makeText(mContext,"Removed : " + itemLabel, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Removed : " + itemLabel, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
-    public int getItemCount(){
-        return mDataSet.size();
+    public int getItemCount() {
+        return mTagsDataSet.size();
     }
 
     // Custom method to apply emboss mask filter to TextView
-    protected void applyEmbossMaskFilter(TextView tv){
+    protected void applyEmbossMaskFilter(TextView tv) {
         EmbossMaskFilter embossFilter = new EmbossMaskFilter(
                 new float[]{1f, 5f, 1f}, // direction of the light source
                 0.8f, // ambient light between 0 to 1
                 8, // specular highlights
                 7f // blur before applying lighting
         );
-       // tv.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
-      //  tv.getPaint().setMaskFilter(embossFilter);
+        // tv.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+        //  tv.getPaint().setMaskFilter(embossFilter);
     }
 
     // Custom method to generate random HSV color
-    protected int getRandomHSVColor(){
+    protected int getRandomHSVColor() {
         // Generate a random hue value between 0 to 360
         int hue = mRandom.nextInt(361);
         // We make the color depth full
@@ -169,31 +183,31 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
     }
 
     // Custom method to create a GradientDrawable object
-    protected GradientDrawable getGradientDrawable(){
+    protected GradientDrawable getGradientDrawable() {
         GradientDrawable gradient = new GradientDrawable();
         gradient.setGradientType(GradientDrawable.SWEEP_GRADIENT);
-        gradient.setColors(new int[]{getRandomHSVColor(), getRandomHSVColor(),getRandomHSVColor()});
+        gradient.setColors(new int[]{getRandomHSVColor(), getRandomHSVColor(), getRandomHSVColor()});
         return gradient;
     }
 
     // Custom method to get a darker color
-    protected int getDarkerColor(int color){
+    protected int getDarkerColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
-        hsv[2] = 0.8f *hsv[2];
+        hsv[2] = 0.8f * hsv[2];
         return Color.HSVToColor(hsv);
     }
 
     // Custom method to get a lighter color
-    protected int getLighterColor(int color){
+    protected int getLighterColor(int color) {
         float[] hsv = new float[3];
-        Color.colorToHSV(color,hsv);
+        Color.colorToHSV(color, hsv);
         hsv[2] = 0.2f + 0.8f * hsv[2];
         return Color.HSVToColor(hsv);
     }
 
     // Custom method to get reverse color
-    protected int getReverseColor(int color){
+    protected int getReverseColor(int color) {
         float[] hsv = new float[3];
         Color.RGBToHSV(
                 Color.red(color), // Red value
@@ -203,5 +217,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder>{
         );
         hsv[0] = (hsv[0] + 180) % 360;
         return Color.HSVToColor(hsv);
+    }
+
+    public HashMap<String, String> getAddedTagsForFiltering() {
+        return mAddedTagsForFiltering;
     }
 }

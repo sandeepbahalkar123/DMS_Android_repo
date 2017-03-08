@@ -34,18 +34,9 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
     }
 
 
-    public void doGetPatientList() {
+    //-- TO get Patient list from server
+    public void doGetPatientList(ShowSearchResultRequestModel showSearchResultRequestModel) {
         ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_PATIENT_LIST, Request.Method.POST);
-        ShowSearchResultRequestModel showSearchResultRequestModel = new ShowSearchResultRequestModel();
-        showSearchResultRequestModel.setPatientId("");
-        showSearchResultRequestModel.setPatientName("");
-        showSearchResultRequestModel.setFileType("");
-        showSearchResultRequestModel.setReferenceId("");
-        showSearchResultRequestModel.setDateType("");
-        showSearchResultRequestModel.setFromDate("");
-        showSearchResultRequestModel.setToDate("");
-        showSearchResultRequestModel.setAnnotationText("");
-        showSearchResultRequestModel.setDocTypeId(new String[1]);
         mConnectionFactory.setHeaderParams();
         mConnectionFactory.setPostParams(showSearchResultRequestModel);
         mConnectionFactory.setUrl(Config.URL_PATIENT_LIST);

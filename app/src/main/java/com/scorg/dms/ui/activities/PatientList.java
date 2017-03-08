@@ -1,22 +1,18 @@
 package com.scorg.dms.ui.activities;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 
 import java.text.SimpleDateFormat;;
 import java.util.Calendar;
+
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,14 +23,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -42,18 +34,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ExpandableListView;
-
 
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
 import com.scorg.dms.adapters.PatientExpandableListAdapter;
-import com.scorg.dms.fragment.TagAdapter;
+import com.scorg.dms.adapters.TagAdapter;
 import com.scorg.dms.helpers.patients.PatientsHelper;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
+import com.scorg.dms.model.requestmodel.showsearchresultrequestmodel.ShowSearchResultRequestModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
@@ -104,11 +93,15 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     private String[] array_id;
     private Context mContext;
     Calendar myCalendar;
+
     ArrayList<String> mTagsList = new ArrayList<String>();
     private Custom_Spin_Adapter custom_spinner_adapter;
     private PatientsHelper mPatientsHelper;
-    private RecyclerView.Adapter mAdapter;
+    private TagAdapter mTagsAdapter;
     RecyclerView recycleTag;
+
+    private Handler mAddedTagsEventHandler;
+    private HashMap<String, String> mAddedTagsForFiltering;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,14 +111,34 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
         mContext = getApplicationContext();
 
+        //-------------
+
+        mAddedTagsForFiltering = new HashMap<String, String>();
+        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, DmsConstants.BLANK);
+        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, DmsConstants.BLANK);
+        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, DmsConstants.BLANK);
+        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, DmsConstants.BLANK);
+        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE, DmsConstants.BLANK);
+        mAddedTagsForFiltering.put(DmsConstants.ID, DmsConstants.BLANK);
+
+        mAddedTagsEventHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                doGetPatientList();
+            }
+        };
+        //------------
+
+
         init();
 
         array_id = getResources().getStringArray(R.array.ids);
         ButterKnife.bind(this);
 
         mPatientsHelper = new PatientsHelper(this, this);
-        mPatientsHelper.doGetPatientList();
-  //floating button click listener
+        doGetPatientList();
+
+        //floating button click listener
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,49 +156,53 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
             @Override
             public void onClick(View v) {
                 mTagsList.clear();
-                if(validateForm(selected_id,et_uhid.getText().toString(),admission_date,et_fromdate.getText().toString(),et_todate.getText().toString(),et_searchPatientName.getText().toString(),et_annotation.getText().toString()))
-                {
+                if (validateForm(selected_id, et_uhid.getText().toString(), admission_date, et_fromdate.getText().toString(), et_todate.getText().toString(), et_searchPatientName.getText().toString(), et_annotation.getText().toString())) {
 
                     //adding field values to generate tags in recycler view
-                    if(!selected_id.equals(getResources().getString(R.string.Select))) {
-                        mTagsList.add(DmsConstants.fileType+"|"+selected_id);
+                    if (!selected_id.equals(getResources().getString(R.string.Select))) {
+                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE + "|" + selected_id);
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, selected_id);
                     }
 
-                    if(!et_uhid.getText().toString().equalsIgnoreCase("")) {
-
-                        mTagsList.add(DmsConstants.ID+"|"+et_uhid.getText().toString());
+                    if (!et_uhid.getText().toString().equalsIgnoreCase("")) {
+                        mTagsList.add(DmsConstants.ID + "|" + et_uhid.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.ID, et_uhid.getText().toString());
                     }
 
-                    if(!admission_date.equals(getResources().getString(R.string.Select))) {
-                        mTagsList.add(DmsConstants.DocTypeId+"|"+admission_date);
+                    if (!admission_date.equals(getResources().getString(R.string.Select))) {
+                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.DOCTYPE_ID + "|" + admission_date);
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOCTYPE_ID, admission_date);
                     }
 
-                    if(!et_fromdate.getText().toString().equalsIgnoreCase("")) {
-                        mTagsList.add(DmsConstants.fromDate+"|"+et_fromdate.getText().toString());
-
+                    if (!et_fromdate.getText().toString().equalsIgnoreCase("")) {
+                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE + "|" + et_fromdate.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, et_fromdate.getText().toString());
                     }
 
-                    if(!et_todate.getText().toString().equalsIgnoreCase("")) {
+                    if (!et_todate.getText().toString().equalsIgnoreCase("")) {
+                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE + "|" + et_todate.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, et_todate.getText().toString());
 
-                        mTagsList.add(DmsConstants.toDate+"|"+et_todate.getText().toString());
-
-                    }
-
-                    if(!et_searchPatientName.getText().toString().equalsIgnoreCase("")) {
-                        mTagsList.add(DmsConstants.patientName+"|"+et_searchPatientName.getText().toString());
-
-                    }
-
-                    if(!et_annotation.getText().toString().equalsIgnoreCase("")) {
-                        mTagsList.add(DmsConstants.annotationText+"|"+et_annotation.getText().toString());
 
                     }
 
-                    Log.e("TAg========","gggg"+et_todate.getText().toString());
+                    if (!et_searchPatientName.getText().toString().equalsIgnoreCase("")) {
+                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME + "|" + et_searchPatientName.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, et_searchPatientName.getText().toString());
 
-                    mAdapter = new TagAdapter(mContext,mTagsList);
-                    recycleTag.setAdapter(mAdapter);
+                    }
+
+                    if (!et_annotation.getText().toString().equalsIgnoreCase("")) {
+                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.annotationText + "|" + et_annotation.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.annotationText, et_annotation.getText().toString());
+                    }
+
+                    Log.e("TAg========", "gggg" + et_todate.getText().toString());
+
+                    mTagsAdapter = new TagAdapter(mContext, mTagsList, mAddedTagsForFiltering, mAddedTagsEventHandler);
+                    recycleTag.setAdapter(mTagsAdapter);
                     drawer.closeDrawer(GravityCompat.END);
+                    doGetPatientList();
                 }
 
             }
@@ -203,7 +220,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
                 spinSelectedID.setSelection(0);
             }
         });
-     et_fromdate.setOnClickListener(new View.OnClickListener() {
+        et_fromdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(PatientList.this, fromDate, myCalendar
@@ -225,32 +242,29 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         spinSelectedID.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                int indexSselectedId =  adapterView.getSelectedItemPosition();
+                int indexSselectedId = adapterView.getSelectedItemPosition();
                 array_id = getResources().getStringArray(R.array.select_id);
                 selected_id = array_id[indexSselectedId];
-                if(selected_id.equals(getResources().getString(R.string.Select))){
+                if (selected_id.equals(getResources().getString(R.string.Select))) {
                     spinner_admissionDate.setSelection(0);
                     spinner_admissionDate.setEnabled(false);
-                }
-
-              else  if(selected_id.equals(getResources().getString(R.string._ipd))){
+                } else if (selected_id.equals(getResources().getString(R.string._ipd))) {
                     spinner_admissionDate.setEnabled(true);
                     custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.IPD));
                     spinner_admissionDate.setAdapter(custom_spinner_adapter);
                     et_uhid.setHint(getResources().getString(R.string.IPD));
 
-                }else if(selected_id.equals(getResources().getString(R.string._opd))){
+                } else if (selected_id.equals(getResources().getString(R.string._opd))) {
                     spinner_admissionDate.setEnabled(true);
                     custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.OPD));
                     spinner_admissionDate.setAdapter(custom_spinner_adapter);
                     et_uhid.setHint(getResources().getString(R.string.OPD));
-                }else if(selected_id.equals(getResources().getString(R.string._uhid))){
+                } else if (selected_id.equals(getResources().getString(R.string._uhid))) {
                     spinner_admissionDate.setEnabled(true);
                     custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.admission_date));
                     spinner_admissionDate.setAdapter(custom_spinner_adapter);
 
                 }
-
 
 
             }
@@ -260,11 +274,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
             }
         });
-     // spinner click listener
+        // spinner click listener
         spinner_admissionDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                int indexSselectedId =  adapterView.getSelectedItemPosition();
+                int indexSselectedId = adapterView.getSelectedItemPosition();
                 array_id = getResources().getStringArray(R.array.admission_date);
                 admission_date = array_id[indexSselectedId];
 
@@ -314,10 +328,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
             }
         });
     }
-/// registering all UI components of activity
+
+    /// registering all UI components of activity
     private void init() {
-        int width = getResources().getDisplayMetrics().widthPixels/2;
-            myCalendar = Calendar.getInstance();
+        int width = getResources().getDisplayMetrics().widthPixels / 2;
+        myCalendar = Calendar.getInstance();
         fromDate = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -354,7 +369,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        recycleTag = (RecyclerView)findViewById(R.id.recycler_view);
+        recycleTag = (RecyclerView) findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         layoutManager.setReverseLayout(true);
         recycleTag.setLayoutManager(layoutManager);
@@ -370,7 +385,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         rightNavigationView.setLayoutParams(params);
         leftNavigationView.setLayoutParams(leftParams);
 
-        spinSelectedID = (Spinner)headerView.findViewById(R.id.spinner_selectId) ;
+        spinSelectedID = (Spinner) headerView.findViewById(R.id.spinner_selectId);
         spinner_admissionDate = (Spinner) headerView.findViewById(R.id.spinner_admissionDate);
         et_uhid = (EditText) headerView.findViewById(R.id.et_uhid);
         et_fromdate = (EditText) headerView.findViewById(R.id.et_fromdate);
@@ -378,8 +393,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         et_searchPatientName = (EditText) headerView.findViewById(R.id.et_searchPatientName);
         et_annotation = (EditText) headerView.findViewById(R.id.et_annotation);
         et_search_annotation = (EditText) headerView.findViewById(R.id.et_search_annotation);
-        tvApply = (TextView)headerView.findViewById(R.id.apply);
-        tvReset = (TextView)headerView.findViewById(R.id.reset);
+        tvApply = (TextView) headerView.findViewById(R.id.apply);
+        tvReset = (TextView) headerView.findViewById(R.id.reset);
 
     }
 
@@ -417,6 +432,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
     public void onServerError(int mOldDataTag, String serverErrorMessage) {
 
     }
+
     private void updateLabelFromdate() {
 
         String myFormat = DmsConstants.DATEFORMAT; //In which you need put here
@@ -425,6 +441,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         et_fromdate.setText(sdf.format(myCalendar.getTime()));
 
     }
+
     private void updateLabelToDate() {
 
         String myFormat = DmsConstants.DATEFORMAT; //In which you need put here
@@ -444,18 +461,18 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         et_searchPatientName.setError(null);
         et_annotation.setError(null);
 
-     if (toDate.equals(fromDate)) {
-           setErrorMsg(getResources().getString(R.string.selectFromDate), et_todate, true);
-           valid = false;
-       }else  if (!patientName.matches("[a-zA-Z. ]*")) {
-           setErrorMsg(getResources().getString(R.string.patientName), et_searchPatientName, true);
-           valid = false;
-       }else  if (!annotation.matches("[a-zA-Z. ]*")) {
-           setErrorMsg(getResources().getString(R.string.annotation), et_annotation, true);
-           valid = false;
-       }else{
-           valid=true;
-       }
+        if (toDate.equals(fromDate)) {
+            setErrorMsg(getResources().getString(R.string.selectFromDate), et_todate, true);
+            valid = false;
+        } else if (!patientName.matches("[a-zA-Z. ]*")) {
+            setErrorMsg(getResources().getString(R.string.patientName), et_searchPatientName, true);
+            valid = false;
+        } else if (!annotation.matches("[a-zA-Z. ]*")) {
+            setErrorMsg(getResources().getString(R.string.annotation), et_annotation, true);
+            valid = false;
+        } else {
+            valid = true;
+        }
         return valid;
     }
 
@@ -471,28 +488,60 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
         et.setError(ssbuilder);
     }
- //show dialog  for validation
-    public static Dialog showMessageDialog(Activity activity, String dialogHeader, String dialogMessage) {
-        final Dialog dialog = new Dialog(activity, R.style.DialogStyle);
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_ok);
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        if (dialogHeader != null)
-            ((TextView) dialog.findViewById(R.id.text_view_dialog_header)).setText(dialogHeader);
-        if (dialogMessage != null)
-            ((TextView) dialog.findViewById(R.id.text_view_dialog_message)).setText(dialogMessage);
 
-        dialog.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+    private void doGetPatientList() {
 
-        return dialog;
+        HashMap<String, String> addedTagsForFiltering;
+        if (mTagsAdapter == null) {
+            addedTagsForFiltering = mAddedTagsForFiltering;
+        } else {
+            addedTagsForFiltering = mTagsAdapter.getAddedTagsForFiltering();
+        }
+
+        ShowSearchResultRequestModel showSearchResultRequestModel = new ShowSearchResultRequestModel();
+
+        String fileType = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE);
+        //----------
+        if (getString(R.string.uhid).equalsIgnoreCase(fileType)) {
+            showSearchResultRequestModel.setPatientId(addedTagsForFiltering.get(DmsConstants.ID));
+            showSearchResultRequestModel.setReferenceId("");
+        } else if (getString(R.string.ipd).equalsIgnoreCase(fileType) || getString(R.string.opd).equalsIgnoreCase(fileType)) {
+            showSearchResultRequestModel.setPatientId("");
+            showSearchResultRequestModel.setReferenceId(addedTagsForFiltering.get(DmsConstants.ID));
+        } else {
+            showSearchResultRequestModel.setPatientId("");
+            showSearchResultRequestModel.setReferenceId("");
+        }
+
+        if (fileType != null) {
+            showSearchResultRequestModel.setFileType("" + fileType);
+        } else {
+            showSearchResultRequestModel.setFileType("");
+        }
+
+        String data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME);
+        if (data != null) {
+            showSearchResultRequestModel.setPatientName("" + data);
+        }
+
+
+        data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE);
+        if (data != null) {
+            showSearchResultRequestModel.setDateType("" + data);
+        }
+
+        data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE);
+        if (data != null) {
+            showSearchResultRequestModel.setFromDate("" + data);
+        }
+        data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE);
+        if (data != null) {
+            showSearchResultRequestModel.setToDate("" + data);
+        }
+
+        showSearchResultRequestModel.setAnnotationText("");
+        showSearchResultRequestModel.setDocTypeId(new String[1]);
+        mPatientsHelper.doGetPatientList(showSearchResultRequestModel);
     }
 }
