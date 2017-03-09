@@ -1,17 +1,17 @@
 package com.scorg.dms.util;
 
+
+
 /**
  * @author Sandeep Bahalkar
  */
 public class DmsConstants {
+
     public static final String DMS_LOG_FOLDER = "DMS_LOG";
     public static final String DMS_LOG_FILE = "DMS_LOG_FILE.txt";
 
     //This is for bydefault textcolor,headercolor,buttoncolor etc.
     public static String HEADER_COLOR = "#E4422C";
-    public static String HEADER_TEXT_COLOR = "#FFFFFF";
-    public static String EVENT_CIRCLE_COLOR = "#E4422C";
-    public static String BUTTON_COLOR = "#E4422C";
     public static String BUTTON_TEXT_COLOR = "#FFFFFF";
     public static String TEXT_COLOR = "#000000";
     public static final String ID = "_id";
@@ -19,7 +19,7 @@ public class DmsConstants {
     public static class PATIENT_LIST_PARAMS {
         public static final String PATIENT_NAME = "patientName";
         public static final String FILE_TYPE = "fileType";
-        public static final String referenceId = "referenceId";
+        public static final String REFRENCE_ID = "referenceId";
         public static final String DATE_TYPE = "dateType";
         public static final String FROM_DATE = "fromDate";
         public static final String TO_DATE = "toDate";
@@ -27,11 +27,11 @@ public class DmsConstants {
         public static final String DOCTYPE_ID = "DocTypeId";
     }
 
+
     public static final String DEVICEID = "Device-Id";
     public static final String OS = "OS";
     public static final String OSVERSION = "OS-Version";
     public static final String DATEFORMAT = "dd/MM/yy";
-    public static final String DEVICETYPE = "deviceType";
     public static final String ACCESS_TOKEN = "accessToken";
     public static final String TOKEN_TYPE = "token_type";
     public static final String REFRESH_TOKEN = "refresh_token";
@@ -89,6 +89,5 @@ public class DmsConstants {
         public static int TWO_SECONDS = 2000;
         public static int THREE_SECONDS = 3000;
     }
-
 
 }

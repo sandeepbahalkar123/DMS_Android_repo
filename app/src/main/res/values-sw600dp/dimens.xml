@@ -26,6 +26,7 @@
     <dimen name="dp200">275dp</dimen>
     <dimen name="dp300">400dp</dimen>
     <dimen name="uhid">8dp</dimen>
+    <dimen name="dp16">16dp</dimen>
 
     <!--  ====================SP====================== -->
     <dimen name="sp12">14sp</dimen>

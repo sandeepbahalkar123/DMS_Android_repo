@@ -6,5 +6,6 @@
     <dimen name="tenDp">10dp</dimen>
     <dimen name="dp0">0dp</dimen>
     <dimen name="dp20">30dp</dimen>
+    <dimen name="dp16">16dp</dimen>
 
 </resources>

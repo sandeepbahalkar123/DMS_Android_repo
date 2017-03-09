@@ -14,14 +14,14 @@ import com.scorg.dms.R;
  * Created by root on 22/6/16.
  */
 public class Custom_Spin_Adapter extends BaseAdapter {
-    Context context;
-    String[] ids;
+    Context mContext;
+    String[] spinIds;
     String[] choice;
 
 
-    public Custom_Spin_Adapter(Context context, String[] ids , String[] spinner_data) {
-        this.context = context;
-        this.ids=ids;
+    public Custom_Spin_Adapter(Context context, String[] ids, String[] spinner_data) {
+        this.mContext = context;
+        this.spinIds = ids;
         this.choice = spinner_data;
     }
 
@@ -44,22 +44,18 @@ public class Custom_Spin_Adapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         View view = convertView;
 
-        if (convertView == null)
-        {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
+        if (convertView == null) {
+            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             view = layoutInflater.inflate(R.layout.layout_custom_spinner_layout, null);
         }
 
-        TextView txt_id=(TextView)view.findViewById(R.id.custom_spinner_txt_view_Id) ;
+        TextView txt_id = (TextView) view.findViewById(R.id.custom_spinner_txt_view_Id);
         TextView txt_data = (TextView) view.findViewById(R.id.custom_spinner_txt_view_txtField);
 
         txt_data.setText(choice[position]);
-      //  txt_id.setText(ids[position]);
+        //  txt_id.setText(ids[position]);
         txt_id.setVisibility(View.GONE);
         return view;
     }
-    public void setError(View view, CharSequence sequence) {
-        TextView error = (TextView) view.findViewById(R.id.custom_spinner_txt_view_txtField);
-        error.setError(sequence);
-    }
+
 }

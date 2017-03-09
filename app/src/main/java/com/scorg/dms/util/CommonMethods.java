@@ -1,25 +1,32 @@
 package com.scorg.dms.util;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.scorg.dms.R;
+import com.scorg.dms.interfaces.DatePickerDialogListener;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -50,12 +57,15 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import static com.scorg.dms.util.DmsConstants.DATEFORMAT;
+
 public class CommonMethods {
 
     private static final String TAG = "Dms/Common";
     private static boolean encryptionIsOn = true;
     private static String aBuffer = "";
-
+    private int mYear, mMonth, mDay, mHour, mMinute;
+    private DatePickerDialogListener mDatePickerDialogListener;
 
     public static void showToast(Context context, String error) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -495,5 +505,28 @@ public class CommonMethods {
 
     }
 
+    public void datePickerDialog(Context context, DatePickerDialogListener datePickerDialogListener, Date dateToSet) {
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        if (dateToSet != null) {
+            c.setTime(dateToSet);
+        }
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        mDatePickerDialogListener = datePickerDialogListener;
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        mDatePickerDialogListener.getSelectedDate(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                    }
+                }, mYear, mMonth, mDay);
+
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        datePickerDialog.show();
+    }
 }
 

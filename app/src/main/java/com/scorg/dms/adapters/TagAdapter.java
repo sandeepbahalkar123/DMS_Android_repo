@@ -1,11 +1,13 @@
 package com.scorg.dms.adapters;
 
 import android.content.Context;
+
 import android.graphics.Color;
 import android.graphics.EmbossMaskFilter;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Message;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.scorg.dms.R;
+
 import com.scorg.dms.util.CommonMethods;
 
 import java.util.ArrayList;
@@ -96,6 +98,8 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         });
 
         // Set a click listener for item remove button
+
+
         holder.mRemoveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,9 +147,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 CommonMethods.Log(TAG, mAddedTagsForFiltering.toString());
 
 
-                // Show the removed item label
-                Toast.makeText(mContext, "Removed : " + itemLabel, Toast.LENGTH_SHORT).show();
-            }
+             }
         });
     }
 
@@ -153,6 +155,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     public int getItemCount() {
         return mTagsDataSet.size();
     }
+
 
     // Custom method to apply emboss mask filter to TextView
     protected void applyEmbossMaskFilter(TextView tv) {
@@ -222,4 +225,5 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     public HashMap<String, String> getAddedTagsForFiltering() {
         return mAddedTagsForFiltering;
     }
+
 }

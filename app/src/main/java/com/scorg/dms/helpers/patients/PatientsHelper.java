@@ -43,7 +43,7 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
         mConnectionFactory.createConnection(DmsConstants.TASK_PATIENT_LIST);
     }
 
-    public void doGetAllAnotations() {
+    public void doGetAllAnnotations() {
         ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_ANNOTATIONS_LIST, Request.Method.GET);
         mConnectionFactory.setHeaderParams();
         mConnectionFactory.setUrl(Config.URL_ANNOTATIONS_LIST);

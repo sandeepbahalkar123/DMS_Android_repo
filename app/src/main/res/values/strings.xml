@@ -21,9 +21,9 @@
     <string name="DateType">Select Date Type</string>
     <string name="patientName">Enter patient name</string>
     <string name="annotation">Enter annotation</string>
-    <string name="selectFromDate">Date cannot be same</string>
+    <string name="error_date_not_same">Date cannot be same</string>
     <string name="selectToDate">Enter to date</string>
-    <string name="UHID">Enter UHID</string>
+    <string name="error_enter_uhid">Enter UHID</string>
     <string name="searchbyPatient">Search By Patient Name</string>
     <string name="enterAnnotation">Enter Annotation</string>
     <string name="searchAnnotation">Search Annotation</string>
@@ -45,9 +45,6 @@
     </string>
 
     <string name="visit_date">Visit Date:</string>
-    <string name="_ipd">IPD</string>
-    <string name="_opd">OPD</string>
-    <string name="_uhid">UHID</string>
     <string name="OPD">Enter OPD</string>
     <string name="IPD">Enter IPD</string>
     <string name="Select">Select</string>

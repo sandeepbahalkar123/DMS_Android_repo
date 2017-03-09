@@ -16,6 +16,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="horizontal">
+            <TextView
+                android:layout_width="@dimen/uhid"
+                android:layout_height="@dimen/uhid"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/opd"
@@ -90,6 +94,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="horizontal">
+            <TextView
+                android:layout_width="@dimen/uhid"
+                android:layout_height="@dimen/uhid"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/ipd"
