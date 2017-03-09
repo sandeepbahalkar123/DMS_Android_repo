@@ -5,17 +5,21 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -49,6 +53,8 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import static com.scorg.dms.util.DmsConstants.DATEFORMAT;
 
 public class CommonMethods {
 
@@ -493,6 +499,24 @@ public class CommonMethods {
         }
         return null;
 
+    }
+    public static void setErrorMsg(String msg, EditText et, boolean isRequestFocus) {
+        int ecolor = Color.RED; // whatever color you want
+        ForegroundColorSpan fgcspan = new ForegroundColorSpan(ecolor);
+        SpannableStringBuilder ssbuilder = new SpannableStringBuilder(msg);
+        ssbuilder.setSpan(fgcspan, 0, msg.length(), 0);
+        if (isRequestFocus) {
+            et.requestFocus();
+        }
+
+        et.setError(ssbuilder);
+    }
+    public static String updateLabel(Calendar mCalendar) {
+
+        String myFormat = DATEFORMAT; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        return (sdf.format(mCalendar.getTime()));
     }
 
 }

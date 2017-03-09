@@ -13,7 +13,7 @@
     <dimen name="dp25">35dp</dimen>
     <dimen name="dp30">40dp</dimen>
     <dimen name="sp20">20sp</dimen>
-
+    <dimen name="dp16">16dp</dimen>
 
     <dimen name="dp28">38dp</dimen>
     <dimen name="sp14">14sp</dimen>

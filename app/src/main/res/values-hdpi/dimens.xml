@@ -7,7 +7,8 @@
     <dimen name="four">12px</dimen>
     <dimen name="font_x_normal">34px</dimen>
     <dimen name="tenDp">10dp</dimen>
-
+    <dimen name="dp0">0dp</dimen>
+    <dimen name="dp16">16dp</dimen>
     <dimen name="offer_detail_image_bottom_margin">15dp</dimen>
     <dimen name="dp1">1dp</dimen>
 

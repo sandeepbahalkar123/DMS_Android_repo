@@ -1,13 +1,6 @@
 package com.scorg.dms.util;
 
-import android.graphics.Color;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.widget.EditText;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.Calendar;
 
 /**
  * @author Sandeep Bahalkar
@@ -19,9 +12,6 @@ public class DmsConstants {
 
     //This is for bydefault textcolor,headercolor,buttoncolor etc.
     public static String HEADER_COLOR = "#E4422C";
-    public static String HEADER_TEXT_COLOR = "#FFFFFF";
-    public static String EVENT_CIRCLE_COLOR = "#E4422C";
-    public static String BUTTON_COLOR = "#E4422C";
     public static String BUTTON_TEXT_COLOR = "#FFFFFF";
     public static String TEXT_COLOR = "#000000";
     public static final String ID = "_id";
@@ -29,27 +19,19 @@ public class DmsConstants {
     public static class PATIENT_LIST_PARAMS {
         public static final String PATIENT_NAME = "patientName";
         public static final String FILE_TYPE = "fileType";
-        public static final String referenceId = "referenceId";
+        public static final String REFRENCE_ID = "referenceId";
         public static final String DATE_TYPE = "dateType";
         public static final String FROM_DATE = "fromDate";
         public static final String TO_DATE = "toDate";
         public static final String annotationText = "annotationText";
         public static final String DOCTYPE_ID = "DocTypeId";
     }
-    public static final String patientName = "patientName";
-    public static final String fileType = "fileType";
-    public static final String referenceId = "referenceId";
-    public static final String dateType = "dateType";
-    public static final String fromDate = "fromDate";
-    public static final String toDate = "toDate";
-    public static final String annotationText = "annotationText";
-    public static final String DocTypeId = "DocTypeId";
+
 
     public static final String DEVICEID = "Device-Id";
     public static final String OS = "OS";
     public static final String OSVERSION = "OS-Version";
     public static final String DATEFORMAT = "dd/MM/yy";
-    public static final String DEVICETYPE = "deviceType";
     public static final String ACCESS_TOKEN = "accessToken";
     public static final String TOKEN_TYPE = "token_type";
     public static final String REFRESH_TOKEN = "refresh_token";
@@ -105,25 +87,6 @@ public class DmsConstants {
         public static int ONE_SECONDS = 1000;
         public static int TWO_SECONDS = 2000;
         public static int THREE_SECONDS = 3000;
-    }
-
-    public static void setErrorMsg(String msg, EditText et, boolean isRequestFocus) {
-        int ecolor = Color.RED; // whatever color you want
-        ForegroundColorSpan fgcspan = new ForegroundColorSpan(ecolor);
-        SpannableStringBuilder ssbuilder = new SpannableStringBuilder(msg);
-        ssbuilder.setSpan(fgcspan, 0, msg.length(), 0);
-        if (isRequestFocus) {
-            et.requestFocus();
-        }
-
-        et.setError(ssbuilder);
-    }
-    public static String updateLabel(Calendar mCalendar) {
-
-        String myFormat = DATEFORMAT; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-        return (sdf.format(mCalendar.getTime()));
     }
 
 }

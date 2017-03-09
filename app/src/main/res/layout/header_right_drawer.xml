@@ -52,17 +52,17 @@
                 android:layout_height="@dimen/height_xsmall"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/padding_small"
+                android:layout_marginTop="@dimen/dp00"
                 android:weightSum="6">
                 <Spinner
                     android:id="@+id/spinner_selectId"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/margin_large"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="@dimen/dp43"
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     android:gravity="center_vertical"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_marginLeft="@dimen/padding_small"
+                    android:layout_marginRight="@dimen/dp00"
+                    android:layout_marginLeft="@dimen/dp00"
                     android:layout_weight="3"
                     android:textColor="@color/dcr_customer_name"
                     android:layout_below="@+id/include1"
@@ -70,8 +70,8 @@
                     />
                 <android.support.design.widget.TextInputLayout
                     android:layout_weight="3"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/margin_large"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="@dimen/dp43"
                     android:layout_gravity="center">
 
                     <EditText
@@ -83,9 +83,9 @@
                         android:layout_gravity="center"
                         android:imeOptions="actionNext"
                         android:textStyle="bold"
-                        android:paddingBottom="@dimen/text_margin_large"
-                        android:layout_marginRight="@dimen/padding_small"
-                        android:layout_marginLeft="@dimen/padding_small"
+                        android:paddingBottom="@dimen/dp123"
+                        android:layout_marginRight="@dimen/dp00"
+                        android:layout_marginLeft="@dimen/dp00"
                         android:textColor="@color/black"
                         android:layout_centerHorizontal="true"
                         />
@@ -101,21 +101,22 @@
                 android:layout_height="@dimen/margin_small"
                 android:orientation="horizontal"
                 android:background="@color/grey_200"
-                android:layout_marginTop="@dimen/padding_small"
+                android:layout_marginTop="@dimen/dp00"
                 android:weightSum="6">
 
 
                 <Spinner
-                    android:layout_width="0dp"
+
+                    android:layout_width="@dimen/dp0"
                     android:layout_height="@dimen/margin_l"
                     android:singleLine="true"
                     android:textStyle="bold"
                     android:spinnerMode="dropdown"
                     android:gravity="center"
                     android:layout_weight="6"
-                    android:layout_marginLeft="@dimen/padding_small"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_marginBottom="@dimen/padding_small"
+                    android:layout_marginLeft="@dimen/dp00"
+                    android:layout_marginRight="@dimen/dp00"
+                    android:layout_marginBottom="@dimen/dp00"
                     android:textColor="@color/black"
                     android:layout_below="@+id/include1"
                     android:layout_centerHorizontal="true"
@@ -130,8 +131,8 @@
                 android:weightSum="6">
                 <android.support.design.widget.TextInputLayout
                     android:layout_weight="3"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/margin_large"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="@dimen/dp43"
                     android:layout_gravity="center">
 
                     <EditText
@@ -146,17 +147,17 @@
                         android:textStyle="bold"
                         android:hint="@string/from"
                         android:drawableRight="@mipmap/calendar"
-                        android:paddingBottom="@dimen/text_margin_large"
-                        android:layout_marginRight="@dimen/padding_small"
-                        android:layout_marginLeft="@dimen/padding_small"
+                        android:paddingBottom="@dimen/dp123"
+                        android:layout_marginRight="@dimen/dp00"
+                        android:layout_marginLeft="@dimen/dp00"
                         android:textColor="@color/black"
                         android:layout_centerHorizontal="true"
                         />
                 </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
                     android:layout_weight="3"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/margin_large"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="@dimen/dp43"
                     android:layout_gravity="center">
 
                     <EditText
@@ -171,9 +172,9 @@
                         android:textStyle="bold"
                         android:hint="@string/to"
                         android:drawableRight="@mipmap/calendar"
-                        android:paddingBottom="@dimen/text_margin_large"
-                        android:layout_marginRight="@dimen/padding_small"
-                        android:layout_marginLeft="@dimen/padding_small"
+                        android:paddingBottom="@dimen/dp123"
+                        android:layout_marginRight="@dimen/dp00"
+                        android:layout_marginLeft="@dimen/dp00"
                         android:textColor="@color/black"
                         android:layout_centerHorizontal="true"
                         />
@@ -187,12 +188,12 @@
                 android:layout_height="@dimen/height_xsmall"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/padding_small"
+                android:layout_marginTop="@dimen/dp00"
                 android:weightSum="6">
                 <android.support.design.widget.TextInputLayout
                     android:layout_weight="6"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/margin_large"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="@dimen/dp43"
                     android:layout_gravity="center">
 
                     <EditText
@@ -205,9 +206,9 @@
                         android:imeOptions="actionNext"
                         android:textStyle="bold"
                         android:hint="@string/searchbyPatient"
-                        android:paddingBottom="@dimen/text_margin_large"
-                        android:layout_marginRight="@dimen/padding_small"
-                        android:layout_marginLeft="@dimen/padding_small"
+                        android:paddingBottom="@dimen/dp123"
+                        android:layout_marginRight="@dimen/dp00"
+                        android:layout_marginLeft="@dimen/dp00"
                         android:textColor="@color/black"
                         android:drawableRight="@mipmap/user"
 
@@ -224,12 +225,12 @@
                 android:layout_height="@dimen/height_xsmall"
                 android:background="@color/grey_200"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/padding_small"
+                android:layout_marginTop="@dimen/dp00"
                 android:weightSum="6">
                 <android.support.design.widget.TextInputLayout
                     android:layout_weight="3"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_large"
+                    android:layout_height="@dimen/dp43"
                     android:layout_gravity="center">
 
                     <EditText
@@ -242,9 +243,9 @@
                         android:imeOptions="actionNext"
                         android:textStyle="bold"
                         android:hint="@string/enterAnnotation"
-                        android:paddingBottom="@dimen/text_margin_large"
-                        android:layout_marginRight="@dimen/padding_small"
-                        android:layout_marginLeft="@dimen/padding_small"
+                        android:paddingBottom="@dimen/dp123"
+                        android:layout_marginRight="@dimen/dp00"
+                        android:layout_marginLeft="@dimen/dp00"
                         android:textColor="@color/black"
                         android:drawableRight="@mipmap/annotation"
                         android:layout_centerHorizontal="true"
@@ -261,13 +262,13 @@
                 android:layout_height="@dimen/height_xsmall"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/padding_small"
+                android:layout_marginTop="@dimen/dp00"
                 android:weightSum="6">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_weight="6"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_large"
+                    android:layout_height="@dimen/dp43"
                     android:layout_gravity="center">
 
                     <EditText
@@ -280,9 +281,9 @@
                         android:imeOptions="actionNext"
                         android:textStyle="bold"
                         android:hint="@string/searchAnnotation"
-                        android:paddingBottom="@dimen/text_margin_large"
-                        android:layout_marginRight="@dimen/padding_small"
-                        android:layout_marginLeft="@dimen/padding_small"
+                        android:paddingBottom="@dimen/dp123"
+                        android:layout_marginRight="@dimen/dp00"
+                        android:layout_marginLeft="@dimen/dp00"
                         android:textColor="@color/black"
                         android:drawableRight="@mipmap/search"
                         android:layout_centerHorizontal="true"

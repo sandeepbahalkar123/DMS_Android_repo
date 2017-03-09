@@ -38,6 +38,7 @@ import com.scorg.dms.model.requestmodel.showsearchresultrequestmodel.ShowSearchR
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
+import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,12 +52,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
 
     @BindView(R.id.expandableListView)
     ExpandableListView mPatientListView;
-    DrawerLayout drawer;
-    Toolbar toolbar;
-    FloatingActionButton fab;
-    NavigationView leftNavigationView;
-    NavigationView rightNavigationView;
-    View headerView;
+    DrawerLayout mDrawer;
+    Toolbar mToolbar;
+    FloatingActionButton mFab;
+    NavigationView mLeftNavigationView;
+    NavigationView mRightNavigationView;
+    View mHeaderView;
     TextView tvApply;
     TextView tvReset;
     String labelFromDate;
@@ -67,20 +68,20 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
     private EditText et_searchPatientName;
     private EditText et_annotation;
     private EditText et_search_annotation;
-    Spinner spinSelectedID;
+    Spinner mSpinSelectedId;
     DatePickerDialog.OnDateSetListener fromDate;
     DatePickerDialog.OnDateSetListener toDate;
-    private Spinner spinner_admissionDate;
-    private String selected_id;
-    private String admission_date;
-    private String[] array_id;
+    private Spinner mSpinnerAmissionDate;
+    private String mSelectedId;
+    private String mAdmissionDate;
+    private String[] mArrayId;
     private Context mContext;
-    Calendar myCalendar;
+    Calendar mCalender;
     ArrayList<String> mTagsList = new ArrayList<String>();
-    private Custom_Spin_Adapter custom_spinner_adapter;
+    private Custom_Spin_Adapter mCustomSpinAdapter;
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
-    RecyclerView recycleTag;
+    RecyclerView mRecycleTag;
     private Handler mAddedTagsEventHandler;
     private HashMap<String, String> mAddedTagsForFiltering;
 
@@ -106,42 +107,42 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
             }
         };
         init();
-        array_id = getResources().getStringArray(R.array.ids);
+        mArrayId = getResources().getStringArray(R.array.ids);
         ButterKnife.bind(this);
 
         mPatientsHelper = new PatientsHelper(this, this);
         doGetPatientList();
 
         // setting adapter for spinner in header view of right drawer
-        custom_spinner_adapter = new Custom_Spin_Adapter(this, array_id, getResources().getStringArray(R.array.select_id));
-        spinSelectedID.setAdapter(custom_spinner_adapter);
+        mCustomSpinAdapter = new Custom_Spin_Adapter(this, mArrayId, getResources().getStringArray(R.array.select_id));
+        mSpinSelectedId.setAdapter(mCustomSpinAdapter);
 
         // spinner click listener
-        spinSelectedID.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinSelectedId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int indexSselectedId =  adapterView.getSelectedItemPosition();
-                array_id = getResources().getStringArray(R.array.select_id);
-                selected_id = array_id[indexSselectedId];
-                if(selected_id.equals(getResources().getString(R.string.Select))){
-                    custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.admission_date));
-                    spinner_admissionDate.setAdapter(custom_spinner_adapter);
-                    spinner_admissionDate.setEnabled(true);
+                mArrayId = getResources().getStringArray(R.array.select_id);
+                mSelectedId = mArrayId[indexSselectedId];
+                if(mSelectedId.equals(getResources().getString(R.string.Select))){
+                    mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.admission_date));
+                    mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
+                    mSpinnerAmissionDate.setEnabled(true);
                 }
-                else  if(selected_id.equals(getResources().getString(R.string._ipd))){
-                    spinner_admissionDate.setEnabled(true);
-                    custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.IPD));
-                    spinner_admissionDate.setAdapter(custom_spinner_adapter);
+                else  if(mSelectedId.equals(getResources().getString(R.string._ipd))){
+                    mSpinnerAmissionDate.setEnabled(true);
+                    mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.IPD));
+                    mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
                     et_uhid.setHint(getResources().getString(R.string.IPD));
-                }else if(selected_id.equals(getResources().getString(R.string._opd))){
-                    spinner_admissionDate.setEnabled(true);
-                    custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.OPD));
-                    spinner_admissionDate.setAdapter(custom_spinner_adapter);
+                }else if(mSelectedId.equals(getResources().getString(R.string._opd))){
+                    mSpinnerAmissionDate.setEnabled(true);
+                    mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.OPD));
+                    mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
                     et_uhid.setHint(getResources().getString(R.string.OPD));
-                }else if(selected_id.equals(getResources().getString(R.string._uhid))){
-                    spinner_admissionDate.setEnabled(true);
-                    custom_spinner_adapter = new Custom_Spin_Adapter(mContext, array_id, getResources().getStringArray(R.array.admission_date));
-                    spinner_admissionDate.setAdapter(custom_spinner_adapter);
+                }else if(mSelectedId.equals(getResources().getString(R.string._uhid))){
+                    mSpinnerAmissionDate.setEnabled(true);
+                    mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.admission_date));
+                    mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
                     et_uhid.setHint(getResources().getString(R.string.UHID));
                 }
             }
@@ -152,12 +153,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
             }
         });
      // spinner click listener
-        spinner_admissionDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinnerAmissionDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int indexSselectedId =  adapterView.getSelectedItemPosition();
-                array_id = getResources().getStringArray(R.array.admission_date);
-                admission_date = array_id[indexSselectedId];
+                mArrayId = getResources().getStringArray(R.array.admission_date);
+                mAdmissionDate = mArrayId[indexSselectedId];
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -165,22 +166,22 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
             }
         });
      // right navigation drawer clickListener
-        rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
 
 
-                drawer.closeDrawer(GravityCompat.END);
+                mDrawer.closeDrawer(GravityCompat.END);
                 return true;
             }
         });
 
         // left navigation drawer clickListener
-        leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        mLeftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 // Handle Left navigation view item clicks here.
-                int id = item.getItemId();
+                /*int id = item.getItemId();
 
                 if (id == R.id.nav_camera) {
                     Toast.makeText(PatientList.this, "Left Drawer - Import", Toast.LENGTH_SHORT).show();
@@ -194,9 +195,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
                     Toast.makeText(PatientList.this, "Left Drawer - Share", Toast.LENGTH_SHORT).show();
                 } else if (id == R.id.nav_send) {
                     Toast.makeText(PatientList.this, "Left Drawer - Send", Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
-                drawer.closeDrawer(GravityCompat.START);
+                mDrawer.closeDrawer(GravityCompat.START);
 
                 return true;
             }
@@ -205,17 +206,17 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
     /// registering all UI components of activity
     private void init() {
         int width = getResources().getDisplayMetrics().widthPixels/2;
-            myCalendar = Calendar.getInstance();
+            mCalender = Calendar.getInstance();
         fromDate = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
                 // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                labelFromDate = DmsConstants.updateLabel(myCalendar);
+                mCalender.set(Calendar.YEAR, year);
+                mCalender.set(Calendar.MONTH, monthOfYear);
+                mCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                labelFromDate = CommonMethods.updateLabel(mCalender);
                 et_fromdate.setText(labelFromDate);
             }
 
@@ -226,51 +227,51 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
                 // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                labelToDate = DmsConstants.updateLabel(myCalendar);
+                mCalender.set(Calendar.YEAR, year);
+                mCalender.set(Calendar.MONTH, monthOfYear);
+                mCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                labelToDate = CommonMethods.updateLabel(mCalender);
                 et_todate.setText(labelToDate);
             }
 
         };
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        recycleTag = (RecyclerView)findViewById(R.id.recycler_view);
+        mRecycleTag = (RecyclerView)findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         layoutManager.setReverseLayout(true);
-        recycleTag.setLayoutManager(layoutManager);
-        leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
-        headerView = rightNavigationView.getHeaderView(0);
+        mRecycleTag.setLayoutManager(layoutManager);
+        mLeftNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
+        mHeaderView = mRightNavigationView.getHeaderView(0);
 
-        DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) rightNavigationView.getLayoutParams();
+        DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
         params.width = width;
 
-        DrawerLayout.LayoutParams leftParams = (DrawerLayout.LayoutParams) leftNavigationView.getLayoutParams();
+        DrawerLayout.LayoutParams leftParams = (DrawerLayout.LayoutParams) mLeftNavigationView.getLayoutParams();
         leftParams.width = width;
-        rightNavigationView.setLayoutParams(params);
-        leftNavigationView.setLayoutParams(leftParams);
+        mRightNavigationView.setLayoutParams(params);
+        mLeftNavigationView.setLayoutParams(leftParams);
 
-        spinSelectedID = (Spinner)headerView.findViewById(R.id.spinner_selectId) ;
-        spinner_admissionDate = (Spinner) headerView.findViewById(R.id.spinner_admissionDate);
-        et_uhid = (EditText) headerView.findViewById(R.id.et_uhid);
-        et_fromdate = (EditText) headerView.findViewById(R.id.et_fromdate);
-        et_todate = (EditText) headerView.findViewById(R.id.et_todate);
-        et_searchPatientName = (EditText) headerView.findViewById(R.id.et_searchPatientName);
-        et_annotation = (EditText) headerView.findViewById(R.id.et_annotation);
-        et_search_annotation = (EditText) headerView.findViewById(R.id.et_search_annotation);
-        tvApply = (TextView)headerView.findViewById(R.id.apply);
-        tvReset = (TextView)headerView.findViewById(R.id.reset);
-        fab.setOnClickListener(this);
+        mSpinSelectedId = (Spinner)mHeaderView.findViewById(R.id.spinner_selectId) ;
+        mSpinnerAmissionDate = (Spinner) mHeaderView.findViewById(R.id.spinner_admissionDate);
+        et_uhid = (EditText) mHeaderView.findViewById(R.id.et_uhid);
+        et_fromdate = (EditText) mHeaderView.findViewById(R.id.et_fromdate);
+        et_todate = (EditText) mHeaderView.findViewById(R.id.et_todate);
+        et_searchPatientName = (EditText) mHeaderView.findViewById(R.id.et_searchPatientName);
+        et_annotation = (EditText) mHeaderView.findViewById(R.id.et_annotation);
+        et_search_annotation = (EditText) mHeaderView.findViewById(R.id.et_search_annotation);
+        tvApply = (TextView)mHeaderView.findViewById(R.id.apply);
+        tvReset = (TextView)mHeaderView.findViewById(R.id.reset);
+        mFab.setOnClickListener(this);
         tvReset.setOnClickListener(this);
         tvApply.setOnClickListener(this);
         et_todate.setOnClickListener(this);
@@ -321,14 +322,14 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
 
         if (!fromDate.isEmpty() && !fromDate.equals("") && !toDate.isEmpty() && !toDate.equals("") && fromDate.equals(toDate))
             {
-                DmsConstants.setErrorMsg(getString(R.string.selectFromDate), et_fromdate, true);
+                CommonMethods.setErrorMsg(getString(R.string.selectFromDate), et_fromdate, true);
                  valid = false;
              }
         else  if (!patientName.matches("[a-zA-Z. ]*")) {
-                 DmsConstants.setErrorMsg(getString(R.string.patientName), et_searchPatientName, true);
+            CommonMethods.setErrorMsg(getString(R.string.patientName), et_searchPatientName, true);
                  valid = false;
         }else  if (!annotation.matches("[a-zA-Z. ]*")) {
-         DmsConstants.setErrorMsg(getString(R.string.annotation), et_annotation, true);
+            CommonMethods.setErrorMsg(getString(R.string.annotation), et_annotation, true);
            valid = false;
         }else{
            valid=true;
@@ -340,23 +341,23 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
     @Override
     public void onClick(View v) {
         //onclick on floating button
-        if (v == fab) {
-            drawer.openDrawer(GravityCompat.END);
+        if (v == mFab) {
+            mDrawer.openDrawer(GravityCompat.END);
         }
 
         // on click of fromDate editext in right drawer
         if (v == et_fromdate) {
-            new DatePickerDialog(PatientList.this, fromDate, myCalendar
-                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(PatientList.this, fromDate, mCalender
+                    .get(Calendar.YEAR), mCalender.get(Calendar.MONTH),
+                    mCalender.get(Calendar.DAY_OF_MONTH)).show();
 
 
         }
         //on click of toDate editext in right drawer
         if (v == et_todate) {
-            new DatePickerDialog(PatientList.this, toDate, myCalendar
-                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(PatientList.this, toDate, mCalender
+                    .get(Calendar.YEAR), mCalender.get(Calendar.MONTH),
+                    mCalender.get(Calendar.DAY_OF_MONTH)).show();
 
         }
       //  on click of Reset in right drawer
@@ -366,8 +367,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
             et_todate.setText("");
             et_search_annotation.setText("");
             et_searchPatientName.setText("");
-            spinner_admissionDate.setSelection(0);
-            spinSelectedID.setSelection(0);
+            mSpinnerAmissionDate.setSelection(0);
+            mSpinSelectedId.setSelection(0);
 
         }
         //  on click of Apply in right drawer
@@ -376,9 +377,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
             if (validateForm(et_fromdate.getText().toString(), et_todate.getText().toString(), et_searchPatientName.getText().toString(), et_annotation.getText().toString())) {
 
                 //adding field values in arrayList to generate tags in recycler view
-                if (!selected_id.equals(getResources().getString(R.string.Select))) {
-                    mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE + "|" + selected_id);
-                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, selected_id);
+                if (!mSelectedId.equals(getResources().getString(R.string.Select))) {
+                    mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE + "|" + mSelectedId);
+                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId);
                 }
 
                 if (!et_uhid.getText().toString().equalsIgnoreCase("")) {
@@ -387,9 +388,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
                     mAddedTagsForFiltering.put(DmsConstants.ID, et_uhid.getText().toString());
                 }
 
-                if (!admission_date.equals(getResources().getString(R.string.Select))) {
-                    mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.DOCTYPE_ID + "|" + admission_date);
-                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOCTYPE_ID, admission_date);
+                if (!mAdmissionDate.equals(getResources().getString(R.string.Select))) {
+                    mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.DOCTYPE_ID + "|" + mAdmissionDate);
+                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOCTYPE_ID, mAdmissionDate);
                 }
 
                 if (!et_fromdate.getText().toString().equalsIgnoreCase("")) {
@@ -418,8 +419,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse,Vie
                 Log.e("TAg========", "gggg" + et_todate.getText().toString());
 
                 mTagsAdapter = new TagAdapter(mContext, mTagsList, mAddedTagsForFiltering, mAddedTagsEventHandler);
-                recycleTag.setAdapter(mTagsAdapter);
-                drawer.closeDrawer(GravityCompat.END);
+                mRecycleTag.setAdapter(mTagsAdapter);
+                mDrawer.closeDrawer(GravityCompat.END);
                 doGetPatientList();
             }
         }
