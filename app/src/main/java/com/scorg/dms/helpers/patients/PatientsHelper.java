@@ -43,6 +43,13 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
         mConnectionFactory.createConnection(DmsConstants.TASK_PATIENT_LIST);
     }
 
+    public void doGetAllAnotations() {
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_ANNOTATIONS_LIST, Request.Method.GET);
+        mConnectionFactory.setHeaderParams();
+        mConnectionFactory.setUrl(Config.URL_ANNOTATIONS_LIST);
+        mConnectionFactory.createConnection(DmsConstants.TASK_ANNOTATIONS_LIST);
+    }
+
     //-------------------------
     @Override
     public void onResponse(int responseResult, CustomResponse customResponse, int mOldDataTag) {
@@ -52,10 +59,8 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
         switch (responseResult) {
             case ConnectionListener.RESPONSE_OK:
                 if (mOldDataTag == DmsConstants.TASK_PATIENT_LIST) {
-                    //--TODO : FOR OFFLINE TESTING
-                    //ShowSearchResultResponseModel showSearchResultResponseModel = loadJSONFromAsset();
-                    // mHelperResponseManager.onSuccess(mOldDataTag, showSearchResultResponseModel);
-                    //-----
+                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
+                } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
                     mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
                 }
                 break;

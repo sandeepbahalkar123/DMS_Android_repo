@@ -7,22 +7,22 @@ import com.scorg.dms.model.responsemodel.Common;
 
 import java.io.Serializable;
 
-public class AnnotationListResponseModel implements CustomResponse,Serializable{
+public class AnnotationListResponseModel implements CustomResponse, Serializable {
 
-@SerializedName("common")
-@Expose
-private Common common;
-@SerializedName("data")
-@Expose
-private AnnotationListData annotationListData;
+    @SerializedName("common")
+    @Expose
+    private Common common;
+    @SerializedName("data")
+    @Expose
+    private AnnotationListData annotationListData;
 
-public Common getCommon() {
-return common;
-}
+    public Common getCommon() {
+        return common;
+    }
 
-public void setCommon(Common common) {
-this.common = common;
-}
+    public void setCommon(Common common) {
+        this.common = common;
+    }
 
     public AnnotationListData getAnnotationListData() {
         return annotationListData;

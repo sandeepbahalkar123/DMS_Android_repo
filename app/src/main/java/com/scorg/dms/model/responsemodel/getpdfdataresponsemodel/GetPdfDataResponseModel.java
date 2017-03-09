@@ -7,22 +7,22 @@ import com.scorg.dms.model.responsemodel.Common;
 
 import java.io.Serializable;
 
-public class GetPdfDataResponseModel implements CustomResponse,Serializable{
+public class GetPdfDataResponseModel implements CustomResponse, Serializable {
 
-@SerializedName("common")
-@Expose
-private Common common;
-@SerializedName("data")
-@Expose
-private GetPdfDataResponseData getPdfDataResponseData;
+    @SerializedName("common")
+    @Expose
+    private Common common;
+    @SerializedName("data")
+    @Expose
+    private GetPdfDataResponseData getPdfDataResponseData;
 
-public Common getCommon() {
-return common;
-}
+    public Common getCommon() {
+        return common;
+    }
 
-public void setCommon(Common common) {
-this.common = common;
-}
+    public void setCommon(Common common) {
+        this.common = common;
+    }
 
     public GetPdfDataResponseData getGetPdfDataResponseData() {
         return getPdfDataResponseData;

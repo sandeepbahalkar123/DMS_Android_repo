@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.scorg.dms.R;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.util.CommonMethods;
@@ -303,6 +304,10 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 case DmsConstants.TASK_PATIENT_LIST: //This is for patient list
                     ShowSearchResultResponseModel showSearchResultResponseModel = gson.fromJson(data, ShowSearchResultResponseModel.class);
                     this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, showSearchResultResponseModel, mOldDataTag);
+                    break;
+                case DmsConstants.TASK_ANNOTATIONS_LIST: //This is for annotation list
+                    AnnotationListResponseModel annotationListResponseModel = gson.fromJson(data, AnnotationListResponseModel.class);
+                    this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, annotationListResponseModel, mOldDataTag);
                     break;
             }
 

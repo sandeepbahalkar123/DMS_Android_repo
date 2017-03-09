@@ -65,6 +65,7 @@ public class DmsConstants {
     public static final int REGISTRATION_CODE = 0;
     public static final int TASK_LOGIN_CODE = 1;
     public static final int TASK_PATIENT_LIST = 2;
+    public static final int TASK_ANNOTATIONS_LIST = 3;
 
 
     public static class DATE_PATTERN {

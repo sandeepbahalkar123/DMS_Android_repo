@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class GetPdfDataResponseData {
 
-@SerializedName("fileData")
-@Expose
-private String fileData;
+    @SerializedName("fileData")
+    @Expose
+    private String fileData;
 
-public String getFileData() {
-return fileData;
-}
+    public String getFileData() {
+        return fileData;
+    }
 
-public void setFileData(String fileData) {
-this.fileData = fileData;
-}
+    public void setFileData(String fileData) {
+        this.fileData = fileData;
+    }
 
 }

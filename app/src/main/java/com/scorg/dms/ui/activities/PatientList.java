@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,11 +45,20 @@ import com.scorg.dms.helpers.patients.PatientsHelper;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
 import com.scorg.dms.model.requestmodel.showsearchresultrequestmodel.ShowSearchResultRequestModel;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationList;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListData;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.ui.ItemDetailActivity;
 import com.scorg.dms.util.DmsConstants;
+import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
+import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
+import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
+import com.unnamed.b.atv.model.TreeNode;
+import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,6 +113,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
 
     private Handler mAddedTagsEventHandler;
     private HashMap<String, String> mAddedTagsForFiltering;
+    private RelativeLayout mAnnotationTreeViewContainer;
+
+    private AndroidTreeView mAndroidTreeView;
+    private Bundle mSavedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +125,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         mContext = getApplicationContext();
+        this.mSavedInstanceState = savedInstanceState;
+
 
         //-------------
 
@@ -142,7 +159,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                mPatientsHelper.doGetAllAnotations();
+
                 drawer.openDrawer(GravityCompat.END);
+
+                mAnnotationTreeViewContainer.removeAllViews();
             }
         });
 
@@ -396,31 +418,43 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         tvApply = (TextView) headerView.findViewById(R.id.apply);
         tvReset = (TextView) headerView.findViewById(R.id.reset);
 
+        //-------
+        mAnnotationTreeViewContainer = (RelativeLayout) headerView.findViewById(R.id.annotationTreeViewContainer);
+        //-------
+
     }
 
 
     @Override
     public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
-        ShowSearchResultResponseModel showSearchResultResponseModel = (ShowSearchResultResponseModel) customResponse;
-        List<SearchResult> searchResult = showSearchResultResponseModel.getSearchResultData().getSearchResult();
 
-        List<String> headerList = new ArrayList<>();
-        HashMap<String, ArrayList<PatientFileData>> childList = new HashMap<String, ArrayList<PatientFileData>>();
+        if (mOldDataTag == DmsConstants.TASK_PATIENT_LIST) {
+            ShowSearchResultResponseModel showSearchResultResponseModel = (ShowSearchResultResponseModel) customResponse;
+            List<SearchResult> searchResult = showSearchResultResponseModel.getSearchResultData().getSearchResult();
 
-        for (SearchResult dataObject :
-                searchResult) {
-            String patientName = dataObject.getPatientName();
-            headerList.add(patientName);
-            childList.put(patientName, new ArrayList<PatientFileData>(dataObject.getPatientFileData()));
+            List<String> headerList = new ArrayList<>();
+            HashMap<String, ArrayList<PatientFileData>> childList = new HashMap<String, ArrayList<PatientFileData>>();
+
+            for (SearchResult dataObject :
+                    searchResult) {
+                String patientName = dataObject.getPatientName();
+                headerList.add(patientName);
+                childList.put(patientName, new ArrayList<PatientFileData>(dataObject.getPatientFileData()));
+            }
+
+            mPatientListView.setAdapter(new PatientExpandableListAdapter(this, headerList, childList));
+            mPatientListView.setGroupIndicator(null);
+            mPatientListView.setChildIndicator(null);
+            mPatientListView.setChildDivider(getResources().getDrawable(R.color.transparent));
+            mPatientListView.setDivider(getResources().getDrawable(R.color.white));
+            mPatientListView.setDividerHeight(2);
+            //mPatientListView.setDividerHeight(2);
+        } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
+            AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
+            AnnotationListData annotationListData = annotationListResponseModel.getAnnotationListData();
+            createAnnotationTreeStructure(annotationListData);
         }
 
-        mPatientListView.setAdapter(new PatientExpandableListAdapter(this, headerList, childList));
-        mPatientListView.setGroupIndicator(null);
-        mPatientListView.setChildIndicator(null);
-        mPatientListView.setChildDivider(getResources().getDrawable(R.color.transparent));
-        mPatientListView.setDivider(getResources().getDrawable(R.color.white));
-        mPatientListView.setDividerHeight(2);
-        //mPatientListView.setDividerHeight(2);
     }
 
     @Override
@@ -525,7 +559,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
             showSearchResultRequestModel.setPatientName("" + data);
         }
 
-
         data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE);
         if (data != null) {
             showSearchResultRequestModel.setDateType("" + data);
@@ -544,4 +577,46 @@ public class PatientList extends AppCompatActivity implements HelperResponse {
         showSearchResultRequestModel.setDocTypeId(new String[1]);
         mPatientsHelper.doGetPatientList(showSearchResultRequestModel);
     }
+
+    private void createAnnotationTreeStructure(AnnotationListData annotationListData) {
+
+        TreeNode root = TreeNode.root();
+
+        List<AnnotationList> annotationLists = annotationListData.getAnnotationLists();
+
+        for (int i = 0; i < annotationLists.size(); i++) {
+            AnnotationList annotationCategoryObject = annotationLists.get(i);
+
+            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this);
+            TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName()))
+                    .setViewHolder(selectableHeaderHolder);
+            // fillFolder(folder1);
+
+            List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
+
+            for (int j = 0; j < docTypeList.size(); j++) {
+                DocTypeList docTypeListObject = docTypeList.get(j);
+                //orderedProductSKU.getSkuCode()-orderedProductSKU.getProductUniqueID()| orderedProductSKU.getSkuID()|orderedProductItems.getProductID()| orderedProductItems.getProductName()
+                String dataToShow = docTypeListObject.getTypeName() + "-" + docTypeListObject.getAbbreviation();
+
+                TreeNode file3 = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this));
+                folder1.addChildren(file3);
+            }
+            root.addChildren(folder1);
+        }
+
+        mAndroidTreeView = new AndroidTreeView(this, root);
+        mAndroidTreeView.setDefaultAnimation(true);
+        mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
+        mAndroidTreeView.setSelectionModeEnabled(true);
+/*
+        if (mSavedInstanceState != null) {
+            String state = mSavedInstanceState.getString("tState");
+            if (!TextUtils.isEmpty(state)) {
+                mAndroidTreeView.restoreState(state);
+            }
+        }*/
+    }
+
+
 }

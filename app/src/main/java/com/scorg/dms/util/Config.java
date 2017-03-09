@@ -25,5 +25,6 @@ public class Config {
     //Declared all URL used in app here
     public static final String URL_LOGIN = BASE_URL + "userLogin";
     public static final String URL_PATIENT_LIST = BASE_URL + "result/ShowSearchResults";
+    public static final String URL_ANNOTATIONS_LIST = BASE_URL + "documenttype/getAnnotations";
 
 }

@@ -90,21 +90,36 @@
         <item>OPD-Visit Date</item>
     </string-array>
     <string-array name="ids">
-    <item>0</item>
-    <item>1</item>
-    <item>2</item>
-    <item>3</item>
-    <item>4</item>
-    <item>5</item>
-    <item>6</item>
-    <item>7</item>
-    <item>8</item>
-    <item>9</item>
-    <item>10</item>
-    <item>11</item>
-    <item>12</item>
-    <item>13</item>
-    <item>14</item>
-    <item>15</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
     </string-array>
+
+    <!--********Tree view holder icon codes****************-->
+    <string name="ic_folder">&#xe09d;</string>
+    <string name="ic_keyboard_arrow_down">&#xe0c5;</string>
+    <string name="ic_keyboard_arrow_right">&#xe0c7;</string>
+    <string name="ic_email">&#xe087;</string>
+    <string name="ic_add">&#xe006;</string>
+    <string name="ic_close">&#xe048;</string>
+    <string name="ic_check_circle_blank">&#xe03e;</string>
+    <string name="ic_label_outline">&#xe0d1;</string>
+    <string name="ic_shopping_cart">&#xe14f;</string>
+    <string name="ic_label">&#xe0d0;</string>
+    <string name="ic_person">&#xe105;</string>
+
+    <!--******************************-->
 </resources>
