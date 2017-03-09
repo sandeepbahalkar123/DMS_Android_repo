@@ -37,8 +37,6 @@ public class DmsPreferencesManager {
 
     }
 
-    ;
-
     public static SharedPreferences getSharedPreference(final Context context) {
         if (context != null) {
             if (sharedPreferences == null) {

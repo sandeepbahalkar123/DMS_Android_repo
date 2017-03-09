@@ -83,23 +83,6 @@ public class ConnectionFactory extends ConnectRequest {
     }
 
     public Connector createConnection(int type) {
-        /*switch (type) {
-
-            //write cases for different APIS
-            case DmsConstants.REGISTRATION_CODE://This is sample code
-                connector = new RequestManager(mContext, mConnectionListener, DmsConstants.REGISTRATION_CODE, mViewById, isProgressBarShown, mOldDataTag, Request.Method.POST);
-                break;
-            case DmsConstants.LOGIN_CODE://This is for login
-                //  connector = new RequestManager(mContext, mConnectionListener, DmsConstants.LOGIN_CODE, mViewById, isProgressBarShown, mOldDataTag, Request.Method.POST);
-                connector = new RequestManager(mContext, mConnectionListener, type, mViewById, isProgressBarShown, mOldDataTag, reqPostOrGet);
-                break;
-            case DmsConstants.PATIENT_LIST://This is for patient list
-                connector = new RequestManager(mContext, mConnectionListener, type, mViewById, isProgressBarShown, mOldDataTag, reqPostOrGet);
-                break;
-            default:
-                Log.d(TAG, "default_circle " + type);
-                break;
-        }*/
 
         connector = new RequestManager(mContext, mConnectionListener, type, mViewById, isProgressBarShown, mOldDataTag, reqPostOrGet);
 
