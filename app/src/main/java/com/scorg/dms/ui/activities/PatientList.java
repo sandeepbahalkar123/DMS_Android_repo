@@ -450,14 +450,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this);
             TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName()))
                     .setViewHolder(selectableHeaderHolder);
-            // fillFolder(folder1);
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
 
             for (int j = 0; j < docTypeList.size(); j++) {
                 DocTypeList docTypeListObject = docTypeList.get(j);
-                //orderedProductSKU.getSkuCode()-orderedProductSKU.getProductUniqueID()| orderedProductSKU.getSkuID()|orderedProductItems.getProductID()| orderedProductItems.getProductName()
-                String dataToShow = docTypeListObject.getTypeName() + "-" + docTypeListObject.getAbbreviation();
+                 String dataToShow = docTypeListObject.getTypeName() + "-" + docTypeListObject.getAbbreviation();
 
                 TreeNode file3 = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this));
                 folder1.addChildren(file3);
@@ -469,13 +467,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mAndroidTreeView.setDefaultAnimation(true);
         mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
         mAndroidTreeView.setSelectionModeEnabled(true);
-/*
-        if (mSavedInstanceState != null) {
-            String state = mSavedInstanceState.getString("tState");
-            if (!TextUtils.isEmpty(state)) {
-                mAndroidTreeView.restoreState(state);
-            }
-        }*/
+
     }
 
 
