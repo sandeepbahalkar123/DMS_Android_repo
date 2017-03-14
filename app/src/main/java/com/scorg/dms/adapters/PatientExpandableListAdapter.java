@@ -147,7 +147,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         //------------------
         int originalChildrenCount = getOriginalChildrenCount(groupPosition);
         int shownDataChildrenCount = getChildrenCount(groupPosition);
-        CommonMethods.Log(TAG, "childrenCount: " + groupPosition + ":" + childPosition + ":" + originalChildrenCount);
+       // CommonMethods.Log(TAG, "childrenCount: " + groupPosition + ":" + childPosition + ":" + originalChildrenCount);
         if (dataShowMaxValue < originalChildrenCount && (childPosition + 1) == shownDataChildrenCount) {
             childViewHolder.moreOption.setVisibility(View.VISIBLE);
             childViewHolder.moreOption.setTag(getGroup(groupPosition));
@@ -388,7 +388,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
         }
 
-        CommonMethods.Log(TAG, _listDataChild.toString());
+       // CommonMethods.Log(TAG, _listDataChild.toString());
 
         this.notifyDataSetChanged();
     }
@@ -440,7 +440,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             boolean[] value = entry.getValue();
             for (boolean b :
                     value) {
-                CommonMethods.Log(TAG, entry.getKey() + ":" + b);
+             //   CommonMethods.Log(TAG, entry.getKey() + ":" + b);
             }
 
         }

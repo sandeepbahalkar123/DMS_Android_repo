@@ -1,7 +1,6 @@
 package com.scorg.dms.util;
 
 
-
 /**
  * @author Sandeep Bahalkar
  */
@@ -23,8 +22,8 @@ public class DmsConstants {
         public static final String DATE_TYPE = "dateType";
         public static final String FROM_DATE = "fromDate";
         public static final String TO_DATE = "toDate";
-        public static final String annotationText = "annotationText";
-        public static final String DOCTYPE_ID = "DocTypeId";
+        public static final String ANNOTATION_TEXT = "annotationText";
+        public static final String DOC_TYPE_ID = "DocTypeId";
     }
 
 
@@ -50,6 +49,7 @@ public class DmsConstants {
     public static final String GRANT_TYPE_KEY = "grant_type";
     public static final String APPLICATION_URL_ENCODED = "application/x-www-form-urlencoded; charset=UTF-8";
     public static final String APPLICATION_JSON = "application/json; charset=utf-8";
+    public static final String CATEGORY_NAME = "categoryName";
 
 
     //--- Request Params

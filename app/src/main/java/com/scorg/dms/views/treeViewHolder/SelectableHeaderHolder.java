@@ -29,7 +29,12 @@ public class SelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTree
         final View view = inflater.inflate(R.layout.layout_selectable_header, null, false);
 
         tvValue = (TextView) view.findViewById(R.id.node_value);
-        tvValue.setText(value.text);
+
+        if (value.text.contains("|")) {
+            tvValue.setText(value.text.split("\\|")[0]);
+        } else {
+            tvValue.setText(value.text);
+        }
 
         nodeSelector = (CheckBox) view.findViewById(R.id.node_selector);
         nodeSelector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

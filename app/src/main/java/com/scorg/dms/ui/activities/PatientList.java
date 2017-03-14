@@ -18,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,10 +59,14 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnEditorAction;
+import butterknife.OnTextChanged;
+import butterknife.Optional;
 
 
 public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -98,7 +104,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private String[] mArrayId;
     private Context mContext;
 
-    ArrayList<String> mTagsList = new ArrayList<String>();
     private Custom_Spin_Adapter mCustomSpinAdapter;
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
@@ -107,6 +112,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private HashMap<String, String> mAddedTagsForFiltering;
     private RelativeLayout mAnnotationTreeViewContainer;
     private AndroidTreeView mAndroidTreeView;
+    private AnnotationListData mAnnotationListData;
+
+    private String TAG = this.getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,6 +230,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mCustomSpinAdapter = new Custom_Spin_Adapter(this, mArrayId, getResources().getStringArray(R.array.select_id));
         mSpinSelectedId.setAdapter(mCustomSpinAdapter);
         //------
+        onTextChanged();
     }
 
     @Override
@@ -249,8 +258,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             //mPatientListView.setDividerHeight(2);
         } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
-            AnnotationListData annotationListData = annotationListResponseModel.getAnnotationListData();
-            createAnnotationTreeStructure(annotationListData);
+            mAnnotationListData = annotationListResponseModel.getAnnotationListData();
+
+            createAnnotationTreeStructure(mAnnotationListData);
         }
     }
 
@@ -292,7 +302,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             //onclick on floating button
             case R.id.fab:
                 mDrawer.openDrawer(GravityCompat.END);
-                mAnnotationTreeViewContainer.removeAllViews();
 
                 mPatientsHelper.doGetAllAnnotations();
                 break;
@@ -326,7 +335,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 break;
             //  on click of Apply in right drawer
             case R.id.apply:
-                mTagsList.clear();
 
                 String fromDate = mFromDateEditText.getText().toString().trim();
                 String toDate = mToDateEditText.getText().toString().trim();
@@ -338,42 +346,43 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
                     //adding field values in arrayList to generate tags in recycler view
                     if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
-                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE + "|" + mSelectedId);
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId);
                     }
 
-                    if (!mUHIDEditText.getText().toString().equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mTagsList.add(DmsConstants.ID + "|" + mUHIDEditText.getText().toString());
+                    if (mUHIDEditText.getText().toString().trim().length() != 0) {
                         mAddedTagsForFiltering.put(DmsConstants.ID, mUHIDEditText.getText().toString());
                     }
 
                     if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
-                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.DOCTYPE_ID + "|" + mAdmissionDate);
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOCTYPE_ID, mAdmissionDate);
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOC_TYPE_ID, mAdmissionDate);
                     }
 
-
                     if (!fromDate.equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE + "|" + mFromDateEditText.getText().toString());
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, mFromDateEditText.getText().toString());
                     }
 
                     if (!toDate.equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE + "|" + mToDateEditText.getText().toString());
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, mToDateEditText.getText().toString());
                     }
 
-                    if (!mSearchPatientNameEditText.getText().toString().equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME + "|" + mSearchPatientNameEditText.getText().toString());
+                    if (mSearchPatientNameEditText.getText().toString().trim().length() != 0) {
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, mSearchPatientNameEditText.getText().toString());
                     }
 
-                    if (!mAnnotationEditText.getText().toString().equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mTagsList.add(DmsConstants.PATIENT_LIST_PARAMS.annotationText + "|" + mAnnotationEditText.getText().toString());
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.annotationText, mAnnotationEditText.getText().toString());
+                    if (mAnnotationEditText.getText().toString().trim().length() != 0) {
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.ANNOTATION_TEXT, mAnnotationEditText.getText().toString());
                     }
 
-                    mTagsAdapter = new TagAdapter(mContext, mTagsList, mAddedTagsForFiltering, mAddedTagsEventHandler);
+                    if (getSelectedAnnotations().length > 0) {
+                        String[] selectedAnnotations = getSelectedAnnotations();
+                        for (String dataValue :
+                                selectedAnnotations) {
+                            //--- hashMap Data : DocTypeId_<childName>, childName|id
+                            mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOC_TYPE_ID + "_" + dataValue, dataValue);
+                        }
+                    }
+
+                    mTagsAdapter = new TagAdapter(mContext, mAddedTagsForFiltering, mAddedTagsEventHandler);
                     mRecycleTag.setAdapter(mTagsAdapter);
                     mDrawer.closeDrawer(GravityCompat.END);
                     doGetPatientList();
@@ -433,12 +442,14 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             showSearchResultRequestModel.setToDate("" + data);
         }
 
-        showSearchResultRequestModel.setAnnotationText("");
-        showSearchResultRequestModel.setDocTypeId(new String[1]);
+        showSearchResultRequestModel.setAnnotationText(DmsConstants.BLANK);
+        showSearchResultRequestModel.setDocTypeId(getSelectedAnnotations());
         mPatientsHelper.doGetPatientList(showSearchResultRequestModel);
     }
 
     private void createAnnotationTreeStructure(AnnotationListData annotationListData) {
+
+        mAnnotationTreeViewContainer.removeAllViews();
 
         TreeNode root = TreeNode.root();
 
@@ -448,14 +459,14 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationList annotationCategoryObject = annotationLists.get(i);
 
             SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this);
-            TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName()))
+            TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() + "|" + DmsConstants.CATEGORY_NAME))
                     .setViewHolder(selectableHeaderHolder);
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
 
             for (int j = 0; j < docTypeList.size(); j++) {
                 DocTypeList docTypeListObject = docTypeList.get(j);
-                 String dataToShow = docTypeListObject.getTypeName() + "-" + docTypeListObject.getAbbreviation();
+                String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
                 TreeNode file3 = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this));
                 folder1.addChildren(file3);
@@ -509,5 +520,74 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private String[] getSelectedAnnotations() {
+        HashSet<String> annotationList = new HashSet<String>();
+        if (mAndroidTreeView != null) {
+            List<TreeNode> selected = mAndroidTreeView.getSelected();
+            if (selected.size() > 0) {
+                for (TreeNode data :
+                        selected) {
+                    String dataValue = data.getValue().toString();
+                    //-- This is done for child only, no parent name will come in the list.
+                    if (dataValue.contains("|")) {
+                        annotationList.add(dataValue);
+                    }
+                }
+            }
+        }
+        String[] strings = annotationList.toArray(new String[annotationList.size()]);
+        return strings;
+    }
+
+
+    protected void onTextChanged() {
+
+        mSearchAnnotationEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String enteredString = mSearchAnnotationEditText.getText().toString();
+                CommonMethods.Log(TAG, "onSearchAnnotationEditor:" + enteredString);
+                AnnotationListData annotationListData = new AnnotationListData();
+                List<AnnotationList> annotationTempList = new ArrayList<>();
+                if (mAnnotationListData != null) {
+                    List<AnnotationList> parentAnnotationList = mAnnotationListData.getAnnotationLists();
+                    if (parentAnnotationList.size() > 0) {
+
+                        for (AnnotationList tempParentObject : parentAnnotationList) {
+                            if (tempParentObject.getCategoryName().toLowerCase().contains(enteredString.toLowerCase())) {
+                                annotationTempList.add(tempParentObject);
+                            } else {
+
+                                //TODO : THIS IS NOT FIXED, CHECK FOR DOUBLE ENTRY IN TRRE VIEW FOR CHILD SEARCH
+                                //-------
+                                List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
+                                for (DocTypeList tempDocTypeObject : childDocTypeList) {
+                                    if (tempDocTypeObject.getTypeName().toLowerCase().contains(enteredString.toLowerCase())) {
+                                        annotationTempList.add(tempParentObject);
+                                        break;
+                                    }
+                                }
+                                //------
+                            }
+
+                        }
+                    }
+                }
+                annotationListData.setAnnotationLists(annotationTempList);
+                createAnnotationTreeStructure(annotationListData);
+            }
+        });
     }
 }

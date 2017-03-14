@@ -20,9 +20,11 @@ import android.widget.Toast;
 import com.scorg.dms.R;
 
 import com.scorg.dms.util.CommonMethods;
+import com.scorg.dms.util.DmsConstants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -44,6 +46,26 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         this.mAddedTagsForFiltering = mAddedTagsForFiltering;
         this.mAddedTagsEventHandler = mAddedTagsEventHandler;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public TagAdapter(Context context, HashMap<String, String> mAddedTagsForFiltering, Handler mAddedTagsEventHandler) {
+        mContext = context;
+        this.mAddedTagsForFiltering = mAddedTagsForFiltering;
+        this.mAddedTagsEventHandler = mAddedTagsEventHandler;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mTagsDataSet = new ArrayList<String>();
+
+        for (Map.Entry<String, String> entry : mAddedTagsForFiltering.entrySet()) {
+            if (!DmsConstants.BLANK.equalsIgnoreCase(entry.getValue())) {
+
+                if (entry.getValue().contains("\\|")) {
+                    mTagsDataSet.add("" + entry.getValue());
+                } else {
+                    //-- For other than annotation list
+                    mTagsDataSet.add(entry.getValue() + "|" + entry.getKey());
+                }
+            }
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -70,7 +92,20 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(TagAdapter.ViewHolder holder, final int position) {
 
-        holder.mTextView.setText(String.valueOf(mTagsDataSet.get(position).split("\\|")[1]));
+
+//        String.valueOf(mTagsDataSet.get(position).split("\\|")[1])
+
+        String data = mTagsDataSet.get(position);
+
+        String dataToShow = "", dataToSet = "";
+        if (data.contains("|")) {
+            String[] temp = data.split("\\|");
+            dataToShow = temp[0];
+            dataToSet = temp[1];
+        }
+        holder.mTextView.setText(dataToShow);
+
+        holder.mRemoveButton.setTag(dataToSet);
 
 
         // Generate a random color
@@ -103,8 +138,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         holder.mRemoveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get the clicked item label
-                String itemLabel = String.valueOf(mTagsDataSet.get(position).split("\\|")[0]);
+
+
+                String tag = (String) view.getTag();
 
                 // Remove the item on remove/button click
                 mTagsDataSet.remove(position);
@@ -140,14 +176,15 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 */
                 notifyItemRangeChanged(position, mTagsDataSet.size());
 
-                mAddedTagsForFiltering.remove(itemLabel);
+                mAddedTagsForFiltering.remove(tag);
+
 
                 mAddedTagsEventHandler.sendMessage(new Message());
 
                 CommonMethods.Log(TAG, mAddedTagsForFiltering.toString());
 
 
-             }
+            }
         });
     }
 
