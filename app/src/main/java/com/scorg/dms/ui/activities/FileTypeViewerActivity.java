@@ -26,8 +26,9 @@ import butterknife.ButterKnife;
  * Created by jeetal on 14/3/17.
  */
 
-public class TreeStructureActivity extends AppCompatActivity implements View.OnClickListener {
+public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener {
     private Context mContext;
+
     @BindView(R.id.fab)
     FloatingActionButton mOpenFilterViewFAB;
     @BindView(R.id.toolbar)

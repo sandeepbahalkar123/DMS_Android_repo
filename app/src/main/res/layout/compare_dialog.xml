@@ -39,7 +39,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center|right"
-            android:text="@string/selected_1" />
+            android:text="@string/selected_2" />
 
         <TextView
             android:id="@+id/selectedTwo"
@@ -48,7 +48,7 @@
             android:layout_marginLeft="@dimen/dp5"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/selected_1" />
+            android:text="@string/selected_2" />
     </LinearLayout>
 
     <!--  <LinearLayout

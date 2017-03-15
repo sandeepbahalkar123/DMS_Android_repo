@@ -15,12 +15,14 @@ import com.unnamed.b.atv.model.TreeNode;
  * Created by Bogdan Melnychuk on 2/15/15.
  */
 public class SelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
+    private boolean isDefaultExpanded;
     private TextView tvValue;
     private PrintView arrowView;
     private CheckBox nodeSelector;
 
-    public SelectableHeaderHolder(Context context) {
+    public SelectableHeaderHolder(Context context, boolean isDefaultExpanded) {
         super(context);
+        this.isDefaultExpanded = isDefaultExpanded;
     }
 
     @Override
@@ -47,6 +49,8 @@ public class SelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTree
             }
         });
         nodeSelector.setChecked(node.isSelected());
+
+        node.setExpanded(isDefaultExpanded);
 
         return view;
     }

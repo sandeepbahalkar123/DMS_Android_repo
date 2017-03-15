@@ -8,28 +8,28 @@ import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseD
 
 import java.io.Serializable;
 
-public class FileTreeResponseModel implements CustomResponse,Serializable{
+public class FileTreeResponseModel implements CustomResponse, Serializable {
 
-@SerializedName("common")
-@Expose
-private Common common;
-@SerializedName("data")
-@Expose
-private FileTreeResponseData fileTreeResponseData;
+    @SerializedName("common")
+    @Expose
+    private Common common;
+    @SerializedName("data")
+    @Expose
+    private FileTreeResponseData fileTreeResponseData;
 
-public Common getCommon() {
-return common;
-}
+    public Common getCommon() {
+        return common;
+    }
 
-public void setCommon(Common common) {
-this.common = common;
-}
+    public void setCommon(Common common) {
+        this.common = common;
+    }
 
-public FileTreeResponseData getFileTreeResponseData() {
-    return fileTreeResponseData;
-}
+    public FileTreeResponseData getFileTreeResponseData() {
+        return fileTreeResponseData;
+    }
 
-public void setFileTreeResponseData(FileTreeResponseData fileTreeResponseData) {
-    this.fileTreeResponseData = fileTreeResponseData;
-}
+    public void setFileTreeResponseData(FileTreeResponseData fileTreeResponseData) {
+        this.fileTreeResponseData = fileTreeResponseData;
+    }
 }

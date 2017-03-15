@@ -1,32 +1,44 @@
 package com.scorg.dms.model.responsemodel.filetreeresponsemodel;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class LstDocCategory {
 
-@SerializedName("docCategory")
-@Expose
-private DocCategory docCategory;
-@SerializedName("lstDocTypes")
-@Expose
-private List<LstDocType> lstDocTypes = null;
+    @SerializedName("categoryId")
+    @Expose
+    private Integer categoryId;
+    @SerializedName("categoryName")
+    @Expose
+    private String categoryName;
+    @SerializedName("lstDocTypes")
+    @Expose
+    private List<LstDocType> lstDocTypes = new ArrayList<LstDocType>();
 
-public DocCategory getDocCategory() {
-return docCategory;
-}
+    public Integer getCategoryId() {
+        return categoryId;
+    }
 
-public void setDocCategory(DocCategory docCategory) {
-this.docCategory = docCategory;
-}
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
 
-public List<LstDocType> getLstDocTypes() {
-return lstDocTypes;
-}
+    public String getCategoryName() {
+        return categoryName;
+    }
 
-public void setLstDocTypes(List<LstDocType> lstDocTypes) {
-this.lstDocTypes = lstDocTypes;
-}
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public List<LstDocType> getLstDocTypes() {
+        return lstDocTypes;
+    }
+
+    public void setLstDocTypes(List<LstDocType> lstDocTypes) {
+        this.lstDocTypes = lstDocTypes;
+    }
 
 }
