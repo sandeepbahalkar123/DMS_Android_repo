@@ -525,7 +525,7 @@ public class CommonMethods {
                     }
                 }, mYear, mMonth, mDay);
 
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        //  datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // To set min date
         datePickerDialog.show();
     }
 }

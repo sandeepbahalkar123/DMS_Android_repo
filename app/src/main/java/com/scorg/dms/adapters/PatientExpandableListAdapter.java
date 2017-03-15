@@ -64,6 +64,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
     // Hashmap for keeping track of our checkbox check states
     private HashMap<Integer, boolean[]> mChildCheckStates;
+    private String mCheckedBoxGroupName = null;
 
     public PatientExpandableListAdapter(Context context, List<String> listDataHeader,
                                         HashMap<String, ArrayList<PatientFileData>> listChildData) {
@@ -147,7 +148,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         //------------------
         int originalChildrenCount = getOriginalChildrenCount(groupPosition);
         int shownDataChildrenCount = getChildrenCount(groupPosition);
-       // CommonMethods.Log(TAG, "childrenCount: " + groupPosition + ":" + childPosition + ":" + originalChildrenCount);
+        // CommonMethods.Log(TAG, "childrenCount: " + groupPosition + ":" + childPosition + ":" + originalChildrenCount);
         if (dataShowMaxValue < originalChildrenCount && (childPosition + 1) == shownDataChildrenCount) {
             childViewHolder.moreOption.setVisibility(View.VISIBLE);
             childViewHolder.moreOption.setTag(getGroup(groupPosition));
@@ -388,7 +389,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
         }
 
-       // CommonMethods.Log(TAG, _listDataChild.toString());
+        // CommonMethods.Log(TAG, _listDataChild.toString());
 
         this.notifyDataSetChanged();
     }
@@ -400,52 +401,83 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
     }
 
     private void checkBoxClicked(CompoundButton buttonView, boolean isChecked, int mGroupPosition, int mChildPosition) {
+
+        //------------------
+        int counterToCheckValues = 0;
+
+        // To make arrayList of elements
+        ArrayList<Boolean> tempStatusList = new ArrayList<>();
+        for (Map.Entry<Integer, boolean[]> entries : mChildCheckStates.entrySet()) {
+            boolean[] value = (boolean[]) entries.getValue();
+            for (boolean tempData :
+                    value) {
+                tempStatusList.add(tempData);
+            }
+        }
+
+        // Increment counter if value ==> false
+        for (Boolean dataValue :
+                tempStatusList) {
+            if (!dataValue) {
+                counterToCheckValues = counterToCheckValues + 1;
+            }
+        }
+
+        // This is done to check that, all elements in list is ==>false then reset mCheckedBoxGroupName
+        if (counterToCheckValues == tempStatusList.size()) {
+            mCheckedBoxGroupName = null;
+        }
+
+        //------------------
+
         if (isChecked) {
-            //------
-            boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
-            getChecked[mChildPosition] = isChecked;
-            mChildCheckStates.put(mGroupPosition, getChecked);
-            //------
-            int checkedDataToCompare[] = new int[getChecked.length];
+            //----
+            boolean flag = true; // TO handle operation when selected for same group.
+            String tempName = (String) getGroup(mGroupPosition);
+            if (mCheckedBoxGroupName == null) {
+                mCheckedBoxGroupName = tempName;
+                flag = true;
+            } else if (!tempName.equalsIgnoreCase(mCheckedBoxGroupName)) {
+                CommonMethods.showToast(_context, _context.getString(R.string.error_compare_patient));
+                flag = false;
+            }
 
-            boolean[] checkedValues = mChildCheckStates.get(mGroupPosition);
+            if (flag) {
+                //------
+                boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
+                getChecked[mChildPosition] = isChecked;
+                mChildCheckStates.put(mGroupPosition, getChecked);
+                //------
+                ArrayList<Integer> tempCheckedDataToCompare = new ArrayList<>();
+                boolean[] checkedValues = mChildCheckStates.get(mGroupPosition);
 
-            for (int i = 0; i < checkedValues.length; i++) {
-                boolean checkedValue = checkedValues[i];
-                if (checkedValue == true) {
-                    checkedDataToCompare[i] = i;
+                for (int i = 0; i < checkedValues.length; i++) {
+                    boolean checkedValue = checkedValues[i];
+                    if (checkedValue == true) {
+                        tempCheckedDataToCompare.add(i);
+                    }
+                }
+                //------
+                if (tempCheckedDataToCompare.size() == 1) {
+                    PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
+                    showCompareOptionsDialog("" + child.getReferenceId() + "|" + child.getFileType(), "", mCheckedBoxGroupName);
+                } else if (tempCheckedDataToCompare.size() == 2) {
+                    PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
+                    PatientFileData child_1 = getChild(mGroupPosition, tempCheckedDataToCompare.get(1));
+                    showCompareOptionsDialog("" + child.getReferenceId() + "|" + child.getFileType(), "" + child_1.getReferenceId() + "|" + child_1.getFileType(), mCheckedBoxGroupName);
+                } else {
+                    getChecked[mChildPosition] = false;
+                    mChildCheckStates.put(mGroupPosition, getChecked);
+                    CommonMethods.showToast(_context, _context.getString(R.string.error_max_two_reports));
                 }
             }
-
-            if (checkedDataToCompare.length == 1) {
-                PatientFileData child = getChild(mGroupPosition, checkedDataToCompare[0]);
-                showCompareOptionsDialog("" + child.getReferenceId(), "");
-            } else if (checkedDataToCompare.length == 2) {
-                PatientFileData child = getChild(mGroupPosition, checkedDataToCompare[0]);
-                PatientFileData child_1 = getChild(mGroupPosition, checkedDataToCompare[1]);
-                showCompareOptionsDialog("" + child.getReferenceId(), "" + child_1.getReferenceId());
-            } else {
-                CommonMethods.showToast(_context, "Selection not more than two");
-            }
+            this.notifyDataSetChanged();
 
         } else {
             boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
             getChecked[mChildPosition] = isChecked;
             mChildCheckStates.put(mGroupPosition, getChecked);
         }
-
-        for (Map.Entry<Integer, boolean[]> entry : mChildCheckStates.entrySet()) {
-            // System.out.println(entry.getKey() + " : " + entry.getValue());
-            //   CommonMethods.Log(TAG, entry.getKey() + ":" + entry.getValue());
-            boolean[] value = entry.getValue();
-            for (boolean b :
-                    value) {
-             //   CommonMethods.Log(TAG, entry.getKey() + ":" + b);
-            }
-
-        }
-
-
     }
 
     /*public void showCompareOptionsDialog(final Context context, String selectedOneValue, String optionTwoTitle) {
@@ -492,16 +524,18 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         dialog.show();
     }*/
 
-    public void showCompareOptionsDialog(String selectedOneValue, String optionTwoTitle) {
+    public void showCompareOptionsDialog(String selectedOneValue, String selectedTwoValue, String title) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(_context);
         View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(_context);
         alertDialogBuilderUserInput.setView(mView);
 
+        alertDialogBuilderUserInput.setTitle(title);
+
         TextView selectedOne = (TextView) mView.findViewById(R.id.selectedOne);
         selectedOne.setText("" + selectedOneValue);
         TextView selectedTwo = (TextView) mView.findViewById(R.id.selectedTwo);
-        selectedTwo.setText("" + optionTwoTitle);
+        selectedTwo.setText("" + selectedTwoValue);
 
         alertDialogBuilderUserInput
                 .setCancelable(false)

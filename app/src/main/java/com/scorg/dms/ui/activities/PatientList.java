@@ -1,10 +1,8 @@
 package com.scorg.dms.ui.activities;
 
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 
-import java.util.Calendar;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +56,7 @@ import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -260,7 +259,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
 
-            createAnnotationTreeStructure(mAnnotationListData);
+            createAnnotationTreeStructure(mAnnotationListData, false);
         }
     }
 
@@ -303,10 +302,16 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             case R.id.fab:
                 mDrawer.openDrawer(GravityCompat.END);
 
-                mPatientsHelper.doGetAllAnnotations();
+                if (mAnnotationListData == null) {
+                    mPatientsHelper.doGetAllAnnotations();
+                } else {
+                    createAnnotationTreeStructure(mAnnotationListData, false);
+                }
+
                 break;
             // on click of fromDate editext in right drawer
             case R.id.et_fromdate:
+
                 new CommonMethods().datePickerDialog(this, new DatePickerDialogListener() {
                     @Override
                     public void getSelectedDate(String selectedTime) {
@@ -325,9 +330,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 break;
             //  on click of Reset in right drawer
             case R.id.reset:
+                mAddedTagsForFiltering.clear();
                 mUHIDEditText.setText(DmsConstants.BLANK);
                 mFromDateEditText.setText(DmsConstants.BLANK);
-                mFromDateEditText.setText(DmsConstants.BLANK);
+                mToDateEditText.setText(DmsConstants.BLANK);
                 mSearchAnnotationEditText.setText(DmsConstants.BLANK);
                 mSearchPatientNameEditText.setText(DmsConstants.BLANK);
                 mSpinnerAmissionDate.setSelection(0);
@@ -336,6 +342,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             //  on click of Apply in right drawer
             case R.id.apply:
 
+                mAddedTagsForFiltering.clear();
                 String fromDate = mFromDateEditText.getText().toString().trim();
                 String toDate = mToDateEditText.getText().toString().trim();
                 boolean dateValidate = false;
@@ -373,14 +380,16 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.ANNOTATION_TEXT, mAnnotationEditText.getText().toString());
                     }
 
-                    if (getSelectedAnnotations().length > 0) {
-                        String[] selectedAnnotations = getSelectedAnnotations();
+                    //----------
+                    String[] selectedAnnotations = getSelectedAnnotations();
+                    if (selectedAnnotations.length > 0) {
                         for (String dataValue :
                                 selectedAnnotations) {
                             //--- hashMap Data : DocTypeId_<childName>, childName|id
                             mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOC_TYPE_ID + "_" + dataValue, dataValue);
                         }
                     }
+                    //-------------
 
                     mTagsAdapter = new TagAdapter(mContext, mAddedTagsForFiltering, mAddedTagsEventHandler);
                     mRecycleTag.setAdapter(mTagsAdapter);
@@ -447,7 +456,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mPatientsHelper.doGetPatientList(showSearchResultRequestModel);
     }
 
-    private void createAnnotationTreeStructure(AnnotationListData annotationListData) {
+    private void createAnnotationTreeStructure(AnnotationListData annotationListData, boolean isExpanded) {
 
         mAnnotationTreeViewContainer.removeAllViews();
 
@@ -458,7 +467,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
 
-            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this);
+            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded);
             TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() + "|" + DmsConstants.CATEGORY_NAME))
                     .setViewHolder(selectableHeaderHolder);
 
@@ -586,7 +595,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     }
                 }
                 annotationListData.setAnnotationLists(annotationTempList);
-                createAnnotationTreeStructure(annotationListData);
+                createAnnotationTreeStructure(annotationListData, true);
             }
         });
     }

@@ -62,6 +62,8 @@
     <string name="selected_2">Selected 2:</string>
 
     <string name="dialog_message_text">message</string>
+    <string name="error_compare_patient">Please select same patient record to compare</string>
+    <string name="error_max_two_reports">You can not select more than two reports to compare</string>
 
     <string-array name="select_id">
         <item>Select</item>
