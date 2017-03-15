@@ -8,16 +8,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.scorg.dms.R;
-
-import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,8 +25,8 @@ import butterknife.ButterKnife;
 public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener {
     private Context mContext;
 
-    @BindView(R.id.fab)
-    FloatingActionButton mOpenFilterViewFAB;
+    @BindView(R.id.openCompareFileTypeRightDrawerFAB)
+    FloatingActionButton mOpenCompareFileTypeRightDrawerFAB;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     DrawerLayout mDrawer;
@@ -40,7 +36,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.compare_screen_activity);
+        setContentView(R.layout.compare_file_type_activity);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ButterKnife.bind(this);
         initialize();
@@ -55,6 +51,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     private void bindView() {
         int width = getResources().getDisplayMetrics().widthPixels / 2;
+        mOpenCompareFileTypeRightDrawerFAB.setOnClickListener(this);
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -72,9 +69,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         params.width = width;
 
         mRightNavigationView.setLayoutParams(params);
-
-        mOpenFilterViewFAB.setOnClickListener(this);
-
 
         mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -99,7 +93,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             //onclick on floating button
-            case R.id.fab:
+            case R.id.openCompareFileTypeRightDrawerFAB:
                 mDrawer.openDrawer(GravityCompat.END);
                 break;
 

@@ -24,7 +24,7 @@ public class SelectableItemHolder extends TreeNode.BaseNodeViewHolder<String> {
     @Override
     public View createNodeView(final TreeNode node, String value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.layout_selectable_item, null, false);
+        final View view = inflater.inflate(R.layout.treeview_layout_selectable_item, null, false);
 
         tvValue = (TextView) view.findViewById(R.id.node_value);
 

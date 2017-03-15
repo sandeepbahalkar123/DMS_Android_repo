@@ -23,7 +23,7 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
     @Override
     public View createNodeView(final TreeNode node, IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.layout_icon_node, null, false);
+        final View view = inflater.inflate(R.layout.treeview_layout_icon_node, null, false);
         tvValue = (TextView) view.findViewById(R.id.node_value);
         tvValue.setText(value.text);
 

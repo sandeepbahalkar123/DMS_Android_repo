@@ -9,25 +9,30 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_compare_drawer"
+        layout="@layout/patient_list_app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/activity_main_drawer" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_right_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="#66000000"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/compare_screen_drawer_activity"
-       >
+        app:headerLayout="@layout/patient_filter_right_drawer">
+
 
     </android.support.design.widget.NavigationView>
-</android.support.v4.widget.DrawerLayout>
 
+</android.support.v4.widget.DrawerLayout>
 
 
 

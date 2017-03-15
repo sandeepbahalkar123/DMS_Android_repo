@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -15,8 +14,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_margin="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -26,21 +25,20 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="4"
-                android:text="@string/scrollingBoth"
                 android:gravity="center_vertical"
+                android:text="@string/scrollingBoth"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <Switch
-                    android:id="@+id/et_uhid"
-                    android:layout_width="@dimen/dp0"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-
+                android:id="@+id/et_uhid"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
 
         </TableRow>
@@ -59,75 +57,79 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:gravity="center_vertical"
-                android:text="@string/patientInformation"
                 android:singleLine="true"
+                android:text="@string/patientInformation"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
         </TableRow>
+
         <TextView
-               android:layout_width="match_parent"
-               android:layout_height="@dimen/dp1"
-               android:layout_marginBottom="@dimen/margin_tiny"
-               android:background="@color/white"/>
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginBottom="@dimen/margin_tiny"
+            android:background="@color/white" />
 
 
-      <TextView
-          android:id="@+id/tvPatientName"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:gravity="center_vertical"
-          android:text="Chotu Gupta"
-          android:textColor="@color/white"
-          android:textStyle="bold"
-          android:drawablePadding="@dimen/padding_tiny"
-          android:layout_marginLeft="@dimen/dp10"
-          android:layout_marginBottom="@dimen/margin_tiny"
-          android:layout_marginTop="@dimen/margin_tiny"
-          android:layout_marginRight="@dimen/margin_tiny"
-          android:drawableLeft="@mipmap/userfill"/>
         <TextView
-
+            android:id="@+id/tvPatientName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_tiny"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/margin_tiny"
+            android:layout_marginTop="@dimen/margin_tiny"
+            android:drawableLeft="@mipmap/userfill"
+            android:drawablePadding="@dimen/padding_tiny"
+            android:gravity="center_vertical"
+            android:text="Chotu Gupta"
             android:textColor="@color/white"
-            android:textStyle="bold"
+            android:textStyle="bold" />
+
+        <TextView
+
             android:id="@+id/tvUhid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="UHID 001"
-            android:gravity="center_vertical"
-            android:drawablePadding="@dimen/padding_tiny"
-            android:layout_marginLeft="@dimen/dp10"
             android:layout_marginBottom="@dimen/margin_tiny"
+            android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/margin_tiny"
-            android:drawableLeft="@mipmap/key"/>
+            android:drawableLeft="@mipmap/key"
+            android:drawablePadding="@dimen/padding_tiny"
+            android:gravity="center_vertical"
+            android:text="UHID 001"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tvLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:text="Pune,400147"
-            android:gravity="center_vertical"
-            android:drawablePadding="@dimen/padding_tiny"
-            android:layout_marginLeft="@dimen/dp10"
             android:layout_marginBottom="@dimen/margin_tiny"
+            android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/margin_tiny"
-            android:drawableLeft="@mipmap/placeholder"/>
+            android:drawableLeft="@mipmap/placeholder"
+            android:drawablePadding="@dimen/padding_tiny"
+            android:gravity="center_vertical"
+            android:text="Pune,400147"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp1"
             android:layout_marginBottom="@dimen/margin_tiny"
-            android:background="@color/white"/>
+            android:background="@color/white" />
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
+            android:orientation="horizontal"
 
             android:weightSum="6">
 
@@ -138,10 +140,10 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:text="File-One"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="File-One"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -149,30 +151,31 @@
                 android:id="@+id/tvFileTypeOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_weight="1"
-                android:padding="@dimen/padding_tiny"
-                android:text="@string/IPD"
-                android:singleLine="true"
                 android:background="@drawable/background_fileno"
+                android:gravity="center"
+                android:padding="@dimen/padding_tiny"
+                android:singleLine="true"
+                android:text="@string/IPD"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
 
-
         </TableRow>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp1"
             android:layout_marginBottom="@dimen/margin_tiny"
-            android:background="@color/white"/>
+            android:background="@color/white" />
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -181,10 +184,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
-                android:text="@string/refId"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="@string/refId"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -192,15 +195,14 @@
                 android:id="@+id/tvRefIDOne"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_weight="1"
-                android:text="10101"
+                android:background="@drawable/background_refid"
+                android:gravity="center"
                 android:padding="@dimen/padding_tiny"
                 android:singleLine="true"
-                android:background="@drawable/background_refid"
+                android:text="10101"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
-
 
 
         </TableRow>
@@ -208,10 +210,10 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -221,10 +223,10 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
-                android:text="@string/doctor"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="@string/doctor"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -240,15 +242,15 @@
                 android:textStyle="bold" />
 
 
-
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -258,10 +260,10 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
-                android:text="@string/admission"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="@string/admission"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -271,11 +273,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
+                android:singleLine="true"
                 android:text="11/07/2016 9:00pm"
                 android:textColor="@color/white"
-                android:singleLine="true"
                 android:textStyle="bold" />
-
 
 
         </TableRow>
@@ -284,10 +285,10 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
+            android:orientation="horizontal"
 
             android:weightSum="6">
 
@@ -298,10 +299,10 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
-                android:text="@string/discharge"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="@string/discharge"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -318,19 +319,21 @@
 
 
         </TableRow>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp1"
             android:layout_marginBottom="@dimen/margin_tiny"
-            android:background="@color/white"/>
+            android:background="@color/white" />
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -340,10 +343,10 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:text="File-Two"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="File-Two"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -351,30 +354,31 @@
                 android:id="@+id/tvFileTypeTwo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_weight="1"
-                android:padding="@dimen/padding_tiny"
-                android:text="@string/IPD"
-                android:singleLine="true"
                 android:background="@drawable/background_fileno"
+                android:gravity="center"
+                android:padding="@dimen/padding_tiny"
+                android:singleLine="true"
+                android:text="@string/IPD"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
 
-
         </TableRow>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp1"
             android:layout_marginBottom="@dimen/margin_tiny"
-            android:background="@color/white"/>
+            android:background="@color/white" />
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -383,10 +387,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
-                android:text="@string/refId"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="@string/refId"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -394,15 +398,14 @@
                 android:id="@+id/tvRefIDTwo"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_weight="1"
-                android:text="101222"
+                android:background="@drawable/background_refid"
+                android:gravity="center"
                 android:padding="@dimen/padding_tiny"
                 android:singleLine="true"
-                android:background="@drawable/background_refid"
+                android:text="101222"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
-
 
 
         </TableRow>
@@ -410,10 +413,10 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -423,10 +426,10 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
-                android:text="@string/doctor"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="@string/doctor"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -437,20 +440,20 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="4"
                 android:singleLine="true"
-                android:textColor="@color/white"
                 android:text="Dr. Nitin Kumar"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
 
-
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -460,10 +463,10 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
-                android:text="@string/admission"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="@string/admission"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -474,10 +477,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
                 android:singleLine="true"
-                android:textColor="@color/white"
                 android:text="14/08/2017 2:00am"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
-
 
 
         </TableRow>
@@ -486,10 +488,10 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp10"
+            android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
@@ -498,10 +500,10 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/search"
-                android:text="@string/discharge"
+                android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
+                android:text="@string/discharge"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -512,8 +514,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
                 android:singleLine="true"
-                android:textColor="@color/white"
                 android:text="21/08/2017 3:00am"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
         </TableRow>
@@ -522,7 +524,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp1"
             android:layout_marginBottom="@dimen/margin_tiny"
-            android:background="@color/white"/>
+            android:background="@color/white" />
 
 
     </LinearLayout>

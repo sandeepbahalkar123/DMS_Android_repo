@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.activities.PatientList"
-    tools:showIn="@layout/app_bar_main">
+    tools:context=".ui.activities.FileTypeViewerActivity"
+    tools:showIn="@layout/compare_file_type_app_bar_drawer">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

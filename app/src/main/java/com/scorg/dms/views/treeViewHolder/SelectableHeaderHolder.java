@@ -28,7 +28,7 @@ public class SelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTree
     @Override
     public View createNodeView(final TreeNode node, IconTreeItemHolder.IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.layout_selectable_header, null, false);
+        final View view = inflater.inflate(R.layout.treeview_layout_selectable_header, null, false);
 
         tvValue = (TextView) view.findViewById(R.id.node_value);
 

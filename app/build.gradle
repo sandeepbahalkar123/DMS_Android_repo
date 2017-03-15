@@ -25,6 +25,7 @@ android {
                             'src/main/res/layouts',
                             'src/main/res/layouts/login',
                             'src/main/res/layouts/patientlist',
+                            'src/main/res/layouts/compare_file_type',
 
 
                     ]
