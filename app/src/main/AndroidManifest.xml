@@ -43,7 +43,13 @@
         <activity
             android:name=".ui.activities.TreeStructureActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".ui.activities.PatientList"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.PatientList" />
+        </activity>
     </application>
 
 </manifest>

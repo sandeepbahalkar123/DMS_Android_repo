@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,6 @@ public class TreeStructureActivity extends AppCompatActivity implements View.OnC
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     DrawerLayout mDrawer;
-    NavigationView mLeftNavigationView;
     NavigationView mRightNavigationView;
     View mHeaderView;
 
@@ -59,9 +59,10 @@ public class TreeStructureActivity extends AppCompatActivity implements View.OnC
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
+        toggle.setDrawerIndicatorEnabled(false);
+        toggle.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.back));
         toggle.syncState();
-        mLeftNavigationView = (NavigationView) findViewById(R.id.nav_view);
+
         mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
         mHeaderView = mRightNavigationView.getHeaderView(0);
 
@@ -69,11 +70,8 @@ public class TreeStructureActivity extends AppCompatActivity implements View.OnC
         DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
         params.width = width;
 
-        DrawerLayout.LayoutParams leftParams = (DrawerLayout.LayoutParams) mLeftNavigationView.getLayoutParams();
-        leftParams.width = width;
-
         mRightNavigationView.setLayoutParams(params);
-        mLeftNavigationView.setLayoutParams(leftParams);
+
         mOpenFilterViewFAB.setOnClickListener(this);
 
 
@@ -86,13 +84,7 @@ public class TreeStructureActivity extends AppCompatActivity implements View.OnC
         });
 
         // left navigation drawer clickListener
-        mLeftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                mDrawer.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
+
     }
 
     private void initializeVariables() {

@@ -98,7 +98,7 @@
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginBottom="@dimen/margin_tiny"
             android:layout_marginRight="@dimen/margin_tiny"
-            android:drawableLeft="@mipmap/userfill"/>
+            android:drawableLeft="@mipmap/key"/>
         <TextView
             android:id="@+id/tvLocation"
             android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginBottom="@dimen/margin_tiny"
             android:layout_marginRight="@dimen/margin_tiny"
-            android:drawableLeft="@mipmap/userfill"/>
+            android:drawableLeft="@mipmap/placeholder"/>
 
 
         <TextView
