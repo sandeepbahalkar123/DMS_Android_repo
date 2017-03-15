@@ -42,7 +42,7 @@
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".ui.activities.TreeStructureActivity"
+            android:name=".ui.activities.FileTypeViewerActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

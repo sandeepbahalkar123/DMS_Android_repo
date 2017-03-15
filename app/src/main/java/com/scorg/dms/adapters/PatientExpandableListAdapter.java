@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.scorg.dms.R;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
+import com.scorg.dms.ui.activities.FileTypeViewerActivity;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 
@@ -542,6 +544,8 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 .setPositiveButton(_context.getString(R.string.compare), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
                         // ToDo get user input here
+                        Intent intent = new Intent(_context, FileTypeViewerActivity.class);
+                        _context.startActivity(intent);
                     }
                 })
 
