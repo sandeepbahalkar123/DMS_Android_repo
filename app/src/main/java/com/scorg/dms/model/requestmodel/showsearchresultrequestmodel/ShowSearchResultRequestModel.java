@@ -103,7 +103,21 @@ public class ShowSearchResultRequestModel implements CustomResponse {
     }
 
     public void setDocTypeId(String[] docTypeId) {
-        DocTypeId = docTypeId;
+
+        if (docTypeId != null) {
+            String[] temp = new String[docTypeId.length];
+            for (int i = 0; i < docTypeId.length; i++) {
+                String dataValue = docTypeId[i];
+                if (dataValue.contains("\\|")) {
+                    temp[i] = dataValue.split("\\|")[1];
+                } else {
+                    temp[i] = dataValue;
+                }
+            }
+            DocTypeId = temp;
+        } else {
+            DocTypeId = docTypeId;
+        }
     }
 
     @Override
