@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="dcr_toolbar">#dec47d</color>
+    <color name="reset_yellow">#ffa100</color>
     <color name="dcr_customer_name">#010101</color>
 
     <color name="blue_grey_50">#ECEFF1</color>
@@ -49,6 +49,7 @@
     <item name="errorColor" type="color">#BD362F</item>
     <color name="login_bg">#4FAFDC</color>
     <color name="login_button">#36657A</color>
+    <color name="refId_color">#8dc63f</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="green">#54AB34</color>
@@ -117,7 +118,7 @@
     <color name="LightSkyBlue">#82CAFA</color>
     <color name="SkyBlue">#82CAFF</color>
     <color name="JeansBlue">#A0CFEC</color>
-    <color name="BlueAngel">#B7CEEC</color>
+    <color name="BlueAngel">#0288d1</color>
     <color name="PastelBlue">#B4CFEC</color>
     <color name="SeaBlue">#C2DFFF</color>
     <color name="PowderBlue">#C6DEFF</color>

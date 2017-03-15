@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -63,8 +64,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+
 import butterknife.OnEditorAction;
 import butterknife.OnTextChanged;
+
 import butterknife.Optional;
 
 
