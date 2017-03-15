@@ -9,6 +9,7 @@ import java.util.Calendar;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -61,6 +62,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Optional;
 
 
 public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -318,7 +320,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             case R.id.reset:
                 mUHIDEditText.setText(DmsConstants.BLANK);
                 mFromDateEditText.setText(DmsConstants.BLANK);
-                mFromDateEditText.setText(DmsConstants.BLANK);
+                mToDateEditText.setText(DmsConstants.BLANK);
                 mSearchAnnotationEditText.setText(DmsConstants.BLANK);
                 mSearchPatientNameEditText.setText(DmsConstants.BLANK);
                 mSpinnerAmissionDate.setSelection(0);

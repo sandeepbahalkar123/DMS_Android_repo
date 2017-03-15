@@ -15,12 +15,12 @@
     <dimen name="center_margin">100dp</dimen>
     <dimen name="dp24">24dp</dimen>
     <dimen name="dp12">12dp</dimen>
-
+    <dimen name="dp1">1dp</dimen>
     <dimen name="dp45">60dp</dimen>
     <dimen name="margin_crate">80dp</dimen>
     <dimen name="padding_tiny">5dp</dimen>
     <dimen name="width_xsmall">80dp</dimen>
-    <dimen name="text_small">12dp</dimen>
+    <dimen name="text_small">13sp</dimen>
     <dimen name="dp43">60dp</dimen>
     <dimen name="margin_l">40dp</dimen>
     <dimen name="margin_small">60dp</dimen>

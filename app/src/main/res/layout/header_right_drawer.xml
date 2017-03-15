@@ -12,17 +12,20 @@
         android:background="@color/black"
         app:popupTheme="@style/AppTheme"
         app:theme="@style/ToolbarColoredBackArrow"
-        app:titleTextColor="@color/dcr_toolbar">
+        >
 
         <TextView
             android:id="@+id/reset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_action_close"
+            android:drawableLeft="@mipmap/reset"
             android:gravity="center_vertical|left"
             android:text="Reset"
-            android:textColor="@color/dcr_toolbar"
-            android:textSize="@dimen/text_small" />
+            android:drawablePadding="@dimen/margin_tiny"
+            android:textStyle="bold"
+            android:textColor="@color/reset_yellow"
+            android:textSize="@dimen/text_small"
+            />
 
         <TextView
             android:id="@+id/toolbar_title"
@@ -30,18 +33,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Filter"
-            android:textColor="@color/dcr_toolbar"
+            android:textStyle="bold"
+            android:textColor="@color/white"
             android:textSize="@dimen/text_small" />
 
         <TextView
             android:id="@+id/apply"
+            android:textStyle="bold"
+            android:drawablePadding="@dimen/margin_tiny"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:drawableLeft="@drawable/ic_action_close"
+            android:drawableRight="@mipmap/apply"
             android:gravity="center_vertical|left"
             android:text="Apply"
-            android:textColor="@color/dcr_toolbar"
+            android:textColor="@color/BlueAngel"
             android:textSize="@dimen/text_small" />
     </android.support.v7.widget.Toolbar>
 

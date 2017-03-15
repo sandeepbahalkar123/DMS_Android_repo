@@ -27,6 +27,12 @@
     <string name="searchbyPatient">Search By Patient Name</string>
     <string name="enterAnnotation">Enter Annotation</string>
     <string name="searchAnnotation">Search Annotation</string>
+    <string name="scrollingBoth">Scrolling Both</string>
+    <string name="patientInformation">Patient Information</string>
+    <string name="refId">REF ID</string>
+    <string name="doctor">Doctor</string>
+    <string name="admission">Admission</string>
+    <string name="discharge">Discharge</string>
     <string name="from">From</string>
     <string name="to">To</string>
 
