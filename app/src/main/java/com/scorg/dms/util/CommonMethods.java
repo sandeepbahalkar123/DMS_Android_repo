@@ -2,11 +2,14 @@ package com.scorg.dms.util;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -19,14 +22,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
+import com.scorg.dms.preference.DmsPreferencesManager;
+import com.scorg.dms.ui.activities.LoginActivity;
+import com.scorg.dms.ui.activities.PatientList;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -64,8 +72,10 @@ public class CommonMethods {
     private static final String TAG = "Dms/Common";
     private static boolean encryptionIsOn = true;
     private static String aBuffer = "";
+
     private int mYear, mMonth, mDay, mHour, mMinute;
     private DatePickerDialogListener mDatePickerDialogListener;
+    public static Context mContext;
 
     public static void showToast(Context context, String error) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -527,6 +537,72 @@ public class CommonMethods {
 
         //  datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // To set min date
         datePickerDialog.show();
+    }
+    public static Dialog showdialog(Context context, String dialogHeader, String dialogMessage) {
+        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_ok);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        if (dialogHeader != null)
+            ((TextView) dialog.findViewById(R.id.text_view_dialog_header)).setText(dialogHeader);
+        if (dialogMessage != null)
+            ((TextView) dialog.findViewById(R.id.text_view_dialog_message)).setText(dialogMessage);
+
+        dialog.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+        return dialog;
+    }
+    public static Dialog showAlertDialog(Context activity, String dialogHeader, final boolean isReEnteredServerPath) {
+        mContext=activity;
+        final Dialog dialog = new Dialog(activity);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_ok_cancel);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        if (dialogHeader != null)
+            ((TextView) dialog.findViewById(R.id.textView_dialog_heading)).setText(dialogHeader);
+
+             dialog.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              EditText etServerPath = (EditText) dialog.findViewById(R.id.et_server_path);
+
+                String mServerPath = Config.HTTP+etServerPath.getText().toString()+Config.API;
+                Log.e(TAG,"SERVER PATH==="+mServerPath);
+
+                DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mServerPath,mContext);
+                dialog.dismiss();
+               if(!isReEnteredServerPath) {
+                   Intent intentObj = new Intent(mContext, LoginActivity.class);
+                   intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                   intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                   intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   mContext.startActivity(intentObj);
+               }
+                //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+            }
+        });
+        dialog.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+        return dialog;
     }
 }
 

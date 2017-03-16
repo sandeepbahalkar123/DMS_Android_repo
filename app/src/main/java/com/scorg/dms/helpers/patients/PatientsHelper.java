@@ -138,6 +138,12 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
     public void onServerError(int mOldDataTag, String serverErrorMessage) {
 
     }
+
+    @Override
+    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
+
+    }
+
     //-------------------------
 
     public ShowSearchResultResponseModel loadJSONFromAsset() {

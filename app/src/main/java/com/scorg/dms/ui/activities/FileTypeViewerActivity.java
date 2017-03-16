@@ -240,6 +240,11 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     }
 
+    @Override
+    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
+
+    }
+
 
     private void createAnnotationTreeStructure(FileTreeResponseData fileTreeResponseData, boolean isExpanded) {
 

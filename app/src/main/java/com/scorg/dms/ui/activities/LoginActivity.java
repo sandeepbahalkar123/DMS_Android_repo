@@ -1,16 +1,23 @@
 package com.scorg.dms.ui.activities;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.helpers.login.LoginHelper;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
+import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
+import com.scorg.dms.util.Config;
+import com.scorg.dms.util.DmsConstants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,10 +26,11 @@ import butterknife.OnClick;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements HelperResponse {
+public class LoginActivity extends AppCompatActivity implements HelperResponse  {
 
     String TAG = this.getClass().getSimpleName();
-
+    Context mContext;
+    String mServerPath;
     @BindView(R.id.userName)
     EditText mUserName;
 
@@ -35,8 +43,10 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+        mContext = getApplicationContext();
+       // Log.d("Server PAth",mServerPath);
 
+        ButterKnife.bind(this);
         mLoginHelper = new LoginHelper(this, this);
 
     }
@@ -86,6 +96,12 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse {
     @Override
     public void onServerError(int mOldDataTag, String serverErrorMessage) {
         CommonMethods.showToast(this, serverErrorMessage);
+    }
+
+    @Override
+    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
+        DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
+        CommonMethods.showAlertDialog(LoginActivity.this,getString(R.string.wrong_server_path)+"\n"+getString(R.string.for_example_server_path),true);
     }
 }
 

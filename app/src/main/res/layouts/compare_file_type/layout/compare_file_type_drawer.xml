@@ -70,7 +70,7 @@
 
 
         <TextView
-            android:id="@+id/tvPatientName"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_tiny"
@@ -91,12 +91,13 @@
             android:layout_marginBottom="@dimen/margin_tiny"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/margin_tiny"
-            android:drawableLeft="@mipmap/key"
+            android:drawableLeft="@mipmap/keywhite"
             android:drawablePadding="@dimen/padding_tiny"
             android:gravity="center_vertical"
             android:text="UHID 001"
             android:textColor="@color/white"
             android:textStyle="bold" />
+
 
         <TextView
             android:id="@+id/tvPatientLocation"
@@ -106,12 +107,16 @@
             android:layout_marginBottom="@dimen/margin_tiny"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/margin_tiny"
-            android:drawableLeft="@mipmap/placeholder"
+
+            android:drawableLeft="@mipmap/placeholderwhite"
+
+
             android:drawablePadding="@dimen/padding_tiny"
             android:gravity="center_vertical"
             android:text="Pune,400147"
             android:textColor="@color/white"
             android:textStyle="bold" />
+
 
 
         <TextView
@@ -221,10 +226,11 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawableLeft="@mipmap/search"
+
                 android:drawablePadding="@dimen/padding_tiny"
-                android:gravity="center_vertical"
+                android:drawableLeft="@mipmap/doctorwhite"
                 android:text="@string/doctor"
+                android:gravity="center_vertical"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -424,10 +430,12 @@
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawableLeft="@mipmap/search"
+
                 android:drawablePadding="@dimen/padding_tiny"
-                android:gravity="center_vertical"
+                android:drawableLeft="@mipmap/doctorwhite"
                 android:text="@string/doctor"
+                android:gravity="center_vertical"
+
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -535,6 +543,7 @@
 
         <LinearLayout
             android:id="@+id/toolbar_add"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

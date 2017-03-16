@@ -4,6 +4,7 @@ package com.scorg.dms.ui.activities;
 import android.content.Context;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,6 +45,7 @@ import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
+import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
@@ -204,6 +206,17 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mLeftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.nav_logout) {
+                    DmsPreferencesManager.clearSharedPref(mContext);
+                    Intent intent = new Intent(PatientList.this,SplashScreenActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    // Handle the camera action
+                }
+
                 mDrawer.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -275,6 +288,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     @Override
     public void onServerError(int mOldDataTag, String serverErrorMessage) {
+
+    }
+
+    @Override
+    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
 
     }
 
