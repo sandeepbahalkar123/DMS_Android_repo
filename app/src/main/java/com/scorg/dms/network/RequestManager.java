@@ -243,8 +243,10 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
                 if (mViewById != null)
                     CommonMethods.showSnack(mViewById, mContext.getString(R.string.internet));
-                else
-                    CommonMethods.showToast(mContext, mContext.getString(R.string.internet));
+                else{
+                    mConnectionListener.onResponse(ConnectionListener.NO_CONNECTION_ERROR, null, mOldDataTag);
+                }
+
                 Log.d(TAG, error.getMessage());
 
                 mConnectionListener.onResponse(ConnectionListener.NO_INTERNET, null, mOldDataTag);

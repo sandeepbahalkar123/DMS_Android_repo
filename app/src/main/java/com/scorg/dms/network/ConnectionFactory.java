@@ -16,6 +16,7 @@ import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.singleton.Device;
 import com.scorg.dms.util.CommonMethods;
+import com.scorg.dms.util.Config;
 import com.scorg.dms.util.DmsConstants;
 
 import java.util.HashMap;
@@ -77,9 +78,9 @@ public class ConnectionFactory extends ConnectRequest {
         this.mPostParams = postParams;
     }
 
-
     public void setUrl(String url) {
-        this.mURL = url;
+        Config.BASE_URL = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mContext);
+        this.mURL = Config.BASE_URL + url;
     }
 
     public Connector createConnection(int type) {

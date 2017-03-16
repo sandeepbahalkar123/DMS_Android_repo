@@ -2,6 +2,7 @@ package com.scorg.dms.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
@@ -24,16 +25,14 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class DmsPreferencesManager {
 
+    private static final String TAG = "";
     private static SharedPreferences sharedPreferences = null;
     private static byte[] sKey;
 
 
     public interface DMS_PREFERENCES_KEY {
-        String ACCESS_TOKEN = "accessToken";
-        String UTM_SOURCE = "utm_source";
-        String UTM_CONTENT = "utm_content";
-        String UTM_CAMPAIGN = "utm_campaign";
-        String UTM_MEDIUM = "utm_medium";
+
+        String SERVER_PATH = "server_path";
 
     }
 
@@ -59,6 +58,7 @@ public class DmsPreferencesManager {
 
     public static String getString(String key, Context context) {
         //String mKey = encrypt(key);
+        CommonMethods.Log("value", "value--getString--mKey--->" + key + "<----mValue-------->" + getSharedPreference(context).getString(key, ""));
         return getSharedPreference(context).getString(key, "");
 
     }

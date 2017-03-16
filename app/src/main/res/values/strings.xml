@@ -2,6 +2,7 @@
     <string name="app_name">DMS_APP</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="internet">Please check your Internet Connection</string>
+    <string name="wrong_server_path">Re-enter correct server path</string>
     <string name="authentication">Authentication error</string>
     <string name="roboto_bold">roboto_bold.ttf</string>
     <string name="roboto_regular">roboto_regular.ttf</string>
@@ -18,6 +19,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="selectID">Select ID</string>
     <string name="Error">Error</string>
+    <string name="dialog_message_text">message</string>
     <string name="DateType">Select Date Type</string>
     <string name="patientName">Enter patient name</string>
     <string name="annotation">Enter annotation</string>
@@ -30,6 +32,8 @@
     <string name="scrollingBoth">Scrolling Both</string>
     <string name="patientInformation">Patient Information</string>
     <string name="refId">REF ID</string>
+    <string name="for_example_server_path">e.g. 192.168.0.25:81</string>
+    <string name="server_path">Enter the server path</string>
     <string name="doctor">Doctor</string>
     <string name="admission">Admission</string>
     <string name="discharge">Discharge</string>
@@ -66,9 +70,8 @@
     <string name="cancel">Cancel</string>
     <string name="selected_1">Selected 1:</string>
     <string name="selected_2">Selected 2:</string>
-
-    <string name="dialog_message_text">message</string>
     <string name="error_compare_patient">Please select same patient record to compare</string>
+    <string name="ok">OK</string>
     <string name="error_max_two_reports">You can not select more than two reports to compare</string>
 
     <string-array name="select_id">

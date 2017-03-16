@@ -12,4 +12,6 @@ public interface HelperResponse {
 
     public void onServerError(int mOldDataTag, String serverErrorMessage);
 
+    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage);
+
 }

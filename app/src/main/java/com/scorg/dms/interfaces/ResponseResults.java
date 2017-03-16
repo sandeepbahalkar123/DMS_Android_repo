@@ -9,4 +9,6 @@ public interface ResponseResults {
     int PARSE_ERR0R = 2;
     int SERVER_ERROR = 3;
     int NO_INTERNET = 4;
+    int NO_CONNECTION_ERROR = 5;
+
 }

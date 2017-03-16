@@ -1,6 +1,7 @@
 package com.scorg.dms.helpers.login;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.scorg.dms.interfaces.ConnectionListener;
@@ -38,7 +39,7 @@ public class LoginHelper implements ConnectionListener {
     @Override
     public void onResponse(int responseResult, CustomResponse customResponse, int mOldDataTag) {
 
-        CommonMethods.Log(TAG, customResponse.toString());
+        //CommonMethods.Log(TAG, customResponse.toString());
 
         switch (responseResult) {
             case ConnectionListener.RESPONSE_OK:
@@ -61,9 +62,16 @@ public class LoginHelper implements ConnectionListener {
 
             case ConnectionListener.SERVER_ERROR:
                 CommonMethods.Log(TAG, "server error");
-                mHelperResponseManager.onParseError(mOldDataTag, "server error");
+                mHelperResponseManager.onServerError(mOldDataTag, "server error");
 
                 break;
+
+            case ConnectionListener.NO_CONNECTION_ERROR:
+                CommonMethods.Log(TAG, "no connection error");
+                mHelperResponseManager.onNoConnectionError(mOldDataTag, "no connection error");
+
+                break;
+
 
             default:
                 CommonMethods.Log(TAG, "default error");
@@ -91,6 +99,7 @@ public class LoginHelper implements ConnectionListener {
         testParams.put(DmsConstants.PASSWORD, password);
         testParams.put(DmsConstants.CLIENT_ID_KEY, DmsConstants.CLIENT_ID_VALUE);
         mConnectionFactory.setPostParams(testParams);
+        Log.e(TAG,"Config.URL_LOGIN: "+Config.URL_LOGIN);
         mConnectionFactory.setUrl(Config.URL_LOGIN);
         mConnectionFactory.createConnection(DmsConstants.TASK_LOGIN_CODE);
     }
