@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
+import com.scorg.dms.model.requestmodel.filetreerequestmodel.FileTreeRequestModel;
+import com.scorg.dms.model.requestmodel.filetreerequestmodel.LstSearchParam;
 import com.scorg.dms.model.requestmodel.showsearchresultrequestmodel.ShowSearchResultRequestModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.network.ConnectRequest;
@@ -17,6 +19,8 @@ import com.scorg.dms.util.DmsConstants;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by riteshpandhurkar on 1/3/17.
@@ -50,6 +54,19 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
         mConnectionFactory.createConnection(DmsConstants.TASK_ANNOTATIONS_LIST);
     }
 
+    public void doGetArchivedList(FileTreeRequestModel fileTreeRequestModel) {
+
+        //---------------
+
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_GET_ARCHIVED_LIST, Request.Method.POST);
+        mConnectionFactory.setHeaderParams();
+        mConnectionFactory.setPostParams(fileTreeRequestModel);
+
+        mConnectionFactory.setUrl(Config.URL_GET_ARCHIVED_LIST);
+        mConnectionFactory.createConnection(DmsConstants.TASK_GET_ARCHIVED_LIST);
+    }
+
+
     //-------------------------
     @Override
     public void onResponse(int responseResult, CustomResponse customResponse, int mOldDataTag) {
@@ -61,6 +78,8 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
                 if (mOldDataTag == DmsConstants.TASK_PATIENT_LIST) {
                     mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
                 } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
+                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
+                } else if (mOldDataTag == DmsConstants.TASK_GET_ARCHIVED_LIST) {
                     mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
                 }
                 break;

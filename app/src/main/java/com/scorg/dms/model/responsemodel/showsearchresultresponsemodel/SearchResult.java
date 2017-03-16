@@ -9,7 +9,7 @@ public class SearchResult {
 
     @SerializedName("patientId")
     @Expose
-    private Integer patientId;
+    private String patientId;
     @SerializedName("patientName")
     @Expose
     private String patientName;
@@ -17,11 +17,11 @@ public class SearchResult {
     @Expose
     private List<PatientFileData> patientFileData = null;
 
-    public Integer getPatientId() {
+    public String getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Integer patientId) {
+    public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 

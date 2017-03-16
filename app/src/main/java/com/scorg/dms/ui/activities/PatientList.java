@@ -237,8 +237,19 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             for (SearchResult dataObject :
                     searchResult) {
                 String patientName = dataObject.getPatientName();
+                String id = dataObject.getPatientId();
                 headerList.add(patientName);
-                childList.put(patientName, new ArrayList<PatientFileData>(dataObject.getPatientFileData()));
+
+                //--------
+                // This is done to set getPatientId in child (PatientFileData)
+                List<PatientFileData> patientFileData = dataObject.getPatientFileData();
+                for (PatientFileData temp :
+                        patientFileData) {
+                    temp.setRespectiveParentPatientID(id);
+                }
+                //--------
+
+                childList.put(patientName, new ArrayList<PatientFileData>(patientFileData));
             }
 
             mPatientListView.setAdapter(new PatientExpandableListAdapter(this, headerList, childList));
@@ -247,6 +258,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             mPatientListView.setChildDivider(getResources().getDrawable(R.color.transparent));
             mPatientListView.setDivider(getResources().getDrawable(R.color.white));
             mPatientListView.setDividerHeight(2);
+
             //mPatientListView.setDividerHeight(2);
         } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;

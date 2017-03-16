@@ -7,7 +7,9 @@ package com.scorg.dms.model.responsemodel.showsearchresultresponsemodel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PatientFileData {
+import java.io.Serializable;
+
+public class PatientFileData implements Serializable {
 
     @SerializedName("fileType")
     @Expose
@@ -22,6 +24,9 @@ public class PatientFileData {
     @Expose
     private String dischargeDate;
 
+
+    //-- THIS IS ADDED TO MAINTAIN RESPECTIVE PARENT PATIENT ID
+    private String respectiveParentPatientID;
 
     private boolean isShowCompleteList = false;
 
@@ -63,5 +68,13 @@ public class PatientFileData {
 
     public void setShowCompleteList(boolean showCompleteList) {
         isShowCompleteList = showCompleteList;
+    }
+
+    public String getRespectiveParentPatientID() {
+        return respectiveParentPatientID;
+    }
+
+    public void setRespectiveParentPatientID(String respectiveParentPatientID) {
+        this.respectiveParentPatientID = respectiveParentPatientID;
     }
 }

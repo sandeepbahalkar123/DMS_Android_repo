@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/selectableItemBackground"
-    android:minHeight="48dp"
-    android:paddingLeft="10dp">
+    android:minHeight="48dp">
 
     <LinearLayout
+        android:id="@+id/mainContentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp10"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp10">
 
         <CheckBox
             android:id="@+id/node_selector"

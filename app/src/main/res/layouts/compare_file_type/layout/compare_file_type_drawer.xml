@@ -5,10 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TableRow
@@ -86,8 +85,7 @@
             android:textStyle="bold" />
 
         <TextView
-
-            android:id="@+id/tvUhid"
+            android:id="@+id/tvPatientUHID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_tiny"
@@ -101,7 +99,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvLocation"
+            android:id="@+id/tvPatientLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -148,7 +146,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvFileTypeOne"
+                android:id="@+id/fileTypeOneFileTypeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -192,7 +190,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvRefIDOne"
+                android:id="@+id/fileTypeOneRefID"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -231,7 +229,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvDoctorNameOne"
+                android:id="@+id/fileTypeOneDoctorName"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -268,7 +266,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvAdmissionDateTimeOne"
+                android:id="@+id/fileTypeOneAdmissionDate"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -307,7 +305,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvDischargeDateTimeOne"
+                android:id="@+id/fileTypeOneDischargeDate"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -351,7 +349,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvFileTypeTwo"
+                android:id="@+id/fileTypeTwoFileTypeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -395,7 +393,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvRefIDTwo"
+                android:id="@+id/fileTypeTwoRefID"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -434,7 +432,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvDoctorNameTwo"
+                android:id="@+id/fileTypeTwoDoctorName"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -471,7 +469,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvAdmissionDateTimeTwo"
+                android:id="@+id/fileTypeTwoAdmissionDate"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -508,7 +506,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvDischargeDateTimeTwo"
+                android:id="@+id/fileTypeTwoDischargeDate"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -526,6 +524,39 @@
             android:layout_marginBottom="@dimen/margin_tiny"
             android:background="@color/white" />
 
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/fileTypeOneTreeViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="dasda" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/fileTypeTwoTreeViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="dasda"
+                android:textColor="@color/white" />
+        </RelativeLayout>
 
     </LinearLayout>
 

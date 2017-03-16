@@ -12,17 +12,42 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.scorg.dms.R;
+import com.scorg.dms.helpers.patients.PatientsHelper;
+import com.scorg.dms.interfaces.CustomResponse;
+import com.scorg.dms.interfaces.HelperResponse;
+import com.scorg.dms.model.requestmodel.filetreerequestmodel.FileTreeRequestModel;
+import com.scorg.dms.model.requestmodel.filetreerequestmodel.LstSearchParam;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationList;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.ArchiveDatum;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseData;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocCategory;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocType;
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
+import com.scorg.dms.util.DmsConstants;
+import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
+import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
+import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
+import com.unnamed.b.atv.model.TreeNode;
+import com.unnamed.b.atv.view.AndroidTreeView;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by jeetal on 14/3/17.
  */
 
-public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener {
+public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse {
     private Context mContext;
 
     @BindView(R.id.openCompareFileTypeRightDrawerFAB)
@@ -32,6 +57,16 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     DrawerLayout mDrawer;
     NavigationView mRightNavigationView;
     View mHeaderView;
+    private PatientsHelper mPatientsHelper;
+
+    private RelativeLayout mFileTypeOneTreeViewContainer;
+    private RelativeLayout mFileTypeTwoTreeViewContainer;
+    private AndroidTreeView mAndroidTreeView;
+
+    //---------
+    ArrayList<PatientFileData> mSelectedFileTypeDataToCompare;
+    String respectivePatientID;
+    //---------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +78,21 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
     private void initialize() {
+
+        Bundle extra = getIntent().getBundleExtra(DmsConstants.DATA);
+
+        if (extra != null) {
+            mSelectedFileTypeDataToCompare = (ArrayList<PatientFileData>) extra.getSerializable(getString(R.string.compare));
+            respectivePatientID = extra.getString(DmsConstants.ID);
+        }
+
         initializeVariables();
         bindView();
 
     }
 
-
     private void bindView() {
         int width = getResources().getDisplayMetrics().widthPixels / 2;
-        mOpenCompareFileTypeRightDrawerFAB.setOnClickListener(this);
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -78,13 +119,20 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             }
         });
 
-        // left navigation drawer clickListener
+        //------------
+        mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeOneTreeViewContainer);
+        mFileTypeTwoTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTwoTreeViewContainer);
+
+        //------------
+
 
     }
 
     private void initializeVariables() {
         mContext = getApplicationContext();
-
+        //-------------
+        mPatientsHelper = new PatientsHelper(this, this);
+        //------------
 
     }
 
@@ -93,11 +141,101 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             //onclick on floating button
-            case R.id.openCompareFileTypeRightDrawerFAB:
-                mDrawer.openDrawer(GravityCompat.END);
-                break;
-
-
         }
+    }
+
+
+    @OnClick(R.id.openCompareFileTypeRightDrawerFAB)
+    public void openCompareFileTypeDrawer(View v) {
+        mDrawer.openDrawer(GravityCompat.END);
+
+        //---------------
+        FileTreeRequestModel fileTreeRequestModel = new FileTreeRequestModel();
+
+        List<LstSearchParam> lstSearchParamList = new ArrayList<>();
+        if (mSelectedFileTypeDataToCompare != null) {
+            for (PatientFileData tempObject :
+                    mSelectedFileTypeDataToCompare) {
+                LstSearchParam lstSearchParam = new LstSearchParam();
+                lstSearchParam.setPatientId(tempObject.getRespectiveParentPatientID());
+                lstSearchParam.setFileType(tempObject.getFileType());
+                lstSearchParam.setFileTypeRefId("" + tempObject.getReferenceId());
+                lstSearchParamList.add(lstSearchParam);
+            }
+            fileTreeRequestModel.setLstSearchParam(lstSearchParamList);
+            mPatientsHelper.doGetArchivedList(fileTreeRequestModel);
+        }
+
+    }
+
+    @Override
+    public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
+        FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
+        FileTreeResponseData fileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
+        createAnnotationTreeStructure(fileTreeResponseData, false);
+    }
+
+    @Override
+    public void onParseError(int mOldDataTag, String errorMessage) {
+
+    }
+
+    @Override
+    public void onServerError(int mOldDataTag, String serverErrorMessage) {
+
+    }
+
+
+    //--- TODO : FIX THIS TREE STRUCTUR  , ALSO CHANGE model of getFileDATA PDF
+    private void createAnnotationTreeStructure(FileTreeResponseData fileTreeResponseData, boolean isExpanded) {
+
+        mFileTypeOneTreeViewContainer.removeAllViews();
+        mFileTypeTwoTreeViewContainer.removeAllViews();
+
+        TreeNode root = TreeNode.root();
+
+        int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
+        int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
+
+        List<ArchiveDatum> archiveData = fileTreeResponseData.getArchiveData();
+
+        // For archived data list
+        for (int i = 0; i < archiveData.size(); i++) {
+            ArchiveDatum archiveDatumObject = archiveData.get(i);
+
+            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded);
+            TreeNode archiveDatumObjectFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, archiveDatumObject.getFileType()))
+                    .setViewHolder(selectableHeaderHolder);
+
+            //---- For list categories loop
+            List<LstDocCategory> lstDocCategories = archiveDatumObject.getLstDocCategories();
+
+            for (int j = 0; j < lstDocCategories.size(); j++) {
+                LstDocCategory lstDocCategoryObject = lstDocCategories.get(j);
+                String dataToShow = lstDocCategoryObject.getCategoryName() + "|" + lstDocCategoryObject.getCategoryId();
+
+                SelectableHeaderHolder docCatSelectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded, lstDocCategoryObjectLeftPadding);
+                TreeNode lstDocCategoryObjectFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow))
+                        .setViewHolder(docCatSelectableHeaderHolder);
+                //---
+
+                //for lstDocTypes loop
+                List<LstDocType> lstDocTypesCategoriesChildList = lstDocCategoryObject.getLstDocTypes();
+                for (int k = 0; k < lstDocTypesCategoriesChildList.size(); k++) {
+                    LstDocType lstDocTypeChild = lstDocTypesCategoriesChildList.get(k);
+                    dataToShow = lstDocTypeChild.getTypeName() + "|" + lstDocTypeChild.getTypeId();
+
+                    TreeNode lstDocTypeChildFolder = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this, lstDocTypeChildLeftPadding));
+                    lstDocCategoryObjectFolder.addChildren(lstDocTypeChildFolder);
+                }
+                archiveDatumObjectFolder.addChildren(lstDocCategoryObjectFolder);
+            }
+            root.addChildren(archiveDatumObjectFolder);
+        }
+
+        mAndroidTreeView = new AndroidTreeView(this, root);
+        mAndroidTreeView.setDefaultAnimation(true);
+        mFileTypeOneTreeViewContainer.addView(mAndroidTreeView.getView());
+        mAndroidTreeView.setSelectionModeEnabled(true);
     }
 }

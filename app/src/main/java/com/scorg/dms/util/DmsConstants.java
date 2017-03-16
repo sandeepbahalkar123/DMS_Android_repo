@@ -66,6 +66,7 @@ public class DmsConstants {
     public static final int TASK_LOGIN_CODE = 1;
     public static final int TASK_PATIENT_LIST = 2;
     public static final int TASK_ANNOTATIONS_LIST = 3;
+    public static final int TASK_GET_ARCHIVED_LIST = 4;
 
 
     public static class DATE_PATTERN {
@@ -83,6 +84,7 @@ public class DmsConstants {
     public static final String TIME = "time";
     public static final String DATE = "date";
     public static final String BLANK = "";
+    public static final String DATA = "DATA";
 
     public static class TIME_STAMPS {
         public static int ONE_SECONDS = 1000;

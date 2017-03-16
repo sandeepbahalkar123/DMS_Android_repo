@@ -25,6 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.scorg.dms.R;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
 import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.util.CommonMethods;
@@ -308,6 +309,10 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 case DmsConstants.TASK_ANNOTATIONS_LIST: //This is for annotation list
                     AnnotationListResponseModel annotationListResponseModel = gson.fromJson(data, AnnotationListResponseModel.class);
                     this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, annotationListResponseModel, mOldDataTag);
+                    break;
+                case DmsConstants.TASK_GET_ARCHIVED_LIST: //This is for get archived list
+                    FileTreeResponseModel fileTreeResponseModel = gson.fromJson(data, FileTreeResponseModel.class);
+                    this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, fileTreeResponseModel, mOldDataTag);
                     break;
             }
 

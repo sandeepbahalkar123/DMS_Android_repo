@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
@@ -462,11 +463,11 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 //------
                 if (tempCheckedDataToCompare.size() == 1) {
                     PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
-                    showCompareOptionsDialog("" + child.getReferenceId() + "|" + child.getFileType(), "", mCheckedBoxGroupName);
+                    showCompareOptionsDialog(child, null, mCheckedBoxGroupName);
                 } else if (tempCheckedDataToCompare.size() == 2) {
                     PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
                     PatientFileData child_1 = getChild(mGroupPosition, tempCheckedDataToCompare.get(1));
-                    showCompareOptionsDialog("" + child.getReferenceId() + "|" + child.getFileType(), "" + child_1.getReferenceId() + "|" + child_1.getFileType(), mCheckedBoxGroupName);
+                    showCompareOptionsDialog(child, child_1, mCheckedBoxGroupName);
                 } else {
                     getChecked[mChildPosition] = false;
                     mChildCheckStates.put(mGroupPosition, getChecked);
@@ -526,7 +527,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         dialog.show();
     }*/
 
-    public void showCompareOptionsDialog(String selectedOneValue, String selectedTwoValue, String title) {
+    public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, String title) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(_context);
         View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(_context);
@@ -535,17 +536,41 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         alertDialogBuilderUserInput.setTitle(title);
 
         TextView selectedOne = (TextView) mView.findViewById(R.id.selectedOne);
-        selectedOne.setText("" + selectedOneValue);
+        selectedOne.setText("" + selectedOneValue_1.getReferenceId() + "-" + selectedOneValue_1.getFileType());
+
+        //----------
         TextView selectedTwo = (TextView) mView.findViewById(R.id.selectedTwo);
-        selectedTwo.setText("" + selectedTwoValue);
+        if (selectedTwoValue_2 == null)
+            selectedTwo.setText(DmsConstants.BLANK);
+        else
+            selectedTwo.setText("" + selectedTwoValue_2.getReferenceId() + "-" + selectedTwoValue_2.getFileType());
+        //----------
 
         alertDialogBuilderUserInput
                 .setCancelable(false)
                 .setPositiveButton(_context.getString(R.string.compare), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
-                        // ToDo get user input here
-                        Intent intent = new Intent(_context, FileTypeViewerActivity.class);
-                        _context.startActivity(intent);
+
+                        if (selectedTwoValue_2 == null) {
+                            CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));
+                        } else {
+                            //
+                            Intent intent = new Intent(_context, FileTypeViewerActivity.class);
+
+                            Bundle extra = new Bundle();
+
+                            ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
+                            dataToSend.add(selectedOneValue_1);
+                            dataToSend.add(selectedTwoValue_2);
+
+                            extra.putSerializable(_context.getString(R.string.compare), dataToSend);
+                            extra.putString(DmsConstants.ID, selectedOneValue_1.getRespectiveParentPatientID());
+
+                            intent.putExtra(DmsConstants.DATA, extra);
+
+                            _context.startActivity(intent);
+                        }
+
                     }
                 })
 
