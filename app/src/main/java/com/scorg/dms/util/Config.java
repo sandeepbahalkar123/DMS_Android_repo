@@ -27,5 +27,6 @@ public class Config {
     public static final String URL_PATIENT_LIST = BASE_URL + "result/ShowSearchResults";
     public static final String URL_ANNOTATIONS_LIST = BASE_URL + "documenttype/getAnnotations";
     public static final String URL_GET_ARCHIVED_LIST = BASE_URL + "getArchived";
+    public static final String URL_GET_PDF_DATA = BASE_URL + "showfile";
 
 }

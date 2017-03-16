@@ -9,6 +9,7 @@ import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
 import com.scorg.dms.model.requestmodel.filetreerequestmodel.FileTreeRequestModel;
 import com.scorg.dms.model.requestmodel.filetreerequestmodel.LstSearchParam;
+import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.GetPdfDataRequestModel;
 import com.scorg.dms.model.requestmodel.showsearchresultrequestmodel.ShowSearchResultRequestModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.network.ConnectRequest;
@@ -66,6 +67,18 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
         mConnectionFactory.createConnection(DmsConstants.TASK_GET_ARCHIVED_LIST);
     }
 
+    public void getPdfData(GetPdfDataRequestModel getPdfDataRequestModel) {
+
+        //---------------
+
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_GET_PDF_DATA, Request.Method.POST);
+        mConnectionFactory.setHeaderParams();
+        mConnectionFactory.setPostParams(getPdfDataRequestModel);
+
+        mConnectionFactory.setUrl(Config.URL_GET_PDF_DATA);
+        mConnectionFactory.createConnection(DmsConstants.TASK_GET_PDF_DATA);
+    }
+
 
     //-------------------------
     @Override
@@ -80,6 +93,8 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
                 } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
                     mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
                 } else if (mOldDataTag == DmsConstants.TASK_GET_ARCHIVED_LIST) {
+                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
+                }else if (mOldDataTag == DmsConstants.TASK_GET_PDF_DATA) {
                     mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
                 }
                 break;

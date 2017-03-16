@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnDrawListener;
@@ -28,13 +30,15 @@ import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
 import com.scorg.dms.model.requestmodel.filetreerequestmodel.FileTreeRequestModel;
 import com.scorg.dms.model.requestmodel.filetreerequestmodel.LstSearchParam;
-import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationList;
-import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
+import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.DocTypeRequest;
+import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.GetPdfDataRequestModel;
+import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.LstDocTypeRequest;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.ArchiveDatum;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseData;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocCategory;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocType;
+import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
@@ -47,7 +51,6 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,9 +65,13 @@ import butterknife.OnClick;
 public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnPageChangeListener, OnLoadCompleteListener, OnDrawListener {
 
     // Ganesh Added
-    private static final String TAG = "FileTypeViewer";
+
+    private static final String TAG = FileTypeViewerActivity.class.getName();
     private static final String SAMPLE_FILE_1 = "sample.pdf";
     private Integer pageNumber = 0;
+
+    GetPdfDataRequestModel getPdfDataRequestModel = new GetPdfDataRequestModel();
+
     // End
 
     private Context mContext;
@@ -87,12 +94,16 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     private PatientsHelper mPatientsHelper;
 
     private RelativeLayout mFileTypeOneTreeViewContainer;
+
+    //TODO: This is not using currently
     private RelativeLayout mFileTypeTwoTreeViewContainer;
     private AndroidTreeView mAndroidTreeView;
 
     //---------
     ArrayList<PatientFileData> mSelectedFileTypeDataToCompare;
     String respectivePatientID;
+    private Button mApplyFileTypeDataLoading;
+    private TreeNode mTreeRoot;
     //---------
 
     @Override
@@ -115,13 +126,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         initializeVariables();
         bindView();
-
-        // Ganesh Added
-
-        displayFromAsset(SAMPLE_FILE_1);
-        getCachePath("sample", "pdf");
-
-        // End
 
     }
 
@@ -156,9 +160,11 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         //------------
         mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeOneTreeViewContainer);
         mFileTypeTwoTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTwoTreeViewContainer);
+        mApplyFileTypeDataLoading = (Button) mHeaderView.findViewById(R.id.applyFileTypeDataLoading);
 
         //------------
-
+        mApplyFileTypeDataLoading.setOnClickListener(this);
+        //-----------
 
     }
 
@@ -174,7 +180,9 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            //onclick on floating button
+            case R.id.applyFileTypeDataLoading:
+                applySelectedArchived();
+                break;
         }
     }
 
@@ -204,9 +212,22 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
-        FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
-        FileTreeResponseData fileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
-        createAnnotationTreeStructure(fileTreeResponseData, false);
+        switch (mOldDataTag) {
+            case DmsConstants.TASK_GET_PDF_DATA:
+                GetPdfDataResponseModel getPdfDataResponseModel = (GetPdfDataResponseModel) customResponse;
+                if (getPdfDataResponseModel.getCommon().getStatusCode().equals(DmsConstants.SUCCESS)) {
+                    if (getPdfDataResponseModel.getGetPdfDataResponseData().getFileData() != null)
+                        displayFromUrl(getPdfDataResponseModel.getGetPdfDataResponseData().getFileData());
+                    else
+                        Toast.makeText(mContext, "Document not available", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case DmsConstants.TASK_GET_ARCHIVED_LIST:
+                FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
+                FileTreeResponseData fileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
+                createAnnotationTreeStructure(fileTreeResponseData, true);
+                break;
+        }
     }
 
     @Override
@@ -220,13 +241,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
 
-    //--- TODO : FIX THIS TREE STRUCTUR  , ALSO CHANGE model of getFileDATA PDF
     private void createAnnotationTreeStructure(FileTreeResponseData fileTreeResponseData, boolean isExpanded) {
 
         mFileTypeOneTreeViewContainer.removeAllViews();
         mFileTypeTwoTreeViewContainer.removeAllViews();
 
-        TreeNode root = TreeNode.root();
+        mTreeRoot = TreeNode.root();
 
         int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
         int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
@@ -264,10 +284,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 }
                 archiveDatumObjectFolder.addChildren(lstDocCategoryObjectFolder);
             }
-            root.addChildren(archiveDatumObjectFolder);
+            mTreeRoot.addChildren(archiveDatumObjectFolder);
         }
 
-        mAndroidTreeView = new AndroidTreeView(this, root);
+        mAndroidTreeView = new AndroidTreeView(this, mTreeRoot);
         mAndroidTreeView.setDefaultAnimation(true);
         mFileTypeOneTreeViewContainer.addView(mAndroidTreeView.getView());
         mAndroidTreeView.setSelectionModeEnabled(true);
@@ -275,10 +295,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     // Ganesh Added
 
-    public String getCachePath(String filename, String extension) {
+    public String getCachePath(String base64Pdf, String filename, String extension) {
         // Create a file in the Internal Storage
 
-        byte[] pdfAsBytes = Base64.decode("", 0);
+        byte[] pdfAsBytes = Base64.decode(base64Pdf, 0);
 
         File file = null;
         FileOutputStream outputStream;
@@ -295,10 +315,9 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         return file.getAbsolutePath();
     }
 
-    private void displayFromAsset(String assetFileName) {
-//        String pdfFileName = assetFileName;
+    private void displayFromUrl(String base64Pdf) {
 
-        firstPdfView.fromAsset(SAMPLE_FILE_1)
+        firstPdfView.fromFile(new File(getCachePath(base64Pdf, "file1", "pdf")))
                 .defaultPage(pageNumber)
                 .onPageChange(this)
                 .onDraw(this)
@@ -374,4 +393,42 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
     // End
+
+    private void applySelectedArchived() {
+
+        getPdfDataRequestModel.setPatientId(mSelectedFileTypeDataToCompare.get(0).getRespectiveParentPatientID());
+        getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(0).getFileType());
+        getPdfDataRequestModel.setFileTypeRefId("9574");
+
+        ArrayList<LstDocTypeRequest> lstDocTypeRequests = new ArrayList<>();
+
+        if (mAndroidTreeView != null) {
+            List<String> selectedValues = mAndroidTreeView.getSelectedValues(String.class);
+
+            // TODO : THIS IS HACK, PLZ FIX IT
+            for (String data :
+                    selectedValues) {
+
+                String[] seperateData = data.split("\\|");
+
+                LstDocTypeRequest lstDocTypeRequest = new LstDocTypeRequest();
+                lstDocTypeRequest.setPageCount(4402);
+                lstDocTypeRequest.setCreatedDate("2017-03-10T17:22:49.273");
+
+                DocTypeRequest docTypeRequest = new DocTypeRequest();
+                docTypeRequest.setTypeId(Integer.parseInt(seperateData[1]));
+                docTypeRequest.setTypeName(seperateData[0]);
+                docTypeRequest.setAbbreviation("IADM48");
+
+                lstDocTypeRequest.setDocTypeRequest(docTypeRequest);
+
+                lstDocTypeRequests.add(lstDocTypeRequest);
+            }
+        }
+
+        // call api
+        mPatientsHelper.getPdfData(getPdfDataRequestModel);
+
+    }
+
 }

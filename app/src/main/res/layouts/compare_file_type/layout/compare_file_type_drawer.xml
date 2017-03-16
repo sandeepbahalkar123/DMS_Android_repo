@@ -533,6 +533,36 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/toolbar_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/resetFileTypeDataLoading"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/black"
+                android:gravity="center"
+                android:text="@string/reset"
+                android:textColor="@color/reset_yellow"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/applyFileTypeDataLoading"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/black"
+                android:gravity="center"
+                android:text="@string/apply"
+                android:textColor="@color/BlueAngel"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/fileTypeOneTreeViewContainer"
             android:layout_width="match_parent"

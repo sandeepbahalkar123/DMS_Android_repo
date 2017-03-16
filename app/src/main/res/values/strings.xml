@@ -71,6 +71,8 @@
     <string name="error_compare_patient">Please select same patient record to compare</string>
     <string name="error_max_two_reports">You can not select more than two reports to compare</string>
     <string name="error_select_second_file_type">Please select second file type to compare</string>
+    <string name="reset">Reset</string>
+    <string name="apply">Apply</string>
 
     <string-array name="select_id">
         <item>Select</item>
