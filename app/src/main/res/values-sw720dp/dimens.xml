@@ -2,6 +2,8 @@
 <resources>
     <dimen name="dp0">0dp</dimen>
 
+    <dimen name="pdf_middle_margin">32dp</dimen>
+
     <dimen name="dp1">2dp</dimen>
     <dimen name="dp2">4dp</dimen>
     <dimen name="dp4">10dp</dimen>
