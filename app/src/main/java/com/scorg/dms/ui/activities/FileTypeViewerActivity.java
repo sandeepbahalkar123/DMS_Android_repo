@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.scorg.dms.R;
@@ -28,6 +29,7 @@ import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseM
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocCategory;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocType;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
+import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
@@ -37,6 +39,7 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -60,12 +63,17 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     private PatientsHelper mPatientsHelper;
 
     private RelativeLayout mFileTypeOneTreeViewContainer;
+
+    //TODO: This is not using currently
     private RelativeLayout mFileTypeTwoTreeViewContainer;
     private AndroidTreeView mAndroidTreeView;
 
     //---------
     ArrayList<PatientFileData> mSelectedFileTypeDataToCompare;
     String respectivePatientID;
+    private Button mApplyFileTypeDataLoading;
+    private String TAG = this.getClass().getName();
+    private TreeNode mTreeRoot;
     //---------
 
     @Override
@@ -122,9 +130,11 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         //------------
         mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeOneTreeViewContainer);
         mFileTypeTwoTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTwoTreeViewContainer);
+        mApplyFileTypeDataLoading = (Button) mHeaderView.findViewById(R.id.applyFileTypeDataLoading);
 
         //------------
-
+        mApplyFileTypeDataLoading.setOnClickListener(this);
+        //-----------
 
     }
 
@@ -140,7 +150,9 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            //onclick on floating button
+            case R.id.applyFileTypeDataLoading:
+                getSelectedArchived();
+                break;
         }
     }
 
@@ -172,7 +184,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
         FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
         FileTreeResponseData fileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
-        createAnnotationTreeStructure(fileTreeResponseData, false);
+        createAnnotationTreeStructure(fileTreeResponseData, true);
     }
 
     @Override
@@ -186,13 +198,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
 
-    //--- TODO : FIX THIS TREE STRUCTUR  , ALSO CHANGE model of getFileDATA PDF
     private void createAnnotationTreeStructure(FileTreeResponseData fileTreeResponseData, boolean isExpanded) {
 
         mFileTypeOneTreeViewContainer.removeAllViews();
         mFileTypeTwoTreeViewContainer.removeAllViews();
 
-        TreeNode root = TreeNode.root();
+        mTreeRoot = TreeNode.root();
 
         int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
         int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
@@ -230,12 +241,31 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 }
                 archiveDatumObjectFolder.addChildren(lstDocCategoryObjectFolder);
             }
-            root.addChildren(archiveDatumObjectFolder);
+            mTreeRoot.addChildren(archiveDatumObjectFolder);
         }
 
-        mAndroidTreeView = new AndroidTreeView(this, root);
+        mAndroidTreeView = new AndroidTreeView(this, mTreeRoot);
         mAndroidTreeView.setDefaultAnimation(true);
         mFileTypeOneTreeViewContainer.addView(mAndroidTreeView.getView());
         mAndroidTreeView.setSelectionModeEnabled(true);
     }
+
+    private String[] getSelectedArchived() {
+        HashSet<String> archivList = new HashSet<String>();
+        if (mAndroidTreeView != null) {
+            List<String> selectedValues = mAndroidTreeView.getSelectedValues(String.class);
+
+            // TODO : THIS IS HACK, PLZ FIX IT
+            for (String data :
+                    selectedValues) {
+                archivList.add(data);
+            }
+        }
+
+        String[] strings = archivList.toArray(new String[archivList.size()]);
+        CommonMethods.Log(TAG, archivList.toString());
+        return strings;
+    }
+
+
 }
