@@ -31,8 +31,13 @@ public class Config {
     }*/
 
     //Declared all URL used in app here
+
     public static final String URL_LOGIN = "userLogin";
     public static final String URL_PATIENT_LIST = "result/ShowSearchResults";
     public static final String URL_ANNOTATIONS_LIST = "documenttype/getAnnotations";
+
+
+    public static final String URL_GET_ARCHIVED_LIST = BASE_URL + "getArchived";
+
 
 }

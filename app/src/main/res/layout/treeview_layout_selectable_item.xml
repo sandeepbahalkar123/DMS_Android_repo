@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/selectableItemBackground"
-    android:minHeight="48dp"
-    android:paddingLeft="10dp">
+    android:minHeight="48dp">
 
     <LinearLayout
+        android:id="@+id/mainContentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp10">
 
         <CheckBox
             android:id="@+id/node_selector"
@@ -19,17 +20,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:visibility="visible" />
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/node_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp5"
-            android:text="asdasd"
+            android:maxLines="2"
+            android:singleLine="false"
+            android:text="asd"
             android:textColor="@color/black"
-            android:textSize="@dimen/sp14" />
+            android:textSize="@dimen/sp12" />
     </LinearLayout>
-
 </RelativeLayout>

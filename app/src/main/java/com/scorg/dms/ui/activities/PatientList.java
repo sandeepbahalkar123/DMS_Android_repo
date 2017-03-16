@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,18 +19,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
@@ -59,7 +55,6 @@ import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -68,18 +63,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-import butterknife.OnEditorAction;
-import butterknife.OnTextChanged;
-
-import butterknife.Optional;
-
-
 public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
 
     @BindView(R.id.expandableListView)
     ExpandableListView mPatientListView;
-    @BindView(R.id.fab)
+    @BindView(R.id.openFilterRightDrawerFAB)
     FloatingActionButton mOpenFilterViewFAB;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -124,7 +113,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.patient_list_activity);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ButterKnife.bind(this);
         initialize();
@@ -261,8 +250,19 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             for (SearchResult dataObject :
                     searchResult) {
                 String patientName = dataObject.getPatientName();
+                String id = dataObject.getPatientId();
                 headerList.add(patientName);
-                childList.put(patientName, new ArrayList<PatientFileData>(dataObject.getPatientFileData()));
+
+                //--------
+                // This is done to set getPatientId in child (PatientFileData)
+                List<PatientFileData> patientFileData = dataObject.getPatientFileData();
+                for (PatientFileData temp :
+                        patientFileData) {
+                    temp.setRespectiveParentPatientID(id);
+                }
+                //--------
+
+                childList.put(patientName, new ArrayList<PatientFileData>(patientFileData));
             }
 
             mPatientListView.setAdapter(new PatientExpandableListAdapter(this, headerList, childList));
@@ -271,6 +271,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             mPatientListView.setChildDivider(getResources().getDrawable(R.color.transparent));
             mPatientListView.setDivider(getResources().getDrawable(R.color.white));
             mPatientListView.setDividerHeight(2);
+
             //mPatientListView.setDividerHeight(2);
         } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
@@ -321,7 +322,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         switch (v.getId()) {
             //onclick on floating button
-            case R.id.fab:
+            case R.id.openFilterRightDrawerFAB:
                 mDrawer.openDrawer(GravityCompat.END);
 
                 if (mAnnotationListData == null) {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.johnkil.print.PrintView;
@@ -15,22 +16,31 @@ import com.unnamed.b.atv.model.TreeNode;
  * Created by Bogdan Melnychuk on 2/15/15.
  */
 public class SelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
+    private int leftPadding;
     private boolean isDefaultExpanded;
     private TextView tvValue;
+    private LinearLayout mainContentLayout;
     private PrintView arrowView;
     private CheckBox nodeSelector;
 
     public SelectableHeaderHolder(Context context, boolean isDefaultExpanded) {
+        this(context, isDefaultExpanded, (int) (context.getResources().getDimension(R.dimen.dp10) / context.getResources().getDisplayMetrics().density));
+    }
+
+    public SelectableHeaderHolder(Context context, boolean isDefaultExpanded, int leftPadding) {
         super(context);
+        this.leftPadding = leftPadding;
         this.isDefaultExpanded = isDefaultExpanded;
     }
 
     @Override
     public View createNodeView(final TreeNode node, IconTreeItemHolder.IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.layout_selectable_header, null, false);
+        final View view = inflater.inflate(R.layout.treeview_layout_selectable_header, null, false);
 
         tvValue = (TextView) view.findViewById(R.id.node_value);
+        mainContentLayout = (LinearLayout) view.findViewById(R.id.mainContentLayout);
+        mainContentLayout.setPadding(leftPadding, 0, 0, 0);
 
         if (value.text.contains("|")) {
             tvValue.setText(value.text.split("\\|")[0]);
