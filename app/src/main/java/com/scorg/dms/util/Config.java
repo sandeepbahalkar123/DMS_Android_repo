@@ -37,8 +37,8 @@ public class Config {
     public static final String URL_ANNOTATIONS_LIST = "documenttype/getAnnotations";
 
 
-    public static final String URL_GET_ARCHIVED_LIST = BASE_URL + "getArchived";
-    public static final String URL_GET_PDF_DATA = BASE_URL + "showfile";
+    public static final String URL_GET_ARCHIVED_LIST = "getArchived";
+    public static final String URL_GET_PDF_DATA = "showfile";
 
 
 }
