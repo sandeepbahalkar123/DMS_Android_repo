@@ -67,6 +67,7 @@ public class DmsConstants {
     public static final int TASK_PATIENT_LIST = 2;
     public static final int TASK_ANNOTATIONS_LIST = 3;
     public static final int TASK_GET_ARCHIVED_LIST = 4;
+    public static final int TASK_GET_PDF_DATA = 7;
 
 
     public static class DATE_PATTERN {
@@ -91,5 +92,7 @@ public class DmsConstants {
         public static int TWO_SECONDS = 2000;
         public static int THREE_SECONDS = 3000;
     }
+
+    public static final Integer SUCCESS = 200;
 
 }

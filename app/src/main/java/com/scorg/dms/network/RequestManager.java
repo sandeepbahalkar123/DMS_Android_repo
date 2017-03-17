@@ -26,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.scorg.dms.R;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
+import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
 import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.util.CommonMethods;
@@ -315,6 +316,10 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 case DmsConstants.TASK_GET_ARCHIVED_LIST: //This is for get archived list
                     FileTreeResponseModel fileTreeResponseModel = gson.fromJson(data, FileTreeResponseModel.class);
                     this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, fileTreeResponseModel, mOldDataTag);
+                    break;
+                case DmsConstants.TASK_GET_PDF_DATA: //This is for get archived list
+                    GetPdfDataResponseModel getPdfDataResponseModel = gson.fromJson(data, GetPdfDataResponseModel.class);
+                    this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, getPdfDataResponseModel, mOldDataTag);
                     break;
             }
 
