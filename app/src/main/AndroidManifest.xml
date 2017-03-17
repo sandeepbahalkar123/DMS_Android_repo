@@ -23,15 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--  <activity
-              android:name=".ui.ItemDetailActivity"
-              android:label="@string/title_item_detail"
-              android:parentActivityName=".ui.ItemListActivity"
-              android:theme="@style/AppTheme.NoActionBar">
-              <meta-data
-                  android:name="android.support.PARENT_ACTIVITY"
-                  android:value="com.scorg.dms.ui.ItemListActivity" />
-          </activity>-->
+
         <activity
             android:name=".ui.activities.PatientList"
             android:label="@string/patient_list"

@@ -538,29 +538,9 @@ public class CommonMethods {
         //  datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // To set min date
         datePickerDialog.show();
     }
-    public static Dialog showdialog(Context context, String dialogHeader, String dialogMessage) {
-        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_ok);
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        if (dialogHeader != null)
-            ((TextView) dialog.findViewById(R.id.text_view_dialog_header)).setText(dialogHeader);
-        if (dialogMessage != null)
-            ((TextView) dialog.findViewById(R.id.text_view_dialog_message)).setText(dialogMessage);
 
-        dialog.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-
-        return dialog;
-    }
+    //this alert is shown for input of serverpath
     public static Dialog showAlertDialog(Context activity, String dialogHeader, final boolean isReEnteredServerPath) {
         mContext=activity;
         final Dialog dialog = new Dialog(activity);

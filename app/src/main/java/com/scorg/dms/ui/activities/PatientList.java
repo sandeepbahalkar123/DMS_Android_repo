@@ -126,7 +126,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         doGetPatientList();
     }
 
-
+// intialize variables
     private void initializeVariables() {
         mContext = getApplicationContext();
         mAddedTagsForFiltering = new HashMap<String, String>();
@@ -150,7 +150,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         //------------
 
     }
-
+// register all views
     private void bindView() {
         int width = getResources().getDisplayMetrics().widthPixels / 2;
 

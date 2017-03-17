@@ -37,7 +37,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Intent intentObj = null;
 
                 if (DmsConstants.BLANK.equalsIgnoreCase(userName) || DmsConstants.BLANK.equalsIgnoreCase(password)) {
-                    /*intentObj = new Intent(mContext, LoginActivity.class);*/
+                  //alert dialog for serverpath
                     CommonMethods.showAlertDialog(SplashScreenActivity.this,getString(R.string.server_path)+"\n"+getString(R.string.for_example_server_path),false);
                 } else {
                     //------Check Remember ME first , then only move on next screen.
