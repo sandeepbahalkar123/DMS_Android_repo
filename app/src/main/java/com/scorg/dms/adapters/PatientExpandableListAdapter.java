@@ -513,24 +513,17 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
     }
 
     /*public void showCompareOptionsDialog(final Context context, String selectedOneValue, String optionTwoTitle) {
-
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.compare_dialog);
-
         dialog.setCancelable(false);
-
         // set the custom dialog components - text
-
         TextView selectedOne = (TextView) dialog.findViewById(R.id.selectedOne);
-
         TextView selectedTwo = (TextView) dialog.findViewById(R.id.selectedTwo);
         Button dialogButtonCompare = (Button) dialog.findViewById(R.id.compare);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.cancel);
-
-
         //-----
         selectedOne.setText("" + selectedOneValue);
         selectedTwo.setText("" + selectedOneValue);
@@ -540,19 +533,15 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-
             }
         });
-
         // if button is clicked, close the custom dialog
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-
             }
         });
-
         dialog.show();
     }*/
 

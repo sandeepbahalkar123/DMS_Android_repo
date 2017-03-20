@@ -1,4 +1,4 @@
-package com.scorg.dms.views.treeViewHolder;
+package com.scorg.dms.views.treeViewHolder.arrow_expand;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -16,7 +16,7 @@ import com.unnamed.b.atv.model.TreeNode;
 /**
  *
  */
-public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
+public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<ArrowExpandIconTreeItemHolder.IconTreeItem> {
     private int nodeValueColor;
     private int leftPadding;
     private boolean isDefaultExpanded;
@@ -37,7 +37,7 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
     }
 
     @Override
-    public View createNodeView(final TreeNode node, IconTreeItemHolder.IconTreeItem value) {
+    public View createNodeView(final TreeNode node, ArrowExpandIconTreeItemHolder.IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.treeview_arrow_expandable_header, null, false);
 
@@ -46,10 +46,11 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
 
         tvValue = (TextView) view.findViewById(R.id.node_value);
         tvValue.setTextColor(getNodeValueColor());
-        if (value.text.contains("|")) {
-            tvValue.setText(value.text.split("\\|")[0]);
+
+        if (value.text.toString().contains("|")) {
+            tvValue.setText(value.text.toString().split("\\|")[0]);
         } else {
-            tvValue.setText(value.text);
+            tvValue.setText(value.text.toString());
         }
 
         arrowView = (PrintView) view.findViewById(R.id.arrow_icon);

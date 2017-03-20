@@ -31,4 +31,11 @@ public class ArchiveDatum {
         this.lstDocCategories = lstDocCategories;
     }
 
+    @Override
+    public String toString() {
+        return "ArchiveDatum{" +
+                "fileType='" + fileType + '\'' +
+                ", lstDocCategories=" + lstDocCategories +
+                '}';
+    }
 }
