@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp43"
         android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginBottom="@dimen/padding_small"
         android:background="@drawable/curv_edge_blue"
         android:orientation="horizontal"
         android:weightSum="6">

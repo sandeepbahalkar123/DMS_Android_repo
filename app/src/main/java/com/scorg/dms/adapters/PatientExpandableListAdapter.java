@@ -26,7 +26,9 @@ import android.widget.TextView;
 
 import com.scorg.dms.R;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.ui.activities.FileTypeViewerActivity;
+import com.scorg.dms.ui.activities.PatientList;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 
@@ -66,14 +68,40 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
     String ipd;
     String uhid;
     int dataShowMaxValue = 2;
+    List<SearchResult> searchResultForPatientDetails;
 
     // Hashmap for keeping track of our checkbox check states
     private HashMap<Integer, boolean[]> mChildCheckStates;
     private String mCheckedBoxGroupName = null;
 
-    public PatientExpandableListAdapter(Context context, List<String> listDataHeader,
-                                        HashMap<String, ArrayList<PatientFileData>> listChildData) {
+    public PatientExpandableListAdapter(Context context,List<SearchResult> searchResult) {
         this._context = context;
+
+        List<String> listDataHeader = new ArrayList<>();
+        HashMap<String, ArrayList<PatientFileData>> listChildData = new HashMap<String, ArrayList<PatientFileData>>();
+
+        for (SearchResult dataObject :
+                searchResult) {
+            String patientName = dataObject.getPatientName();
+            String patientAddress = dataObject.getPatientAddress();
+            String id = dataObject.getPatientId();
+            listDataHeader.add(patientName);
+
+
+
+            //--------
+            // This is done to set getPatientId in child (PatientFileData)
+            List<PatientFileData> patientFileData = dataObject.getPatientFileData();
+            for (PatientFileData temp :
+                    patientFileData) {
+                temp.setRespectiveParentPatientID(id);
+            }
+            //--------
+
+            listChildData.put(patientName, new ArrayList<PatientFileData>(patientFileData));
+        }
+
+        this.searchResultForPatientDetails = searchResult;
         this._originalListDataHeader = listDataHeader;
         this._originalListDataChild = listChildData;
 
@@ -84,7 +112,9 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         uhid = _context.getString(R.string.uhid);
 
 
+
     }
+
 
     @Override
     public PatientFileData getChild(int groupPosition, int childPosition) {
@@ -489,11 +519,11 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 //------
                 if (tempCheckedDataToCompare.size() == 1) {
                     PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
-                    showCompareOptionsDialog(child, null, mCheckedBoxGroupName);
+                    showCompareOptionsDialog(child, null, mCheckedBoxGroupName,tempName);
                 } else if (tempCheckedDataToCompare.size() == 2) {
                     PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
                     PatientFileData child_1 = getChild(mGroupPosition, tempCheckedDataToCompare.get(1));
-                    showCompareOptionsDialog(child, child_1, mCheckedBoxGroupName);
+                    showCompareOptionsDialog(child, child_1, mCheckedBoxGroupName,tempName);
                 } else {
                     getChecked[mChildPosition] = false;
                     mChildCheckStates.put(mGroupPosition, getChecked);
@@ -553,7 +583,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         dialog.show();
     }*/
 
-    public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, String title) {
+    public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, String title, final String patientName) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(_context);
         View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(_context);
@@ -588,10 +618,12 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                             ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
                             dataToSend.add(selectedOneValue_1);
                             dataToSend.add(selectedTwoValue_2);
-
+                            SearchResult searchPatientInformation =  searchPatientInfo(selectedOneValue_1.getRespectiveParentPatientID());
                             extra.putSerializable(_context.getString(R.string.compare), dataToSend);
+                            extra.putString(DmsConstants.PATIENT_ADDRESS,searchPatientInformation.getPatientAddress());
+                            extra.putString(DmsConstants.DOCTOR_NAME,searchPatientInformation.getDoctorName());
                             extra.putString(DmsConstants.ID, selectedOneValue_1.getRespectiveParentPatientID());
-
+                            extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME,patientName);
                             intent.putExtra(DmsConstants.DATA, extra);
 
                             _context.startActivity(intent);
@@ -610,6 +642,15 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
     }
+ private SearchResult searchPatientInfo(String patientId){
+     SearchResult searchResult = null;
+     for(SearchResult searchResultPatientInfo:searchResultForPatientDetails){
+        if(searchResultPatientInfo.getPatientId().equals(patientId)){
+            searchResult=searchResultPatientInfo;
+        }
+     }
 
+     return searchResult;
+ }
 
 }

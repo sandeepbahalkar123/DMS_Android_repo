@@ -1,6 +1,8 @@
 package com.scorg.dms.ui.activities;
 
 import android.content.Context;
+
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,13 +14,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
@@ -78,8 +85,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     private Context mContext;
 
-    @BindView(R.id.openCompareFileTypeRightDrawerFAB)
-    FloatingActionButton mOpenCompareFileTypeRightDrawerFAB;
+    /*@BindView(R.id.openCompareFileTypeRightDrawerFAB)
+    FloatingActionButton mOpenCompareFileTypeRightDrawerFAB;*/
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -88,9 +95,30 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     PDFView firstPdfView;
     @BindView(R.id.secondPdfView)
     PDFView secondPdfView;
-    // End
 
+    @BindView(R.id.firstPdfViewLay)
+    RelativeLayout firstPdfViewLay;
+    @BindView(R.id.secondPdfViewLay)
+    RelativeLayout secondPdfViewLay;
+
+    @BindView(R.id.openRightDrawer)
+    ImageView mOpenRightDrawer;
+    // End
+    TextView mDoctorNameOne;
+    TextView mDoctorNameTwo;
+    TextView mPatientAddress;
+    TextView mFileOneRefId;
+    TextView mFileTwoRefId;
+    TextView mAdmissionDateOne;
+    TextView mAdmissionDateTwo;
+    TextView mDischargeDateOne;
+    TextView mDischargeDateTwo;
+    TextView mPatientId;
+    TextView mPatientName;
+    TextView mFileTypeOne;
+    TextView mFileTypeTwo;
     DrawerLayout mDrawer;
+
     NavigationView mRightNavigationView;
     View mHeaderView;
     private PatientsHelper mPatientsHelper;
@@ -101,13 +129,23 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     private RelativeLayout mFileTypeTwoTreeViewContainer;
     private AndroidTreeView mAndroidTreeView;
     private Switch mCompareSwitch;
+    private TableRow mRowScrollBoth;
+
+    private LinearLayout fileOneLay;
+    private LinearLayout fileTwoLay;
+
     private boolean isCompareChecked = false;
 
     //---------
     ArrayList<PatientFileData> mSelectedFileTypeDataToCompare;
     String respectivePatientID;
+    String patientName;
+    String doctorName;
+    String patientAddress;
+
     private Button mApplyFileTypeDataLoading;
     private TreeNode mTreeRoot;
+
     //---------
 
     @Override
@@ -126,6 +164,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         if (extra != null) {
             mSelectedFileTypeDataToCompare = (ArrayList<PatientFileData>) extra.getSerializable(getString(R.string.compare));
             respectivePatientID = extra.getString(DmsConstants.ID);
+            patientName = extra.getString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME);
+            patientAddress = extra.getString(DmsConstants.PATIENT_ADDRESS);
+            doctorName = extra.getString(DmsConstants.DOCTOR_NAME);
+
         }
 
         initializeVariables();
@@ -154,6 +196,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
         mHeaderView = mRightNavigationView.getHeaderView(0);
 
+
         //---------------
         DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
         params.width = width;
@@ -169,21 +212,64 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         });
 
         //------------
+        mFileOneRefId = (TextView)mHeaderView.findViewById(R.id.fileTypeOneRefID);
+        mFileTwoRefId = (TextView)mHeaderView.findViewById(R.id.fileTypeTwoRefID);
+        mAdmissionDateOne = (TextView)mHeaderView.findViewById(R.id.fileTypeOneAdmissionDate);
+        mAdmissionDateTwo = (TextView)mHeaderView.findViewById(R.id.fileTypeTwoAdmissionDate);
+        mDischargeDateOne = (TextView)mHeaderView.findViewById(R.id.fileTypeOneDischargeDate);
+        mDischargeDateTwo = (TextView)mHeaderView.findViewById(R.id.fileTypeTwoDischargeDate);
+        mPatientId = (TextView)mHeaderView.findViewById(R.id.tvPatientUHID);
+        mPatientName = (TextView)mHeaderView.findViewById(R.id.tvPatientName);
+        mFileTypeOne = (TextView)mHeaderView.findViewById(R.id.fileTypeOneFileTypeName);
+        mFileTypeTwo = (TextView)mHeaderView.findViewById(R.id.fileTypeTwoFileTypeName);
+        mDoctorNameOne =   (TextView)mHeaderView.findViewById(R.id.fileTypeOneDoctorName);
+        mDoctorNameTwo =   (TextView)mHeaderView.findViewById(R.id.fileTypeTwoDoctorName);
+        mPatientAddress =   (TextView)mHeaderView.findViewById(R.id.tvPatientLocation);
+
+        mFileOneRefId.setText(mSelectedFileTypeDataToCompare.get(0).getReferenceId().toString());
+        mAdmissionDateOne.setText(mSelectedFileTypeDataToCompare.get(0).getAdmissionDate().toString());
+        mDischargeDateOne.setText(mSelectedFileTypeDataToCompare.get(0).getDischargeDate().toString());
+        mFileTypeOne.setText(mSelectedFileTypeDataToCompare.get(0).getFileType().toString());
+
+        mPatientId.setText(mSelectedFileTypeDataToCompare.get(0).getRespectiveParentPatientID().toString());
+
+        mPatientName.setText(patientName);
+        mDoctorNameTwo.setText(doctorName);
+        mDoctorNameOne.setText(doctorName);
+        mPatientAddress.setText(patientAddress);
+
         mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeOneTreeViewContainer);
         mFileTypeTwoTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTwoTreeViewContainer);
         mCompareSwitch = (Switch) mHeaderView.findViewById(R.id.et_uhid);
+        mRowScrollBoth = (TableRow) mHeaderView.findViewById(R.id.rowScrollBoth);
+        fileOneLay = (LinearLayout) mHeaderView.findViewById(R.id.fileOneLay);
+        fileTwoLay = (LinearLayout) mHeaderView.findViewById(R.id.fileTwoLay);
+
+        if (mSelectedFileTypeDataToCompare.size() == 2) {
+
+            mFileTwoRefId.setText(mSelectedFileTypeDataToCompare.get(1).getReferenceId().toString());
+            mAdmissionDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getAdmissionDate().toString());
+            mDischargeDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getDischargeDate().toString());
+            mFileTypeTwo.setText(mSelectedFileTypeDataToCompare.get(1).getFileType().toString());
+
+            secondPdfViewLay.setVisibility(View.VISIBLE);
+            mRowScrollBoth.setVisibility(View.VISIBLE);
+            fileTwoLay.setVisibility(View.VISIBLE);
+
+            mCompareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    isCompareChecked = isChecked;
+                }
+            });
+        }
+
         mApplyFileTypeDataLoading = (Button) mHeaderView.findViewById(R.id.applyFileTypeDataLoading);
 
         //------------
         mApplyFileTypeDataLoading.setOnClickListener(this);
+        mOpenRightDrawer.setOnClickListener(this);
         //-----------
-
-        mCompareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isCompareChecked = isChecked;
-            }
-        });
 
     }
 
@@ -202,32 +288,31 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             case R.id.applyFileTypeDataLoading:
                 applySelectedArchived();
                 break;
-        }
-    }
+            case R.id.openRightDrawer:
+                mDrawer.openDrawer(GravityCompat.END);
 
+                //---------------
+                FileTreeRequestModel fileTreeRequestModel = new FileTreeRequestModel();
 
-    @OnClick(R.id.openCompareFileTypeRightDrawerFAB)
-    public void openCompareFileTypeDrawer(View v) {
-        mDrawer.openDrawer(GravityCompat.END);
+                List<LstSearchParam> lstSearchParamList = new ArrayList<>();
+                if (mSelectedFileTypeDataToCompare != null) {
+                    for (PatientFileData tempObject :
+                            mSelectedFileTypeDataToCompare) {
+                        LstSearchParam lstSearchParam = new LstSearchParam();
+                        lstSearchParam.setPatientId(tempObject.getRespectiveParentPatientID());
+                        lstSearchParam.setFileType(tempObject.getFileType());
+                        lstSearchParam.setFileTypeRefId("" + tempObject.getReferenceId());
+                        lstSearchParamList.add(lstSearchParam);
+                    }
+                    fileTreeRequestModel.setLstSearchParam(lstSearchParamList);
+                    mPatientsHelper.doGetArchivedList(fileTreeRequestModel);
+                }
 
-        //---------------
-        FileTreeRequestModel fileTreeRequestModel = new FileTreeRequestModel();
-
-        List<LstSearchParam> lstSearchParamList = new ArrayList<>();
-        if (mSelectedFileTypeDataToCompare != null) {
-            for (PatientFileData tempObject :
-                    mSelectedFileTypeDataToCompare) {
-                LstSearchParam lstSearchParam = new LstSearchParam();
-                lstSearchParam.setPatientId(tempObject.getRespectiveParentPatientID());
-                lstSearchParam.setFileType(tempObject.getFileType());
-                lstSearchParam.setFileTypeRefId("" + tempObject.getReferenceId());
-                lstSearchParamList.add(lstSearchParam);
-            }
-            fileTreeRequestModel.setLstSearchParam(lstSearchParamList);
-            mPatientsHelper.doGetArchivedList(fileTreeRequestModel);
+                break;
         }
 
     }
+
 
     @Override
     public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
@@ -269,6 +354,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         mFileTypeOneTreeViewContainer.removeAllViews();
         mFileTypeTwoTreeViewContainer.removeAllViews();
+
+        DmsConstants.EXPAND_ITEM_TEXT = "#FFFFFF";
 
         mTreeRoot = TreeNode.root();
 

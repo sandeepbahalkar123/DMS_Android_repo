@@ -126,7 +126,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         doGetPatientList();
     }
 
-
+// intialize variables
     private void initializeVariables() {
         mContext = getApplicationContext();
         mAddedTagsForFiltering = new HashMap<String, String>();
@@ -150,7 +150,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         //------------
 
     }
-
+// register all views
     private void bindView() {
         int width = getResources().getDisplayMetrics().widthPixels / 2;
 
@@ -244,28 +244,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             ShowSearchResultResponseModel showSearchResultResponseModel = (ShowSearchResultResponseModel) customResponse;
             List<SearchResult> searchResult = showSearchResultResponseModel.getSearchResultData().getSearchResult();
 
-            List<String> headerList = new ArrayList<>();
-            HashMap<String, ArrayList<PatientFileData>> childList = new HashMap<String, ArrayList<PatientFileData>>();
 
-            for (SearchResult dataObject :
-                    searchResult) {
-                String patientName = dataObject.getPatientName();
-                String id = dataObject.getPatientId();
-                headerList.add(patientName);
 
-                //--------
-                // This is done to set getPatientId in child (PatientFileData)
-                List<PatientFileData> patientFileData = dataObject.getPatientFileData();
-                for (PatientFileData temp :
-                        patientFileData) {
-                    temp.setRespectiveParentPatientID(id);
-                }
-                //--------
 
-                childList.put(patientName, new ArrayList<PatientFileData>(patientFileData));
-            }
-
-            mPatientListView.setAdapter(new PatientExpandableListAdapter(this, headerList, childList));
+            mPatientListView.setAdapter(new PatientExpandableListAdapter(this, searchResult));
             mPatientListView.setGroupIndicator(null);
             mPatientListView.setChildIndicator(null);
             mPatientListView.setChildDivider(getResources().getDrawable(R.color.transparent));
@@ -482,6 +464,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private void createAnnotationTreeStructure(AnnotationListData annotationListData, boolean isExpanded) {
 
         mAnnotationTreeViewContainer.removeAllViews();
+
+        DmsConstants.EXPAND_ITEM_TEXT = "#9E9E9E";
 
         TreeNode root = TreeNode.root();
 

@@ -9,14 +9,17 @@ public class DmsConstants {
     public static final String DMS_LOG_FOLDER = "DMS_LOG";
     public static final String DMS_LOG_FILE = "DMS_LOG_FILE.txt";
 
-    public static final String EXPAND_ITEM_BACKGROUND = "#00000000";
-    public static final String EXPAND_ITEM_TEXT = "#FFFFFF";
+    public static String EXPAND_ITEM_BACKGROUND = "#00000000";
+    public static String EXPAND_ITEM_TEXT = "#FFFFFF";
 
     //This is for bydefault textcolor,headercolor,buttoncolor etc.
     public static String HEADER_COLOR = "#E4422C";
     public static String BUTTON_TEXT_COLOR = "#FFFFFF";
     public static String TEXT_COLOR = "#000000";
     public static final String ID = "_id";
+    public static final String PATIENT_ADDRESS = "patientAddress";
+    public static final String DOCTOR_NAME = "doctorName";
+
 
     public static class PATIENT_LIST_PARAMS {
         public static final String PATIENT_NAME = "patientName";
