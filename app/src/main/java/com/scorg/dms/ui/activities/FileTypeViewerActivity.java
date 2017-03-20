@@ -355,8 +355,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mFileTypeOneTreeViewContainer.removeAllViews();
         mFileTypeTwoTreeViewContainer.removeAllViews();
 
-        DmsConstants.EXPAND_ITEM_TEXT = "#FFFFFF";
-
         mTreeRoot = TreeNode.root();
 
         int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);

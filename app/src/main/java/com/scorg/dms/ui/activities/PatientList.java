@@ -465,8 +465,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         mAnnotationTreeViewContainer.removeAllViews();
 
-        DmsConstants.EXPAND_ITEM_TEXT = "#9E9E9E";
-
         TreeNode root = TreeNode.root();
 
         List<AnnotationList> annotationLists = annotationListData.getAnnotationLists();

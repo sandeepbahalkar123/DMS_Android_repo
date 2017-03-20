@@ -37,8 +37,6 @@ public class SelectableItemHolder extends TreeNode.BaseNodeViewHolder<String> {
         final View view = inflater.inflate(R.layout.treeview_layout_selectable_item, null, false);
 
         tvValue = (TextView) view.findViewById(R.id.node_value);
-        view.setBackgroundColor(Color.parseColor(DmsConstants.EXPAND_ITEM_BACKGROUND));
-        tvValue.setTextColor(Color.parseColor(DmsConstants.EXPAND_ITEM_TEXT));
         mainContentLayout = (LinearLayout) view.findViewById(R.id.mainContentLayout);
         mainContentLayout.setPadding(leftPadding, 0, 0, 0);
 

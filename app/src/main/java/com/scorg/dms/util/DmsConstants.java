@@ -9,9 +9,6 @@ public class DmsConstants {
     public static final String DMS_LOG_FOLDER = "DMS_LOG";
     public static final String DMS_LOG_FILE = "DMS_LOG_FILE.txt";
 
-    public static String EXPAND_ITEM_BACKGROUND = "#00000000";
-    public static String EXPAND_ITEM_TEXT = "#FFFFFF";
-
     //This is for bydefault textcolor,headercolor,buttoncolor etc.
     public static String HEADER_COLOR = "#E4422C";
     public static String BUTTON_TEXT_COLOR = "#FFFFFF";
