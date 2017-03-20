@@ -25,6 +25,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/firstCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:checked="true"
+            android:visibility="gone"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="CompareByFist" />
+
     </RelativeLayout>
 
 
@@ -42,6 +54,17 @@
             android:id="@+id/secondPdfView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/secondCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="CompareBySecond" />
 
     </RelativeLayout>
 
