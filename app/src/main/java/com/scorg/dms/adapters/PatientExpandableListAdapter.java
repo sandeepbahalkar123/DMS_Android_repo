@@ -73,7 +73,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
     private HashMap<Integer, boolean[]> mChildCheckStates;
     private String mCheckedBoxGroupName = null;
 
-    public PatientExpandableListAdapter(Context context,List<SearchResult> searchResult) {
+    public PatientExpandableListAdapter(Context context, List<SearchResult> searchResult) {
         this._context = context;
 
         List<String> listDataHeader = new ArrayList<>();
@@ -85,7 +85,6 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             String patientAddress = dataObject.getPatientAddress();
             String id = dataObject.getPatientId();
             listDataHeader.add(patientName);
-
 
 
             //--------
@@ -109,7 +108,6 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         opd = _context.getString(R.string.opd);
         ipd = _context.getString(R.string.ipd);
         uhid = _context.getString(R.string.uhid);
-
 
 
     }
@@ -494,11 +492,11 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 //------
                 if (tempCheckedDataToCompare.size() == 1) {
                     PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
-                    showCompareOptionsDialog(child, null, mCheckedBoxGroupName,tempName);
+                    showCompareOptionsDialog(child, null, mCheckedBoxGroupName, tempName);
                 } else if (tempCheckedDataToCompare.size() == 2) {
                     PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
                     PatientFileData child_1 = getChild(mGroupPosition, tempCheckedDataToCompare.get(1));
-                    showCompareOptionsDialog(child, child_1, mCheckedBoxGroupName,tempName);
+                    showCompareOptionsDialog(child, child_1, mCheckedBoxGroupName, tempName);
                 } else {
                     getChecked[mChildPosition] = false;
                     mChildCheckStates.put(mGroupPosition, getChecked);
@@ -593,12 +591,12 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                             ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
                             dataToSend.add(selectedOneValue_1);
                             dataToSend.add(selectedTwoValue_2);
-                            SearchResult searchPatientInformation =  searchPatientInfo( selectedOneValue_1.getRespectiveParentPatientID());
+                            SearchResult searchPatientInformation = searchPatientInfo(selectedOneValue_1.getRespectiveParentPatientID());
                             extra.putSerializable(_context.getString(R.string.compare), dataToSend);
-                            extra.putString(DmsConstants.PATIENT_ADDRESS,searchPatientInformation.getPatientAddress());
-                            extra.putString(DmsConstants.DOCTOR_NAME,searchPatientInformation.getDoctorName());
+                            extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
+                            extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
                             extra.putString(DmsConstants.ID, selectedOneValue_1.getRespectiveParentPatientID());
-                            extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME,patientName);
+                            extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, patientName);
                             intent.putExtra(DmsConstants.DATA, extra);
 
                             _context.startActivity(intent);
@@ -617,15 +615,16 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
     }
- private SearchResult searchPatientInfo(String patientId){
-     SearchResult searchResult = null;
-     for(SearchResult searchResultPatientInfo:searchResultForPatientDetails){
-        if(searchResultPatientInfo.getPatientId().equals(patientId)){
-            searchResult=searchResultPatientInfo;
-        }
-     }
 
-     return searchResult;
- }
+    private SearchResult searchPatientInfo(String patientId) {
+        SearchResult searchResult = null;
+        for (SearchResult searchResultPatientInfo : searchResultForPatientDetails) {
+            if (searchResultPatientInfo.getPatientId().equals(patientId)) {
+                searchResult = searchResultPatientInfo;
+            }
+        }
+
+        return searchResult;
+    }
 
 }

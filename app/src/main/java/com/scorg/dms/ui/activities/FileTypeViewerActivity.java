@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -45,6 +46,7 @@ import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocType;
 import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.util.DmsConstants;
+import com.scorg.dms.views.treeViewHolder.ArrowExpandSelectableHeaderHolder;
 import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
@@ -66,7 +68,7 @@ import butterknife.OnClick;
  * Created by jeetal on 14/3/17.
  */
 
-public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnPageChangeListener, OnLoadCompleteListener, OnDrawListener {
+public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnPageChangeListener, OnLoadCompleteListener, OnDrawListener, TreeNode.TreeNodeClickListener {
 
     // Ganesh Added
 
@@ -183,19 +185,19 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         });
 
         //------------
-        mFileOneRefId = (TextView)mHeaderView.findViewById(R.id.fileTypeOneRefID);
-        mFileTwoRefId = (TextView)mHeaderView.findViewById(R.id.fileTypeTwoRefID);
-        mAdmissionDateOne = (TextView)mHeaderView.findViewById(R.id.fileTypeOneAdmissionDate);
-        mAdmissionDateTwo = (TextView)mHeaderView.findViewById(R.id.fileTypeTwoAdmissionDate);
-        mDischargeDateOne = (TextView)mHeaderView.findViewById(R.id.fileTypeOneDischargeDate);
-        mDischargeDateTwo = (TextView)mHeaderView.findViewById(R.id.fileTypeTwoDischargeDate);
-        mPatientId = (TextView)mHeaderView.findViewById(R.id.tvPatientUHID);
-        mPatientName = (TextView)mHeaderView.findViewById(R.id.tvPatientName);
-        mFileTypeOne = (TextView)mHeaderView.findViewById(R.id.fileTypeOneFileTypeName);
-        mFileTypeTwo = (TextView)mHeaderView.findViewById(R.id.fileTypeTwoFileTypeName);
-        mDoctorNameOne =   (TextView)mHeaderView.findViewById(R.id.fileTypeOneDoctorName);
-        mDoctorNameTwo =   (TextView)mHeaderView.findViewById(R.id.fileTypeTwoDoctorName);
-        mPatientAddress =   (TextView)mHeaderView.findViewById(R.id.tvPatientLocation);
+        mFileOneRefId = (TextView) mHeaderView.findViewById(R.id.fileTypeOneRefID);
+        mFileTwoRefId = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoRefID);
+        mAdmissionDateOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneAdmissionDate);
+        mAdmissionDateTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoAdmissionDate);
+        mDischargeDateOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneDischargeDate);
+        mDischargeDateTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoDischargeDate);
+        mPatientId = (TextView) mHeaderView.findViewById(R.id.tvPatientUHID);
+        mPatientName = (TextView) mHeaderView.findViewById(R.id.tvPatientName);
+        mFileTypeOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneFileTypeName);
+        mFileTypeTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoFileTypeName);
+        mDoctorNameOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneDoctorName);
+        mDoctorNameTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoDoctorName);
+        mPatientAddress = (TextView) mHeaderView.findViewById(R.id.tvPatientLocation);
 
         mFileOneRefId.setText(mSelectedFileTypeDataToCompare.get(0).getReferenceId().toString());
         mAdmissionDateOne.setText(mSelectedFileTypeDataToCompare.get(0).getAdmissionDate().toString());
@@ -239,12 +241,14 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 break;
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     //open right drawer onclick of settings icon
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -325,6 +329,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
         int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
+        int textColor = ContextCompat.getColor(this, R.color.white);
 
         List<ArchiveDatum> archiveData = fileTreeResponseData.getArchiveData();
 
@@ -332,7 +337,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         for (int i = 0; i < archiveData.size(); i++) {
             ArchiveDatum archiveDatumObject = archiveData.get(i);
 
-            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded);
+            ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
+            selectableHeaderHolder.setNodeValueColor(textColor);
             TreeNode archiveDatumObjectFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, archiveDatumObject.getFileType()))
                     .setViewHolder(selectableHeaderHolder);
 
@@ -343,7 +349,9 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 LstDocCategory lstDocCategoryObject = lstDocCategories.get(j);
                 String dataToShow = lstDocCategoryObject.getCategoryName() + "|" + lstDocCategoryObject.getCategoryId();
 
-                SelectableHeaderHolder docCatSelectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded, lstDocCategoryObjectLeftPadding);
+                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocCategoryObjectLeftPadding);
+                docCatSelectableHeaderHolder.setNodeValueColor(textColor);
+
                 TreeNode lstDocCategoryObjectFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow))
                         .setViewHolder(docCatSelectableHeaderHolder);
                 //---
@@ -354,7 +362,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                     LstDocType lstDocTypeChild = lstDocTypesCategoriesChildList.get(k);
                     dataToShow = lstDocTypeChild.getTypeName() + "|" + lstDocTypeChild.getTypeId();
 
-                    TreeNode lstDocTypeChildFolder = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this, lstDocTypeChildLeftPadding));
+                    //-------
+                    ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
+                    lstDocTypeChildSelectableHeaderHolder.setNodeValueColor(textColor);
+
+                    TreeNode lstDocTypeChildFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow))
+                            .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
+                    //-------
                     lstDocCategoryObjectFolder.addChildren(lstDocTypeChildFolder);
                 }
                 archiveDatumObjectFolder.addChildren(lstDocCategoryObjectFolder);
@@ -364,8 +378,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         mAndroidTreeView = new AndroidTreeView(this, mTreeRoot);
         mAndroidTreeView.setDefaultAnimation(true);
+        mAndroidTreeView.setUse2dScroll(true);
+        mAndroidTreeView.setDefaultNodeClickListener(this);
+        mAndroidTreeView.setUseAutoToggle(false);
         mFileTypeOneTreeViewContainer.addView(mAndroidTreeView.getView());
-        mAndroidTreeView.setSelectionModeEnabled(true);
     }
 
     // Ganesh Added
@@ -506,4 +522,9 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     }
 
+    //--- For tree view node clicked
+    @Override
+    public void onClick(TreeNode node, Object value) {
+
+    }
 }
