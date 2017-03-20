@@ -32,6 +32,8 @@
     <string name="scrollingBoth">Scrolling Both</string>
     <string name="patientInformation">Patient Information</string>
     <string name="refId">REF ID</string>
+    <string name="file_one">File-One</string>
+    <string name="file_two">File-Two</string>
     <string name="for_example_server_path">e.g. 192.168.0.25:81</string>
     <string name="server_path">Enter the server path</string>
     <string name="doctor">Doctor</string>

@@ -569,6 +569,9 @@ public class CommonMethods {
                    intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                    intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                    mContext.startActivity(intentObj);
+                   ((Activity)mContext).finish();
+
+
                }
                 //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 

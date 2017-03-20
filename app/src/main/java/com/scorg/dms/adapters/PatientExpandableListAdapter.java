@@ -558,10 +558,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         dialog.show();
     }*/
 
-    public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, String title, final String patientName) {
+    public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, final String title, final String patientName) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(_context);
         View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(_context);
+        final AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(_context);
         alertDialogBuilderUserInput.setView(mView);
 
         alertDialogBuilderUserInput.setTitle(title);
@@ -573,6 +573,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         TextView selectedTwo = (TextView) mView.findViewById(R.id.selectedTwo);
         if (selectedTwoValue_2 == null)
             selectedTwo.setText(DmsConstants.BLANK);
+
         else
             selectedTwo.setText("" + selectedTwoValue_2.getReferenceId() + "-" + selectedTwoValue_2.getFileType());
         //----------
@@ -583,7 +584,8 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                     public void onClick(DialogInterface dialogBox, int id) {
 
                         if (selectedTwoValue_2 == null) {
-                            CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));
+                            alertDialogBuilderUserInput.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
+                            /*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*/
                         } else {
                             //
                             Intent intent = new Intent(_context, FileTypeViewerActivity.class);
@@ -616,6 +618,16 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
+        if (selectedTwoValue_2 == null) {
+            alertDialogAndroid.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
+            alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+            /*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*/
+        }else {
+            alertDialogAndroid.setTitle(title);
+            alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+        }
+
+
     }
  private SearchResult searchPatientInfo(String patientId){
      SearchResult searchResult = null;

@@ -94,7 +94,7 @@
             android:drawableLeft="@mipmap/keywhite"
             android:drawablePadding="@dimen/padding_tiny"
             android:gravity="center_vertical"
-            android:text="UHID 001"
+            android:text=""
             android:textColor="@color/white"
             android:textStyle="bold" />
 
@@ -128,24 +128,22 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
-            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginRight="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
             android:orientation="horizontal"
-
             android:weightSum="6">
 
             <TextView
                 android:id="@+id/tvFileNoOne"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:drawablePadding="@dimen/padding_tiny"
+                android:paddingLeft="@dimen/dp10"
                 android:gravity="center_vertical"
-                android:text="File-One"
+                android:text="@string/file_one"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -165,16 +163,10 @@
 
         </TableRow>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp1"
-            android:layout_marginBottom="@dimen/margin_tiny"
-            android:background="@color/white" />
-
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:orientation="horizontal"
@@ -182,7 +174,7 @@
 
             <TextView
 
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
@@ -195,7 +187,7 @@
 
             <TextView
                 android:id="@+id/fileTypeOneRefID"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/background_refid"
@@ -212,7 +204,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:orientation="horizontal"
@@ -220,7 +212,7 @@
 
             <TextView
 
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
@@ -234,12 +226,12 @@
 
             <TextView
                 android:id="@+id/fileTypeOneDoctorName"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:singleLine="true"
-                android:text="Dr. Nitin Kumar"
+                android:text=""
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -249,7 +241,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:orientation="horizontal"
@@ -257,7 +249,7 @@
 
             <TextView
 
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
@@ -271,7 +263,7 @@
 
             <TextView
                 android:id="@+id/fileTypeOneAdmissionDate"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
@@ -287,7 +279,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:orientation="horizontal"
@@ -296,7 +288,7 @@
 
             <TextView
 
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
@@ -310,7 +302,7 @@
 
             <TextView
                 android:id="@+id/fileTypeOneDischargeDate"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
@@ -331,23 +323,24 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
             android:orientation="horizontal"
             android:weightSum="6">
+            />
 
             <TextView
                 android:id="@+id/tvFileNoTwo"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
+                android:paddingLeft="@dimen/dp10"
                 android:drawablePadding="@dimen/padding_tiny"
                 android:gravity="center_vertical"
-                android:text="File-Two"
+                android:text="@string/file_two"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -367,16 +360,11 @@
 
         </TableRow>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp1"
-            android:layout_marginBottom="@dimen/margin_tiny"
-            android:background="@color/white" />
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:orientation="horizontal"
@@ -384,7 +372,7 @@
 
             <TextView
 
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
@@ -397,7 +385,7 @@
 
             <TextView
                 android:id="@+id/fileTypeTwoRefID"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/background_refid"
@@ -414,7 +402,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:orientation="horizontal"
@@ -422,26 +410,24 @@
 
             <TextView
 
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-
                 android:drawablePadding="@dimen/padding_tiny"
                 android:drawableLeft="@mipmap/doctorwhite"
                 android:text="@string/doctor"
                 android:gravity="center_vertical"
-
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/fileTypeTwoDoctorName"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:singleLine="true"
                 android:text="Dr. Nitin Kumar"
                 android:textColor="@color/white"
@@ -453,7 +439,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:orientation="horizontal"
@@ -461,7 +447,7 @@
 
             <TextView
 
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
@@ -475,7 +461,7 @@
 
             <TextView
                 android:id="@+id/fileTypeTwoAdmissionDate"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
@@ -491,14 +477,14 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:orientation="horizontal"
             android:weightSum="6">
 
             <TextView
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
@@ -512,7 +498,7 @@
 
             <TextView
                 android:id="@+id/fileTypeTwoDischargeDate"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
