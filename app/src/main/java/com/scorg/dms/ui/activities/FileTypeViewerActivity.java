@@ -16,7 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
@@ -62,7 +64,7 @@ import butterknife.OnClick;
  * Created by jeetal on 14/3/17.
  */
 
-public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnPageChangeListener, OnLoadCompleteListener, OnDrawListener {
+public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnLoadCompleteListener, OnDrawListener {
 
     // Ganesh Added
 
@@ -98,6 +100,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     //TODO: This is not using currently
     private RelativeLayout mFileTypeTwoTreeViewContainer;
     private AndroidTreeView mAndroidTreeView;
+    private Switch mCompareSwitch;
+    private boolean isCompareChecked = false;
 
     //---------
     ArrayList<PatientFileData> mSelectedFileTypeDataToCompare;
@@ -140,6 +144,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         toggle.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.back));
         toggle.syncState();
 
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
         mHeaderView = mRightNavigationView.getHeaderView(0);
 
@@ -160,11 +171,19 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         //------------
         mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeOneTreeViewContainer);
         mFileTypeTwoTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTwoTreeViewContainer);
+        mCompareSwitch = (Switch) mHeaderView.findViewById(R.id.et_uhid);
         mApplyFileTypeDataLoading = (Button) mHeaderView.findViewById(R.id.applyFileTypeDataLoading);
 
         //------------
         mApplyFileTypeDataLoading.setOnClickListener(this);
         //-----------
+
+        mCompareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCompareChecked = isChecked;
+            }
+        });
 
     }
 
@@ -324,7 +343,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         firstPdfView.fromFile(new File(getCachePath(base64Pdf, "file1", "pdf")))
                 .defaultPage(pageNumber)
-                .onPageChange(this)
                 .onDraw(this)
                 .enableAnnotationRendering(true)
                 .onLoad(this)
@@ -341,18 +359,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onPageChanged(int page, int pageCount) {
-        pageNumber = page;
-//        setTitle(String.format("%s %s / %s", pdfFileName, page + 1, pageCount));
-        secondPdfView.jumpTo(page);
-
-    }
-
-    @Override
     public void onLayerDrawn(Canvas canvas, float pageWidth, float pageHeight, int displayedPage) {
 
-        secondPdfView.zoomWithAnimation(firstPdfView.getZoom());
-        secondPdfView.moveTo(firstPdfView.getCurrentXOffset(), firstPdfView.getCurrentYOffset());
+        if (isCompareChecked) {
+            secondPdfView.jumpTo(displayedPage);
+            secondPdfView.zoomWithAnimation(firstPdfView.getZoom());
+            secondPdfView.moveTo(firstPdfView.getCurrentXOffset(), firstPdfView.getCurrentYOffset());
+        }
 
     }
 

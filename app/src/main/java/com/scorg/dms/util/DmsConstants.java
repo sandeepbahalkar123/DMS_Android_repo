@@ -9,6 +9,9 @@ public class DmsConstants {
     public static final String DMS_LOG_FOLDER = "DMS_LOG";
     public static final String DMS_LOG_FILE = "DMS_LOG_FILE.txt";
 
+    public static final String EXPAND_ITEM_BACKGROUND = "#00000000";
+    public static final String EXPAND_ITEM_TEXT = "#FFFFFF";
+
     //This is for bydefault textcolor,headercolor,buttoncolor etc.
     public static String HEADER_COLOR = "#E4422C";
     public static String BUTTON_TEXT_COLOR = "#FFFFFF";
@@ -73,7 +76,7 @@ public class DmsConstants {
     public static class DATE_PATTERN {
         public static String YYYY_MM_DD = "yyyy-MM-dd";
         public static String YYYY_MM_DD_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
-        public static String DD_MM_YYYY_hh_mm = "dd-MM-yyyy hh:mm aa";
+        public static String DD_MM_YYYY_hh_mm = "dd/MM/yyyy hh:mm aa";
 
         public static String HH_MM = "hh:mm";
         public static String EEE_MMM_DD_MMM = "EEEE dd MMM yyyy HH:mm";
