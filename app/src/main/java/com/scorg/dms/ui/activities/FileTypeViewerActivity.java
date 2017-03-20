@@ -16,8 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,10 +65,10 @@ import butterknife.ButterKnife;
  * Created by jeetal on 14/3/17.
  */
 
+
 public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnPageChangeListener, OnLoadCompleteListener, OnDrawListener, TreeNode.TreeNodeClickListener {
 
     private static final String TAG = FileTypeViewerActivity.class.getName();
-    private static final String SAMPLE_FILE_1 = "sample.pdf";
     private Integer pageNumber = 0;
     // End
 
@@ -78,6 +82,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     PDFView mFirstFileTypePdfView;
     @BindView(R.id.secondPdfView)
     PDFView mSecondFileTypePdfView;
+
+    @BindView(R.id.firstPdfViewLay)
+    RelativeLayout firstPdfViewLay;
+    @BindView(R.id.secondPdfViewLay)
+    RelativeLayout secondPdfViewLay;
+
     @BindView(R.id.openRightDrawer)
     ImageView mOpenRightDrawer;
     // End
@@ -103,6 +113,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     private RelativeLayout mFileTypeOneTreeViewContainer;
 
     private AndroidTreeView mAndroidTreeView;
+    private Switch mCompareSwitch;
+    private TableRow mRowScrollBoth;
+
+    private LinearLayout fileOneLay;
+    private LinearLayout fileTwoLay;
+
+    private boolean isCompareChecked = false;
 
     //---------
     ArrayList<PatientFileData> mSelectedFileTypeDataToCompare;
@@ -111,6 +128,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     String doctorName;
     String patientAddress;
     private TreeNode mTreeRoot;
+
     //---------
     private boolean mLoadPDFInFirstPDFView = true; // false for second pdfview.
 
@@ -139,7 +157,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         initializeVariables();
         bindView();
 
-
     }
 
     private void bindView() {
@@ -152,6 +169,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         toggle.setDrawerIndicatorEnabled(false);
         toggle.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.back));
         toggle.syncState();
+
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
         mHeaderView = mRightNavigationView.getHeaderView(0);
@@ -191,17 +215,38 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mDischargeDateOne.setText(mSelectedFileTypeDataToCompare.get(0).getDischargeDate().toString());
         mFileTypeOne.setText(mSelectedFileTypeDataToCompare.get(0).getFileType().toString());
 
-        mFileTwoRefId.setText(mSelectedFileTypeDataToCompare.get(1).getReferenceId().toString());
-        mAdmissionDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getAdmissionDate().toString());
-        mDischargeDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getDischargeDate().toString());
-        mFileTypeTwo.setText(mSelectedFileTypeDataToCompare.get(1).getFileType().toString());
         mPatientId.setText(mSelectedFileTypeDataToCompare.get(0).getRespectiveParentPatientID().toString());
+
         mPatientName.setText(patientName);
         mDoctorNameTwo.setText(doctorName);
         mDoctorNameOne.setText(doctorName);
         mPatientAddress.setText(patientAddress);
 
         mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTreeViewContainer);
+
+        mCompareSwitch = (Switch) mHeaderView.findViewById(R.id.et_uhid);
+        mRowScrollBoth = (TableRow) mHeaderView.findViewById(R.id.rowScrollBoth);
+        fileOneLay = (LinearLayout) mHeaderView.findViewById(R.id.fileOneLay);
+        fileTwoLay = (LinearLayout) mHeaderView.findViewById(R.id.fileTwoLay);
+
+        if (mSelectedFileTypeDataToCompare.size() == 2) {
+
+            mFileTwoRefId.setText(mSelectedFileTypeDataToCompare.get(1).getReferenceId().toString());
+            mAdmissionDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getAdmissionDate().toString());
+            mDischargeDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getDischargeDate().toString());
+            mFileTypeTwo.setText(mSelectedFileTypeDataToCompare.get(1).getFileType().toString());
+
+            secondPdfViewLay.setVisibility(View.VISIBLE);
+            mRowScrollBoth.setVisibility(View.VISIBLE);
+            fileTwoLay.setVisibility(View.VISIBLE);
+
+            mCompareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    isCompareChecked = isChecked;
+                }
+            });
+        }
 
         //------------
         mOpenRightDrawer.setOnClickListener(this);
@@ -359,6 +404,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mAndroidTreeView.setDefaultNodeClickListener(this);
         mAndroidTreeView.setUseAutoToggle(false);
         mFileTypeOneTreeViewContainer.addView(mAndroidTreeView.getView());
+
     }
 
     @Override
@@ -369,11 +415,18 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     }
 
+
+    // Ganesh Added
+
+
     @Override
     public void onLayerDrawn(Canvas canvas, float pageWidth, float pageHeight, int displayedPage) {
 
-        mSecondFileTypePdfView.zoomWithAnimation(mFirstFileTypePdfView.getZoom());
-        mSecondFileTypePdfView.moveTo(mFirstFileTypePdfView.getCurrentXOffset(), mFirstFileTypePdfView.getCurrentYOffset());
+        if (isCompareChecked) {
+            mSecondFileTypePdfView.jumpTo(displayedPage);
+            mSecondFileTypePdfView.zoomWithAnimation(mFirstFileTypePdfView.getZoom());
+            mSecondFileTypePdfView.moveTo(mFirstFileTypePdfView.getCurrentXOffset(), mFirstFileTypePdfView.getCurrentYOffset());
+        }
 
     }
 

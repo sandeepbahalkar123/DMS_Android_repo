@@ -1,6 +1,8 @@
 package com.scorg.dms.views.treeViewHolder;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.github.johnkil.print.PrintView;
 import com.scorg.dms.R;
+import com.scorg.dms.util.DmsConstants;
 import com.unnamed.b.atv.model.TreeNode;
 
 /**
@@ -21,7 +24,7 @@ public class SelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTree
     private TextView tvValue;
     private LinearLayout mainContentLayout;
     private PrintView arrowView;
-    private CheckBox nodeSelector;
+    private AppCompatCheckBox nodeSelector;
 
     public SelectableHeaderHolder(Context context, boolean isDefaultExpanded) {
         this(context, isDefaultExpanded, (int) (context.getResources().getDimension(R.dimen.dp10) / context.getResources().getDisplayMetrics().density));
@@ -48,7 +51,7 @@ public class SelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<IconTree
             tvValue.setText(value.text);
         }
 
-        nodeSelector = (CheckBox) view.findViewById(R.id.node_selector);
+        nodeSelector = (AppCompatCheckBox) view.findViewById(R.id.node_selector);
         nodeSelector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

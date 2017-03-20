@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scorg.dms.R;
@@ -144,7 +145,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             childViewHolder = (ChildViewHolder) convertView.getTag();
         }
 
-        PatientFileData childElement = getChild(groupPosition, childPosition);
+        final PatientFileData childElement = getChild(groupPosition, childPosition);
 
         //---
         if (opd.equalsIgnoreCase(childElement.getFileType())) {
@@ -254,6 +255,26 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
         //--------------------
 
+        childViewHolder.rowLay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Clicked " + childElement.getAdmissionDate() + " " + childElement.getDischargeDate() + " " + childElement.getFileType() + " " + childElement.getReferenceId());
+                Intent intent = new Intent(_context, FileTypeViewerActivity.class);
+
+                Bundle extra = new Bundle();
+
+                ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
+                dataToSend.add(childElement);
+
+                extra.putSerializable(_context.getString(R.string.compare), dataToSend);
+                extra.putString(DmsConstants.ID, childElement.getRespectiveParentPatientID());
+
+                intent.putExtra(DmsConstants.DATA, extra);
+
+                _context.startActivity(intent);
+            }
+        });
+
         return convertView;
     }
 
@@ -334,6 +355,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
     static class ChildViewHolder {
         //---------
+
+        @BindView(R.id.rowLay)
+        LinearLayout rowLay;
+
         @BindView(R.id.opd)
         TextView opd;
         @BindView(R.id.opdValue)

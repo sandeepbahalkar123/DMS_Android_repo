@@ -12,6 +12,7 @@
     tools:showIn="@layout/compare_file_type_app_bar_drawer">
 
     <RelativeLayout
+        android:id="@+id/firstPdfViewLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -28,11 +29,13 @@
 
 
     <RelativeLayout
+        android:id="@+id/secondPdfViewLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="1.5dp"
         android:background="@drawable/pdfdecoration"
         android:layout_marginTop="7dp"
+        android:visibility="gone"
         android:layout_weight="1.0">
 
         <com.github.barteksc.pdfviewer.PDFView
