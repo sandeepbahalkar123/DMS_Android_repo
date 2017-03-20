@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,6 +91,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     PDFView firstPdfView;
     @BindView(R.id.secondPdfView)
     PDFView secondPdfView;
+    @BindView(R.id.openRightDrawer)
+    ImageView mOpenRightDrawer;
     // End
     TextView mDoctorNameOne;
     TextView mDoctorNameTwo;
@@ -105,6 +108,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     TextView mFileTypeOne;
     TextView mFileTypeTwo;
     DrawerLayout mDrawer;
+
     NavigationView mRightNavigationView;
     View mHeaderView;
     private PatientsHelper mPatientsHelper;
@@ -218,6 +222,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         //------------
         mApplyFileTypeDataLoading.setOnClickListener(this);
+        mOpenRightDrawer.setOnClickListener(this);
         //-----------
 
     }
@@ -237,46 +242,29 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             case R.id.applyFileTypeDataLoading:
                 applySelectedArchived();
                 break;
-        }
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-    @Override
-    //open right drawer onclick of settings icon
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+            case R.id.openRightDrawer:
+                mDrawer.openDrawer(GravityCompat.END);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            mDrawer.openDrawer(GravityCompat.END);
+                //---------------
+                FileTreeRequestModel fileTreeRequestModel = new FileTreeRequestModel();
 
-            //---------------
-            FileTreeRequestModel fileTreeRequestModel = new FileTreeRequestModel();
-
-            List<LstSearchParam> lstSearchParamList = new ArrayList<>();
-            if (mSelectedFileTypeDataToCompare != null) {
-                for (PatientFileData tempObject :
-                        mSelectedFileTypeDataToCompare) {
-                    LstSearchParam lstSearchParam = new LstSearchParam();
-                    lstSearchParam.setPatientId(tempObject.getRespectiveParentPatientID());
-                    lstSearchParam.setFileType(tempObject.getFileType());
-                    lstSearchParam.setFileTypeRefId("" + tempObject.getReferenceId());
-                    lstSearchParamList.add(lstSearchParam);
+                List<LstSearchParam> lstSearchParamList = new ArrayList<>();
+                if (mSelectedFileTypeDataToCompare != null) {
+                    for (PatientFileData tempObject :
+                            mSelectedFileTypeDataToCompare) {
+                        LstSearchParam lstSearchParam = new LstSearchParam();
+                        lstSearchParam.setPatientId(tempObject.getRespectiveParentPatientID());
+                        lstSearchParam.setFileType(tempObject.getFileType());
+                        lstSearchParam.setFileTypeRefId("" + tempObject.getReferenceId());
+                        lstSearchParamList.add(lstSearchParam);
+                    }
+                    fileTreeRequestModel.setLstSearchParam(lstSearchParamList);
+                    mPatientsHelper.doGetArchivedList(fileTreeRequestModel);
                 }
-                fileTreeRequestModel.setLstSearchParam(lstSearchParamList);
-                mPatientsHelper.doGetArchivedList(fileTreeRequestModel);
-            }
-            return true;
+
+                break;
         }
 
-        return super.onOptionsItemSelected(item);
     }
 
 

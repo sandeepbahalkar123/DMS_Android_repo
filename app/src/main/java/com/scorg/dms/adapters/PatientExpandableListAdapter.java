@@ -593,7 +593,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                             ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
                             dataToSend.add(selectedOneValue_1);
                             dataToSend.add(selectedTwoValue_2);
-                            SearchResult searchPatientInformation =  searchPatientInfo( selectedOneValue_1.getRespectiveParentPatientID());
+                            SearchResult searchPatientInformation =  searchPatientInfo(selectedOneValue_1.getRespectiveParentPatientID());
                             extra.putSerializable(_context.getString(R.string.compare), dataToSend);
                             extra.putString(DmsConstants.PATIENT_ADDRESS,searchPatientInformation.getPatientAddress());
                             extra.putString(DmsConstants.DOCTOR_NAME,searchPatientInformation.getDoctorName());
