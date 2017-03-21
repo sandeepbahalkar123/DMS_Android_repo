@@ -244,9 +244,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             ShowSearchResultResponseModel showSearchResultResponseModel = (ShowSearchResultResponseModel) customResponse;
             List<SearchResult> searchResult = showSearchResultResponseModel.getSearchResultData().getSearchResult();
 
-
-
-
             mPatientListView.setAdapter(new PatientExpandableListAdapter(this, searchResult));
             mPatientListView.setGroupIndicator(null);
             mPatientListView.setChildIndicator(null);

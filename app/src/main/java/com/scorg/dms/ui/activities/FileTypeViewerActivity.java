@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnDrawListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
-import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.scorg.dms.R;
 import com.scorg.dms.helpers.patients.PatientsHelper;
@@ -46,6 +44,7 @@ import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocCategory;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocType;
 import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
+import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandSelectableHeaderHolder;
@@ -54,8 +53,6 @@ import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +67,7 @@ import butterknife.ButterKnife;
 public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnLoadCompleteListener, OnDrawListener, TreeNode.TreeNodeClickListener {
 
     private static final String TAG = FileTypeViewerActivity.class.getName();
-    private Integer pageNumber = 0;
+    private Integer mPageNumber = 0;
     // End
 
     private Context mContext;
@@ -86,14 +83,14 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     PDFView mSecondPdfView;
 
     @BindView(R.id.firstCheckBox)
-    AppCompatRadioButton mFirstCheckBox;
+    AppCompatRadioButton mCompareByFirstDocCheckBox;
     @BindView(R.id.secondCheckBox)
-    AppCompatRadioButton mSecondCheckBox;
+    AppCompatRadioButton mCompareBySecondDocCheckBox;
 
     @BindView(R.id.firstPdfViewLay)
-    RelativeLayout mFirstPdfViewLay;
+    RelativeLayout mFirstFileTypePdfView;
     @BindView(R.id.secondPdfViewLay)
-    RelativeLayout mSecondPdfViewLay;
+    RelativeLayout mSecondFileTypePdfView;
 
     @BindView(R.id.openRightDrawer)
     ImageView mOpenRightDrawer;
@@ -243,7 +240,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             mDischargeDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getDischargeDate().toString());
             mFileTypeTwo.setText(mSelectedFileTypeDataToCompare.get(1).getFileType().toString());
 
-            mSecondPdfViewLay.setVisibility(View.VISIBLE);
+            mSecondFileTypePdfView.setVisibility(View.VISIBLE);
             mRowScrollBoth.setVisibility(View.VISIBLE);
             mFileTwoDrawerLayout.setVisibility(View.VISIBLE);
 
@@ -252,17 +249,17 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     isCompareChecked = isChecked;
                     if (isChecked){
-                        mFirstCheckBox.setChecked(true);
-                        mSecondCheckBox.setChecked(false);
+                        mCompareByFirstDocCheckBox.setChecked(true);
+                        mCompareBySecondDocCheckBox.setChecked(false);
                         mFirstPdfView.setOnDrawListener(onDrawListener);
                         mSecondPdfView.setOnDrawListener(null);
-                        mFirstCheckBox.setVisibility(View.VISIBLE);
-                        mSecondCheckBox.setVisibility(View.VISIBLE);
+                        mCompareByFirstDocCheckBox.setVisibility(View.VISIBLE);
+                        mCompareBySecondDocCheckBox.setVisibility(View.VISIBLE);
                     }else {
                         mFirstPdfView.setOnDrawListener(null);
                         mSecondPdfView.setOnDrawListener(null);
-                        mFirstCheckBox.setVisibility(View.GONE);
-                        mSecondCheckBox.setVisibility(View.GONE);
+                        mCompareByFirstDocCheckBox.setVisibility(View.GONE);
+                        mCompareBySecondDocCheckBox.setVisibility(View.GONE);
                     }
                 }
             });
@@ -272,24 +269,24 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mOpenRightDrawer.setOnClickListener(this);
         //-----------
 
-        mFirstCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mCompareByFirstDocCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     mFirstPdfView.setOnDrawListener(onDrawListener);
                     mSecondPdfView.setOnDrawListener(null);
-                    mSecondCheckBox.setChecked(false);
+                    mCompareBySecondDocCheckBox.setChecked(false);
                 }
             }
         });
 
-        mSecondCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mCompareBySecondDocCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     mFirstPdfView.setOnDrawListener(null);
                     mSecondPdfView.setOnDrawListener(onDrawListener);
-                    mFirstCheckBox.setChecked(false);
+                    mCompareByFirstDocCheckBox.setChecked(false);
                 }
             }
         });
@@ -346,9 +343,9 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                     String fileData = getPdfDataResponseModel.getGetPdfDataResponseData().getFileData();
                     if (fileData != null) {
                         if (mLoadPDFInFirstPDFView) {
-                            displayFirstPDFFromServer(fileData);
+                            loadPDFFromServer(mFirstPdfView, fileData, "file1", "pdf");
                         } else {
-                            displaySecondPDFFromServer(fileData);
+                            loadPDFFromServer(mSecondPdfView, fileData, "file2", "pdf");
                         }
                     } else
                         Toast.makeText(mContext, "Document not available", Toast.LENGTH_SHORT).show();
@@ -450,47 +447,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     }
 
-    // Ganesh Added
-
-    public String getCachePath(String base64Pdf, String filename, String extension) {
-        // Create a file in the Internal Storage
-
-        byte[] pdfAsBytes = Base64.decode(base64Pdf, 0);
-
-        File file = null;
-        FileOutputStream outputStream;
-        try {
-
-            file = new File(getCacheDir(), filename + "." + extension);
-
-            outputStream = new FileOutputStream(file);
-            outputStream.write(pdfAsBytes);
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file.getAbsolutePath();
-    }
-
-    private void displayFirstPDFFromServer(String base64Pdf) {
-
-        mFirstPdfView.fromFile(new File(getCachePath(base64Pdf, "file1", "pdf")))
-                .defaultPage(pageNumber)
+    private void loadPDFFromServer(PDFView pdfViewToLoad, String base64Pdf, String fileName, String extension) {
+        pdfViewToLoad.fromFile(new File(CommonMethods.getCachePath(this, base64Pdf, fileName, extension)))
+                .defaultPage(mPageNumber)
                 .enableAnnotationRendering(true)
-                .onLoad(this)
                 .scrollHandle(new DefaultScrollHandle(this))
                 .load();
-    }
-
-    private void displaySecondPDFFromServer(String base64Pdf) {
-
-        mSecondPdfView.fromFile(new File(getCachePath(base64Pdf, "file2", "pdf")))
-                .defaultPage(pageNumber)
-                .enableAnnotationRendering(true)
-                .onLoad(this)
-                .scrollHandle(new DefaultScrollHandle(this))
-                .load();
-
     }
 
     @Override
