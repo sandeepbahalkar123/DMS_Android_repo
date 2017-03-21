@@ -20,7 +20,7 @@
 
             <TextView
                 android:id="@+id/tv_scrollingBoth"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/include1"
                 android:layout_gravity="center"
@@ -32,7 +32,7 @@
 
             <Switch
                 android:id="@+id/et_uhid"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
@@ -54,7 +54,7 @@
 
             <TextView
                 android:id="@+id/tvPatienntInfo"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:gravity="center_vertical"
@@ -144,7 +144,7 @@
 
                 <TextView
                     android:id="@+id/tvFileNoOne"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/include1"
                     android:layout_gravity="center"
@@ -185,7 +185,7 @@
 
                 <TextView
 
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="2"
@@ -198,7 +198,7 @@
 
                 <TextView
                     android:id="@+id/fileTypeOneRefID"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/background_refid"
@@ -223,7 +223,7 @@
 
                 <TextView
 
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/include1"
                     android:layout_gravity="center"
@@ -237,7 +237,7 @@
 
                 <TextView
                     android:id="@+id/fileTypeOneDoctorName"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="4"
@@ -260,7 +260,7 @@
 
                 <TextView
 
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/include1"
                     android:layout_gravity="center"
@@ -274,7 +274,7 @@
 
                 <TextView
                     android:id="@+id/fileTypeOneAdmissionDate"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="2"
@@ -299,7 +299,7 @@
 
                 <TextView
 
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/include1"
                     android:layout_gravity="center"
@@ -313,7 +313,7 @@
 
                 <TextView
                     android:id="@+id/fileTypeOneDischargeDate"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="2"
@@ -351,7 +351,7 @@
 
                 <TextView
                     android:id="@+id/tvFileNoTwo"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/include1"
                     android:layout_gravity="center"
@@ -391,7 +391,7 @@
 
                 <TextView
 
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="2"
@@ -404,7 +404,7 @@
 
                 <TextView
                     android:id="@+id/fileTypeTwoRefID"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/background_refid"
@@ -429,7 +429,7 @@
 
                 <TextView
 
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/include1"
                     android:layout_gravity="center"
@@ -445,7 +445,7 @@
 
                 <TextView
                     android:id="@+id/fileTypeTwoDoctorName"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="4"
@@ -468,7 +468,7 @@
 
                 <TextView
 
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/include1"
                     android:layout_gravity="center"
@@ -482,7 +482,7 @@
 
                 <TextView
                     android:id="@+id/fileTypeTwoAdmissionDate"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="2"
@@ -505,7 +505,7 @@
                 android:weightSum="6">
 
                 <TextView
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/include1"
                     android:layout_gravity="center"
@@ -519,7 +519,7 @@
 
                 <TextView
                     android:id="@+id/fileTypeTwoDischargeDate"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="2"

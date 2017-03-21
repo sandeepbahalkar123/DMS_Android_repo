@@ -27,7 +27,7 @@ import java.util.List;
  * Created by riteshpandhurkar on 1/3/17.
  */
 
-public class PatientsHelper implements HelperResponse, ConnectionListener {
+public class PatientsHelper implements  ConnectionListener {
 
     String TAG = this.getClass().getSimpleName();
     Context mContext;
@@ -106,7 +106,7 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
 
             case ConnectionListener.SERVER_ERROR:
                 CommonMethods.Log(TAG, "server error");
-                mHelperResponseManager.onParseError(mOldDataTag, "server error");
+                mHelperResponseManager.onServerError(mOldDataTag, "server error");
 
                 break;
 
@@ -122,29 +122,6 @@ public class PatientsHelper implements HelperResponse, ConnectionListener {
     public void onTimeout(ConnectRequest request) {
 
     }
-
-    //-------------------------
-    @Override
-    public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
-
-    }
-
-    @Override
-    public void onParseError(int mOldDataTag, String errorMessage) {
-
-    }
-
-    @Override
-    public void onServerError(int mOldDataTag, String serverErrorMessage) {
-
-    }
-
-    @Override
-    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
-
-    }
-
-    //-------------------------
 
     public ShowSearchResultResponseModel loadJSONFromAsset() {
         ShowSearchResultResponseModel showSearchResultResponseModel;
