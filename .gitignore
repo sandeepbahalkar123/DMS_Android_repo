@@ -8,7 +8,6 @@
 /captures
 .externalNativeBuild
 
-/android-pdf-viewer/build/
-/app/build/
-/build/
-/library/build/
+/android-pdf-viewer/build/**/
+/app/build/**/
+/library/build/**/
