@@ -592,6 +592,7 @@ public class CommonMethods {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                ((Activity)mContext).finish();
             }
         });
         dialog.show();

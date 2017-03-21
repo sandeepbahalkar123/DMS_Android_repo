@@ -185,15 +185,33 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         if (dataShowMaxValue < originalChildrenCount && (childPosition + 1) == shownDataChildrenCount) {
             childViewHolder.moreOption.setVisibility(View.VISIBLE);
             childViewHolder.moreOption.setTag(getGroup(groupPosition));
+
             if (childElement.isShowCompleteList()) {
                 childViewHolder.moreOption.setText(_context.getString(R.string.less));
+               /* childViewHolder.mDividerLineMore.setVisibility(View.GONE);
+                childViewHolder.mDividerLineLess.setVisibility(View.VISIBLE);
+*/
+
             } else {
                 childViewHolder.moreOption.setText(_context.getString(R.string.more));
+              /*  childViewHolder.mDividerLineMore.setVisibility(View.VISIBLE);
+                childViewHolder.mDividerLineLess.setVisibility(View.GONE);
+*/
+
             }
         } else {
             childViewHolder.moreOption.setVisibility(View.GONE);
         }
 
+        if(isLastChild) {
+
+            childViewHolder.mDividerLineMore.setVisibility(View.VISIBLE);
+
+        } else {
+
+            childViewHolder.mDividerLineMore.setVisibility(View.INVISIBLE);
+
+        }
         childViewHolder.ipdCheckBox.setOnCheckedChangeListener(null);
         childViewHolder.opdCheckBox.setOnCheckedChangeListener(null);
 
@@ -244,10 +262,15 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 if (textString.equalsIgnoreCase(lessText)) {
                     manageChild(null);
                     childViewHolder.moreOption.setText(moreText);
+                   /* childViewHolder.mDividerLineLess.setVisibility(View.VISIBLE);
+                    childViewHolder.mDividerLineMore.setVisibility(View.GONE);*/
+
                 } else {
                     String groupName = (String) v.getTag();
                     manageChild(groupName);
                     childViewHolder.moreOption.setText(lessText);
+                    /*childViewHolder.mDividerLineMore.setVisibility(View.VISIBLE);
+                    childViewHolder.mDividerLineLess.setVisibility(View.GONE);*/
                 }
 
             }
@@ -358,7 +381,8 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
         @BindView(R.id.rowLay)
         LinearLayout rowLay;
-
+        @BindView(R.id.dividerLineMore)
+        View mDividerLineMore;
         @BindView(R.id.opd)
         TextView opd;
         @BindView(R.id.opdValue)
@@ -631,7 +655,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
         if (selectedTwoValue_2 == null) {
-            alertDialogAndroid.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
+            alertDialogAndroid.setTitle(_context.getString(R.string.error_select_second_file_type)+"\n"+title);
             alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
             /*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*/
         }else {
