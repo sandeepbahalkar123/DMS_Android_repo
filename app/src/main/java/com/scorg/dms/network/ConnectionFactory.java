@@ -6,10 +6,9 @@ package com.scorg.dms.network;
  */
 
 import android.content.Context;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.android.volley.Request;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.Connector;
 import com.scorg.dms.interfaces.CustomResponse;
@@ -79,7 +78,7 @@ public class ConnectionFactory extends ConnectRequest {
     }
 
     public void setUrl(String url) {
-        Config.BASE_URL = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mContext);
+        Config.BASE_URL = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext);
         this.mURL = Config.BASE_URL + url;
     }
 
