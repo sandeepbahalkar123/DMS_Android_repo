@@ -7,9 +7,7 @@
 /build
 /captures
 .externalNativeBuild
-src/main/res/layout-w900dp/
-src/main/res/layouts/compare_file_type/layout-sw600dp/
-src/main/res/layouts/compare_file_type/layout-sw720dp/
+
 /android-pdf-viewer/build/
 /app/build/
 /build/
