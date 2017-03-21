@@ -135,6 +135,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     //---------
     private boolean mLoadPDFInFirstPDFView = true; // false for second pdfview.
+    private FileTreeResponseData mFileTreeResponseData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,14 +249,14 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     isCompareChecked = isChecked;
-                    if (isChecked){
+                    if (isChecked) {
                         mCompareByFirstDocCheckBox.setChecked(true);
                         mCompareBySecondDocCheckBox.setChecked(false);
                         mFirstPdfView.setOnDrawListener(onDrawListener);
                         mSecondPdfView.setOnDrawListener(null);
                         mCompareByFirstDocCheckBox.setVisibility(View.VISIBLE);
                         mCompareBySecondDocCheckBox.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         mFirstPdfView.setOnDrawListener(null);
                         mSecondPdfView.setOnDrawListener(null);
                         mCompareByFirstDocCheckBox.setVisibility(View.GONE);
@@ -307,10 +308,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         switch (v.getId()) {
             case R.id.openRightDrawer:
                 mDrawer.openDrawer(GravityCompat.END);
-                getLoadArchivedList();
+                if (mFileTreeResponseData == null)
+                    getLoadArchivedList();
+                else
+                    createAnnotationTreeStructure(mFileTreeResponseData, true);
+
                 break;
         }
-
     }
 
     // To create JSON and get archived list of data.
@@ -353,8 +357,9 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 break;
             case DmsConstants.TASK_GET_ARCHIVED_LIST:
                 FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
-                FileTreeResponseData fileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
-                createAnnotationTreeStructure(fileTreeResponseData, true);
+                mFileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
+
+                createAnnotationTreeStructure(mFileTreeResponseData, true);
 
                 break;
         }
@@ -447,13 +452,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     }
 
-    private void loadPDFFromServer(PDFView pdfViewToLoad, String base64Pdf, String fileName, String extension) {
-        pdfViewToLoad.fromFile(new File(CommonMethods.getCachePath(this, base64Pdf, fileName, extension)))
-                .defaultPage(mPageNumber)
-                .enableAnnotationRendering(true)
-                .scrollHandle(new DefaultScrollHandle(this))
-                .load();
-    }
 
     @Override
     public void onLayerDrawn(PDFView pdfView, Canvas canvas, float pageWidth, float pageHeight, int displayedPage) {
@@ -479,33 +477,25 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     @Override
     public void loadComplete(PDFView pdfView, int nbPages) {
         try {
+            PdfDocument.Meta meta = null;
             if (pdfView == mFirstPdfView) {
-                PdfDocument.Meta meta = mFirstPdfView.getDocumentMeta();
-                Log.e(TAG, "title = " + meta.getTitle());
-                Log.e(TAG, "author = " + meta.getAuthor());
-                Log.e(TAG, "subject = " + meta.getSubject());
-                Log.e(TAG, "keywords = " + meta.getKeywords());
-                Log.e(TAG, "creator = " + meta.getCreator());
-                Log.e(TAG, "producer = " + meta.getProducer());
-                Log.e(TAG, "creationDate = " + meta.getCreationDate());
-                Log.e(TAG, "modDate = " + meta.getModDate());
-
+                meta = mFirstPdfView.getDocumentMeta();
                 printBookmarksTree(mFirstPdfView.getTableOfContents(), "-");
-
             } else if (pdfView == mSecondPdfView) {
-                PdfDocument.Meta meta1 = mSecondPdfView.getDocumentMeta();
-                Log.e(TAG, "title = " + meta1.getTitle());
-                Log.e(TAG, "author = " + meta1.getAuthor());
-                Log.e(TAG, "subject = " + meta1.getSubject());
-                Log.e(TAG, "keywords = " + meta1.getKeywords());
-                Log.e(TAG, "creator = " + meta1.getCreator());
-                Log.e(TAG, "producer = " + meta1.getProducer());
-                Log.e(TAG, "creationDate = " + meta1.getCreationDate());
-                Log.e(TAG, "modDate = " + meta1.getModDate());
-
+                meta = mSecondPdfView.getDocumentMeta();
                 printBookmarksTree(mSecondPdfView.getTableOfContents(), "-");
             }
-
+            if (meta != null) {
+                String dataToShow = "title = " + meta.getTitle()
+                        + "author = " + meta.getAuthor()
+                        + "subject = " + meta.getSubject()
+                        + "keywords = " + meta.getKeywords()
+                        + "creator = " + meta.getCreator()
+                        + "producer = " + meta.getProducer()
+                        + "creationDate = " + meta.getCreationDate()
+                        + "modDate = " + meta.getModDate();
+                CommonMethods.Log(TAG, "title = " + dataToShow);
+            }
         } catch (Exception e) {
             e.getStackTrace();
         }
@@ -513,9 +503,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     public void printBookmarksTree(List<PdfDocument.Bookmark> tree, String sep) {
         for (PdfDocument.Bookmark b : tree) {
-
-            Log.e(TAG, String.format("%s %s, p %d", sep, b.getTitle(), b.getPageIdx()));
-
+            CommonMethods.Log(TAG, String.format("%s %s, p %d", sep, b.getTitle(), b.getPageIdx()));
             if (b.hasChildren()) {
                 printBookmarksTree(b.getChildren(), sep + "-");
             }
@@ -600,5 +588,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             }
         }
         return docList;
+    }
+
+    private void loadPDFFromServer(PDFView pdfViewToLoad, String base64Pdf, String fileName, String extension) {
+        pdfViewToLoad.fromFile(new File(CommonMethods.getCachePath(this, base64Pdf, fileName, extension)))
+                .defaultPage(mPageNumber)
+                .enableAnnotationRendering(true)
+                .scrollHandle(new DefaultScrollHandle(this))
+                .load();
     }
 }

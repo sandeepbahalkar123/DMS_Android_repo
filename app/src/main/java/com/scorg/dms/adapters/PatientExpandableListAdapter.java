@@ -127,7 +127,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final int mGroupPosition = groupPosition;
@@ -189,30 +189,20 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
             if (childElement.isShowCompleteList()) {
                 childViewHolder.moreOption.setText(_context.getString(R.string.less));
-               /* childViewHolder.mDividerLineMore.setVisibility(View.GONE);
-                childViewHolder.mDividerLineLess.setVisibility(View.VISIBLE);
-*/
-
             } else {
                 childViewHolder.moreOption.setText(_context.getString(R.string.more));
-              /*  childViewHolder.mDividerLineMore.setVisibility(View.VISIBLE);
-                childViewHolder.mDividerLineLess.setVisibility(View.GONE);
-*/
-
             }
         } else {
             childViewHolder.moreOption.setVisibility(View.GONE);
         }
 
-        if(isLastChild) {
-
+        //----------------
+        if (isLastChild) {
             childViewHolder.mDividerLineMore.setVisibility(View.VISIBLE);
-
         } else {
-
             childViewHolder.mDividerLineMore.setVisibility(View.INVISIBLE);
-
         }
+        //-----------------
         childViewHolder.ipdCheckBox.setOnCheckedChangeListener(null);
         childViewHolder.opdCheckBox.setOnCheckedChangeListener(null);
 
@@ -263,15 +253,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 if (textString.equalsIgnoreCase(lessText)) {
                     manageChild(null);
                     childViewHolder.moreOption.setText(moreText);
-                   /* childViewHolder.mDividerLineLess.setVisibility(View.VISIBLE);
-                    childViewHolder.mDividerLineMore.setVisibility(View.GONE);*/
-
                 } else {
                     String groupName = (String) v.getTag();
                     manageChild(groupName);
                     childViewHolder.moreOption.setText(lessText);
-                    /*childViewHolder.mDividerLineMore.setVisibility(View.VISIBLE);
-                    childViewHolder.mDividerLineLess.setVisibility(View.GONE);*/
                 }
 
             }
@@ -282,7 +267,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         childViewHolder.rowLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked " + childElement.getAdmissionDate() + " " + childElement.getDischargeDate() + " " + childElement.getFileType() + " " + childElement.getReferenceId());
+                //------------------
                 Intent intent = new Intent(_context, FileTypeViewerActivity.class);
 
                 Bundle extra = new Bundle();
@@ -290,12 +275,17 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
                 dataToSend.add(childElement);
 
+                SearchResult searchPatientInformation = searchPatientInfo(childElement.getRespectiveParentPatientID());
                 extra.putSerializable(_context.getString(R.string.compare), dataToSend);
-                extra.putString(DmsConstants.ID, childElement.getRespectiveParentPatientID());
 
+                extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
+                extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
+                extra.putString(DmsConstants.ID, childElement.getRespectiveParentPatientID());
+                extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, "" + getGroup(mGroupPosition));
                 intent.putExtra(DmsConstants.DATA, extra);
 
                 _context.startActivity(intent);
+                //-------------------
             }
         });
 
@@ -562,39 +552,6 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         }
     }
 
-    /*public void showCompareOptionsDialog(final Context context, String selectedOneValue, String optionTwoTitle) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.compare_dialog);
-        dialog.setCancelable(false);
-        // set the custom dialog components - text
-        TextView selectedOne = (TextView) dialog.findViewById(R.id.selectedOne);
-        TextView selectedTwo = (TextView) dialog.findViewById(R.id.selectedTwo);
-        Button dialogButtonCompare = (Button) dialog.findViewById(R.id.compare);
-        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.cancel);
-        //-----
-        selectedOne.setText("" + selectedOneValue);
-        selectedTwo.setText("" + selectedOneValue);
-        //-----
-        // if button is clicked, close the custom dialog
-        dialogButtonCompare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        // if button is clicked, close the custom dialog
-        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }*/
-
     public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, final String title, final String patientName) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(_context);
         final View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
@@ -670,8 +627,12 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                     public void onClick(DialogInterface dialogBox, int id) {
 
                         if (selectedTwoValue_2 == null) {
+<<<<<<< HEAD
                             alertDialogBuilderUserInput.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
                             *//*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*//*
+=======
+                            alertDialogBuilderUserInput.setTitle(title + "\n" + _context.getString(R.string.error_select_second_file_type));
+>>>>>>> a7f02e304b66ddf9afbbd2301a664f4c1768e066
                         } else {
                             //
                             Intent intent = new Intent(_context, FileTypeViewerActivity.class);
@@ -704,7 +665,18 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 */
 
 
+    /*    AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
+        if (selectedTwoValue_2 == null) {
+            alertDialogAndroid.setTitle(_context.getString(R.string.error_select_second_file_type) + "\n" + title);
+            alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+        } else {
+            alertDialogAndroid.setTitle(title);
+            alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+        }
 
+
+*/
     }
 
     private SearchResult searchPatientInfo(String patientId) {
