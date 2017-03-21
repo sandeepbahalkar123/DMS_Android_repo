@@ -5,6 +5,7 @@ import android.content.Context;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -126,7 +127,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final int mGroupPosition = groupPosition;
@@ -185,6 +186,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         if (dataShowMaxValue < originalChildrenCount && (childPosition + 1) == shownDataChildrenCount) {
             childViewHolder.moreOption.setVisibility(View.VISIBLE);
             childViewHolder.moreOption.setTag(getGroup(groupPosition));
+
             if (childElement.isShowCompleteList()) {
                 childViewHolder.moreOption.setText(_context.getString(R.string.less));
             } else {
@@ -194,6 +196,13 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             childViewHolder.moreOption.setVisibility(View.GONE);
         }
 
+        //----------------
+        if (isLastChild) {
+            childViewHolder.mDividerLineMore.setVisibility(View.VISIBLE);
+        } else {
+            childViewHolder.mDividerLineMore.setVisibility(View.INVISIBLE);
+        }
+        //-----------------
         childViewHolder.ipdCheckBox.setOnCheckedChangeListener(null);
         childViewHolder.opdCheckBox.setOnCheckedChangeListener(null);
 
@@ -258,7 +267,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         childViewHolder.rowLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked " + childElement.getAdmissionDate() + " " + childElement.getDischargeDate() + " " + childElement.getFileType() + " " + childElement.getReferenceId());
+                //------------------
                 Intent intent = new Intent(_context, FileTypeViewerActivity.class);
 
                 Bundle extra = new Bundle();
@@ -266,12 +275,17 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
                 dataToSend.add(childElement);
 
+                SearchResult searchPatientInformation = searchPatientInfo(childElement.getRespectiveParentPatientID());
                 extra.putSerializable(_context.getString(R.string.compare), dataToSend);
-                extra.putString(DmsConstants.ID, childElement.getRespectiveParentPatientID());
 
+                extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
+                extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
+                extra.putString(DmsConstants.ID, childElement.getRespectiveParentPatientID());
+                extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, "" + getGroup(mGroupPosition));
                 intent.putExtra(DmsConstants.DATA, extra);
 
                 _context.startActivity(intent);
+                //-------------------
             }
         });
 
@@ -358,7 +372,8 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
         @BindView(R.id.rowLay)
         LinearLayout rowLay;
-
+        @BindView(R.id.dividerLineMore)
+        View mDividerLineMore;
         @BindView(R.id.opd)
         TextView opd;
         @BindView(R.id.opdValue)
@@ -537,67 +552,87 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         }
     }
 
-    /*public void showCompareOptionsDialog(final Context context, String selectedOneValue, String optionTwoTitle) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.compare_dialog);
-        dialog.setCancelable(false);
-        // set the custom dialog components - text
-        TextView selectedOne = (TextView) dialog.findViewById(R.id.selectedOne);
-        TextView selectedTwo = (TextView) dialog.findViewById(R.id.selectedTwo);
-        Button dialogButtonCompare = (Button) dialog.findViewById(R.id.compare);
-        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.cancel);
-        //-----
-        selectedOne.setText("" + selectedOneValue);
-        selectedTwo.setText("" + selectedOneValue);
-        //-----
-        // if button is clicked, close the custom dialog
-        dialogButtonCompare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        // if button is clicked, close the custom dialog
-        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }*/
-
     public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, final String title, final String patientName) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(_context);
-        View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
+        final View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
         final AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(_context);
         alertDialogBuilderUserInput.setView(mView);
+        final AlertDialog showAlert = alertDialogBuilderUserInput.show();
 
         alertDialogBuilderUserInput.setTitle(title);
 
         TextView selectedOne = (TextView) mView.findViewById(R.id.selectedOne);
-        selectedOne.setText("" + selectedOneValue_1.getReferenceId() + "-" + selectedOneValue_1.getFileType());
+        Button mCancel = (Button) mView.findViewById(R.id.cancel);
+        Button mCompare = (Button)mView.findViewById(R.id.compare);
+        TextView mTitle = (TextView)mView.findViewById(R.id.title);
+        TextView mFiletypeOne = (TextView)mView.findViewById(R.id.fileTypeOne);
+        TextView mFiletypeTwo = (TextView)mView.findViewById(R.id.fileTypeTwo);
 
+        selectedOne.setText("" + selectedOneValue_1.getReferenceId());
+        mFiletypeOne.setText(""+selectedOneValue_1.getFileType());
         //----------
         TextView selectedTwo = (TextView) mView.findViewById(R.id.selectedTwo);
-        if (selectedTwoValue_2 == null)
-            selectedTwo.setText(DmsConstants.BLANK);
+        if (selectedTwoValue_2 == null) {
+            selectedTwo.setVisibility(View.GONE);
+            mFiletypeTwo.setVisibility(View.GONE);
+            mTitle.setText(_context.getString(R.string.error_select_second_file_type) + "\n\n" + title);
+            mCompare.setAlpha(.6f);
+            mCompare.setEnabled(false);
+        }
+        else {
+            selectedTwo.setVisibility(View.VISIBLE);
+            mFiletypeTwo.setVisibility(View.VISIBLE);
+            selectedTwo.setText("" + selectedTwoValue_2.getReferenceId());
+            mFiletypeTwo.setText(""+selectedTwoValue_2.getFileType());
+            mTitle.setText(title);
+        }
 
-        else
-            selectedTwo.setText("" + selectedTwoValue_2.getReferenceId() + "-" + selectedTwoValue_2.getFileType());
-        //----------
+        mCompare.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               if (selectedTwoValue_2 == null) {
+                   alertDialogBuilderUserInput.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
+                            /*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*/
+               } else {
+                   //
+                   Intent intent = new Intent(_context, FileTypeViewerActivity.class);
 
-        alertDialogBuilderUserInput
+                   Bundle extra = new Bundle();
+
+                   ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
+                   dataToSend.add(selectedOneValue_1);
+                   dataToSend.add(selectedTwoValue_2);
+                   SearchResult searchPatientInformation = searchPatientInfo(selectedOneValue_1.getRespectiveParentPatientID());
+                   extra.putSerializable(_context.getString(R.string.compare), dataToSend);
+                   extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
+                   extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
+                   extra.putString(DmsConstants.ID, selectedOneValue_1.getRespectiveParentPatientID());
+                   extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, patientName);
+                   intent.putExtra(DmsConstants.DATA, extra);
+                   _context.startActivity(intent);
+               }
+
+           }
+       });
+
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlert.dismiss();
+            }
+        });
+       /* alertDialogBuilderUserInput
                 .setCancelable(false)
                 .setPositiveButton(_context.getString(R.string.compare), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
 
                         if (selectedTwoValue_2 == null) {
+<<<<<<< HEAD
                             alertDialogBuilderUserInput.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
-                            /*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*/
+                            *//*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*//*
+=======
+                            alertDialogBuilderUserInput.setTitle(title + "\n" + _context.getString(R.string.error_select_second_file_type));
+>>>>>>> a7f02e304b66ddf9afbbd2301a664f4c1768e066
                         } else {
                             //
                             Intent intent = new Intent(_context, FileTypeViewerActivity.class);
@@ -627,19 +662,21 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                                 dialogBox.cancel();
                             }
                         });
+*/
 
-        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+
+    /*    AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
         if (selectedTwoValue_2 == null) {
-            alertDialogAndroid.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
+            alertDialogAndroid.setTitle(_context.getString(R.string.error_select_second_file_type) + "\n" + title);
             alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-            /*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*/
-        }else {
+        } else {
             alertDialogAndroid.setTitle(title);
             alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
         }
 
 
+*/
     }
 
     private SearchResult searchPatientInfo(String patientId) {

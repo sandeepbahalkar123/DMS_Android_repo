@@ -70,8 +70,8 @@
     <string name="patient_list">Patient List</string>
     <string name="compare">Compare</string>
     <string name="cancel">Cancel</string>
-    <string name="selected_1">Selected 1:</string>
-    <string name="selected_2">Selected 2:</string>
+    <string name="selected_1">File name one</string>
+    <string name="selected_2">File name two</string>
     <string name="error_compare_patient">Please select same patient record to compare</string>
     <string name="ok">OK</string>
     <string name="error_max_two_reports">You can not select more than two reports to compare</string>
