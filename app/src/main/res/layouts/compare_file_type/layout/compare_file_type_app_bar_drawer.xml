@@ -23,8 +23,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp10"
+            android:padding="@dimen/dp10"
             android:layout_gravity="center_vertical|right"
-            android:src="@mipmap/more" />
+            android:src="@mipmap/more"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

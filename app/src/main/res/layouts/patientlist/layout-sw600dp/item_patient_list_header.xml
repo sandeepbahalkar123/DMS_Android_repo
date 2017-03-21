@@ -28,6 +28,8 @@
             android:layout_marginLeft="@dimen/dp5"
             android:gravity="center_vertical"
             android:text="@string/user_name"
+            android:drawablePadding="@dimen/dp10"
+            android:drawableLeft="@mipmap/userfill"
             android:textStyle="bold" />
 
     </LinearLayout>
