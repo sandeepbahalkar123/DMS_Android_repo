@@ -48,6 +48,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.security.MessageDigest;
@@ -542,7 +543,7 @@ public class CommonMethods {
 
     //this alert is shown for input of serverpath
     public static Dialog showAlertDialog(Context activity, String dialogHeader, final boolean isReEnteredServerPath) {
-        mContext=activity;
+        mContext = activity;
         final Dialog dialog = new Dialog(activity);
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -553,16 +554,17 @@ public class CommonMethods {
         if (dialogHeader != null)
             ((TextView) dialog.findViewById(R.id.textView_dialog_heading)).setText(dialogHeader);
 
-             dialog.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              EditText etServerPath = (EditText) dialog.findViewById(R.id.et_server_path);
+                EditText etServerPath = (EditText) dialog.findViewById(R.id.et_server_path);
 
-                String mServerPath = Config.HTTP+etServerPath.getText().toString()+Config.API;
-                Log.e(TAG,"SERVER PATH==="+mServerPath);
+                String mServerPath = Config.HTTP + etServerPath.getText().toString() + Config.API;
+                Log.e(TAG, "SERVER PATH===" + mServerPath);
 
-                DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mServerPath,mContext);
+                DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
                 dialog.dismiss();
+
                if(!isReEnteredServerPath) {
                    Intent intentObj = new Intent(mContext, LoginActivity.class);
                    intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -573,6 +575,15 @@ public class CommonMethods {
 
 
                }
+
+                if (!isReEnteredServerPath) {
+                    Intent intentObj = new Intent(mContext, LoginActivity.class);
+                    intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intentObj);
+                }
+
                 //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
             }
@@ -586,6 +597,26 @@ public class CommonMethods {
         dialog.show();
 
         return dialog;
+    }
+
+    public static String getCachePath(Context context, String base64Pdf, String filename, String extension) {
+        // Create a file in the Internal Storage
+
+        byte[] pdfAsBytes = Base64.decode(base64Pdf, 0);
+
+        File file = null;
+        FileOutputStream outputStream;
+        try {
+
+            file = new File(context.getCacheDir(), filename + "." + extension);
+
+            outputStream = new FileOutputStream(file);
+            outputStream.write(pdfAsBytes);
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file.getAbsolutePath();
     }
 }
 

@@ -1,6 +1,7 @@
 package com.scorg.dms.views.treeViewHolder;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.scorg.dms.R;
+import com.scorg.dms.util.DmsConstants;
 import com.unnamed.b.atv.model.TreeNode;
 
 /**

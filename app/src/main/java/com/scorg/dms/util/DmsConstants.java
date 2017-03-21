@@ -76,7 +76,6 @@ public class DmsConstants {
     public static class DATE_PATTERN {
         public static String YYYY_MM_DD = "yyyy-MM-dd";
         public static String YYYY_MM_DD_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
-      //  public static String DD_MM_YYYY_hh_mm = "dd-MM-yyyy hh:mm aa";
         public static String DD_MM_YYYY_hh_mm = "dd/MM/yyyy hh:mm aa";
 
         public static String HH_MM = "hh:mm";

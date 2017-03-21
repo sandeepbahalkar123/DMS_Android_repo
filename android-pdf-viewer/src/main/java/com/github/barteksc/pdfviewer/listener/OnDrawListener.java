@@ -17,6 +17,8 @@ package com.github.barteksc.pdfviewer.listener;
 
 import android.graphics.Canvas;
 
+import com.github.barteksc.pdfviewer.PDFView;
+
 /**
  * This interface allows an extern class to draw
  * something on the PDFView canvas, above all images.
@@ -29,10 +31,11 @@ public interface OnDrawListener {
      * <p>
      * The page is starting at (0,0)
      *
+     * @param pdfView
      * @param canvas        The canvas on which to draw things.
      * @param pageWidth     The width of the current page.
      * @param pageHeight    The height of the current page.
      * @param displayedPage The current page index
      */
-    void onLayerDrawn(Canvas canvas, float pageWidth, float pageHeight, int displayedPage);
+    void onLayerDrawn(PDFView pdfView, Canvas canvas, float pageWidth, float pageHeight, int displayedPage);
 }

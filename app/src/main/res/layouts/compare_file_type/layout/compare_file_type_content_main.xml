@@ -12,6 +12,7 @@
     tools:showIn="@layout/compare_file_type_app_bar_drawer">
 
     <RelativeLayout
+        android:id="@+id/firstPdfViewLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -24,21 +25,46 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/firstCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:checked="true"
+            android:visibility="gone"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="CompareByFist" />
+
     </RelativeLayout>
 
 
     <RelativeLayout
+        android:id="@+id/secondPdfViewLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="1.5dp"
         android:background="@drawable/pdfdecoration"
         android:layout_marginTop="7dp"
+        android:visibility="gone"
         android:layout_weight="1.0">
 
         <com.github.barteksc.pdfviewer.PDFView
             android:id="@+id/secondPdfView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/secondCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="CompareBySecond" />
 
     </RelativeLayout>
 

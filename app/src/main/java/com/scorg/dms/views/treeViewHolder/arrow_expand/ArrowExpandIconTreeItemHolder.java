@@ -1,4 +1,4 @@
-package com.scorg.dms.views.treeViewHolder;
+package com.scorg.dms.views.treeViewHolder.arrow_expand;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,11 +12,11 @@ import com.unnamed.b.atv.model.TreeNode;
 /**
  * Created by Bogdan Melnychuk on 2/12/15.
  */
-public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
+public class ArrowExpandIconTreeItemHolder extends TreeNode.BaseNodeViewHolder<ArrowExpandIconTreeItemHolder.IconTreeItem> {
     private TextView tvValue;
     private PrintView arrowView;
 
-    public IconTreeItemHolder(Context context) {
+    public ArrowExpandIconTreeItemHolder(Context context) {
         super(context);
     }
 
@@ -25,7 +25,7 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.treeview_layout_icon_node, null, false);
         tvValue = (TextView) view.findViewById(R.id.node_value);
-        tvValue.setText(value.text);
+        tvValue.setText(value.text.toString());
 
         return view;
     }
@@ -37,14 +37,19 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
 
     public static class IconTreeItem {
         public int icon;
-        public String text;
+        public Object text;
+        public Object objectData;
 
-        public IconTreeItem(int icon, String text) {
+        public IconTreeItem(int icon, Object text, Object objectData) {
             this.icon = icon;
             this.text = text;
+            this.objectData = objectData;
         }
 
-
+      /*  @Override
+        public String toString() {
+            return objectData.toString();
+        }*/
     }
 
 }

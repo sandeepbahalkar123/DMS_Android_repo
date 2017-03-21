@@ -15,6 +15,8 @@
  */
 package com.github.barteksc.pdfviewer.listener;
 
+import com.github.barteksc.pdfviewer.PDFView;
+
 /**
  * Implement this interface to receive events from PDFView
  * when loading is complete.
@@ -23,7 +25,8 @@ public interface OnLoadCompleteListener {
 
     /**
      * Called when the PDF is loaded
+     * @param pdfView
      * @param nbPages the number of pages in this PDF file
      */
-    void loadComplete(int nbPages);
+    void loadComplete(PDFView pdfView, int nbPages);
 }

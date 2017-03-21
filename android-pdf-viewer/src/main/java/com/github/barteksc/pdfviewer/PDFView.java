@@ -450,7 +450,7 @@ public class PDFView extends RelativeLayout {
         return this.onPageScrollListener;
     }
 
-    private void setOnDrawListener(OnDrawListener onDrawListener) {
+    public void setOnDrawListener(OnDrawListener onDrawListener) {
         this.onDrawListener = onDrawListener;
     }
 
@@ -583,7 +583,7 @@ public class PDFView extends RelativeLayout {
         if (onDrawListener != null) {
             canvas.translate(toCurrentScale(currentFilteredPage * optimalPageWidth), 0);
 
-            onDrawListener.onLayerDrawn(canvas, //
+            onDrawListener.onLayerDrawn(this, canvas, //
                     toCurrentScale(optimalPageWidth), //
                     toCurrentScale(optimalPageHeight),
                     currentPage);
@@ -705,7 +705,7 @@ public class PDFView extends RelativeLayout {
         // Notify the listener
         jumpTo(defaultPage, false);
         if (onLoadCompleteListener != null) {
-            onLoadCompleteListener.loadComplete(documentPageCount);
+            onLoadCompleteListener.loadComplete(this, documentPageCount);
         }
     }
 

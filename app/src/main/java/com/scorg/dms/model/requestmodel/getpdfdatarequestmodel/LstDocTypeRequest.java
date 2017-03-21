@@ -5,38 +5,73 @@ import com.google.gson.annotations.SerializedName;
 
 public class LstDocTypeRequest {
 
-@SerializedName("docType")
-@Expose
-private DocTypeRequest docTypeRequest;
-@SerializedName("createdDate")
-@Expose
-private String createdDate;
-@SerializedName("pageCount")
-@Expose
-private Integer pageCount;
+    @SerializedName("typeId")
+    @Expose
+    private Integer typeId;
+    @SerializedName("typeName")
+    @Expose
+    private String typeName;
+    @SerializedName("abbreviation")
+    @Expose
+    private String abbreviation;
 
-public DocTypeRequest getDocTypeRequest() {
-    return docTypeRequest;
-}
 
-public void setDocTypeRequest(DocTypeRequest docTypeRequest) {
-    this.docTypeRequest = docTypeRequest;
-}
+    @SerializedName("createdDate")
+    @Expose
+    private String createdDate;
+    @SerializedName("pageCount")
+    @Expose
+    private Integer pageCount;
+    @SerializedName("pageNumber")
+    @Expose
+    private Integer pageNumber;
 
     public String getCreatedDate() {
-return createdDate;
-}
+        return createdDate;
+    }
 
-public void setCreatedDate(String createdDate) {
-this.createdDate = createdDate;
-}
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
 
-public Integer getPageCount() {
-return pageCount;
-}
+    public Integer getPageCount() {
+        return pageCount;
+    }
 
-public void setPageCount(Integer pageCount) {
-this.pageCount = pageCount;
-}
+    public void setPageCount(Integer pageCount) {
+        this.pageCount = pageCount;
+    }
 
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
 }
