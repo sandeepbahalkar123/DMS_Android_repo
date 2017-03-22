@@ -161,10 +161,9 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
     }
 
     @Override
-    public void setPageNum(int pageNum) {
-        String text = String.valueOf(pageNum);
-        if (!textView.getText().equals(text)) {
-            textView.setText(text);
+    public void setPageNum(String pageNum) {
+        if (!textView.getText().equals(pageNum)) {
+            textView.setText(pageNum);
         }
     }
 
