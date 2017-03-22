@@ -526,18 +526,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         if (value instanceof ArrowExpandIconTreeItemHolder.IconTreeItem) {
             ArrowExpandIconTreeItemHolder.IconTreeItem value1 = (ArrowExpandIconTreeItemHolder.IconTreeItem) value;
 
-            //----- THIS IS TO FIND OUT, WHICH ITEM OF TREEVIEW IS CLICKED (EX. FileONE OR FileTWO PDF VIEW)
-            String nodeValue = value1.text.toString();
-            if (nodeValue.contains("@")) {
-                String[] split = nodeValue.split("@");
-                if (split[1].equalsIgnoreCase("1")) {
-                    mLoadPDFInFirstPDFView = true;
-                } else {
-                    mLoadPDFInFirstPDFView = false;
-                }
-            }
             //-----------
-
             if (value1.objectData instanceof ArchiveDatum) {
                 ArchiveDatum tempData = (ArchiveDatum) value1.objectData;
                 List<LstDocCategory> lstDocCategories = tempData.getLstDocCategories();
@@ -562,6 +551,27 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 getPdfDataRequestModel.setLstDocTypeRequests(createLstDocTypeRequest(lstDocCategories));
             }
             // call api
+
+            //----- THIS IS TO FIND OUT, WHICH ITEM OF TREEVIEW IS CLICKED (EX. FileONE OR FileTWO PDF VIEW)
+            String nodeValue = value1.text.toString();
+            if (nodeValue.contains("@")) {
+                String[] split = nodeValue.split("@");
+                if (split[1].equalsIgnoreCase("1")) {
+                    mLoadPDFInFirstPDFView = true;
+                } else {
+                    mLoadPDFInFirstPDFView = false;
+                }
+
+                //-----TO grayed out pdfview based on no element in that view -----
+                List<LstDocTypeRequest> lstDocTypeRequestsToFetchFromServer = getPdfDataRequestModel.getLstDocTypeRequests();
+                if (lstDocTypeRequestsToFetchFromServer.size() == 0 && mLoadPDFInFirstPDFView) {
+                    mFirstPdfView.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                } else if (lstDocTypeRequestsToFetchFromServer.size() == 0 && !mLoadPDFInFirstPDFView) {
+                    mFirstPdfView.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                }
+                //----------
+            }
+
             mPatientsHelper.getPdfData(getPdfDataRequestModel);
         }
     }

@@ -26,6 +26,7 @@ import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
 import com.scorg.dms.adapters.PatientExpandableListAdapter;
@@ -50,10 +51,12 @@ import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -112,7 +115,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         doGetPatientList();
     }
 
-// intialize variables
+    // intialize variables
     private void initializeVariables() {
         mContext = getApplicationContext();
         mAddedTagsForFiltering = new HashMap<String, String>();
@@ -136,7 +139,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         //------------
 
     }
-// register all views
+
+    // register all views
     private void bindView() {
         int width = getResources().getDisplayMetrics().widthPixels / 2;
 
@@ -195,7 +199,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 int id = item.getItemId();
                 if (id == R.id.nav_logout) {
                     DmsPreferencesManager.clearSharedPref(mContext);
-                    Intent intent = new Intent(PatientList.this,SplashScreenActivity.class);
+                    Intent intent = new Intent(PatientList.this, SplashScreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -242,7 +246,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
 
-            createAnnotationTreeStructure(mAnnotationListData, false);
+            createAnnotationTreeStructure(mAnnotationListData, true);
         }
     }
 
@@ -293,7 +297,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 if (mAnnotationListData == null) {
                     mPatientsHelper.doGetAllAnnotations();
                 } else {
-                    createAnnotationTreeStructure(mAnnotationListData, false);
+                    createAnnotationTreeStructure(mAnnotationListData, true);
                 }
 
                 break;
@@ -566,12 +570,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                             if (tempParentObject.getCategoryName().toLowerCase().contains(enteredString.toLowerCase())) {
                                 annotationTempList.add(tempParentObject);
                             } else {
-
-                                //TODO : THIS IS NOT FIXED, CHECK FOR DOUBLE ENTRY IN TRRE VIEW FOR CHILD SEARCH
                                 //-------
                                 List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
                                 for (DocTypeList tempDocTypeObject : childDocTypeList) {
-                                    if (tempDocTypeObject.getTypeName().toLowerCase().contains(enteredString.toLowerCase())) {
+                                    if (tempDocTypeObject.getTypeName().toLowerCase().startsWith(enteredString.toLowerCase())) {
                                         annotationTempList.add(tempParentObject);
                                         break;
                                     }

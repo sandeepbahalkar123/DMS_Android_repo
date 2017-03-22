@@ -77,6 +77,8 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         });
         nodeSelector.setChecked(node.isSelected());
 
+        node.setExpanded(isDefaultExpanded);
+
         return view;
     }
 
