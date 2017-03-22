@@ -97,6 +97,7 @@
             android:background="@color/dialog_cancel"
             android:drawablePadding="@dimen/margin_tiny"
             android:text="@string/cancel"
+            android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/text_small"
             android:textStyle="bold" />
@@ -110,6 +111,7 @@
             android:background="@color/dialog_compare"
             android:drawablePadding="@dimen/margin_tiny"
             android:text="@string/compare"
+            android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/text_small"
             android:textStyle="bold" />

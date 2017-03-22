@@ -2,8 +2,6 @@ package com.scorg.dms.ui.activities;
 
 
 import android.content.Context;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +26,6 @@ import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
 import com.scorg.dms.adapters.PatientExpandableListAdapter;
@@ -53,12 +50,10 @@ import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -73,14 +68,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     DrawerLayout mDrawer;
-
-    //--------------
-
     NavigationView mLeftNavigationView;
     NavigationView mRightNavigationView;
     View mHeaderView;
-
-    //--------------
     private TextView mApplySearchFilter;
     private TextView mResetSearchFilter;
     private EditText mUHIDEditText;
@@ -89,15 +79,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private EditText mSearchPatientNameEditText;
     private EditText mAnnotationEditText;
     private EditText mSearchAnnotationEditText;
-
     private Spinner mSpinSelectedId;
-
     private Spinner mSpinnerAmissionDate;
     private String mSelectedId;
     private String mAdmissionDate;
     private String[] mArrayId;
     private Context mContext;
-
     private Custom_Spin_Adapter mCustomSpinAdapter;
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
@@ -107,7 +94,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private RelativeLayout mAnnotationTreeViewContainer;
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
-
     private String TAG = this.getClass().getName();
 
     @Override
