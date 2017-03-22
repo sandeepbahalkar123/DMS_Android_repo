@@ -575,8 +575,11 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         if (selectedTwoValue_2 == null) {
             selectedTwo.setVisibility(View.GONE);
             mFiletypeTwo.setVisibility(View.GONE);
+
             mTitle.setText(_context.getString(R.string.error_select_second_file_type));
-            mCompare.setBackgroundColor(Color.alpha(R.color.dialog_compare));
+
+            mCompare.setAlpha(.6f);
+
             mCompare.setEnabled(false);
         }
         else {
