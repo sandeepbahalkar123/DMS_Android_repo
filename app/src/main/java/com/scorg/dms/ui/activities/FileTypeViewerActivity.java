@@ -82,15 +82,16 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     @BindView(R.id.secondPdfView)
     PDFView mSecondPdfView;
 
+    @BindView(R.id.firstPdfViewLay)
+    RelativeLayout mFirstFileTypePdfViewLayout;
+    @BindView(R.id.secondPdfViewLay)
+    RelativeLayout mSecondFileTypePdfViewLayout;
+
     @BindView(R.id.firstCheckBox)
     AppCompatRadioButton mCompareByFirstDocCheckBox;
     @BindView(R.id.secondCheckBox)
     AppCompatRadioButton mCompareBySecondDocCheckBox;
 
-    @BindView(R.id.firstPdfViewLay)
-    RelativeLayout mFirstFileTypePdfView;
-    @BindView(R.id.secondPdfViewLay)
-    RelativeLayout mSecondFileTypePdfView;
 
     @BindView(R.id.openRightDrawer)
     ImageView mOpenRightDrawer;
@@ -241,7 +242,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             mDischargeDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getDischargeDate().toString());
             mFileTypeTwo.setText(mSelectedFileTypeDataToCompare.get(1).getFileType().toString());
 
-            mSecondFileTypePdfView.setVisibility(View.VISIBLE);
+            mSecondFileTypePdfViewLayout.setVisibility(View.VISIBLE);
             mRowScrollBoth.setVisibility(View.VISIBLE);
             mFileTwoDrawerLayout.setVisibility(View.VISIBLE);
 
@@ -554,24 +555,33 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
             //----- THIS IS TO FIND OUT, WHICH ITEM OF TREEVIEW IS CLICKED (EX. FileONE OR FileTWO PDF VIEW)
             String nodeValue = value1.text.toString();
+            List<LstDocTypeRequest> lstDocTypeRequestsToFetchFromServer = getPdfDataRequestModel.getLstDocTypeRequests();
+
             if (nodeValue.contains("@")) {
                 String[] split = nodeValue.split("@");
                 if (split[1].equalsIgnoreCase("1")) {
                     mLoadPDFInFirstPDFView = true;
+                    //-----TO grayed out pdfview based on no element in that view -----
+                    if (lstDocTypeRequestsToFetchFromServer.size() != 0) {
+                        mFirstPdfView.setVisibility(View.VISIBLE);
+                        mFirstFileTypePdfViewLayout.setBackgroundResource(R.drawable.pdfdecoration);
+                    } else {
+                        mFirstPdfView.setVisibility(View.GONE);
+                        mFirstFileTypePdfViewLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                    }
                 } else {
                     mLoadPDFInFirstPDFView = false;
-                }
 
-                //-----TO grayed out pdfview based on no element in that view -----
-                List<LstDocTypeRequest> lstDocTypeRequestsToFetchFromServer = getPdfDataRequestModel.getLstDocTypeRequests();
-                if (lstDocTypeRequestsToFetchFromServer.size() == 0 && mLoadPDFInFirstPDFView) {
-                    mFirstPdfView.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
-                } else if (lstDocTypeRequestsToFetchFromServer.size() == 0 && !mLoadPDFInFirstPDFView) {
-                    mFirstPdfView.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                    //-----TO grayed out pdfview based on no element in that view -----
+                    if (lstDocTypeRequestsToFetchFromServer.size() != 0) {
+                        mSecondPdfView.setVisibility(View.VISIBLE);
+                        mSecondFileTypePdfViewLayout.setBackgroundResource(R.drawable.pdfdecoration);
+                    } else {
+                        mSecondPdfView.setVisibility(View.GONE);
+                        mSecondFileTypePdfViewLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                    }
                 }
-                //----------
             }
-
             mPatientsHelper.getPdfData(getPdfDataRequestModel);
         }
     }
