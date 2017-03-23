@@ -15,27 +15,23 @@
         android:id="@+id/firstPdfViewLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="7dp"
         android:layout_weight="1"
-        android:padding="1.5dp"
         android:background="@drawable/pdfdecoration"
-        android:layout_marginBottom="7dp">
+        android:padding="1.5dp">
 
         <com.github.barteksc.pdfviewer.PDFView
             android:id="@+id/firstPdfView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <android.support.v7.widget.AppCompatRadioButton
-            android:id="@+id/firstCheckBox"
+        <TextView
+            android:id="@+id/messageForFirstFile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:checked="true"
-            android:visibility="gone"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:text="CompareByFist" />
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/filenotfoundmessagetextsize"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -44,27 +40,24 @@
         android:id="@+id/secondPdfViewLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="1.5dp"
-        android:background="@drawable/pdfdecoration"
         android:layout_marginTop="7dp"
-        android:visibility="gone"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:background="@drawable/pdfdecoration"
+        android:padding="1.5dp"
+        android:visibility="gone">
 
         <com.github.barteksc.pdfviewer.PDFView
             android:id="@+id/secondPdfView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <android.support.v7.widget.AppCompatRadioButton
-            android:id="@+id/secondCheckBox"
+        <TextView
+            android:id="@+id/messageForSecondFile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:visibility="gone"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:text="CompareBySecond" />
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/filenotfoundmessagetextsize"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

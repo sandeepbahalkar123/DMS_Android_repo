@@ -133,6 +133,7 @@
     <string name="ic_shopping_cart">&#xe14f;</string>
     <string name="ic_label">&#xe0d0;</string>
     <string name="ic_person">&#xe105;</string>
+    <string name="filenotfound">File not found</string>
 
     <!--******************************-->
 </resources>

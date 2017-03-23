@@ -133,7 +133,7 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
             pdfView.moveRelativeTo(-distanceX, -distanceY);
         }
         if (!scaling || pdfView.doRenderDuringScale()) {
-          pdfView.loadPageByOffset();
+            pdfView.loadPageByOffset();
         }
         return true;
     }
@@ -191,6 +191,8 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
     public boolean onTouch(View v, MotionEvent event) {
         boolean retVal = scaleGestureDetector.onTouchEvent(event);
         retVal = gestureDetector.onTouchEvent(event) || retVal;
+
+        pdfView.onTouch(v, event);
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (scrolling) {
