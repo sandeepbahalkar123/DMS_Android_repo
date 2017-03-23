@@ -401,8 +401,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             selectableHeaderHolder.setNodeValueColor(textColor);
 
-            // Label|NA @ fileOne Or fileTwo count id
-            String dataToShow = archiveDatumObject.getFileType() + "|NA" + "@" + (i + 1);
+            // Label|NA|pageCount @ fileOne Or fileTwo count id
+            String dataToShow = archiveDatumObject.getFileType() + " (" + archiveDatumObject.getTotalDocCategoryPageCount() + ")" + "|NA" + "@" + (i + 1);
             TreeNode archiveDatumObjectFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, archiveDatumObject))
                     .setViewHolder(selectableHeaderHolder);
 
@@ -412,8 +412,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             for (int j = 0; j < lstDocCategories.size(); j++) {
                 LstDocCategory lstDocCategoryObject = lstDocCategories.get(j);
 
-                // Label|id @ fileOne Or fileTwo count id
-                dataToShow = lstDocCategoryObject.getCategoryName() + "|" + lstDocCategoryObject.getCategoryId() + "@" + (i + 1);
+                // Label|id|pageCount @ fileOne Or fileTwo count id
+                dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId() + "@" + (i + 1);
 
                 ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocCategoryObjectLeftPadding);
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);
@@ -427,8 +427,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 for (int k = 0; k < lstDocTypesCategoriesChildList.size(); k++) {
                     LstDocType lstDocTypeChild = lstDocTypesCategoriesChildList.get(k);
 
-                    // Label|id @ fileOne Or fileTwo count id
-                    dataToShow = lstDocTypeChild.getTypeName() + "|" + lstDocTypeChild.getTypeId() + "@" + (i + 1);
+                    // Label|id|pageCount @ fileOne Or fileTwo count id
+                    dataToShow = lstDocTypeChild.getTypeName() + " (" + lstDocTypeChild.getPageCount() + ")" + "|" + lstDocTypeChild.getTypeId() + "@" + (i + 1);
 
                     //-------
                     ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
