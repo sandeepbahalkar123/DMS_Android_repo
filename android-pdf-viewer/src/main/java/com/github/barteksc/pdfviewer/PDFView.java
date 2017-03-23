@@ -30,6 +30,8 @@ import android.os.AsyncTask;
 import android.os.HandlerThread;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.github.barteksc.pdfviewer.listener.OnDrawListener;
@@ -373,7 +375,7 @@ public class PDFView extends RelativeLayout {
         loadPages();
 
         if (scrollHandle != null && !documentFitsView()) {
-            scrollHandle.setPageNum(currentPage + 1);
+            scrollHandle.setPageNum((currentPage + 1) + "/" + documentPageCount);
         }
 
         if (onPageChangeListener != null) {
@@ -484,7 +486,7 @@ public class PDFView extends RelativeLayout {
         scrollHandle = null;
         isScrollHandleInit = false;
         currentXOffset = currentYOffset = 0;
-        zoom = 1f;
+        zoom = DEFAULT_MID_SCALE;
         recycled = true;
         state = State.DEFAULT;
     }
@@ -511,6 +513,13 @@ public class PDFView extends RelativeLayout {
             moveTo(currentXOffset, calculateCenterOffsetForPage(currentFilteredPage));
         else
             moveTo(calculateCenterOffsetForPage(currentFilteredPage), currentYOffset);
+    }
+
+    public void onTouch(View v, MotionEvent event) {
+        // Draws the user layer
+        if (onDrawListener != null) {
+            onDrawListener.onTouch(v, event);
+        }
     }
 
     @Override
@@ -714,7 +723,7 @@ public class PDFView extends RelativeLayout {
         recycle();
         invalidate();
         if (this.onErrorListener != null) {
-            this.onErrorListener.onError(t);
+            this.onErrorListener.onError(this, t);
         } else {
             Log.e("PDFView", "load pdf error", t);
         }
@@ -1157,6 +1166,7 @@ public class PDFView extends RelativeLayout {
 
     /**
      * Use bytearray as the pdf source, documents is not saved
+     *
      * @param bytes
      * @return
      */
@@ -1276,7 +1286,7 @@ public class PDFView extends RelativeLayout {
             return this;
         }
 
-        public void load() {
+        public Configurator load() {
             PDFView.this.recycle();
             PDFView.this.setOnDrawListener(onDrawListener);
             PDFView.this.setOnPageChangeListener(onPageChangeListener);
@@ -1293,6 +1303,7 @@ public class PDFView extends RelativeLayout {
             } else {
                 PDFView.this.load(documentSource, password, onLoadCompleteListener, onErrorListener);
             }
+            return null;
         }
     }
 }

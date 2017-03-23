@@ -31,7 +31,7 @@ public interface ScrollHandle {
      *
      * @param pageNum page number
      */
-    void setPageNum(int pageNum);
+    void setPageNum(String pageNum);
 
     /**
      * Get handle visibility

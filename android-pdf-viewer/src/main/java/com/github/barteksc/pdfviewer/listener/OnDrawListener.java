@@ -16,6 +16,8 @@
 package com.github.barteksc.pdfviewer.listener;
 
 import android.graphics.Canvas;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.github.barteksc.pdfviewer.PDFView;
 
@@ -30,12 +32,11 @@ public interface OnDrawListener {
      * drawing its view.
      * <p>
      * The page is starting at (0,0)
-     *
-     * @param pdfView
      * @param canvas        The canvas on which to draw things.
      * @param pageWidth     The width of the current page.
      * @param pageHeight    The height of the current page.
      * @param displayedPage The current page index
      */
     void onLayerDrawn(PDFView pdfView, Canvas canvas, float pageWidth, float pageHeight, int displayedPage);
+    void onTouch(View v, MotionEvent event);
 }

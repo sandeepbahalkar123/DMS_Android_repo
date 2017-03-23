@@ -15,11 +15,14 @@
  */
 package com.github.barteksc.pdfviewer.listener;
 
+import com.github.barteksc.pdfviewer.PDFView;
+
 public interface OnErrorListener {
 
     /**
      * Called if error occurred while opening PDF
+     * @param pdfView
      * @param t Throwable with error
      */
-    void onError(Throwable t);
+    void onError(PDFView pdfView, Throwable t);
 }

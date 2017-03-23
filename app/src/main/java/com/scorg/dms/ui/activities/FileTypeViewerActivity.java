@@ -1,7 +1,6 @@
 package com.scorg.dms.ui.activities;
 
 import android.content.Context;
-
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,10 +9,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -27,6 +26,7 @@ import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnDrawListener;
+import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.scorg.dms.R;
@@ -64,14 +64,16 @@ import butterknife.ButterKnife;
  */
 
 
-public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnLoadCompleteListener, OnDrawListener, TreeNode.TreeNodeClickListener {
+public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnLoadCompleteListener, OnErrorListener, OnDrawListener, TreeNode.TreeNodeClickListener {
 
     private static final String TAG = FileTypeViewerActivity.class.getName();
     private Integer mPageNumber = 0;
+    private boolean isFirstPdf = true;
+    private float mCurrentXOffset = -1;
+    private float mCurrentYOffset = -1;
     // End
 
     private Context mContext;
-    private OnDrawListener onDrawListener = this;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -81,18 +83,16 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     PDFView mFirstPdfView;
     @BindView(R.id.secondPdfView)
     PDFView mSecondPdfView;
-
     @BindView(R.id.firstPdfViewLay)
     RelativeLayout mFirstFileTypePdfViewLayout;
     @BindView(R.id.secondPdfViewLay)
     RelativeLayout mSecondFileTypePdfViewLayout;
 
-    @BindView(R.id.firstCheckBox)
-    AppCompatRadioButton mCompareByFirstDocCheckBox;
-    @BindView(R.id.secondCheckBox)
-    AppCompatRadioButton mCompareBySecondDocCheckBox;
 
-
+    @BindView(R.id.messageForFirstFile)
+    TextView mMessageForFirstFile;
+    @BindView(R.id.messageForSecondFile)
+    TextView mMessageForSecondFile;
     @BindView(R.id.openRightDrawer)
     ImageView mOpenRightDrawer;
     // End
@@ -250,19 +250,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     isCompareChecked = isChecked;
-                    if (isChecked) {
-                        mCompareByFirstDocCheckBox.setChecked(true);
-                        mCompareBySecondDocCheckBox.setChecked(false);
-                        mFirstPdfView.setOnDrawListener(onDrawListener);
-                        mSecondPdfView.setOnDrawListener(null);
-                        mCompareByFirstDocCheckBox.setVisibility(View.VISIBLE);
-                        mCompareBySecondDocCheckBox.setVisibility(View.VISIBLE);
-                    } else {
-                        mFirstPdfView.setOnDrawListener(null);
-                        mSecondPdfView.setOnDrawListener(null);
-                        mCompareByFirstDocCheckBox.setVisibility(View.GONE);
-                        mCompareBySecondDocCheckBox.setVisibility(View.GONE);
-                    }
                 }
             });
         }
@@ -270,28 +257,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         //------------
         mOpenRightDrawer.setOnClickListener(this);
         //-----------
-
-        mCompareByFirstDocCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    mFirstPdfView.setOnDrawListener(onDrawListener);
-                    mSecondPdfView.setOnDrawListener(null);
-                    mCompareBySecondDocCheckBox.setChecked(false);
-                }
-            }
-        });
-
-        mCompareBySecondDocCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    mFirstPdfView.setOnDrawListener(null);
-                    mSecondPdfView.setOnDrawListener(onDrawListener);
-                    mCompareByFirstDocCheckBox.setChecked(false);
-                }
-            }
-        });
 
 
     }
@@ -459,20 +424,50 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         if (isCompareChecked) {
 
-            if (mFirstPdfView == pdfView) {
-                mSecondPdfView.jumpTo(displayedPage);
-                mSecondPdfView.zoomWithAnimation(mFirstPdfView.getZoom());
-                mSecondPdfView.moveTo(mFirstPdfView.getCurrentXOffset(), mFirstPdfView.getCurrentYOffset());
+            if (pdfView.getCurrentXOffset() == mCurrentXOffset && pdfView.getCurrentYOffset() == mCurrentYOffset) {
+                Log.d(TAG + " onLayerDrawnSame", displayedPage + " " + pdfView.getCurrentXOffset() + " " + pdfView.getCurrentYOffset());
+            } else {
 
-            } else if (mSecondPdfView == pdfView) {
-                mFirstPdfView.jumpTo(displayedPage);
-                mFirstPdfView.zoomWithAnimation(mSecondPdfView.getZoom());
-                mFirstPdfView.moveTo(mSecondPdfView.getCurrentXOffset(), mSecondPdfView.getCurrentYOffset());
+                Log.d(TAG + " onLayerDrawnDifferent", displayedPage + " " + pdfView.getCurrentXOffset() + " " + pdfView.getCurrentYOffset());
 
+                if (isFirstPdf && mFirstPdfView == pdfView) {
+                    mSecondPdfView.jumpTo(displayedPage);
+                    mSecondPdfView.zoomWithAnimation(mFirstPdfView.getZoom());
+                    mSecondPdfView.moveTo(mFirstPdfView.getCurrentXOffset(), mFirstPdfView.getCurrentYOffset());
+
+                } else if (!isFirstPdf && mSecondPdfView == pdfView) {
+                    mFirstPdfView.jumpTo(displayedPage);
+                    mFirstPdfView.zoomWithAnimation(mSecondPdfView.getZoom());
+                    mFirstPdfView.moveTo(mSecondPdfView.getCurrentXOffset(), mSecondPdfView.getCurrentYOffset());
+                }
             }
 
-        }
+            mCurrentXOffset = pdfView.getCurrentXOffset();
+            mCurrentYOffset = pdfView.getCurrentYOffset();
 
+        }
+    }
+
+    @Override
+    public void onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP) {
+            if (v == mFirstPdfView) {
+                isFirstPdf = true;
+            } else {
+                isFirstPdf = false;
+            }
+        }
+    }
+
+    @Override
+    public void onError(PDFView pdfView, Throwable t) {
+        if (mFirstPdfView == pdfView) {
+            mMessageForFirstFile.setVisibility(View.VISIBLE);
+            mMessageForFirstFile.setText(getString(R.string.filenotfound));
+        } else if (mSecondPdfView == pdfView) {
+            mMessageForSecondFile.setVisibility(View.VISIBLE);
+            mMessageForSecondFile.setText(getString(R.string.filenotfound));
+        }
     }
 
     @Override
@@ -480,9 +475,11 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         try {
             PdfDocument.Meta meta = null;
             if (pdfView == mFirstPdfView) {
+                mMessageForFirstFile.setVisibility(View.GONE);
                 meta = mFirstPdfView.getDocumentMeta();
                 printBookmarksTree(mFirstPdfView.getTableOfContents(), "-");
             } else if (pdfView == mSecondPdfView) {
+                mMessageForSecondFile.setVisibility(View.GONE);
                 meta = mSecondPdfView.getDocumentMeta();
                 printBookmarksTree(mSecondPdfView.getTableOfContents(), "-");
             }
@@ -613,6 +610,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     private void loadPDFFromServer(PDFView pdfViewToLoad, String base64Pdf, String fileName, String extension) {
         pdfViewToLoad.fromFile(new File(CommonMethods.getCachePath(this, base64Pdf, fileName, extension)))
                 .defaultPage(mPageNumber)
+                .onError(this)
+                .onDraw(this)
                 .enableAnnotationRendering(true)
                 .scrollHandle(new DefaultScrollHandle(this))
                 .load();

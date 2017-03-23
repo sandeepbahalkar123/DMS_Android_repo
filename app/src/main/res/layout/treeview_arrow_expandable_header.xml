@@ -25,15 +25,15 @@
 
         <com.github.johnkil.print.PrintView
             android:id="@+id/arrow_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp28"
+            android:layout_height="@dimen/dp28"
             android:layout_alignWithParentIfMissing="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/node_selector"
-            app:iconColor="#12558C"
+            app:iconColor="@color/black"
             app:iconFont="fonts/material-icon-font.ttf"
-            app:iconSize="20dp"
+            app:iconSize="22dp"
             app:iconText="@string/ic_keyboard_arrow_right" />
 
         <!--  <com.github.johnkil.print.PrintView
