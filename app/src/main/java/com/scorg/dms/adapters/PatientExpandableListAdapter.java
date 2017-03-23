@@ -575,8 +575,11 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         if (selectedTwoValue_2 == null) {
             selectedTwo.setVisibility(View.GONE);
             mFiletypeTwo.setVisibility(View.GONE);
-            mTitle.setText(_context.getString(R.string.error_select_second_file_type) + "\n\n" + title);
+
+            mTitle.setText(_context.getString(R.string.error_select_second_file_type));
+
             mCompare.setAlpha(.6f);
+
             mCompare.setEnabled(false);
         }
         else {
@@ -591,7 +594,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
            @Override
            public void onClick(View v) {
                if (selectedTwoValue_2 == null) {
-                   alertDialogBuilderUserInput.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
+                   alertDialogBuilderUserInput.setTitle(_context.getString(R.string.error_select_second_file_type));
                             /*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*/
                } else {
                    //
@@ -610,6 +613,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                    extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, patientName);
                    intent.putExtra(DmsConstants.DATA, extra);
                    _context.startActivity(intent);
+                   showAlert.dismiss();
                }
 
            }
@@ -621,62 +625,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 showAlert.dismiss();
             }
         });
-       /* alertDialogBuilderUserInput
-                .setCancelable(false)
-                .setPositiveButton(_context.getString(R.string.compare), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogBox, int id) {
 
-                        if (selectedTwoValue_2 == null) {
-<<<<<<< HEAD
-                            alertDialogBuilderUserInput.setTitle(title+"\n"+_context.getString(R.string.error_select_second_file_type));
-                            *//*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*//*
-=======
-                            alertDialogBuilderUserInput.setTitle(title + "\n" + _context.getString(R.string.error_select_second_file_type));
->>>>>>> a7f02e304b66ddf9afbbd2301a664f4c1768e066
-                        } else {
-                            //
-                            Intent intent = new Intent(_context, FileTypeViewerActivity.class);
-
-                            Bundle extra = new Bundle();
-
-                            ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
-                            dataToSend.add(selectedOneValue_1);
-                            dataToSend.add(selectedTwoValue_2);
-                            SearchResult searchPatientInformation = searchPatientInfo(selectedOneValue_1.getRespectiveParentPatientID());
-                            extra.putSerializable(_context.getString(R.string.compare), dataToSend);
-                            extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
-                            extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
-                            extra.putString(DmsConstants.ID, selectedOneValue_1.getRespectiveParentPatientID());
-                            extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, patientName);
-                            intent.putExtra(DmsConstants.DATA, extra);
-
-                            _context.startActivity(intent);
-                        }
-
-                    }
-                })
-
-                .setNegativeButton(_context.getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                dialogBox.cancel();
-                            }
-                        });
-*/
-
-
-    /*    AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-        alertDialogAndroid.show();
-        if (selectedTwoValue_2 == null) {
-            alertDialogAndroid.setTitle(_context.getString(R.string.error_select_second_file_type) + "\n" + title);
-            alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        } else {
-            alertDialogAndroid.setTitle(title);
-            alertDialogAndroid.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-        }
-
-
-*/
     }
 
     private SearchResult searchPatientInfo(String patientId) {

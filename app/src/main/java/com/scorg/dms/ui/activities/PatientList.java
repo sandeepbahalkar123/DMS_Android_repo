@@ -2,8 +2,6 @@ package com.scorg.dms.ui.activities;
 
 
 import android.content.Context;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -73,14 +71,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     DrawerLayout mDrawer;
-
-    //--------------
-
     NavigationView mLeftNavigationView;
     NavigationView mRightNavigationView;
     View mHeaderView;
-
-    //--------------
     private TextView mApplySearchFilter;
     private TextView mResetSearchFilter;
     private EditText mUHIDEditText;
@@ -89,15 +82,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private EditText mSearchPatientNameEditText;
     private EditText mAnnotationEditText;
     private EditText mSearchAnnotationEditText;
-
     private Spinner mSpinSelectedId;
-
     private Spinner mSpinnerAmissionDate;
     private String mSelectedId;
     private String mAdmissionDate;
     private String[] mArrayId;
     private Context mContext;
-
     private Custom_Spin_Adapter mCustomSpinAdapter;
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
@@ -107,7 +97,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private RelativeLayout mAnnotationTreeViewContainer;
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
-
     private String TAG = this.getClass().getName();
 
     @Override
@@ -126,7 +115,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         doGetPatientList();
     }
 
-// intialize variables
+    // intialize variables
     private void initializeVariables() {
         mContext = getApplicationContext();
         mAddedTagsForFiltering = new HashMap<String, String>();
@@ -150,7 +139,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         //------------
 
     }
-// register all views
+
+    // register all views
     private void bindView() {
         int width = getResources().getDisplayMetrics().widthPixels / 2;
 
@@ -209,7 +199,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 int id = item.getItemId();
                 if (id == R.id.nav_logout) {
                     DmsPreferencesManager.clearSharedPref(mContext);
-                    Intent intent = new Intent(PatientList.this,SplashScreenActivity.class);
+                    Intent intent = new Intent(PatientList.this, SplashScreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -256,7 +246,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
 
-            createAnnotationTreeStructure(mAnnotationListData, false);
+            createAnnotationTreeStructure(mAnnotationListData, true);
         }
     }
 
@@ -307,7 +297,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 if (mAnnotationListData == null) {
                     mPatientsHelper.doGetAllAnnotations();
                 } else {
-                    createAnnotationTreeStructure(mAnnotationListData, false);
+                    createAnnotationTreeStructure(mAnnotationListData, true);
                 }
 
                 break;
@@ -580,12 +570,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                             if (tempParentObject.getCategoryName().toLowerCase().contains(enteredString.toLowerCase())) {
                                 annotationTempList.add(tempParentObject);
                             } else {
-
-                                //TODO : THIS IS NOT FIXED, CHECK FOR DOUBLE ENTRY IN TRRE VIEW FOR CHILD SEARCH
                                 //-------
                                 List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
                                 for (DocTypeList tempDocTypeObject : childDocTypeList) {
-                                    if (tempDocTypeObject.getTypeName().toLowerCase().contains(enteredString.toLowerCase())) {
+                                    if (tempDocTypeObject.getTypeName().toLowerCase().startsWith(enteredString.toLowerCase())) {
                                         annotationTempList.add(tempParentObject);
                                         break;
                                     }

@@ -83,16 +83,16 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     PDFView mFirstPdfView;
     @BindView(R.id.secondPdfView)
     PDFView mSecondPdfView;
+    @BindView(R.id.firstPdfViewLay)
+    RelativeLayout mFirstFileTypePdfViewLayout;
+    @BindView(R.id.secondPdfViewLay)
+    RelativeLayout mSecondFileTypePdfViewLayout;
+
+
     @BindView(R.id.messageForFirstFile)
     TextView mMessageForFirstFile;
     @BindView(R.id.messageForSecondFile)
     TextView mMessageForSecondFile;
-
-    @BindView(R.id.firstPdfViewLay)
-    RelativeLayout mFirstFileTypePdfView;
-    @BindView(R.id.secondPdfViewLay)
-    RelativeLayout mSecondFileTypePdfView;
-
     @BindView(R.id.openRightDrawer)
     ImageView mOpenRightDrawer;
     // End
@@ -242,7 +242,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             mDischargeDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getDischargeDate().toString());
             mFileTypeTwo.setText(mSelectedFileTypeDataToCompare.get(1).getFileType().toString());
 
-            mSecondFileTypePdfView.setVisibility(View.VISIBLE);
+            mSecondFileTypePdfViewLayout.setVisibility(View.VISIBLE);
             mRowScrollBoth.setVisibility(View.VISIBLE);
             mFileTwoDrawerLayout.setVisibility(View.VISIBLE);
 
@@ -366,8 +366,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             selectableHeaderHolder.setNodeValueColor(textColor);
 
-            // Label|NA @ fileOne Or fileTwo count id
-            String dataToShow = archiveDatumObject.getFileType() + "|NA" + "@" + (i + 1);
+            // Label|NA|pageCount @ fileOne Or fileTwo count id
+            String dataToShow = archiveDatumObject.getFileType() + " (" + archiveDatumObject.getTotalDocCategoryPageCount() + ")" + "|NA" + "@" + (i + 1);
             TreeNode archiveDatumObjectFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, archiveDatumObject))
                     .setViewHolder(selectableHeaderHolder);
 
@@ -377,8 +377,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             for (int j = 0; j < lstDocCategories.size(); j++) {
                 LstDocCategory lstDocCategoryObject = lstDocCategories.get(j);
 
-                // Label|id @ fileOne Or fileTwo count id
-                dataToShow = lstDocCategoryObject.getCategoryName() + "|" + lstDocCategoryObject.getCategoryId() + "@" + (i + 1);
+                // Label|id|pageCount @ fileOne Or fileTwo count id
+                dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId() + "@" + (i + 1);
 
                 ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocCategoryObjectLeftPadding);
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);
@@ -392,8 +392,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 for (int k = 0; k < lstDocTypesCategoriesChildList.size(); k++) {
                     LstDocType lstDocTypeChild = lstDocTypesCategoriesChildList.get(k);
 
-                    // Label|id @ fileOne Or fileTwo count id
-                    dataToShow = lstDocTypeChild.getTypeName() + "|" + lstDocTypeChild.getTypeId() + "@" + (i + 1);
+                    // Label|id|pageCount @ fileOne Or fileTwo count id
+                    dataToShow = lstDocTypeChild.getTypeName() + " (" + lstDocTypeChild.getPageCount() + ")" + "|" + lstDocTypeChild.getTypeId() + "@" + (i + 1);
 
                     //-------
                     ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
@@ -524,18 +524,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         if (value instanceof ArrowExpandIconTreeItemHolder.IconTreeItem) {
             ArrowExpandIconTreeItemHolder.IconTreeItem value1 = (ArrowExpandIconTreeItemHolder.IconTreeItem) value;
 
-            //----- THIS IS TO FIND OUT, WHICH ITEM OF TREEVIEW IS CLICKED (EX. FileONE OR FileTWO PDF VIEW)
-            String nodeValue = value1.text.toString();
-            if (nodeValue.contains("@")) {
-                String[] split = nodeValue.split("@");
-                if (split[1].equalsIgnoreCase("1")) {
-                    mLoadPDFInFirstPDFView = true;
-                } else {
-                    mLoadPDFInFirstPDFView = false;
-                }
-            }
             //-----------
-
             if (value1.objectData instanceof ArchiveDatum) {
                 ArchiveDatum tempData = (ArchiveDatum) value1.objectData;
                 List<LstDocCategory> lstDocCategories = tempData.getLstDocCategories();
@@ -560,6 +549,36 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 getPdfDataRequestModel.setLstDocTypeRequests(createLstDocTypeRequest(lstDocCategories));
             }
             // call api
+
+            //----- THIS IS TO FIND OUT, WHICH ITEM OF TREEVIEW IS CLICKED (EX. FileONE OR FileTWO PDF VIEW)
+            String nodeValue = value1.text.toString();
+            List<LstDocTypeRequest> lstDocTypeRequestsToFetchFromServer = getPdfDataRequestModel.getLstDocTypeRequests();
+
+            if (nodeValue.contains("@")) {
+                String[] split = nodeValue.split("@");
+                if (split[1].equalsIgnoreCase("1")) {
+                    mLoadPDFInFirstPDFView = true;
+                    //-----TO grayed out pdfview based on no element in that view -----
+                    if (lstDocTypeRequestsToFetchFromServer.size() != 0) {
+                        mFirstPdfView.setVisibility(View.VISIBLE);
+                        mFirstFileTypePdfViewLayout.setBackgroundResource(R.drawable.pdfdecoration);
+                    } else {
+                        mFirstPdfView.setVisibility(View.GONE);
+                        mFirstFileTypePdfViewLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                    }
+                } else {
+                    mLoadPDFInFirstPDFView = false;
+
+                    //-----TO grayed out pdfview based on no element in that view -----
+                    if (lstDocTypeRequestsToFetchFromServer.size() != 0) {
+                        mSecondPdfView.setVisibility(View.VISIBLE);
+                        mSecondFileTypePdfViewLayout.setBackgroundResource(R.drawable.pdfdecoration);
+                    } else {
+                        mSecondPdfView.setVisibility(View.GONE);
+                        mSecondFileTypePdfViewLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                    }
+                }
+            }
             mPatientsHelper.getPdfData(getPdfDataRequestModel);
         }
     }
