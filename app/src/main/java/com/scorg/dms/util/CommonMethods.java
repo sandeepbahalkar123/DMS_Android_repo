@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -18,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -618,6 +620,18 @@ public class CommonMethods {
             e.printStackTrace();
         }
         return file.getAbsolutePath();
+    }
+
+    public static float convertPixelsToDp(float px) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return Math.round(dp);
+    }
+
+    public static int convertDpToPixel(float dp) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return Math.round(px);
     }
 }
 

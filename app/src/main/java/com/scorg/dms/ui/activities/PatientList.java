@@ -1,6 +1,7 @@
 package com.scorg.dms.ui.activities;
 
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,7 +41,6 @@ import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationL
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListData;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
-import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
@@ -63,6 +63,10 @@ import butterknife.ButterKnife;
 
 public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+
+    private static final long ANIMATION_DURATION = 500; // in milliseconds
+    private static final int ANIMATION_LAYOUT_MAX_HEIGHT = 280; // in milliseconds
+    private static final int ANIMATION_LAYOUT_MIN_HEIGHT = 0; // in milliseconds
 
     @BindView(R.id.expandableListView)
     ExpandableListView mPatientListView;
@@ -98,6 +102,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
     private String TAG = this.getClass().getName();
+    private boolean flag = true;
+    private RelativeLayout mCompareDialogLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,6 +232,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mSpinSelectedId.setAdapter(mCustomSpinAdapter);
         //------
         onTextChanged();
+
+        mCompareDialogLayout = (RelativeLayout) findViewById(R.id.compareDialog);
+
     }
 
     @Override
@@ -285,6 +294,46 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         }
     }
 
+    public void collapse(final View v) {
+        flag = true;
+
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(ANIMATION_LAYOUT_MAX_HEIGHT, ANIMATION_LAYOUT_MIN_HEIGHT);
+        valueAnimator.setDuration(ANIMATION_DURATION);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                params.height = CommonMethods.convertDpToPixel(value.intValue());
+                v.setLayoutParams(params);
+
+            }
+        });
+
+        valueAnimator.start();
+
+    }
+
+    public void expand(final View v) {
+
+        flag = false;
+
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(ANIMATION_LAYOUT_MIN_HEIGHT, ANIMATION_LAYOUT_MAX_HEIGHT);
+        valueAnimator.setDuration(ANIMATION_DURATION);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                params.height = CommonMethods.convertDpToPixel(value.intValue());
+                v.setLayoutParams(params);
+
+            }
+        });
+
+        valueAnimator.start();
+    }
+
     //onClick listener
     @Override
     public void onClick(View v) {
@@ -299,6 +348,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 } else {
                     createAnnotationTreeStructure(mAnnotationListData, true);
                 }
+
+                /*if (flag)
+                    expand(mCompareDialogLayout);
+                else
+                    collapse(mCompareDialogLayout);*/
 
                 break;
             // on click of fromDate editext in right drawer
