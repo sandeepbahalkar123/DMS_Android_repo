@@ -572,17 +572,9 @@ public class CommonMethods {
                    intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                    mContext.startActivity(intentObj);
                    ((Activity)mContext).finish();
-
-
                }
 
-                if (!isReEnteredServerPath) {
-                    Intent intentObj = new Intent(mContext, LoginActivity.class);
-                    intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(intentObj);
-                }
+
 
                 //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
