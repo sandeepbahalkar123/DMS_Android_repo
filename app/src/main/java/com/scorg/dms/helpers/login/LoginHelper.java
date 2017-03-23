@@ -29,6 +29,7 @@ public class LoginHelper implements ConnectionListener {
     HelperResponse mHelperResponseManager;
     private String userName;
     private String password;
+    private String userGender;
 
     public LoginHelper(Context context, HelperResponse loginActivity1) {
         this.mContext = context;
@@ -51,6 +52,7 @@ public class LoginHelper implements ConnectionListener {
                     DmsPreferencesManager.putString(DmsConstants.REFRESH_TOKEN, model.getRefreshToken(), mContext);
                     DmsPreferencesManager.putString(DmsConstants.USERNAME, userName, mContext);
                     DmsPreferencesManager.putString(DmsConstants.PASSWORD, password, mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER, userGender, mContext);
                     mHelperResponseManager.onSuccess(mOldDataTag, model);
                 }
                 break;

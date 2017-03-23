@@ -7,7 +7,7 @@
     <dimen name="dp1">2dp</dimen>
     <dimen name="dp2">4dp</dimen>
     <dimen name="dp4">10dp</dimen>
-    <dimen name="dp5">12dp</dimen>
+    <dimen name="dp5">5dp</dimen>
     <dimen name="dp8">16dp</dimen>
     <dimen name="dp16">16dp</dimen>
     <dimen name="dp10">20dp</dimen>
