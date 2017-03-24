@@ -78,8 +78,9 @@ public class ConnectionFactory extends ConnectRequest {
     }
 
     public void setUrl(String url) {
-        Config.BASE_URL = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext);
-        this.mURL = Config.BASE_URL + url;
+        String baseUrl = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext);
+        this.mURL = baseUrl + url;
+        CommonMethods.Log(TAG,"mURL: "+this.mURL);
     }
 
     public Connector createConnection(int type) {
