@@ -8,16 +8,14 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +32,6 @@ import com.scorg.dms.R;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.ui.activities.LoginActivity;
-import com.scorg.dms.ui.activities.PatientList;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -67,8 +64,6 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import static com.scorg.dms.util.DmsConstants.DATEFORMAT;
 
 public class CommonMethods {
 
@@ -561,22 +556,22 @@ public class CommonMethods {
             public void onClick(View v) {
                 EditText etServerPath = (EditText) dialog.findViewById(R.id.et_server_path);
 
-                if(isValidIP(etServerPath.getText().toString())){
+                if (isValidIP(etServerPath.getText().toString())) {
                     String mServerPath = Config.HTTP + etServerPath.getText().toString() + Config.API;
 //                    CommonMethods.Log(TAG, "SERVER PATH===" + mServerPath);
 
                     DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
                     dialog.dismiss();
-                    if(!isReEnteredServerPath) {
+                    if (!isReEnteredServerPath) {
                         Intent intentObj = new Intent(mContext, LoginActivity.class);
                         intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         mContext.startActivity(intentObj);
-                        ((Activity)mContext).finish();
+                        ((Activity) mContext).finish();
                     }
-                }else{
-                    Toast.makeText(mContext, R.string.error_in_ip,Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(mContext, R.string.error_in_ip, Toast.LENGTH_LONG).show();
                 }
 
                 //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
@@ -587,8 +582,8 @@ public class CommonMethods {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                if(!isReEnteredServerPath){
-                    ((Activity)mContext).finish();
+                if (!isReEnteredServerPath) {
+                    ((Activity) mContext).finish();
                 }
 
 
@@ -599,7 +594,7 @@ public class CommonMethods {
         return dialog;
     }
 
-    private static boolean isValidIP(String ipAddr){
+    private static boolean isValidIP(String ipAddr) {
 
 //        Pattern ptn = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\:(\\d{1,4})$");
         Pattern ptn = Pattern.compile("(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\:(\\d{1,4})$");
@@ -625,6 +620,18 @@ public class CommonMethods {
             e.printStackTrace();
         }
         return file.getAbsolutePath();
+    }
+
+    public static float convertPixelsToDp(float px) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return Math.round(dp);
+    }
+
+    public static int convertDpToPixel(float dp) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return Math.round(px);
     }
 }
 

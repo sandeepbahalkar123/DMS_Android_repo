@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?android:attr/selectableItemBackground"
     android:minHeight="48dp">
 
@@ -25,7 +26,7 @@
 
         <com.github.johnkil.print.PrintView
             android:id="@+id/arrow_icon"
-            android:layout_width="@dimen/dp28"
+            android:layout_width="@dimen/dp30"
             android:layout_height="@dimen/dp28"
             android:layout_alignWithParentIfMissing="true"
             android:layout_centerHorizontal="true"
@@ -55,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp5"
-            android:text="asdasd"
+            tools:text="asdasd"
             android:textColor="@color/black"
             android:textSize="@dimen/sp14" />
     </LinearLayout>

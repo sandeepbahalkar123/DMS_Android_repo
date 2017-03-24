@@ -136,6 +136,6 @@
     <string name="ic_person">&#xe105;</string>
     <string name="filenotfound">File not found</string>
     <string name="error_in_ip">Please enter valid IP address</string>
-
-    <!--******************************-->
+    <string name="comparedocument">Compare Document</string>
+    <string name="adddocument">Add Document</string>
 </resources>
