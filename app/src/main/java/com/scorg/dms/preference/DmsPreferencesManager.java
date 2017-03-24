@@ -33,6 +33,7 @@ public class DmsPreferencesManager {
     public interface DMS_PREFERENCES_KEY {
 
         String SERVER_PATH = "server_path";
+        String USER_GENDER = "user_gender";
 
     }
 

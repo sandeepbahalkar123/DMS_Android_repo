@@ -1,6 +1,8 @@
 package com.scorg.dms.util;
 
 
+import com.github.barteksc.pdfviewer.util.Constants;
+
 /**
  * @author Sandeep Bahalkar
  */
@@ -21,7 +23,6 @@ public class DmsConstants {
     public static class PATIENT_LIST_PARAMS {
         public static final String PATIENT_NAME = "patientName";
         public static final String FILE_TYPE = "fileType";
-        public static final String REFRENCE_ID = "referenceId";
         public static final String DATE_TYPE = "dateType";
         public static final String FROM_DATE = "fromDate";
         public static final String TO_DATE = "toDate";
@@ -65,14 +66,12 @@ public class DmsConstants {
     public static final String FALSE = "false";
 
     // Connection codes
-    public static final int REGISTRATION_CODE = 0;
-    public static final int TASK_LOGIN_CODE = 1;
-    public static final int TASK_PATIENT_LIST = 2;
-    public static final int TASK_ANNOTATIONS_LIST = 3;
-    public static final int TASK_GET_ARCHIVED_LIST = 4;
-    public static final int TASK_GET_PDF_DATA = 7;
-    public static final int TOKEN_REFRESH = 8;
-
+    public static final String REGISTRATION_CODE = DmsConstants.BLANK + 0;
+    public static final String TASK_LOGIN_CODE = DmsConstants.BLANK + 1;
+    public static final String TASK_PATIENT_LIST = DmsConstants.BLANK + 2;
+    public static final String TASK_ANNOTATIONS_LIST = DmsConstants.BLANK + 3;
+    public static final String TASK_GET_ARCHIVED_LIST = DmsConstants.BLANK + 4;
+    public static final String TASK_GET_PDF_DATA = DmsConstants.BLANK + "PDF_DATA";
 
     public static class DATE_PATTERN {
         public static String YYYY_MM_DD = "yyyy-MM-dd";

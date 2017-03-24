@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/riteshpandhurkar/riteshpandhurkar/Projects/Scorge_Projects/DMS/DMS_Android_repo/android-pdf-viewer/build/intermediates/res/merged/debug/drawable/default_scroll_handle_top.xml",
+        "source": "/home/riteshpandhurkar/riteshpandhurkar/Projects/Scorge_Projects/DMS/DMS_Android_repo/android-pdf-viewer/src/main/res/drawable/default_scroll_handle_top.xml"
+    },
+    {
+        "merged": "/home/riteshpandhurkar/riteshpandhurkar/Projects/Scorge_Projects/DMS/DMS_Android_repo/android-pdf-viewer/build/intermediates/res/merged/debug/drawable/default_scroll_handle_right.xml",
+        "source": "/home/riteshpandhurkar/riteshpandhurkar/Projects/Scorge_Projects/DMS/DMS_Android_repo/android-pdf-viewer/src/main/res/drawable/default_scroll_handle_right.xml"
+    },
+    {
+        "merged": "/home/riteshpandhurkar/riteshpandhurkar/Projects/Scorge_Projects/DMS/DMS_Android_repo/android-pdf-viewer/build/intermediates/res/merged/debug/drawable/default_scroll_handle_left.xml",
+        "source": "/home/riteshpandhurkar/riteshpandhurkar/Projects/Scorge_Projects/DMS/DMS_Android_repo/android-pdf-viewer/src/main/res/drawable/default_scroll_handle_left.xml"
+    },
+    {
+        "merged": "/home/riteshpandhurkar/riteshpandhurkar/Projects/Scorge_Projects/DMS/DMS_Android_repo/android-pdf-viewer/build/intermediates/res/merged/debug/drawable/default_scroll_handle_bottom.xml",
+        "source": "/home/riteshpandhurkar/riteshpandhurkar/Projects/Scorge_Projects/DMS/DMS_Android_repo/android-pdf-viewer/src/main/res/drawable/default_scroll_handle_bottom.xml"
+    }
+]

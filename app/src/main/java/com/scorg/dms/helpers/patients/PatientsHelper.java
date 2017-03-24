@@ -27,7 +27,7 @@ import java.util.List;
  * Created by riteshpandhurkar on 1/3/17.
  */
 
-public class PatientsHelper implements  ConnectionListener {
+public class PatientsHelper implements ConnectionListener {
 
     String TAG = this.getClass().getSimpleName();
     Context mContext;
@@ -67,36 +67,26 @@ public class PatientsHelper implements  ConnectionListener {
         mConnectionFactory.createConnection(DmsConstants.TASK_GET_ARCHIVED_LIST);
     }
 
-    public void getPdfData(GetPdfDataRequestModel getPdfDataRequestModel) {
+    public void getPdfData(GetPdfDataRequestModel getPdfDataRequestModel, String taskID) {
 
         //---------------
-
-        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_GET_PDF_DATA, Request.Method.POST);
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, false, taskID, Request.Method.POST);
         mConnectionFactory.setHeaderParams();
         mConnectionFactory.setPostParams(getPdfDataRequestModel);
-
         mConnectionFactory.setUrl(Config.URL_GET_PDF_DATA);
-        mConnectionFactory.createConnection(DmsConstants.TASK_GET_PDF_DATA);
+        mConnectionFactory.createConnection(taskID);
     }
 
 
     //-------------------------
     @Override
-    public void onResponse(int responseResult, CustomResponse customResponse, int mOldDataTag) {
+    public void onResponse(int responseResult, CustomResponse customResponse, String mOldDataTag) {
 
         CommonMethods.Log(TAG, customResponse.toString());
 
         switch (responseResult) {
             case ConnectionListener.RESPONSE_OK:
-                if (mOldDataTag == DmsConstants.TASK_PATIENT_LIST) {
-                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
-                } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
-                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
-                } else if (mOldDataTag == DmsConstants.TASK_GET_ARCHIVED_LIST) {
-                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
-                }else if (mOldDataTag == DmsConstants.TASK_GET_PDF_DATA) {
-                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
-                }
+                mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
                 break;
 
             case ConnectionListener.PARSE_ERR0R:

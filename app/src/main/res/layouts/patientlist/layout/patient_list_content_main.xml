@@ -9,14 +9,19 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.activities.PatientList"
     tools:showIn="@layout/patient_list_app_bar">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/grey_300">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/grey_300"
         app:reverseLayout="false"></android.support.v7.widget.RecyclerView>
-
+</LinearLayout>
     <ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/expandableListView"
         android:layout_width="match_parent"

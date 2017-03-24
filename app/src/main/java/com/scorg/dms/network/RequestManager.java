@@ -58,12 +58,12 @@ public class RequestManager extends ConnectRequest implements Connector, Request
     private String requestTag;
     private int connectionType = Request.Method.POST;
 
-    private int mDataTag;
+    private String mDataTag;
     private RequestTimer requestTimer;
     private JsonObjectRequest jsonRequest;
     private StringRequest stringRequest;
 
-    public RequestManager(Context mContext, ConnectionListener connectionListener, int dataTag, View viewById, boolean isProgressBarShown, int mOldDataTag, int connectionType) {
+    public RequestManager(Context mContext, ConnectionListener connectionListener, String dataTag, View viewById, boolean isProgressBarShown, String mOldDataTag, int connectionType) {
         super();
         this.mConnectionListener = connectionListener;
         this.mContext = mContext;
@@ -319,6 +319,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 connect();
             } else {
                 // This success response is for respective api's
+
                 switch (this.mDataTag) {
                     case DmsConstants.REGISTRATION_CODE: //This is sample code
 //                    RegistrationModel  registrationModel = gson.fromJson(data, RegistrationModel.class);
@@ -340,10 +341,12 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                         FileTreeResponseModel fileTreeResponseModel = gson.fromJson(data, FileTreeResponseModel.class);
                         this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, fileTreeResponseModel, mOldDataTag);
                         break;
-                    case DmsConstants.TASK_GET_PDF_DATA: //This is for get archived list
-                        GetPdfDataResponseModel getPdfDataResponseModel = gson.fromJson(data, GetPdfDataResponseModel.class);
-                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, getPdfDataResponseModel, mOldDataTag);
-                        break;
+                    default:
+                        //This is for get PDF Data
+                        if (mOldDataTag.startsWith(DmsConstants.TASK_GET_PDF_DATA)) {
+                            GetPdfDataResponseModel getPdfDataResponseModel = gson.fromJson(data, GetPdfDataResponseModel.class);
+                            this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, getPdfDataResponseModel, mOldDataTag);
+                        }
                 }
             }
 

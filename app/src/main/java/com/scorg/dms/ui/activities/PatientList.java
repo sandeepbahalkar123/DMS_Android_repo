@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -40,7 +41,6 @@ import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationL
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListData;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
-import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
@@ -73,7 +73,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     DrawerLayout mDrawer;
     NavigationView mLeftNavigationView;
     NavigationView mRightNavigationView;
-    View mHeaderView;
+    View mRightHeaderView;
+    View mLeftHeaderView;
+    private TextView mUserName;
     private TextView mApplySearchFilter;
     private TextView mResetSearchFilter;
     private EditText mUHIDEditText;
@@ -98,6 +100,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
     private String TAG = this.getClass().getName();
+    private boolean isFileType = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,8 +161,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         mLeftNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
-        mHeaderView = mRightNavigationView.getHeaderView(0);
-
+        mRightHeaderView = mRightNavigationView.getHeaderView(0);
+        mLeftHeaderView = mLeftNavigationView.getHeaderView(0);
         //---------------
         DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
         params.width = width;
@@ -169,18 +172,18 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mRightNavigationView.setLayoutParams(params);
         mLeftNavigationView.setLayoutParams(leftParams);
         //---------------
-
-        mSpinSelectedId = (Spinner) mHeaderView.findViewById(R.id.spinner_selectId);
-        mSpinnerAmissionDate = (Spinner) mHeaderView.findViewById(R.id.spinner_admissionDate);
-        mUHIDEditText = (EditText) mHeaderView.findViewById(R.id.et_uhid);
-        mFromDateEditText = (EditText) mHeaderView.findViewById(R.id.et_fromdate);
-        mToDateEditText = (EditText) mHeaderView.findViewById(R.id.et_todate);
-        mSearchPatientNameEditText = (EditText) mHeaderView.findViewById(R.id.et_searchPatientName);
-        mAnnotationEditText = (EditText) mHeaderView.findViewById(R.id.et_annotation);
-        mSearchAnnotationEditText = (EditText) mHeaderView.findViewById(R.id.et_search_annotation);
-        mApplySearchFilter = (TextView) mHeaderView.findViewById(R.id.apply);
-        mResetSearchFilter = (TextView) mHeaderView.findViewById(R.id.reset);
-        mAnnotationTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.annotationTreeViewContainer);
+        mUserName = (TextView) mLeftHeaderView.findViewById(R.id.userName);
+        mSpinSelectedId = (Spinner) mRightHeaderView.findViewById(R.id.spinner_selectId);
+        mSpinnerAmissionDate = (Spinner) mRightHeaderView.findViewById(R.id.spinner_admissionDate);
+        mUHIDEditText = (EditText) mRightHeaderView.findViewById(R.id.et_uhid);
+        mFromDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_fromdate);
+        mToDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_todate);
+        mSearchPatientNameEditText = (EditText) mRightHeaderView.findViewById(R.id.et_searchPatientName);
+        mAnnotationEditText = (EditText) mRightHeaderView.findViewById(R.id.et_annotation);
+        mSearchAnnotationEditText = (EditText) mRightHeaderView.findViewById(R.id.et_search_annotation);
+        mApplySearchFilter = (TextView) mRightHeaderView.findViewById(R.id.apply);
+        mResetSearchFilter = (TextView) mRightHeaderView.findViewById(R.id.reset);
+        mAnnotationTreeViewContainer = (RelativeLayout) mRightHeaderView.findViewById(R.id.annotationTreeViewContainer);
 
         //---------
         // right navigation drawer clickListener
@@ -220,6 +223,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mApplySearchFilter.setOnClickListener(this);
         mFromDateEditText.setOnClickListener(this);
         mToDateEditText.setOnClickListener(this);
+        mUserName.setText(DmsPreferencesManager.getString(DmsConstants.USERNAME, mContext));
         //--------
         // setting adapter for spinner in header view of right drawer
         mCustomSpinAdapter = new Custom_Spin_Adapter(this, mArrayId, getResources().getStringArray(R.array.select_id));
@@ -229,7 +233,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     }
 
     @Override
-    public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
+    public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
         if (mOldDataTag == DmsConstants.TASK_PATIENT_LIST) {
             ShowSearchResultResponseModel showSearchResultResponseModel = (ShowSearchResultResponseModel) customResponse;
             List<SearchResult> searchResult = showSearchResultResponseModel.getSearchResultData().getSearchResult();
@@ -237,8 +241,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             mPatientListView.setAdapter(new PatientExpandableListAdapter(this, searchResult));
             mPatientListView.setGroupIndicator(null);
             mPatientListView.setChildIndicator(null);
-            mPatientListView.setChildDivider(getResources().getDrawable(R.color.transparent));
-            mPatientListView.setDivider(getResources().getDrawable(R.color.white));
+            mPatientListView.setChildDivider(ContextCompat.getDrawable(this, R.color.transparent));
+            mPatientListView.setDivider(ContextCompat.getDrawable(this, R.color.white));
             mPatientListView.setDividerHeight(2);
 
             //mPatientListView.setDividerHeight(2);
@@ -251,17 +255,17 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     }
 
     @Override
-    public void onParseError(int mOldDataTag, String errorMessage) {
+    public void onParseError(String mOldDataTag, String errorMessage) {
 
     }
 
     @Override
-    public void onServerError(int mOldDataTag, String serverErrorMessage) {
+    public void onServerError(String mOldDataTag, String serverErrorMessage) {
 
     }
 
     @Override
-    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
+    public void onNoConnectionError(String mOldDataTag, String serverErrorMessage) {
 
     }
 
@@ -327,6 +331,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mFromDateEditText.setText(DmsConstants.BLANK);
                 mToDateEditText.setText(DmsConstants.BLANK);
                 mSearchAnnotationEditText.setText(DmsConstants.BLANK);
+                mAnnotationEditText.setText(DmsConstants.BLANK);
                 mSearchPatientNameEditText.setText(DmsConstants.BLANK);
                 mSpinnerAmissionDate.setSelection(0);
                 mSpinSelectedId.setSelection(0);
@@ -342,14 +347,19 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     dateValidate = validate(fromDate, toDate);
                 }
                 if (!dateValidate) {
-
                     //adding field values in arrayList to generate tags in recycler view
-                    if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
+                    //we are adding refrence id and file type value in FILE_TYPE parameter
+                    //Reference id = UHID or OPD or IPD number
+                    if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select)) && mUHIDEditText.getText().toString().trim().length() != 0) {
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + mUHIDEditText.getText().toString());
+                    } else if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId);
-                    }
-
-                    if (mUHIDEditText.getText().toString().trim().length() != 0) {
-                        mAddedTagsForFiltering.put(DmsConstants.ID, mUHIDEditText.getText().toString());
+                        isFileType = true;
+                    } else if (mUHIDEditText.getText().toString().trim().length() != 0) {
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mUHIDEditText.getText().toString());
+                        isFileType = false;
+                    } else {
+                        isFileType = false;
                     }
 
                     if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
@@ -404,22 +414,43 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         }
 
         ShowSearchResultRequestModel showSearchResultRequestModel = new ShowSearchResultRequestModel();
-
-        String fileType = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE);
+        // Code for giving separate values of file type and refrence Id to api
+        String mCheckFileTypeOrReferenceID = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE);
+        String mFileTypeTag = "";
+        String mReferenceIdTag = "";
+        if (mCheckFileTypeOrReferenceID != null)
+            if (!mCheckFileTypeOrReferenceID.equals("")) {
+                String[] separateReferenceIdFileType = mCheckFileTypeOrReferenceID.split(":");
+                if (separateReferenceIdFileType.length == 2) {
+                    mFileTypeTag = separateReferenceIdFileType[0];
+                    mReferenceIdTag = separateReferenceIdFileType[1];
+                } else if (isFileType) {
+                    mFileTypeTag = separateReferenceIdFileType[0];
+                } else {
+                    mReferenceIdTag = separateReferenceIdFileType[0];
+                }
+            }
         //----------
-        if (getString(R.string.uhid).equalsIgnoreCase(fileType)) {
+        if (getString(R.string.uhid).equalsIgnoreCase(mFileTypeTag)) {
             showSearchResultRequestModel.setPatientId(addedTagsForFiltering.get(DmsConstants.ID));
-            showSearchResultRequestModel.setReferenceId("");
-        } else if (getString(R.string.ipd).equalsIgnoreCase(fileType) || getString(R.string.opd).equalsIgnoreCase(fileType)) {
+
+        } else if (getString(R.string.ipd).equalsIgnoreCase(mFileTypeTag) || getString(R.string.opd).equalsIgnoreCase(mFileTypeTag)) {
             showSearchResultRequestModel.setPatientId("");
-            showSearchResultRequestModel.setReferenceId(addedTagsForFiltering.get(DmsConstants.ID));
+
         } else {
             showSearchResultRequestModel.setPatientId("");
-            showSearchResultRequestModel.setReferenceId("");
         }
 
-        if (fileType != null) {
-            showSearchResultRequestModel.setFileType("" + fileType);
+        if (!mReferenceIdTag.equals(""))
+            showSearchResultRequestModel.setReferenceId(mReferenceIdTag);
+        else
+            showSearchResultRequestModel.setReferenceId("");
+
+        if (mFileTypeTag != null) {
+            if (!mFileTypeTag.equals(""))
+                showSearchResultRequestModel.setFileType(mFileTypeTag);
+            else
+                showSearchResultRequestModel.setFileType("");
         } else {
             showSearchResultRequestModel.setFileType("");
         }
