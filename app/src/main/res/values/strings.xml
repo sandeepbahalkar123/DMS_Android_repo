@@ -134,6 +134,7 @@
     <string name="ic_label">&#xe0d0;</string>
     <string name="ic_person">&#xe105;</string>
     <string name="filenotfound">File not found</string>
+    <string name="error_in_ip">Please enter correct IP address</string>
 
     <!--******************************-->
 </resources>

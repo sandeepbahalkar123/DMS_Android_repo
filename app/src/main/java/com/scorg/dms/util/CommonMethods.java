@@ -59,6 +59,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -559,22 +561,23 @@ public class CommonMethods {
             public void onClick(View v) {
                 EditText etServerPath = (EditText) dialog.findViewById(R.id.et_server_path);
 
-                String mServerPath = Config.HTTP + etServerPath.getText().toString() + Config.API;
-                Log.e(TAG, "SERVER PATH===" + mServerPath);
+                if(isValidIP(etServerPath.getText().toString())){
+                    String mServerPath = Config.HTTP + etServerPath.getText().toString() + Config.API;
+                    Log.e(TAG, "SERVER PATH===" + mServerPath);
 
-                DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
-                dialog.dismiss();
-
-               if(!isReEnteredServerPath) {
-                   Intent intentObj = new Intent(mContext, LoginActivity.class);
-                   intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                   intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                   intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                   mContext.startActivity(intentObj);
-                   ((Activity)mContext).finish();
-               }
-
-
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
+                    dialog.dismiss();
+                    if(!isReEnteredServerPath) {
+                        Intent intentObj = new Intent(mContext, LoginActivity.class);
+                        intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContext.startActivity(intentObj);
+                        ((Activity)mContext).finish();
+                    }
+                }else{
+                    Toast.makeText(mContext, R.string.error_in_ip,Toast.LENGTH_LONG).show();
+                }
 
                 //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
@@ -590,6 +593,14 @@ public class CommonMethods {
         dialog.show();
 
         return dialog;
+    }
+
+    private static boolean isValidIP(String ipAddr){
+
+//        Pattern ptn = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\:(\\d{1,4})$");
+        Pattern ptn = Pattern.compile("(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\:(\\d{1,4})$");
+        Matcher mtch = ptn.matcher(ipAddr);
+        return mtch.find();
     }
 
     public static String getCachePath(Context context, String base64Pdf, String filename, String extension) {
