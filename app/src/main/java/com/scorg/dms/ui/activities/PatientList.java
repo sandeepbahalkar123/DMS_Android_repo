@@ -186,10 +186,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mApplySearchFilter = (TextView) mRightHeaderView.findViewById(R.id.apply);
         mResetSearchFilter = (TextView) mRightHeaderView.findViewById(R.id.reset);
         mAnnotationTreeViewContainer = (RelativeLayout) mRightHeaderView.findViewById(R.id.annotationTreeViewContainer);
-         if(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER,mContext).equals("m")){
-             mUserImage.setBackground(getDrawable(R.drawable.image_male));
+         if(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER,mContext).equals("M")){
+             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_male));
          }else {
-             mUserImage.setBackground(getDrawable(R.drawable.image_female));
+             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_female));
          }
         //---------
         // right navigation drawer clickListener

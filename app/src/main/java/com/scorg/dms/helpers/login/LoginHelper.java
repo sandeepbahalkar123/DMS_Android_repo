@@ -7,6 +7,8 @@ import com.android.volley.Request;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
+import com.scorg.dms.model.responsemodel.Common;
+import com.scorg.dms.model.responsemodel.iptestresponsemodel.IpTestResponseModel;
 import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.network.ConnectRequest;
 import com.scorg.dms.network.ConnectionFactory;
@@ -53,10 +55,18 @@ public class LoginHelper implements ConnectionListener {
                     DmsPreferencesManager.putString(DmsConstants.REFRESH_TOKEN, model.getRefreshToken(), mContext);
                     DmsPreferencesManager.putString(DmsConstants.USERNAME, userName, mContext);
                     DmsPreferencesManager.putString(DmsConstants.PASSWORD, password, mContext);
-                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER, userGender, mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER, model.getUserGender(), mContext);
                     mHelperResponseManager.onSuccess(mOldDataTag, model);
+
+                } else if (mOldDataTag == DmsConstants.TASK_CHECK_SERVER_CONNECTION) {
+
+                    IpTestResponseModel ipTestResponseModel = (IpTestResponseModel) customResponse;
+                    mHelperResponseManager.onSuccess(mOldDataTag, ipTestResponseModel);
+
+
                 }
                 break;
+
 
             case ConnectionListener.PARSE_ERR0R:
                 CommonMethods.Log(TAG, "parse error");
@@ -105,10 +115,11 @@ public class LoginHelper implements ConnectionListener {
         mConnectionFactory.setUrl(Config.URL_LOGIN);
         mConnectionFactory.createConnection(DmsConstants.TASK_LOGIN_CODE);
     }
+
     public void checkConnectionToServer(String serverPath) {
         this.mServerPath = serverPath;
-        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_CHECK_SERVER_CONNECTION, Request.Method.POST);
-        Log.e(TAG,"Config.URL_LOGIN: "+Config.URL_CHECK_SERVER_CONNECTION);
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_CHECK_SERVER_CONNECTION, Request.Method.GET);
+        Log.e(TAG, "Config.URL_LOGIN: " + Config.URL_CHECK_SERVER_CONNECTION);
         mConnectionFactory.setUrl(Config.URL_CHECK_SERVER_CONNECTION);
         mConnectionFactory.createConnection(DmsConstants.TASK_CHECK_SERVER_CONNECTION);
     }

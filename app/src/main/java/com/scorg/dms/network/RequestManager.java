@@ -30,9 +30,11 @@ import com.scorg.dms.R;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.Connector;
 import com.scorg.dms.interfaces.CustomResponse;
+import com.scorg.dms.model.responsemodel.Common;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
 import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
+import com.scorg.dms.model.responsemodel.iptestresponsemodel.IpTestResponseModel;
 import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
@@ -337,6 +339,10 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                     case DmsConstants.TASK_GET_PDF_DATA: //This is for get archived list
                         GetPdfDataResponseModel getPdfDataResponseModel = gson.fromJson(data, GetPdfDataResponseModel.class);
                         this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, getPdfDataResponseModel, mOldDataTag);
+                        break;
+                    case DmsConstants.TASK_CHECK_SERVER_CONNECTION: //This is for get archived list
+                        IpTestResponseModel ipTestResponseModel = gson.fromJson(data, IpTestResponseModel.class);
+                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, ipTestResponseModel, mOldDataTag);
                         break;
                 }
             }

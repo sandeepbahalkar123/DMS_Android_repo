@@ -7,5 +7,5 @@ import android.content.Context;
  */
 
 public interface CheckIpConnection {
-    public void onOkButtonClickListner(String serverPath,Context context,Boolean isReEnteredServerPath);
+    public void onOkButtonClickListner(String serverPath,Context context);
 }
