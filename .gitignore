@@ -11,4 +11,8 @@
 /android-pdf-viewer/build/**/
 /app/build/**/
 /library/build/**/
+<<<<<<< HEAD
 .idea/vcs.xml
+=======
+.idea/vcs.xml
+>>>>>>> RiteshP

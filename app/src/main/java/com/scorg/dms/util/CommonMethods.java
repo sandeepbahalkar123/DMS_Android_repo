@@ -568,6 +568,7 @@ public class CommonMethods {
                     mCheckIpConnection.onOkButtonClickListner(mServerPath, mContext);
                     dialog.dismiss();
 
+
                 } else {
                     Toast.makeText(mContext, R.string.error_in_ip, Toast.LENGTH_LONG).show();
                 }
@@ -579,12 +580,8 @@ public class CommonMethods {
         dialog.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dialog.dismiss();
                 ((Activity) mContext).finish();
-
-
-
             }
         });
         dialog.show();
@@ -613,6 +610,7 @@ public class CommonMethods {
             outputStream = new FileOutputStream(file);
             outputStream.write(pdfAsBytes);
             outputStream.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

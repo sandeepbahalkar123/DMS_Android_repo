@@ -11,8 +11,9 @@
     tools:context=".ui.activities.FileTypeViewerActivity"
     tools:showIn="@layout/compare_file_type_app_bar_drawer">
 
-    <RelativeLayout
-        android:id="@+id/firstPdfViewLay"
+
+    <FrameLayout
+        android:id="@+id/firstPdfViewFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="7dp"
@@ -30,21 +31,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:textSize="@dimen/filenotfoundmessagetextsize"
             android:visibility="gone" />
+    </FrameLayout>
 
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/secondPdfViewLay"
+    <FrameLayout
+        android:id="@+id/secondPdfViewFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="7dp"
         android:layout_weight="1.0"
         android:background="@drawable/pdfdecoration"
         android:padding="1.5dp"
-        android:visibility="gone">
+        android:visibility="visible">
+
 
         <com.github.barteksc.pdfviewer.PDFView
             android:id="@+id/secondPdfView"
@@ -56,9 +57,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:textSize="@dimen/filenotfoundmessagetextsize"
             android:visibility="visible" />
 
-    </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

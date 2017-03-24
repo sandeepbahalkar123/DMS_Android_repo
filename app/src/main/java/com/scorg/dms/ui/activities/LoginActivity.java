@@ -27,7 +27,7 @@ import butterknife.OnClick;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements HelperResponse  {
+public class LoginActivity extends AppCompatActivity implements HelperResponse {
 
     String TAG = this.getClass().getSimpleName();
     Context mContext;
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse  
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mContext = getApplicationContext();
-       // Log.d("Server PAth",mServerPath);
+        // Log.d("Server PAth",mServerPath);
 
         ButterKnife.bind(this);
         mLoginHelper = new LoginHelper(this, this);
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse  
     }
 
     @Override
-    public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
+    public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
 
         Intent intent = new Intent(this, PatientList.class);
         startActivity(intent);
@@ -90,25 +90,19 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse  
     }
 
     @Override
-    public void onParseError(int mOldDataTag, String errorMessage) {
+    public void onParseError(String mOldDataTag, String errorMessage) {
         CommonMethods.showToast(this, errorMessage);
     }
 
     @Override
-    public void onServerError(int mOldDataTag, String serverErrorMessage) {
-        DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
-//        CommonMethods.showAlertDialog(LoginActivity.this,getString(R.string.wrong_server_path)+"\n"+getString(R.string.for_example_server_path),true);
+    public void onServerError(String mOldDataTag, String serverErrorMessage) {
+        CommonMethods.showToast(this, serverErrorMessage);
     }
 
     @Override
-    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
-       /* DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
-        CommonMethods.showAlertDialog(LoginActivity.this, getString(R.string.wrong_server_path) + "\n" + getString(R.string.for_example_server_path), true, new CheckIpConnection() {
-            @Override
-            public void onOkButtonClickListner(String serverPath, Context context,Boolean isReenteredServerPath) {
+    public void onNoConnectionError(String mOldDataTag, String serverErrorMessage) {
+        CommonMethods.showToast(this, serverErrorMessage);
 
-            }
-        });*/
     }
 }
 

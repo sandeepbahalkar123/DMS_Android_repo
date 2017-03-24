@@ -39,11 +39,13 @@ public class ArrowExpandIconTreeItemHolder extends TreeNode.BaseNodeViewHolder<A
         public int icon;
         public Object text;
         public Object objectData;
+        public int level;
 
-        public IconTreeItem(int icon, Object text, Object objectData) {
+        public IconTreeItem(int icon, Object text, Object objectData, int level) {
             this.icon = icon;
             this.text = text;
             this.objectData = objectData;
+            this.level = level;
         }
 
       /*  @Override

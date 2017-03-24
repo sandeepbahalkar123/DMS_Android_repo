@@ -90,7 +90,7 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
     }
 
     @Override
-    public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
+    public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
         IpTestResponseModel ipTestResponseModel = (IpTestResponseModel) customResponse;
         if (ipTestResponseModel.getCommon().getStatusCode().equals(DmsConstants.SUCCESS)) {
             DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG, DmsConstants.TRUE, mContext);
@@ -105,12 +105,12 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
     }
 
     @Override
-    public void onParseError(int mOldDataTag, String errorMessage) {
+    public void onParseError(String mOldDataTag, String errorMessage) {
 
     }
 
     @Override
-    public void onServerError(int mOldDataTag, String serverErrorMessage) {
+    public void onServerError(String mOldDataTag, String serverErrorMessage) {
         DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
         CommonMethods.showAlertDialog(SplashScreenActivity.this, getString(R.string.wrong_server_path) + "\n" + getString(R.string.for_example_server_path), true, new CheckIpConnection() {
             @Override
@@ -123,7 +123,7 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
     }
 
     @Override
-    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
+    public void onNoConnectionError(String mOldDataTag, String serverErrorMessage) {
         DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
         CommonMethods.showAlertDialog(SplashScreenActivity.this, getString(R.string.wrong_server_path) + "\n" + getString(R.string.for_example_server_path), true, new CheckIpConnection() {
             @Override
