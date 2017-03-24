@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,6 +75,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     NavigationView mRightNavigationView;
     View mRightHeaderView;
     View mLeftHeaderView;
+    private ImageView mUserImage;
     private TextView mUserName;
     private TextView mApplySearchFilter;
     private TextView mResetSearchFilter;
@@ -171,6 +173,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mRightNavigationView.setLayoutParams(params);
         mLeftNavigationView.setLayoutParams(leftParams);
         //---------------
+        mUserImage = (ImageView)mLeftHeaderView.findViewById(R.id.userImage);
         mUserName = (TextView) mLeftHeaderView.findViewById(R.id.userName);
         mSpinSelectedId = (Spinner) mRightHeaderView.findViewById(R.id.spinner_selectId);
         mSpinnerAmissionDate = (Spinner) mRightHeaderView.findViewById(R.id.spinner_admissionDate);
@@ -183,7 +186,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mApplySearchFilter = (TextView) mRightHeaderView.findViewById(R.id.apply);
         mResetSearchFilter = (TextView) mRightHeaderView.findViewById(R.id.reset);
         mAnnotationTreeViewContainer = (RelativeLayout) mRightHeaderView.findViewById(R.id.annotationTreeViewContainer);
-
+         if(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER,mContext).equals("m")){
+             mUserImage.setBackground(getDrawable(R.drawable.image_male));
+         }else {
+             mUserImage.setBackground(getDrawable(R.drawable.image_female));
+         }
         //---------
         // right navigation drawer clickListener
         mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
