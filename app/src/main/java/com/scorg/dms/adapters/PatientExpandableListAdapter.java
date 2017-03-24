@@ -1,35 +1,22 @@
 package com.scorg.dms.adapters;
 
-import android.app.Dialog;
 import android.content.Context;
-
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scorg.dms.R;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.ui.activities.FileTypeViewerActivity;
-import com.scorg.dms.ui.activities.PatientList;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 
@@ -38,12 +25,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.R.attr.value;
 
 /**
  * Created by riteshpandhurkar on 24/2/17.
@@ -53,13 +37,13 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
     private String TAG = this.getClass().getName();
     private Context _context;
+    private OnCompareListener onCompareListener;
 
-
-    private List<String> _listDataHeader; // header titles
+    private List<SearchResult> _listDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, ArrayList<PatientFileData>> _listDataChild;
 
-    private List<String> _originalListDataHeader; // header titles
+    private List<SearchResult> _originalListDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, ArrayList<PatientFileData>> _originalListDataChild;
 
@@ -78,7 +62,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
     public PatientExpandableListAdapter(Context context, List<SearchResult> searchResult) {
         this._context = context;
 
-        List<String> listDataHeader = new ArrayList<>();
+        List<SearchResult> listDataHeader = new ArrayList<>();
         HashMap<String, ArrayList<PatientFileData>> listChildData = new HashMap<String, ArrayList<PatientFileData>>();
 
         for (SearchResult dataObject :
@@ -86,8 +70,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             String patientName = dataObject.getPatientName();
             String patientAddress = dataObject.getPatientAddress();
             String id = dataObject.getPatientId();
-            listDataHeader.add(patientName);
-
+            listDataHeader.add(dataObject);
 
             //--------
             // This is done to set getPatientId in child (PatientFileData)
@@ -99,6 +82,14 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             //--------
 
             listChildData.put(patientName, new ArrayList<PatientFileData>(patientFileData));
+
+            try {
+                this.onCompareListener = ((PatientExpandableListAdapter.OnCompareListener) _context);
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Activity must implement onCompareListener.");
+            }
+
+
         }
 
         this.searchResultForPatientDetails = searchResult;
@@ -117,7 +108,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
     @Override
     public PatientFileData getChild(int groupPosition, int childPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition).getPatientName())
                 .get(childPosition);
     }
 
@@ -185,7 +176,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         // CommonMethods.Log(TAG, "childrenCount: " + groupPosition + ":" + childPosition + ":" + originalChildrenCount);
         if (dataShowMaxValue < originalChildrenCount && (childPosition + 1) == shownDataChildrenCount) {
             childViewHolder.moreOption.setVisibility(View.VISIBLE);
-            childViewHolder.moreOption.setTag(getGroup(groupPosition));
+            childViewHolder.moreOption.setTag(getGroup(groupPosition).getPatientName());
 
             if (childElement.isShowCompleteList()) {
                 childViewHolder.moreOption.setText(_context.getString(R.string.less));
@@ -281,7 +272,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
                 extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
                 extra.putString(DmsConstants.ID, childElement.getRespectiveParentPatientID());
-                extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, "" + getGroup(mGroupPosition));
+                extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, "" + getGroup(mGroupPosition).getPatientName());
                 intent.putExtra(DmsConstants.DATA, extra);
 
                 _context.startActivity(intent);
@@ -294,12 +285,12 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition).getPatientName())
                 .size();
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
+    public SearchResult getGroup(int groupPosition) {
         return this._listDataHeader.get(groupPosition);
     }
 
@@ -331,10 +322,11 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         ExpandableListView mExpandableListView = (ExpandableListView) parent;
         mExpandableListView.expandGroup(groupPosition);
 
-        String groupHeader = (String) getGroup(groupPosition);
+        SearchResult groupHeader = getGroup(groupPosition);
         int childrenCount = getChildrenCount(groupPosition);
 
-        groupViewHolder.userName.setText("" + groupHeader);
+        groupViewHolder.userName.setText(groupHeader.getPatientName());
+        groupViewHolder.patientId.setText(groupHeader.getPatientId());
         groupViewHolder.uhid.setText(uhid);
 
         return convertView;
@@ -361,6 +353,8 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         TextView userName;
         @BindView(R.id.uhid)
         TextView uhid;
+        @BindView(R.id.patientId)
+        TextView patientId;
 
         public GroupViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -468,7 +462,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
 
     private int getOriginalChildrenCount(int groupPosition) {
-        return this._originalListDataChild.get(this._originalListDataHeader.get(groupPosition))
+        return this._originalListDataChild.get(this._originalListDataHeader.get(groupPosition).getPatientName())
                 .size();
     }
 
@@ -500,59 +494,60 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             mCheckedBoxGroupName = null;
         }
 
-        //------------------
+        boolean flag = true; // TO handle operation when selected for same group.
+        String tempName = getGroup(mGroupPosition).getPatientName();
+        if (mCheckedBoxGroupName == null) {
+            mCheckedBoxGroupName = tempName;
+            flag = true;
+        } else if (!tempName.equalsIgnoreCase(mCheckedBoxGroupName)) {
+            CommonMethods.showToast(_context, _context.getString(R.string.error_compare_patient));
+            flag = false;
+        }
 
-        if (isChecked) {
-            //----
-            boolean flag = true; // TO handle operation when selected for same group.
-            String tempName = (String) getGroup(mGroupPosition);
-            if (mCheckedBoxGroupName == null) {
-                mCheckedBoxGroupName = tempName;
-                flag = true;
-            } else if (!tempName.equalsIgnoreCase(mCheckedBoxGroupName)) {
-                CommonMethods.showToast(_context, _context.getString(R.string.error_compare_patient));
-                flag = false;
-            }
-
-            if (flag) {
-                //------
-                boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
-                getChecked[mChildPosition] = isChecked;
-                mChildCheckStates.put(mGroupPosition, getChecked);
-                //------
-                ArrayList<Integer> tempCheckedDataToCompare = new ArrayList<>();
-                boolean[] checkedValues = mChildCheckStates.get(mGroupPosition);
-
-                for (int i = 0; i < checkedValues.length; i++) {
-                    boolean checkedValue = checkedValues[i];
-                    if (checkedValue == true) {
-                        tempCheckedDataToCompare.add(i);
-                    }
-                }
-                //------
-                if (tempCheckedDataToCompare.size() == 1) {
-                    PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
-                    showCompareOptionsDialog(child, null, mCheckedBoxGroupName, tempName);
-                } else if (tempCheckedDataToCompare.size() == 2) {
-                    PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
-                    PatientFileData child_1 = getChild(mGroupPosition, tempCheckedDataToCompare.get(1));
-                    showCompareOptionsDialog(child, child_1, mCheckedBoxGroupName, tempName);
-                } else {
-                    getChecked[mChildPosition] = false;
-                    mChildCheckStates.put(mGroupPosition, getChecked);
-                    CommonMethods.showToast(_context, _context.getString(R.string.error_max_two_reports));
-                }
-            }
-            this.notifyDataSetChanged();
-
-        } else {
+        if (flag) {
+            //------
             boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
             getChecked[mChildPosition] = isChecked;
             mChildCheckStates.put(mGroupPosition, getChecked);
+            //------
+            ArrayList<Integer> tempCheckedDataToCompare = new ArrayList<>();
+            boolean[] checkedValues = mChildCheckStates.get(mGroupPosition);
+
+            for (int i = 0; i < checkedValues.length; i++) {
+                boolean checkedValue = checkedValues[i];
+                if (checkedValue == true) {
+                    tempCheckedDataToCompare.add(i);
+                }
+            }
+            //------
+            if (tempCheckedDataToCompare.size() == 1) {
+                PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
+
+                onCompareListener.onCompareDialogShow(null, null, null, null, true);
+                onCompareListener.onCompareDialogShow(child, null, mCheckedBoxGroupName, tempName, true);
+
+//                    showCompareOptionsDialog(child, null, mCheckedBoxGroupName, tempName);
+            } else if (tempCheckedDataToCompare.size() == 2) {
+                PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
+                PatientFileData child_1 = getChild(mGroupPosition, tempCheckedDataToCompare.get(1));
+
+                onCompareListener.onCompareDialogShow(null, null, null, null, true);
+                onCompareListener.onCompareDialogShow(child, child_1, mCheckedBoxGroupName, tempName, true);
+
+//                    showCompareOptionsDialog(child, child_1, mCheckedBoxGroupName, tempName);
+            } else if (tempCheckedDataToCompare.size() > 2) {
+                getChecked[mChildPosition] = false;
+                mChildCheckStates.put(mGroupPosition, getChecked);
+                CommonMethods.showToast(_context, _context.getString(R.string.error_max_two_reports));
+            }else {
+                onCompareListener.onCompareDialogShow(null, null, null, null, false);
+            }
         }
+        this.notifyDataSetChanged();
+
     }
 
-    public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, final String title, final String patientName) {
+    /*public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, final String title, final String patientName) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(_context);
         final View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
         final AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(_context);
@@ -563,13 +558,13 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
         TextView selectedOne = (TextView) mView.findViewById(R.id.selectedOne);
         Button mCancel = (Button) mView.findViewById(R.id.cancel);
-        Button mCompare = (Button)mView.findViewById(R.id.compare);
-        TextView mTitle = (TextView)mView.findViewById(R.id.title);
-        TextView mFiletypeOne = (TextView)mView.findViewById(R.id.fileTypeOne);
-        TextView mFiletypeTwo = (TextView)mView.findViewById(R.id.fileTypeTwo);
+        Button mCompare = (Button) mView.findViewById(R.id.compare);
+        TextView mTitle = (TextView) mView.findViewById(R.id.title);
+        TextView mFiletypeOne = (TextView) mView.findViewById(R.id.fileTypeOne);
+        TextView mFiletypeTwo = (TextView) mView.findViewById(R.id.fileTypeTwo);
 
         selectedOne.setText("" + selectedOneValue_1.getReferenceId());
-        mFiletypeOne.setText(""+selectedOneValue_1.getFileType());
+        mFiletypeOne.setText("" + selectedOneValue_1.getFileType());
         //----------
         TextView selectedTwo = (TextView) mView.findViewById(R.id.selectedTwo);
         if (selectedTwoValue_2 == null) {
@@ -581,43 +576,42 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             mCompare.setAlpha(.6f);
 
             mCompare.setEnabled(false);
-        }
-        else {
+        } else {
             selectedTwo.setVisibility(View.VISIBLE);
             mFiletypeTwo.setVisibility(View.VISIBLE);
             selectedTwo.setText("" + selectedTwoValue_2.getReferenceId());
-            mFiletypeTwo.setText(""+selectedTwoValue_2.getFileType());
+            mFiletypeTwo.setText("" + selectedTwoValue_2.getFileType());
             mTitle.setText(title);
         }
 
         mCompare.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               if (selectedTwoValue_2 == null) {
-                   alertDialogBuilderUserInput.setTitle(_context.getString(R.string.error_select_second_file_type));
-                            /*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*/
-               } else {
-                   //
-                   Intent intent = new Intent(_context, FileTypeViewerActivity.class);
+            @Override
+            public void onClick(View v) {
+                if (selectedTwoValue_2 == null) {
+                    alertDialogBuilderUserInput.setTitle(_context.getString(R.string.error_select_second_file_type));
+                            *//*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*//*
+                } else {
+                    //
+                    Intent intent = new Intent(_context, FileTypeViewerActivity.class);
 
-                   Bundle extra = new Bundle();
+                    Bundle extra = new Bundle();
 
-                   ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
-                   dataToSend.add(selectedOneValue_1);
-                   dataToSend.add(selectedTwoValue_2);
-                   SearchResult searchPatientInformation = searchPatientInfo(selectedOneValue_1.getRespectiveParentPatientID());
-                   extra.putSerializable(_context.getString(R.string.compare), dataToSend);
-                   extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
-                   extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
-                   extra.putString(DmsConstants.ID, selectedOneValue_1.getRespectiveParentPatientID());
-                   extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, patientName);
-                   intent.putExtra(DmsConstants.DATA, extra);
-                   _context.startActivity(intent);
-                   showAlert.dismiss();
-               }
+                    ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
+                    dataToSend.add(selectedOneValue_1);
+                    dataToSend.add(selectedTwoValue_2);
+                    SearchResult searchPatientInformation = searchPatientInfo(selectedOneValue_1.getRespectiveParentPatientID());
+                    extra.putSerializable(_context.getString(R.string.compare), dataToSend);
+                    extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
+                    extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
+                    extra.putString(DmsConstants.ID, selectedOneValue_1.getRespectiveParentPatientID());
+                    extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, patientName);
+                    intent.putExtra(DmsConstants.DATA, extra);
+                    _context.startActivity(intent);
+                    showAlert.dismiss();
+                }
 
-           }
-       });
+            }
+        });
 
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -626,9 +620,9 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             }
         });
 
-    }
+    }*/
 
-    private SearchResult searchPatientInfo(String patientId) {
+    public SearchResult searchPatientInfo(String patientId) {
         SearchResult searchResult = null;
         for (SearchResult searchResultPatientInfo : searchResultForPatientDetails) {
             if (searchResultPatientInfo.getPatientId().equals(patientId)) {
@@ -637,6 +631,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         }
 
         return searchResult;
+    }
+
+    public interface OnCompareListener {
+        void onCompareDialogShow(PatientFileData patientFileData1, PatientFileData patientFileData2, String mCheckedBoxGroupName, String tempName, boolean b);
     }
 
 }

@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="@color/grey_300">
+   >
 
     <TextView
         android:layout_width="@dimen/uhid"
@@ -11,7 +11,7 @@
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp43"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp5"
         android:layout_marginBottom="@dimen/dp5"
         android:background="@drawable/curv_edge_blue"
@@ -46,7 +46,7 @@
             />
     </TableRow>
 
-    <TextView
+    <View
         android:layout_width="5dp"
         android:layout_height="5dp" />
 

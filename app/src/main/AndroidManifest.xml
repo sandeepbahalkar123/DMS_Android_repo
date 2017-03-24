@@ -15,6 +15,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activities.SplashScreenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,15 +27,18 @@
 
         <activity
             android:name=".ui.activities.PatientList"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/patient_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.activities.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_login"
             android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.activities.FileTypeViewerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_login"
             android:parentActivityName=".ui.activities.PatientList"
             android:theme="@style/AppTheme.NoActionBar">

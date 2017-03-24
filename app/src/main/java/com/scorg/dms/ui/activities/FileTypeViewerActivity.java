@@ -355,7 +355,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
         int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
-        int textColor = ContextCompat.getColor(this, R.color.white);
+        int textColor = ContextCompat.getColor(this, R.color.black);
 
         List<ArchiveDatum> archiveData = fileTreeResponseData.getArchiveData();
 

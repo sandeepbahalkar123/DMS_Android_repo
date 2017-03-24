@@ -21,7 +21,6 @@ public class DmsConstants {
     public static class PATIENT_LIST_PARAMS {
         public static final String PATIENT_NAME = "patientName";
         public static final String FILE_TYPE = "fileType";
-        public static final String REFRENCE_ID = "referenceId";
         public static final String DATE_TYPE = "dateType";
         public static final String FROM_DATE = "fromDate";
         public static final String TO_DATE = "toDate";

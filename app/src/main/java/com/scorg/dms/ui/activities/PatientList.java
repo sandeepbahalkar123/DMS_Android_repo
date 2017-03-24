@@ -19,11 +19,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,6 +44,7 @@ import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationL
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListData;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
@@ -61,11 +65,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnCompareListener {
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
-    private static final int ANIMATION_LAYOUT_MAX_HEIGHT = 280; // in milliseconds
+    private static final int ANIMATION_LAYOUT_MAX_HEIGHT = 270; // in milliseconds
     private static final int ANIMATION_LAYOUT_MIN_HEIGHT = 0; // in milliseconds
 
     @BindView(R.id.expandableListView)
@@ -77,7 +81,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     DrawerLayout mDrawer;
     NavigationView mLeftNavigationView;
     NavigationView mRightNavigationView;
-    View mHeaderView;
+    View mRightHeaderView;
+    View mLeftHeaderView;
+    private TextView mUserName;
     private TextView mApplySearchFilter;
     private TextView mResetSearchFilter;
     private EditText mUHIDEditText;
@@ -102,8 +108,20 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
     private String TAG = this.getClass().getName();
-    private boolean flag = true;
+    private boolean isCompareDialogCollapsed = true;
+
     private RelativeLayout mCompareDialogLayout;
+    private TextView mCompareLabel;
+    private ImageView mFileOneIcon;
+    private TextView mFileOneType;
+    private TextView mFileOneReferenceID;
+    private ImageView mFileTwoIcon;
+    private TextView mFileTwoType;
+    private TextView mFileTwoReferenceID;
+    private Button mCompareButton;
+
+    private boolean isFileType = false;
+    private PatientExpandableListAdapter patientExpandableListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,8 +182,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         mLeftNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
-        mHeaderView = mRightNavigationView.getHeaderView(0);
-
+        mRightHeaderView = mRightNavigationView.getHeaderView(0);
+        mLeftHeaderView = mLeftNavigationView.getHeaderView(0);
         //---------------
         DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
         params.width = width;
@@ -175,18 +193,18 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mRightNavigationView.setLayoutParams(params);
         mLeftNavigationView.setLayoutParams(leftParams);
         //---------------
-
-        mSpinSelectedId = (Spinner) mHeaderView.findViewById(R.id.spinner_selectId);
-        mSpinnerAmissionDate = (Spinner) mHeaderView.findViewById(R.id.spinner_admissionDate);
-        mUHIDEditText = (EditText) mHeaderView.findViewById(R.id.et_uhid);
-        mFromDateEditText = (EditText) mHeaderView.findViewById(R.id.et_fromdate);
-        mToDateEditText = (EditText) mHeaderView.findViewById(R.id.et_todate);
-        mSearchPatientNameEditText = (EditText) mHeaderView.findViewById(R.id.et_searchPatientName);
-        mAnnotationEditText = (EditText) mHeaderView.findViewById(R.id.et_annotation);
-        mSearchAnnotationEditText = (EditText) mHeaderView.findViewById(R.id.et_search_annotation);
-        mApplySearchFilter = (TextView) mHeaderView.findViewById(R.id.apply);
-        mResetSearchFilter = (TextView) mHeaderView.findViewById(R.id.reset);
-        mAnnotationTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.annotationTreeViewContainer);
+        mUserName = (TextView) mLeftHeaderView.findViewById(R.id.userName);
+        mSpinSelectedId = (Spinner) mRightHeaderView.findViewById(R.id.spinner_selectId);
+        mSpinnerAmissionDate = (Spinner) mRightHeaderView.findViewById(R.id.spinner_admissionDate);
+        mUHIDEditText = (EditText) mRightHeaderView.findViewById(R.id.et_uhid);
+        mFromDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_fromdate);
+        mToDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_todate);
+        mSearchPatientNameEditText = (EditText) mRightHeaderView.findViewById(R.id.et_searchPatientName);
+        mAnnotationEditText = (EditText) mRightHeaderView.findViewById(R.id.et_annotation);
+        mSearchAnnotationEditText = (EditText) mRightHeaderView.findViewById(R.id.et_search_annotation);
+        mApplySearchFilter = (TextView) mRightHeaderView.findViewById(R.id.apply);
+        mResetSearchFilter = (TextView) mRightHeaderView.findViewById(R.id.reset);
+        mAnnotationTreeViewContainer = (RelativeLayout) mRightHeaderView.findViewById(R.id.annotationTreeViewContainer);
 
         //---------
         // right navigation drawer clickListener
@@ -226,6 +244,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mApplySearchFilter.setOnClickListener(this);
         mFromDateEditText.setOnClickListener(this);
         mToDateEditText.setOnClickListener(this);
+        mUserName.setText(DmsPreferencesManager.getString(DmsConstants.USERNAME, mContext));
         //--------
         // setting adapter for spinner in header view of right drawer
         mCustomSpinAdapter = new Custom_Spin_Adapter(this, mArrayId, getResources().getStringArray(R.array.select_id));
@@ -234,6 +253,24 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         onTextChanged();
 
         mCompareDialogLayout = (RelativeLayout) findViewById(R.id.compareDialog);
+        mCompareLabel = (TextView) findViewById(R.id.compareLabel);
+        mFileOneIcon = (ImageView) findViewById(R.id.fileOneIcon);
+        mFileOneType = (TextView) findViewById(R.id.fileOneType);
+        mFileOneReferenceID = (TextView) findViewById(R.id.fileOneReferenceID);
+        mFileTwoIcon = (ImageView) findViewById(R.id.fileTwoIcon);
+        mFileTwoType = (TextView) findViewById(R.id.fileTwoType);
+        mFileTwoReferenceID = (TextView) findViewById(R.id.fileTwoReferenceID);
+        mCompareButton = (Button) findViewById(R.id.compareButton);
+
+        mCompareLabel.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isCompareDialogCollapsed)
+                    expandCompareDialog();
+                else collapseCompareDialog();
+                return false;
+            }
+        });
 
     }
 
@@ -243,7 +280,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             ShowSearchResultResponseModel showSearchResultResponseModel = (ShowSearchResultResponseModel) customResponse;
             List<SearchResult> searchResult = showSearchResultResponseModel.getSearchResultData().getSearchResult();
 
-            mPatientListView.setAdapter(new PatientExpandableListAdapter(this, searchResult));
+            patientExpandableListAdapter = new PatientExpandableListAdapter(this, searchResult);
+
+            mPatientListView.setAdapter(patientExpandableListAdapter);
             mPatientListView.setGroupIndicator(null);
             mPatientListView.setChildIndicator(null);
             mPatientListView.setChildDivider(getResources().getDrawable(R.color.transparent));
@@ -294,46 +333,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         }
     }
 
-    public void collapse(final View v) {
-        flag = true;
-
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(ANIMATION_LAYOUT_MAX_HEIGHT, ANIMATION_LAYOUT_MIN_HEIGHT);
-        valueAnimator.setDuration(ANIMATION_DURATION);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                Integer value = (Integer) animation.getAnimatedValue();
-
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) v.getLayoutParams();
-                params.height = CommonMethods.convertDpToPixel(value.intValue());
-                v.setLayoutParams(params);
-
-            }
-        });
-
-        valueAnimator.start();
-
-    }
-
-    public void expand(final View v) {
-
-        flag = false;
-
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(ANIMATION_LAYOUT_MIN_HEIGHT, ANIMATION_LAYOUT_MAX_HEIGHT);
-        valueAnimator.setDuration(ANIMATION_DURATION);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                Integer value = (Integer) animation.getAnimatedValue();
-
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) v.getLayoutParams();
-                params.height = CommonMethods.convertDpToPixel(value.intValue());
-                v.setLayoutParams(params);
-
-            }
-        });
-
-        valueAnimator.start();
-    }
-
     //onClick listener
     @Override
     public void onClick(View v) {
@@ -348,11 +347,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 } else {
                     createAnnotationTreeStructure(mAnnotationListData, true);
                 }
-
-                /*if (flag)
-                    expand(mCompareDialogLayout);
-                else
-                    collapse(mCompareDialogLayout);*/
 
                 break;
             // on click of fromDate editext in right drawer
@@ -381,6 +375,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mFromDateEditText.setText(DmsConstants.BLANK);
                 mToDateEditText.setText(DmsConstants.BLANK);
                 mSearchAnnotationEditText.setText(DmsConstants.BLANK);
+                mAnnotationEditText.setText(DmsConstants.BLANK);
                 mSearchPatientNameEditText.setText(DmsConstants.BLANK);
                 mSpinnerAmissionDate.setSelection(0);
                 mSpinSelectedId.setSelection(0);
@@ -396,14 +391,19 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     dateValidate = validate(fromDate, toDate);
                 }
                 if (!dateValidate) {
-
                     //adding field values in arrayList to generate tags in recycler view
-                    if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
+                    //we are adding refrence id and file type value in FILE_TYPE parameter
+                    //Reference id = UHID or OPD or IPD number
+                    if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select)) && mUHIDEditText.getText().toString().trim().length() != 0) {
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + mUHIDEditText.getText().toString());
+                    } else if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId);
-                    }
-
-                    if (mUHIDEditText.getText().toString().trim().length() != 0) {
-                        mAddedTagsForFiltering.put(DmsConstants.ID, mUHIDEditText.getText().toString());
+                        isFileType = true;
+                    } else if (mUHIDEditText.getText().toString().trim().length() != 0) {
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mUHIDEditText.getText().toString());
+                        isFileType = false;
+                    } else {
+                        isFileType = false;
                     }
 
                     if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
@@ -458,22 +458,43 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         }
 
         ShowSearchResultRequestModel showSearchResultRequestModel = new ShowSearchResultRequestModel();
-
-        String fileType = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE);
+        // Code for giving separate values of file type and refrence Id to api
+        String mCheckFileTypeOrReferenceID = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE);
+        String mFileTypeTag = "";
+        String mReferenceIdTag = "";
+        if (mCheckFileTypeOrReferenceID != null)
+            if (!mCheckFileTypeOrReferenceID.equals("")) {
+                String[] separateReferenceIdFileType = mCheckFileTypeOrReferenceID.split(":");
+                if (separateReferenceIdFileType.length == 2) {
+                    mFileTypeTag = separateReferenceIdFileType[0];
+                    mReferenceIdTag = separateReferenceIdFileType[1];
+                } else if (isFileType) {
+                    mFileTypeTag = separateReferenceIdFileType[0];
+                } else {
+                    mReferenceIdTag = separateReferenceIdFileType[0];
+                }
+            }
         //----------
-        if (getString(R.string.uhid).equalsIgnoreCase(fileType)) {
+        if (getString(R.string.uhid).equalsIgnoreCase(mFileTypeTag)) {
             showSearchResultRequestModel.setPatientId(addedTagsForFiltering.get(DmsConstants.ID));
-            showSearchResultRequestModel.setReferenceId("");
-        } else if (getString(R.string.ipd).equalsIgnoreCase(fileType) || getString(R.string.opd).equalsIgnoreCase(fileType)) {
+
+        } else if (getString(R.string.ipd).equalsIgnoreCase(mFileTypeTag) || getString(R.string.opd).equalsIgnoreCase(mFileTypeTag)) {
             showSearchResultRequestModel.setPatientId("");
-            showSearchResultRequestModel.setReferenceId(addedTagsForFiltering.get(DmsConstants.ID));
+
         } else {
             showSearchResultRequestModel.setPatientId("");
-            showSearchResultRequestModel.setReferenceId("");
         }
 
-        if (fileType != null) {
-            showSearchResultRequestModel.setFileType("" + fileType);
+        if (!mReferenceIdTag.equals(""))
+            showSearchResultRequestModel.setReferenceId(mReferenceIdTag);
+        else
+            showSearchResultRequestModel.setReferenceId("");
+
+        if (mFileTypeTag != null) {
+            if (!mFileTypeTag.equals(""))
+                showSearchResultRequestModel.setFileType(mFileTypeTag);
+            else
+                showSearchResultRequestModel.setFileType("");
         } else {
             showSearchResultRequestModel.setFileType("");
         }
@@ -642,5 +663,112 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 createAnnotationTreeStructure(annotationListData, true);
             }
         });
+    }
+
+    @Override
+    public void onCompareDialogShow(final PatientFileData patientFileData1, final PatientFileData patientFileData2, String mCheckedBoxGroupName, final String tempName, boolean isChecked) {
+
+        if (patientFileData2 == null && patientFileData1 == null) {
+            mFileOneReferenceID.setText("");
+            mFileOneType.setText(getResources().getString(R.string.adddocument));
+            mFileOneIcon.setImageResource(R.drawable.ic_unselected_document);
+            mFileTwoReferenceID.setText("");
+            mFileTwoType.setText(getResources().getString(R.string.adddocument));
+            mFileTwoIcon.setImageResource(R.drawable.ic_unselected_document);
+            mCompareButton.setTextColor(getResources().getColor(R.color.grey_700));
+            mCompareButton.setBackground(getResources().getDrawable(R.drawable.compare_button_grey_background));
+            mCompareButton.setEnabled(false);
+            if (!isCompareDialogCollapsed && !isChecked) {
+                collapseCompareDialog();
+            }
+        } else if (patientFileData2 == null && patientFileData1 != null) {
+            mFileOneReferenceID.setText(patientFileData1.getReferenceId().toString());
+            mFileOneType.setText(patientFileData1.getFileType());
+            mFileOneIcon.setImageResource(R.drawable.ic_selected_document);
+            mCompareButton.setTextColor(getResources().getColor(R.color.grey_700));
+            mCompareButton.setBackground(getResources().getDrawable(R.drawable.compare_button_grey_background));
+            mCompareButton.setEnabled(false);
+            if (isCompareDialogCollapsed)
+                expandCompareDialog();
+        } else if (patientFileData2 != null && patientFileData1 == null) {
+            mFileTwoReferenceID.setText(patientFileData2.getReferenceId().toString());
+            mFileTwoType.setText(patientFileData2.getFileType());
+            mFileTwoIcon.setImageResource(R.drawable.ic_selected_document);
+            mCompareButton.setTextColor(getResources().getColor(R.color.grey_700));
+            mCompareButton.setBackground(getResources().getDrawable(R.drawable.compare_button_grey_background));
+            mCompareButton.setEnabled(false);
+            if (isCompareDialogCollapsed)
+                expandCompareDialog();
+        } else {
+            mFileOneReferenceID.setText(patientFileData1.getReferenceId().toString());
+            mFileOneType.setText(patientFileData1.getFileType());
+            mFileOneIcon.setImageResource(R.drawable.ic_selected_document);
+            mFileTwoReferenceID.setText(patientFileData2.getReferenceId().toString());
+            mFileTwoType.setText(patientFileData2.getFileType());
+            mFileTwoIcon.setImageResource(R.drawable.ic_selected_document);
+            mCompareButton.setTextColor(getResources().getColor(R.color.Red));
+            mCompareButton.setBackground(getResources().getDrawable(R.drawable.compare_button_red_background));
+            mCompareButton.setEnabled(true);
+            mCompareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, FileTypeViewerActivity.class);
+                    Bundle extra = new Bundle();
+                    ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
+                    dataToSend.add(patientFileData1);
+                    dataToSend.add(patientFileData2);
+                    SearchResult searchPatientInformation = patientExpandableListAdapter.searchPatientInfo(patientFileData1.getRespectiveParentPatientID());
+                    extra.putSerializable(getString(R.string.compare), dataToSend);
+                    extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
+                    extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
+                    extra.putString(DmsConstants.ID, patientFileData1.getRespectiveParentPatientID());
+                    extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, tempName);
+                    intent.putExtra(DmsConstants.DATA, extra);
+                    startActivity(intent);
+                }
+            });
+            if (isCompareDialogCollapsed && isChecked)
+                expandCompareDialog();
+        }
+    }
+
+    public void collapseCompareDialog() {
+        isCompareDialogCollapsed = true;
+
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(ANIMATION_LAYOUT_MAX_HEIGHT, ANIMATION_LAYOUT_MIN_HEIGHT);
+        valueAnimator.setDuration(ANIMATION_DURATION);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mCompareDialogLayout.getLayoutParams();
+                params.height = CommonMethods.convertDpToPixel(value.intValue());
+                mCompareDialogLayout.setLayoutParams(params);
+
+            }
+        });
+
+        valueAnimator.start();
+
+    }
+
+    public void expandCompareDialog() {
+
+        isCompareDialogCollapsed = false;
+
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(ANIMATION_LAYOUT_MIN_HEIGHT, ANIMATION_LAYOUT_MAX_HEIGHT);
+        valueAnimator.setDuration(ANIMATION_DURATION);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mCompareDialogLayout.getLayoutParams();
+                params.height = CommonMethods.convertDpToPixel(value.intValue());
+                mCompareDialogLayout.setLayoutParams(params);
+
+            }
+        });
+
+        valueAnimator.start();
     }
 }

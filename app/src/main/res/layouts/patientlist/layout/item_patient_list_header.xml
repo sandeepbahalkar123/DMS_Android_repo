@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:padding="@dimen/dp2">
+    android:padding="2dp">
 
     <TextView
         android:id="@+id/uhid"
@@ -13,6 +14,14 @@
         android:gravity="center"
         android:text="111"
         android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/patientId"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        tools:text="111"
+        android:paddingStart="5dp"
+        android:paddingLeft="5dp"/>
 
     <TextView
         android:id="@+id/userName"

@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:reverseLayout="false"></android.support.v7.widget.RecyclerView>
+            app:reverseLayout="false" />
 
         <ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/expandableListView"
@@ -41,28 +41,41 @@
         android:id="@+id/compareDialog"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        tools:layout_height="280dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        tools:layout_height="280dp">
 
         <TextView
             android:id="@+id/compareLabel"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_alignParentTop="true"
-            android:background="@color/grey_900"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/compare_label_background"
             android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="10dp"
             android:text="@string/comparedocument"
             android:textColor="@color/white"
             android:textSize="18sp" />
+
+        <View
+            android:id="@+id/deviderView"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/compareLabel"
+            android:background="@color/grey_800" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/compareButton"
-            android:layout_below="@+id/compareLabel"
+            android:layout_below="@+id/deviderView"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -75,21 +88,26 @@
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <ImageView
+                    android:id="@+id/fileOneIcon"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:padding="10dp"
-                    android:src="@drawable/document_icon" />
+                    tools:src="@drawable/ic_selected_document" />
 
                 <TextView
+                    android:id="@+id/fileOneType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="22sp"
-                    android:text="Document1" />
+                    android:textStyle="bold"
+                    tools:text="Document1" />
 
                 <TextView
+                    android:id="@+id/fileOneReferenceID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1234" />
+                    android:textStyle="bold"
+                    tools:text="1234" />
 
             </LinearLayout>
 
@@ -107,39 +125,35 @@
 
             </RelativeLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_horizontal_margin">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/fileTwoIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:padding="10dp"
+                    tools:src="@drawable/ic_unselected_document" />
+
+                <TextView
+                    android:id="@+id/fileTwoType"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="@dimen/activity_horizontal_margin">
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    tools:text="Document1" />
 
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:padding="10dp"
-                        android:src="@drawable/document_icon" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="22sp"
-                        android:text="Document1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1234" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/fileTwoReferenceID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    tools:text="1234" />
 
             </LinearLayout>
         </LinearLayout>
@@ -153,11 +167,11 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginStart="10dp"
-            android:background="@drawable/comparebuttonbackground"
+            android:background="@drawable/compare_button_red_background"
             android:gravity="center"
             android:padding="10dp"
-            android:textColor="@color/Red"
             android:text="@string/comparedocument"
+            android:textColor="@color/grey_700"
             android:textSize="18sp" />
 
     </RelativeLayout>
