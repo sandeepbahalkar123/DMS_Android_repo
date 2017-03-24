@@ -2,8 +2,9 @@ package com.scorg.dms.model.responsemodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.scorg.dms.interfaces.CustomResponse;
 
-public class Common {
+public class Common implements CustomResponse{
 
     @SerializedName("success")
     @Expose

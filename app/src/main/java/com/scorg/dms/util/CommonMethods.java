@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scorg.dms.R;
+import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.ui.activities.LoginActivity;
@@ -73,6 +74,7 @@ public class CommonMethods {
 
     private int mYear, mMonth, mDay, mHour, mMinute;
     private DatePickerDialogListener mDatePickerDialogListener;
+    private static CheckIpConnection mCheckIpConnection;
     public static Context mContext;
 
     public static void showToast(Context context, String error) {
@@ -539,8 +541,9 @@ public class CommonMethods {
 
 
     //this alert is shown for input of serverpath
-    public static Dialog showAlertDialog(Context activity, String dialogHeader, final boolean isReEnteredServerPath) {
+    public static Dialog showAlertDialog(Context activity, String dialogHeader, final boolean isReEnteredServerPath, CheckIpConnection checkIpConnection) {
         mContext = activity;
+        mCheckIpConnection = checkIpConnection;
         final Dialog dialog = new Dialog(activity);
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -554,22 +557,17 @@ public class CommonMethods {
         dialog.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 EditText etServerPath = (EditText) dialog.findViewById(R.id.et_server_path);
 
                 if (isValidIP(etServerPath.getText().toString())) {
                     String mServerPath = Config.HTTP + etServerPath.getText().toString() + Config.API;
-//                    CommonMethods.Log(TAG, "SERVER PATH===" + mServerPath);
 
-                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
+                    Log.e(TAG, "SERVER PATH===" + mServerPath);
+
+                    mCheckIpConnection.onOkButtonClickListner(mServerPath, mContext);
                     dialog.dismiss();
-                    if (!isReEnteredServerPath) {
-                        Intent intentObj = new Intent(mContext, LoginActivity.class);
-                        intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intentObj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intentObj.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContext.startActivity(intentObj);
-                        ((Activity) mContext).finish();
-                    }
+
                 } else {
                     Toast.makeText(mContext, R.string.error_in_ip, Toast.LENGTH_LONG).show();
                 }
@@ -581,10 +579,10 @@ public class CommonMethods {
         dialog.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dialog.dismiss();
-                if (!isReEnteredServerPath) {
-                    ((Activity) mContext).finish();
-                }
+                ((Activity) mContext).finish();
+
 
 
             }
@@ -596,7 +594,6 @@ public class CommonMethods {
 
     private static boolean isValidIP(String ipAddr) {
 
-//        Pattern ptn = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\:(\\d{1,4})$");
         Pattern ptn = Pattern.compile("(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\.(\\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\\b)\\:(\\d{1,4})$");
         Matcher mtch = ptn.matcher(ipAddr);
         return mtch.find();
