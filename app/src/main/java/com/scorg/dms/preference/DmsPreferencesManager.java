@@ -2,6 +2,7 @@ package com.scorg.dms.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
@@ -24,20 +25,17 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class DmsPreferencesManager {
 
+    private static final String TAG = "DMS/DmsPreferencesManager";
     private static SharedPreferences sharedPreferences = null;
     private static byte[] sKey;
 
 
     public interface DMS_PREFERENCES_KEY {
-        String ACCESS_TOKEN = "accessToken";
-        String UTM_SOURCE = "utm_source";
-        String UTM_CONTENT = "utm_content";
-        String UTM_CAMPAIGN = "utm_campaign";
-        String UTM_MEDIUM = "utm_medium";
+
+        String SERVER_PATH = "server_path";
+        String USER_GENDER = "user_gender";
 
     }
-
-    ;
 
     public static SharedPreferences getSharedPreference(final Context context) {
         if (context != null) {
@@ -61,6 +59,7 @@ public class DmsPreferencesManager {
 
     public static String getString(String key, Context context) {
         //String mKey = encrypt(key);
+//        CommonMethods.Log(TAG, "getString--mKey--->" + key + "<----mValue-------->" + getSharedPreference(context).getString(key, ""));
         return getSharedPreference(context).getString(key, "");
 
     }
@@ -84,7 +83,7 @@ public class DmsPreferencesManager {
     public static boolean putBoolean(String key, boolean value, Context context) {
         //String mKey = encrypt(key);
         // String mValue = encrypt(Boolean.toString(value));
-        CommonMethods.Log("", "--------------------------" + Boolean.toString(value));
+//        CommonMethods.Log(TAG, "--------------------------" + Boolean.toString(value));
         //getSharedPreference(context).edit().putString(mKey, encrypt(mValue)).commit();
         getSharedPreference(context).edit().putBoolean(key, value).commit();
         return value;
@@ -93,7 +92,7 @@ public class DmsPreferencesManager {
     public static void putString(String key, String value, Context context) {
         //String mKey = encrypt(key);
         //String mValue = encrypt(value);
-        CommonMethods.Log("value", "value--putString--mKey--->" + key + "<----mValue-------->" + value);
+//        CommonMethods.Log(TAG, "putString--mKey--->" + key + "<----mValue-------->" + value);
         getSharedPreference(context).edit().putString(key, value).commit();
     }
 

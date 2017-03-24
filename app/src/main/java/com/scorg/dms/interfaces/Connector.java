@@ -17,7 +17,7 @@ public interface Connector {
 
 	void connect();
 
-	void parseJson(String response);
+	void parseJson(String data, boolean isTokenExpired);
 
 	void abort();
 

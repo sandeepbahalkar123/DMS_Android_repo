@@ -6,15 +6,16 @@ package com.scorg.dms.network;
  */
 
 import android.content.Context;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.android.volley.Request;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.Connector;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.singleton.Device;
+import com.scorg.dms.util.CommonMethods;
+import com.scorg.dms.util.Config;
 import com.scorg.dms.util.DmsConstants;
 
 import java.util.HashMap;
@@ -26,13 +27,14 @@ public class ConnectionFactory extends ConnectRequest {
     Connector connector = null;
     private Device device;
 
-    public ConnectionFactory(Context context, ConnectionListener connectionListener, View viewById, boolean isProgressBarShown, int mOldDataTag) {
+    public ConnectionFactory(Context context, ConnectionListener connectionListener, View viewById, boolean isProgressBarShown, int mOldDataTag, int reqPostOrGet) {
         super();
         this.mConnectionListener = connectionListener;
         this.mContext = context;
         this.mViewById = viewById;
         this.isProgressBarShown = isProgressBarShown;
         this.mOldDataTag = mOldDataTag;
+        this.reqPostOrGet = reqPostOrGet;
 
         device = Device.getInstance(mContext);
     }
@@ -42,12 +44,28 @@ public class ConnectionFactory extends ConnectRequest {
     }
 
     public void setHeaderParams() {
+
         Map<String, String> headerParams = new HashMap<>();
+
+        String authorizationString = "";
+        String contentType = DmsPreferencesManager.getString(DmsConstants.LOGIN_SUCCESS, mContext);
+
+        if (contentType.equalsIgnoreCase(DmsConstants.TRUE)) {
+            authorizationString = DmsPreferencesManager.getString(DmsConstants.TOKEN_TYPE, mContext)
+                    + " " + DmsPreferencesManager.getString(DmsConstants.ACCESS_TOKEN, mContext);
+            headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_JSON);
+        } else {
+            headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_URL_ENCODED);
+        }
+
+        headerParams.put(DmsConstants.AUTHORIZATION, authorizationString);
         headerParams.put(DmsConstants.DEVICEID, device.getDeviceId());
+
         headerParams.put(DmsConstants.OS, device.getOS());
         headerParams.put(DmsConstants.OSVERSION, device.getOSVersion());
-        headerParams.put(DmsConstants.DEVICETYPE, device.getDeviceType());
+        //  headerParams.put(DmsConstants.DEVICETYPE, device.getDeviceType());
 //        headerParams.put(DmsConstants.ACCESS_TOKEN, "");
+        CommonMethods.Log(TAG, "setHeaderParams:" + headerParams.toString());
         this.mHeaderParams = headerParams;
     }
 
@@ -59,25 +77,15 @@ public class ConnectionFactory extends ConnectRequest {
         this.mPostParams = postParams;
     }
 
-
     public void setUrl(String url) {
-        this.mURL = url;
+        String baseUrl = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext);
+        this.mURL = baseUrl + url;
+        CommonMethods.Log(TAG,"mURL: "+this.mURL);
     }
 
     public Connector createConnection(int type) {
-        switch (type) {
 
-            //write cases for different APIS
-            case DmsConstants.REGISTRATION_CODE://This is sample code
-                connector = new RequestManager(mContext, mConnectionListener, DmsConstants.REGISTRATION_CODE, mViewById, isProgressBarShown, mOldDataTag, Request.Method.POST);
-                break;
-
-
-
-            default:
-                Log.d(TAG, "default_circle " + type);
-                break;
-        }
+        connector = new RequestManager(mContext, mConnectionListener, type, mViewById, isProgressBarShown, mOldDataTag, reqPostOrGet);
 
         if (customResponse != null) connector.setPostParams(customResponse);
 

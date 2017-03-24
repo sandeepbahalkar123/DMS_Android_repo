@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+   >
+
+    <TextView
+        android:layout_width="@dimen/uhid"
+        android:layout_height="@dimen/uhid" />
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp5"
+        android:layout_marginBottom="@dimen/dp5"
+        android:background="@drawable/curv_edge_blue"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <TextView
+            android:id="@+id/tv_dispalydetails"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_weight="4"
+            android:textSize="@dimen/sp12"
+            android:paddingLeft="@dimen/dp10"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/ib_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/padding_small"
+            android:layout_weight="2"
+            android:background="@mipmap/cross"
+            android:paddingRight="@dimen/padding_very_tiny"
+            android:singleLine="true"
+            android:textColor="@color/black"
+
+            />
+    </TableRow>
+
+    <View
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+
+
+</LinearLayout>

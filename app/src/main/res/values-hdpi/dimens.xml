@@ -1,0 +1,79 @@
+<!--REDUCED FONT SIZES START-->
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="twenty">44px</dimen>
+    <dimen name="four">12px</dimen>
+    <dimen name="font_x_normal">34px</dimen>
+    <dimen name="tenDp">10dp</dimen>
+    <dimen name="dp0">0dp</dimen>
+    <dimen name="dp16">16dp</dimen>
+    <dimen name="offer_detail_image_bottom_margin">15dp</dimen>
+    <dimen name="dp1">1dp</dimen>
+
+    <dimen name="dp20">30dp</dimen>
+    <dimen name="dp22">32dp</dimen>
+    <dimen name="dp24">34dp</dimen>
+    <dimen name="dp25">35dp</dimen>
+    <dimen name="dp30">40dp</dimen>
+    <dimen name="sp20">18sp</dimen>
+
+    <dimen name="dp28">38dp</dimen>
+
+    <dimen name="sp14">13sp</dimen>
+    <dimen name="sp15">13sp</dimen>
+    <dimen name="sp16">14sp</dimen>
+    <dimen name="sp18">16sp</dimen>
+    <dimen name="sp24">22sp</dimen>
+    <dimen name="sp22">20sp</dimen>
+    <dimen name="dp175">185dp</dimen>
+    <dimen name="sp26">24sp</dimen>
+    <dimen name="dp200">250dp</dimen>
+    <dimen name="sp28">26sp</dimen>
+
+    <dimen name="offer_detail_image_bottom_strip_margin">190dp</dimen>
+    <dimen name="offer_detail_call_options_margin">80dp</dimen>
+
+    <dimen name="sign_up_five_category_size">14sp</dimen>
+
+    <dimen name="dp80">80dp</dimen>
+
+</resources><!--REDUCED FONT SIZES END-->
+
+    <!-- BACKUP WORKING
+    <resources>
+        &lt;!&ndash; Default screen margins, per the Android Design guidelines. &ndash;&gt;
+        <dimen name="activity_horizontal_margin">16dp</dimen>
+        <dimen name="activity_vertical_margin">16dp</dimen>
+        <dimen name="twenty">44px</dimen>
+        <dimen name="four">12px</dimen>
+        <dimen name="font_x_normal">34px</dimen>
+        <dimen name="tenDp">10dp</dimen>
+
+
+        <dimen name="offer_detail_image_bottom_margin">15dp</dimen>
+
+
+        <dimen name="dp20">30dp</dimen>
+        <dimen name="dp25">35dp</dimen>
+        <dimen name="dp30">40dp</dimen>
+        <dimen name="sp20">20sp</dimen>
+
+        <dimen name="dp28">38dp</dimen>
+
+        <dimen name="sp15">15sp</dimen>
+        <dimen name="sp16">16sp</dimen>
+        <dimen name="sp18">16sp</dimen>
+        <dimen name="sp24">24sp</dimen>
+        <dimen name="sp22">22sp</dimen>
+        <dimen name="dp175">185dp</dimen>
+        <dimen name="sp26">26sp</dimen>
+        <dimen name="dp200">250dp</dimen>
+        <dimen name="sp28">28sp</dimen>
+
+        <dimen name="offer_detail_image_bottom_strip_margin">190dp</dimen>
+        <dimen name="offer_detail_call_options_margin">80dp</dimen>
+
+    </resources>
+    -->

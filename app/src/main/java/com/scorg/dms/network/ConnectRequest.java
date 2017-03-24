@@ -1,6 +1,7 @@
 package com.scorg.dms.network;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.scorg.dms.views.CustomProgressDialog;
@@ -20,4 +21,5 @@ public class ConnectRequest {
     protected boolean isProgressBarShown;
     protected int mOldDataTag;
     protected String mURL;
+    protected int reqPostOrGet;
 }

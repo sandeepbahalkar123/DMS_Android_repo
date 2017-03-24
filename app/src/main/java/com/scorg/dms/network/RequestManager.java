@@ -6,6 +6,7 @@ package com.scorg.dms.network;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,28 +24,35 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.scorg.dms.R;
-import com.scorg.dms.util.CommonMethods;
-import com.scorg.dms.util.DmsConstants;
-import com.scorg.dms.util.NetworkUtil;
-import com.scorg.dms.views.CustomProgressDialog;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.Connector;
 import com.scorg.dms.interfaces.CustomResponse;
-import com.scorg.dms.util.DmsConstants;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
+import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
+import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
+import com.scorg.dms.preference.DmsPreferencesManager;
+import com.scorg.dms.ui.activities.LoginActivity;
 import com.scorg.dms.util.CommonMethods;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.scorg.dms.util.Config;
+import com.scorg.dms.util.DmsConstants;
+import com.scorg.dms.util.NetworkUtil;
+import com.scorg.dms.views.CustomProgressDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RequestManager extends ConnectRequest implements Connector, RequestTimer.RequestTimerListener {
-    private static final String TAG = "RequestManager";
+    private static final String TAG = "DMS/RequestManager";
     private static final int CONNECTION_TIME_OUT = 1000 * 60;
     private static final int N0OF_RETRY = 0;
     private String requestTag;
@@ -88,7 +96,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
             }
 
             if (mPostParams != null) {
-                stringRequest();
+                stringRequest(mURL, connectionType, mHeaderParams, mPostParams, false);
             } else if (customResponse != null) {
                 jsonRequest();
             } else {
@@ -111,6 +119,9 @@ public class RequestManager extends ConnectRequest implements Connector, Request
         JSONObject jsonObject = null;
         try {
             String jsonString = gson.toJson(customResponse);
+
+            CommonMethods.Log(TAG, "jsonRequest:--" + jsonString);
+
             if (!jsonString.equals("null"))
                 jsonObject = new JSONObject(jsonString);
         } catch (JSONException e) {
@@ -123,12 +134,12 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        succesResponse(response.toString());
+                        succesResponse(response.toString(), false);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                errorResponse(error);
+                errorResponse(error, false);
             }
         })
 
@@ -158,7 +169,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
     }
 
-    private void stringRequest() {
+    private void stringRequest(String mURL, int connectionType, final Map<String, String> headerParams, final Map<String, String> postParams, final boolean isTokenExpired) {
 
         // ganesh for string request and delete method with string request
 
@@ -166,27 +177,27 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        succesResponse(response);
+                        succesResponse(response, isTokenExpired);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        errorResponse(error);
+                        errorResponse(error, isTokenExpired);
                     }
                 }
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
 
-                return mHeaderParams;
+                return headerParams;
             }
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
-                return mPostParams;
+                return postParams;
             }
         };
 
@@ -206,15 +217,15 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
     }
 
-    private void succesResponse(String response) {
+    private void succesResponse(String response, boolean isTokenExpired) {
         requestTimer.cancel();
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-        parseJson(fixEncoding(response));
+        parseJson(fixEncoding(response), isTokenExpired);
     }
 
-    private void errorResponse(VolleyError error) {
+    private void errorResponse(VolleyError error, boolean isTokenExpired) {
 
         requestTimer.cancel();
 
@@ -223,44 +234,50 @@ public class RequestManager extends ConnectRequest implements Connector, Request
         }
 
         try {
+            CommonMethods.Log(TAG,"Goes into error response condition");
 
             if (error instanceof TimeoutError) {
 
-                if (error.getMessage().equalsIgnoreCase("java.io.IOException: No authentication challenges found") || error.getMessage().equalsIgnoreCase("invalid_grant")) {
-                    if (mViewById != null)
-                        CommonMethods.showSnack(mViewById, mContext.getString(R.string.authentication));
+//                if (error.getMessage().equalsIgnoreCase("java.io.IOException: No authentication challenges found") || error.getMessage().equalsIgnoreCase("invalid_grant")) {
+//                    if (mViewById != null)
+//                        CommonMethods.showSnack(mViewById, mContext.getString(R.string.authentication));
+//                    else
+//                        CommonMethods.showToast(mContext, mContext.getString(R.string.authentication));
+//                } else if (error.getMessage().equalsIgnoreCase("javax.net.ssl.SSLHandshakeException: java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.")) {
+//                    showErrorDialog("Something went wrong.");
+//                }
+
+                if (mViewById != null)
+                        CommonMethods.showSnack(mViewById, mContext.getString(R.string.timeout));
                     else
-                        CommonMethods.showToast(mContext, mContext.getString(R.string.authentication));
-                    Log.d(TAG, error.getMessage());
-                } else if (error.getMessage().equalsIgnoreCase("javax.net.ssl.SSLHandshakeException: java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.")) {
-                    showErrorDialog("Something went wrong.");
-                }
+                        CommonMethods.showToast(mContext, mContext.getString(R.string.timeout));
+
             } else if (error instanceof NoConnectionError) {
 
                 if (mViewById != null)
                     CommonMethods.showSnack(mViewById, mContext.getString(R.string.internet));
-                else
-                    CommonMethods.showToast(mContext, mContext.getString(R.string.internet));
-                Log.d(TAG, error.getMessage());
-
-                mConnectionListener.onResponse(ConnectionListener.NO_INTERNET, null, mOldDataTag);
+                else {
+                    mConnectionListener.onResponse(ConnectionListener.NO_CONNECTION_ERROR, null, mOldDataTag);
+                }
 
             } else if (error instanceof ServerError) {
-
-                mConnectionListener.onResponse(ConnectionListener.SERVER_ERROR, null, mOldDataTag);
-                Log.d(TAG, error.getMessage());
-
+                if (isTokenExpired) {
+                    // Redirect to Login
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    mContext.startActivity(intent);
+                    ((AppCompatActivity) mContext).finish();
+                } else
+                    mConnectionListener.onResponse(ConnectionListener.SERVER_ERROR, null, mOldDataTag);
             } else if (error instanceof NetworkError) {
                 Log.d(TAG, error.getMessage());
                 if (mViewById != null)
                     CommonMethods.showSnack(mViewById, mContext.getString(R.string.internet));
                 else
                     CommonMethods.showToast(mContext, mContext.getString(R.string.internet));
-
             } else if (error instanceof ParseError) {
                 mConnectionListener.onResponse(ConnectionListener.PARSE_ERR0R, null, mOldDataTag);
-                Log.d(TAG, error.getMessage());
-
+            } else if (error instanceof AuthFailureError) {
+                tokenRefreshRequest();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -268,8 +285,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
     }
 
-
-    public static String fixEncoding(String response) {
+    private String fixEncoding(String response) {
         try {
             byte[] u = response.getBytes("ISO-8859-1");
             response = new String(u, "UTF-8");
@@ -281,27 +297,52 @@ public class RequestManager extends ConnectRequest implements Connector, Request
     }
 
     @Override
-    public void parseJson(String data) {
+    public void parseJson(String data, boolean isTokenExpired) {
         try {
 
-            Log.d(TAG, data);
+            Log.e(TAG, data);
 
             Gson gson = new Gson();
 
-            switch (this.mDataTag) {
-
-                case DmsConstants.REGISTRATION_CODE: //This is sample code
+            if (isTokenExpired) {
+                // This success response is for refresh token
+                LoginResponseModel loginResponseModel = gson.fromJson(data, LoginResponseModel.class);
+                DmsPreferencesManager.putString(DmsConstants.ACCESS_TOKEN, loginResponseModel.getAccessToken(), mContext);
+                DmsPreferencesManager.putString(DmsConstants.TOKEN_TYPE, loginResponseModel.getTokenType(), mContext);
+                DmsPreferencesManager.putString(DmsConstants.REFRESH_TOKEN, loginResponseModel.getRefreshToken(), mContext);
+                connect();
+            } else {
+                // This success response is for respective api's
+                switch (this.mDataTag) {
+                    case DmsConstants.REGISTRATION_CODE: //This is sample code
 //                    RegistrationModel  registrationModel = gson.fromJson(data, RegistrationModel.class);
 //                    this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, registrationModel, mOldDataTag);
-                    break;
-
-
+                        break;
+                    case DmsConstants.TASK_LOGIN_CODE: //This is for login
+                        LoginResponseModel loginResponseModel = gson.fromJson(data, LoginResponseModel.class);
+                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, loginResponseModel, mOldDataTag);
+                        break;
+                    case DmsConstants.TASK_PATIENT_LIST: //This is for patient list
+                        ShowSearchResultResponseModel showSearchResultResponseModel = gson.fromJson(data, ShowSearchResultResponseModel.class);
+                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, showSearchResultResponseModel, mOldDataTag);
+                        break;
+                    case DmsConstants.TASK_ANNOTATIONS_LIST: //This is for annotation list
+                        AnnotationListResponseModel annotationListResponseModel = gson.fromJson(data, AnnotationListResponseModel.class);
+                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, annotationListResponseModel, mOldDataTag);
+                        break;
+                    case DmsConstants.TASK_GET_ARCHIVED_LIST: //This is for get archived list
+                        FileTreeResponseModel fileTreeResponseModel = gson.fromJson(data, FileTreeResponseModel.class);
+                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, fileTreeResponseModel, mOldDataTag);
+                        break;
+                    case DmsConstants.TASK_GET_PDF_DATA: //This is for get archived list
+                        GetPdfDataResponseModel getPdfDataResponseModel = gson.fromJson(data, GetPdfDataResponseModel.class);
+                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, getPdfDataResponseModel, mOldDataTag);
+                        break;
+                }
             }
 
         } catch (JsonSyntaxException e) {
-
             Log.d(TAG, "JsonException" + e.getMessage());
-
             mConnectionListener.onResponse(ConnectionListener.PARSE_ERR0R, null, mOldDataTag);
         }
 
@@ -367,4 +408,33 @@ public class RequestManager extends ConnectRequest implements Connector, Request
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+    private void tokenRefreshRequest() {
+        String url = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext) + Config.URL_LOGIN;
+
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.putAll(mHeaderParams);
+        headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_URL_ENCODED);
+
+        Map<String, String> postParams = new HashMap<>();
+        postParams.put(DmsConstants.GRANT_TYPE_KEY, DmsConstants.REFRESH_TOKEN);
+        postParams.put(DmsConstants.REFRESH_TOKEN, DmsPreferencesManager.getString(DmsConstants.REFRESH_TOKEN, mContext));
+        postParams.put(DmsConstants.CLIENT_ID_KEY, DmsConstants.CLIENT_ID_VALUE);
+
+        stringRequest(url, Request.Method.POST, headerParams, postParams, true);
+    }
+
+   /* private void tokenRefreshed() {
+
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, mConnectionListener, mViewById, true, mDataTag, connectionType);
+        if (mHeaderParams != null)
+            mConnectionFactory.setHeaderParams(mHeaderParams);
+        if (customResponse != null)
+            mConnectionFactory.setPostParams(customResponse);
+        if (mPostParams != null)
+            mConnectionFactory.setPostParams(mPostParams);
+        mConnectionFactory.setUrl(mURL);
+        mConnectionFactory.createConnection(mDataTag);
+
+    }*/
 }

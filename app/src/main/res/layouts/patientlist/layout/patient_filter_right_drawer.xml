@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        app:popupTheme="@style/AppTheme"
+        app:theme="@style/ToolbarColoredBackArrow">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/reset"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:text="@string/reset"
+                android:drawablePadding="@dimen/dp10"
+                android:drawableLeft="@mipmap/reset"
+                android:textColor="@color/reset_yellow"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Filter"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/apply"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/apply"
+                android:layout_marginRight="@dimen/dp10"
+                android:drawablePadding="@dimen/dp10"
+                android:drawableEnd="@mipmap/apply"
+                android:textColor="@color/BlueAngel"
+                android:textStyle="bold"
+                android:drawableRight="@mipmap/apply" />
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_xsmall"
+            android:layout_marginTop="@dimen/dp00"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <Spinner
+                android:id="@+id/spinner_selectId"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp43"
+                android:layout_below="@+id/include1"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp00"
+                android:layout_marginRight="@dimen/dp00"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:textColor="@color/dcr_customer_name"
+                android:textStyle="bold" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp43"
+                android:layout_gravity="center"
+                android:layout_weight="3">
+
+                <EditText
+                    android:id="@+id/et_uhid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp00"
+                    android:layout_marginRight="@dimen/dp00"
+                    android:ellipsize="end"
+                    android:imeOptions="actionNext"
+                    android:paddingBottom="@dimen/dp123"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </android.support.design.widget.TextInputLayout>
+
+
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_small"
+            android:layout_marginTop="@dimen/dp00"
+            android:background="@color/grey_200"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+
+            <Spinner
+
+                android:id="@+id/spinner_admissionDate"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/margin_l"
+                android:layout_below="@+id/include1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/dp00"
+                android:layout_marginLeft="@dimen/dp00"
+                android:layout_marginRight="@dimen/dp00"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:singleLine="true"
+                android:spinnerMode="dropdown"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_small"
+            android:background="@color/grey_200"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp43"
+                android:layout_gravity="center"
+                android:layout_weight="3">
+
+                <EditText
+                    android:id="@+id/et_fromdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp00"
+                    android:layout_marginRight="@dimen/dp00"
+                    android:drawableRight="@mipmap/calendar"
+                    android:ellipsize="end"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/from"
+                    android:imeOptions="actionNext"
+                    android:paddingBottom="@dimen/dp123"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp43"
+                android:layout_gravity="center"
+                android:layout_weight="3">
+
+                <EditText
+                    android:id="@+id/et_todate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp00"
+                    android:layout_marginRight="@dimen/dp00"
+                    android:drawableRight="@mipmap/calendar"
+                    android:ellipsize="end"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/to"
+                    android:imeOptions="actionNext"
+                    android:paddingBottom="@dimen/dp123"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </android.support.design.widget.TextInputLayout>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_xsmall"
+            android:layout_marginTop="@dimen/dp00"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp43"
+                android:layout_gravity="center"
+                android:layout_weight="6">
+
+                <EditText
+                    android:id="@+id/et_searchPatientName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp00"
+                    android:layout_marginRight="@dimen/dp00"
+                    android:drawableRight="@mipmap/user"
+                    android:ellipsize="end"
+                    android:hint="@string/searchbyPatient"
+                    android:imeOptions="actionNext"
+                    android:paddingBottom="@dimen/dp123"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+
+                    android:textStyle="bold" />
+            </android.support.design.widget.TextInputLayout>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_xsmall"
+            android:layout_marginTop="@dimen/dp00"
+            android:background="@color/grey_200"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp43"
+                android:layout_gravity="center"
+                android:layout_weight="3">
+
+                <EditText
+                    android:id="@+id/et_annotation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp00"
+                    android:layout_marginRight="@dimen/dp00"
+                    android:drawableRight="@mipmap/annotation"
+                    android:ellipsize="end"
+                    android:hint="@string/enterAnnotation"
+                    android:imeOptions="actionNext"
+                    android:paddingBottom="@dimen/dp123"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </android.support.design.widget.TextInputLayout>
+
+
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_xsmall"
+            android:layout_marginTop="@dimen/dp00"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp43"
+                android:layout_gravity="center"
+                android:layout_weight="6">
+
+                <EditText
+                    android:id="@+id/et_search_annotation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp00"
+                    android:layout_marginRight="@dimen/dp00"
+                    android:drawableRight="@mipmap/search"
+                    android:ellipsize="end"
+                    android:hint="@string/searchAnnotation"
+                    android:imeOptions="actionNext"
+                    android:paddingBottom="@dimen/dp123"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </android.support.design.widget.TextInputLayout>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/padding_small"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+
+            <RelativeLayout
+                android:id="@+id/annotationTreeViewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></RelativeLayout>
+
+            <TextView
+                android:id="@+id/emptyListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="assdd"
+                android:textSize="@dimen/sp24" />
+
+        </TableRow>
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,11 +2,140 @@
     <string name="app_name">DMS_APP</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="internet">Please check your Internet Connection</string>
+    <string name="wrong_server_path">Re-enter correct server path</string>
     <string name="authentication">Authentication error</string>
+    <string name="timeout">Timeout error</string>
     <string name="roboto_bold">roboto_bold.ttf</string>
     <string name="roboto_regular">roboto_regular.ttf</string>
     <string name="roboto_light">roboto_light.ttf</string>
     <string name="roboto_medium">roboto_medium.ttf</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <dimen name="padding_very_tiny">3dp</dimen>
+    <string name="login">LOG IN</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="sign_up_hospital_name">Sign up for hospital name</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="selectID">Select ID</string>
+    <string name="Error">Error</string>
+    <string name="dialog_message_text">message</string>
+    <string name="DateType">Select Date Type</string>
+    <string name="patientName">Enter patient name</string>
+    <string name="annotation">Enter annotation</string>
+    <string name="error_date_not_same">Date cannot be same</string>
+    <string name="selectToDate">Enter to date</string>
+    <string name="error_enter_uhid">Enter UHID</string>
+    <string name="searchbyPatient">Search By Patient Name</string>
+    <string name="enterAnnotation">Enter Annotation</string>
+    <string name="searchAnnotation">Search Annotation</string>
+    <string name="scrollingBoth">Scrolling Both</string>
+    <string name="patientInformation">Patient Information</string>
+    <string name="refId">REF ID</string>
+    <string name="file_one">File-One</string>
+    <string name="file_two">File-Two</string>
+    <string name="for_example_server_path">e.g. 192.168.0.25:81</string>
+    <string name="server_path">Enter the server path</string>
+    <string name="doctor">Doctor</string>
+    <string name="admission">Admission</string>
+    <string name="discharge">Discharge</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
 
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_empty_fields">Please enter username/password</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 
+    <string name="visit_date">Visit Date:</string>
+    <string name="OPD">Enter OPD</string>
+    <string name="IPD">Enter IPD</string>
+    <string name="Select">Select</string>
+    <string name="admission_date">Admission Date:</string>
+    <string name="discharge_date">Discharge Date:</string>
+    <string name="more">More</string>
+    <string name="less">Less</string>
+    <string name="opd">OPD</string>
+    <string name="ipd">IPD</string>
+    <string name="uhid">UHID</string>
+    <string name="patient_list">Patient List</string>
+    <string name="compare">Compare</string>
+    <string name="cancel">Cancel</string>
+    <string name="selected_1">File name one</string>
+    <string name="selected_2">File name two</string>
+    <string name="error_compare_patient">Please select same patient record to compare</string>
+    <string name="ok">OK</string>
+    <string name="error_max_two_reports">You can not select more than two reports to compare</string>
+    <string name="error_select_second_file_type">Select up to two files type to compare</string>
+    <string name="reset">Reset</string>
+    <string name="apply">Apply</string>
+
+    <string-array name="select_id">
+        <item>Select</item>
+        <item>IPD</item>
+        <item>OPD</item>
+        <item>UHID</item>
+    </string-array>
+
+    <string-array name="admission_date">
+        <item>Select</item>
+        <item>IPD-Admission Date</item>
+        <item>IPD-Discharge Date</item>
+        <item>OPD-Visit Date</item>
+    </string-array>
+
+    <string-array name="IPD">
+        <item>Select</item>
+        <item>IPD-Admission Date</item>
+        <item>IPD-Discharge Date</item>
+    </string-array>
+    <string-array name="OPD">
+        <item>Select</item>
+        <item>OPD-Visit Date</item>
+    </string-array>
+    <string-array name="ids">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </string-array>
+
+    <!--********Tree view holder icon codes****************-->
+    <string name="ic_folder">&#xe09d;</string>
+    <string name="ic_keyboard_arrow_down">&#xe0c5;</string>
+    <string name="ic_keyboard_arrow_right">&#xe0c7;</string>
+    <string name="ic_email">&#xe087;</string>
+    <string name="ic_add">&#xe006;</string>
+    <string name="ic_close">&#xe048;</string>
+    <string name="ic_check_circle_blank">&#xe03e;</string>
+    <string name="ic_label_outline">&#xe0d1;</string>
+    <string name="ic_shopping_cart">&#xe14f;</string>
+    <string name="ic_label">&#xe0d0;</string>
+    <string name="ic_person">&#xe105;</string>
+    <string name="filenotfound">File not found</string>
+    <string name="error_in_ip">Please enter valid IP address</string>
+
+    <!--******************************-->
 </resources>
