@@ -95,7 +95,8 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse  
 
     @Override
     public void onServerError(int mOldDataTag, String serverErrorMessage) {
-        CommonMethods.showToast(this, serverErrorMessage);
+        DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
+        CommonMethods.showAlertDialog(LoginActivity.this,getString(R.string.wrong_server_path)+"\n"+getString(R.string.for_example_server_path),true);
     }
 
     @Override
