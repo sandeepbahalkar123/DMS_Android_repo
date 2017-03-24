@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.helpers.login.LoginHelper;
+import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
 import com.scorg.dms.preference.DmsPreferencesManager;
@@ -100,8 +101,13 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse  
 
     @Override
     public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
-        DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
-        CommonMethods.showAlertDialog(LoginActivity.this,getString(R.string.wrong_server_path)+"\n"+getString(R.string.for_example_server_path),true);
+       /* DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
+        CommonMethods.showAlertDialog(LoginActivity.this, getString(R.string.wrong_server_path) + "\n" + getString(R.string.for_example_server_path), true, new CheckIpConnection() {
+            @Override
+            public void onOkButtonClickListner(String serverPath, Context context,Boolean isReenteredServerPath) {
+
+            }
+        });*/
     }
 }
 

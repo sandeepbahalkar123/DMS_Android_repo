@@ -71,6 +71,7 @@ public class DmsConstants {
     public static final int TASK_GET_ARCHIVED_LIST = 4;
     public static final int TASK_GET_PDF_DATA = 7;
     public static final int TOKEN_REFRESH = 8;
+    public static final int TASK_CHECK_SERVER_CONNECTION = 9;
 
 
     public static class DATE_PATTERN {

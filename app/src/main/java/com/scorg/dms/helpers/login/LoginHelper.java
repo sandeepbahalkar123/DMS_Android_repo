@@ -28,6 +28,7 @@ public class LoginHelper implements ConnectionListener {
     Context mContext;
     HelperResponse mHelperResponseManager;
     private String userName;
+    private String mServerPath;
     private String password;
     private String userGender;
 
@@ -104,5 +105,12 @@ public class LoginHelper implements ConnectionListener {
         Log.e(TAG,"Config.URL_LOGIN: "+Config.URL_LOGIN);
         mConnectionFactory.setUrl(Config.URL_LOGIN);
         mConnectionFactory.createConnection(DmsConstants.TASK_LOGIN_CODE);
+    }
+    public void checkConnectionToServer(String serverPath) {
+        this.mServerPath = serverPath;
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_CHECK_SERVER_CONNECTION, Request.Method.POST);
+        Log.e(TAG,"Config.URL_LOGIN: "+Config.URL_CHECK_SERVER_CONNECTION);
+        mConnectionFactory.setUrl(Config.URL_CHECK_SERVER_CONNECTION);
+        mConnectionFactory.createConnection(DmsConstants.TASK_CHECK_SERVER_CONNECTION);
     }
 }

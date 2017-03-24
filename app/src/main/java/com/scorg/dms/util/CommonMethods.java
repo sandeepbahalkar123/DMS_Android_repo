@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scorg.dms.R;
+import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.ui.activities.LoginActivity;
@@ -78,6 +79,7 @@ public class CommonMethods {
 
     private int mYear, mMonth, mDay, mHour, mMinute;
     private DatePickerDialogListener mDatePickerDialogListener;
+    private static CheckIpConnection mCheckIpConnection;
     public static Context mContext;
 
     public static void showToast(Context context, String error) {
@@ -544,8 +546,9 @@ public class CommonMethods {
 
 
     //this alert is shown for input of serverpath
-    public static Dialog showAlertDialog(Context activity, String dialogHeader, final boolean isReEnteredServerPath) {
+    public static Dialog showAlertDialog(Context activity, String dialogHeader, final boolean isReEnteredServerPath, CheckIpConnection checkIpConnection) {
         mContext = activity;
+        mCheckIpConnection = checkIpConnection;
         final Dialog dialog = new Dialog(activity);
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -559,13 +562,14 @@ public class CommonMethods {
         dialog.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 EditText etServerPath = (EditText) dialog.findViewById(R.id.et_server_path);
 
                 if(isValidIP(etServerPath.getText().toString())){
                     String mServerPath = Config.HTTP + etServerPath.getText().toString() + Config.API;
                     Log.e(TAG, "SERVER PATH===" + mServerPath);
-
-                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
+                    mCheckIpConnection.onOkButtonClickListner(mServerPath,mContext,isReEnteredServerPath);
+                    //DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
                     dialog.dismiss();
                     if(!isReEnteredServerPath) {
                         Intent intentObj = new Intent(mContext, LoginActivity.class);

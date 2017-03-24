@@ -39,6 +39,7 @@ public class Config {
 
     public static final String URL_GET_ARCHIVED_LIST = "getArchived";
     public static final String URL_GET_PDF_DATA = "showfile";
+    public static final String URL_CHECK_SERVER_CONNECTION = "connectionCheck";
 
 
 }
