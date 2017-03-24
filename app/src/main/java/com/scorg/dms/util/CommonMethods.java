@@ -567,9 +567,15 @@ public class CommonMethods {
 
                 if(isValidIP(etServerPath.getText().toString())){
                     String mServerPath = Config.HTTP + etServerPath.getText().toString() + Config.API;
+
                     Log.e(TAG, "SERVER PATH===" + mServerPath);
                     mCheckIpConnection.onOkButtonClickListner(mServerPath,mContext,isReEnteredServerPath);
                     //DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
+
+//                    CommonMethods.Log(TAG, "SERVER PATH===" + mServerPath);
+
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
+
                     dialog.dismiss();
                     if(!isReEnteredServerPath) {
                         Intent intentObj = new Intent(mContext, LoginActivity.class);
@@ -591,7 +597,11 @@ public class CommonMethods {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                ((Activity)mContext).finish();
+                if(!isReEnteredServerPath){
+                    ((Activity)mContext).finish();
+                }
+
+
             }
         });
         dialog.show();

@@ -52,7 +52,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestManager extends ConnectRequest implements Connector, RequestTimer.RequestTimerListener {
-    private static final String TAG = "RequestManager";
+    private static final String TAG = "DMS/RequestManager";
     private static final int CONNECTION_TIME_OUT = 1000 * 60;
     private static final int N0OF_RETRY = 0;
     private String requestTag;
@@ -234,18 +234,23 @@ public class RequestManager extends ConnectRequest implements Connector, Request
         }
 
         try {
+            CommonMethods.Log(TAG,"Goes into error response condition");
 
             if (error instanceof TimeoutError) {
 
-                if (error.getMessage().equalsIgnoreCase("java.io.IOException: No authentication challenges found") || error.getMessage().equalsIgnoreCase("invalid_grant")) {
-                    if (mViewById != null)
-                        CommonMethods.showSnack(mViewById, mContext.getString(R.string.authentication));
+//                if (error.getMessage().equalsIgnoreCase("java.io.IOException: No authentication challenges found") || error.getMessage().equalsIgnoreCase("invalid_grant")) {
+//                    if (mViewById != null)
+//                        CommonMethods.showSnack(mViewById, mContext.getString(R.string.authentication));
+//                    else
+//                        CommonMethods.showToast(mContext, mContext.getString(R.string.authentication));
+//                } else if (error.getMessage().equalsIgnoreCase("javax.net.ssl.SSLHandshakeException: java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.")) {
+//                    showErrorDialog("Something went wrong.");
+//                }
+
+                if (mViewById != null)
+                        CommonMethods.showSnack(mViewById, mContext.getString(R.string.timeout));
                     else
-                        CommonMethods.showToast(mContext, mContext.getString(R.string.authentication));
-                    Log.d(TAG, error.getMessage());
-                } else if (error.getMessage().equalsIgnoreCase("javax.net.ssl.SSLHandshakeException: java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.")) {
-                    showErrorDialog("Something went wrong.");
-                }
+                        CommonMethods.showToast(mContext, mContext.getString(R.string.timeout));
 
             } else if (error instanceof NoConnectionError) {
 
@@ -255,10 +260,6 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                     mConnectionListener.onResponse(ConnectionListener.NO_CONNECTION_ERROR, null, mOldDataTag);
                 }
 
-                Log.d(TAG, error.getMessage());
-
-                mConnectionListener.onResponse(ConnectionListener.NO_INTERNET, null, mOldDataTag);
-
             } else if (error instanceof ServerError) {
                 if (isTokenExpired) {
                     // Redirect to Login
@@ -267,23 +268,16 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                     ((AppCompatActivity) mContext).finish();
                 } else
                     mConnectionListener.onResponse(ConnectionListener.SERVER_ERROR, null, mOldDataTag);
-                Log.d(TAG, error.getMessage());
-
             } else if (error instanceof NetworkError) {
                 Log.d(TAG, error.getMessage());
                 if (mViewById != null)
                     CommonMethods.showSnack(mViewById, mContext.getString(R.string.internet));
                 else
                     CommonMethods.showToast(mContext, mContext.getString(R.string.internet));
-
             } else if (error instanceof ParseError) {
                 mConnectionListener.onResponse(ConnectionListener.PARSE_ERR0R, null, mOldDataTag);
-                Log.d(TAG, error.getMessage());
-
             } else if (error instanceof AuthFailureError) {
-
                 tokenRefreshRequest();
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -416,7 +410,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
     }
 
     private void tokenRefreshRequest() {
-        String url = Config.BASE_URL + Config.URL_LOGIN;
+        String url = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext) + Config.URL_LOGIN;
 
         Map<String, String> headerParams = new HashMap<>();
         headerParams.putAll(mHeaderParams);

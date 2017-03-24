@@ -102,7 +102,6 @@ public class LoginHelper implements ConnectionListener {
         testParams.put(DmsConstants.PASSWORD, password);
         testParams.put(DmsConstants.CLIENT_ID_KEY, DmsConstants.CLIENT_ID_VALUE);
         mConnectionFactory.setPostParams(testParams);
-        Log.e(TAG,"Config.URL_LOGIN: "+Config.URL_LOGIN);
         mConnectionFactory.setUrl(Config.URL_LOGIN);
         mConnectionFactory.createConnection(DmsConstants.TASK_LOGIN_CODE);
     }

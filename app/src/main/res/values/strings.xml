@@ -4,6 +4,7 @@
     <string name="internet">Please check your Internet Connection</string>
     <string name="wrong_server_path">Re-enter correct server path</string>
     <string name="authentication">Authentication error</string>
+    <string name="timeout">Timeout error</string>
     <string name="roboto_bold">roboto_bold.ttf</string>
     <string name="roboto_regular">roboto_regular.ttf</string>
     <string name="roboto_light">roboto_light.ttf</string>
@@ -134,7 +135,7 @@
     <string name="ic_label">&#xe0d0;</string>
     <string name="ic_person">&#xe105;</string>
     <string name="filenotfound">File not found</string>
-    <string name="error_in_ip">Please enter correct IP address</string>
+    <string name="error_in_ip">Please enter valid IP address</string>
 
     <!--******************************-->
 </resources>
