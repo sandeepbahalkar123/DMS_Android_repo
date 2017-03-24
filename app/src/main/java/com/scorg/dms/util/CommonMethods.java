@@ -614,6 +614,7 @@ public class CommonMethods {
             outputStream = new FileOutputStream(file);
             outputStream.write(pdfAsBytes);
             outputStream.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

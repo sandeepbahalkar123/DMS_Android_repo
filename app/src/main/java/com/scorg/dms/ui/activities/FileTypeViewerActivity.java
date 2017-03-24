@@ -317,6 +317,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                         } else {
                             loadPDFFromServer(mSecondPdfView, fileData, "file2", "pdf");
                         }
+                        fileData = null;
                     } else
                         Toast.makeText(mContext, "Document not available", Toast.LENGTH_SHORT).show();
                 }
@@ -518,8 +519,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         GetPdfDataRequestModel getPdfDataRequestModel = new GetPdfDataRequestModel();
         getPdfDataRequestModel.setPatientId(respectivePatientID);
-        getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(0).getFileType());
-        getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(0).getReferenceId());
+
 
         if (value instanceof ArrowExpandIconTreeItemHolder.IconTreeItem) {
             ArrowExpandIconTreeItemHolder.IconTreeItem value1 = (ArrowExpandIconTreeItemHolder.IconTreeItem) value;
@@ -557,6 +557,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             if (nodeValue.contains("@")) {
                 String[] split = nodeValue.split("@");
                 if (split[1].equalsIgnoreCase("1")) {
+
+                    getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(0).getFileType());
+                    getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(0).getReferenceId());
+
                     mLoadPDFInFirstPDFView = true;
                     //-----TO grayed out pdfview based on no element in that view -----
                     if (lstDocTypeRequestsToFetchFromServer.size() != 0) {
@@ -568,6 +572,9 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                     }
                 } else {
                     mLoadPDFInFirstPDFView = false;
+
+                    getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(1).getFileType());
+                    getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(1).getReferenceId());
 
                     //-----TO grayed out pdfview based on no element in that view -----
                     if (lstDocTypeRequestsToFetchFromServer.size() != 0) {
