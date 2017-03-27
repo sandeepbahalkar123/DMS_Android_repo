@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -54,6 +55,7 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,16 +80,17 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    // Ganesh Added
+    //---------
     @BindView(R.id.firstPdfView)
     PDFView mFirstPdfView;
     @BindView(R.id.secondPdfView)
     PDFView mSecondPdfView;
-    @BindView(R.id.firstPdfViewLay)
-    RelativeLayout mFirstFileTypePdfViewLayout;
-    @BindView(R.id.secondPdfViewLay)
-    RelativeLayout mSecondFileTypePdfViewLayout;
 
+    @BindView(R.id.firstPdfViewFrameLayout)
+    FrameLayout mFirstFileTypePdfViewLayout;
+    @BindView(R.id.secondPdfViewFrameLayout)
+    FrameLayout mSecondFileTypePdfViewLayout;
+    //---------
 
     @BindView(R.id.messageForFirstFile)
     TextView mMessageForFirstFile;
@@ -117,7 +120,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     private RelativeLayout mFileTypeOneTreeViewContainer;
 
-    private AndroidTreeView mAndroidTreeView;
     private Switch mCompareSwitch;
     private TableRow mRowScrollBoth;
 
@@ -132,11 +134,14 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     String patientName;
     String doctorName;
     String patientAddress;
-    private TreeNode mTreeRoot;
-
     //---------
-    private boolean mLoadPDFInFirstPDFView = true; // false for second pdfview.
+    private int mClickedTreeStructureLevel;
+    private boolean isTreeInMultipleRootMode = true; // true--> if tree contains two main root like (IPD,OPD) , false--> (IPD OR OPD only)
     private FileTreeResponseData mFileTreeResponseData;
+
+    private RelativeLayout mFirstFileTypeProgressDialogLayout;
+    private RelativeLayout mSecondFileTypeProgressDialogLayout;
+    private HashMap<Integer, String> mPreviousClickedTreeElement = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,12 +162,22 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             patientName = extra.getString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME);
             patientAddress = extra.getString(DmsConstants.PATIENT_ADDRESS);
             doctorName = extra.getString(DmsConstants.DOCTOR_NAME);
-
         }
 
-        initializeVariables();
+        mContext = getApplicationContext();
+        //-------------
+        mPatientsHelper = new PatientsHelper(this, this);
+        mPreviousClickedTreeElement = new HashMap<>();
+
         bindView();
 
+        //-----------
+        mDrawer.openDrawer(GravityCompat.END);
+        if (mFileTreeResponseData == null)
+            getLoadArchivedList();
+        else
+            createAnnotationTreeStructure(mFileTreeResponseData, true);
+        //-----------
     }
 
     private void bindView() {
@@ -176,23 +191,24 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         toggle.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.back));
         toggle.syncState();
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
+        //------RightNavigationView initialize---------
         mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
-        mHeaderView = mRightNavigationView.getHeaderView(0);
 
-
-        //---------------
         DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
         params.width = width;
 
         mRightNavigationView.setLayoutParams(params);
 
+        mHeaderView = mRightNavigationView.getHeaderView(0);
+        doBindHeaderViews();
+
+        //-------Listeners-----
+        mCompareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCompareChecked = isChecked;
+            }
+        });
         mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -200,8 +216,25 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 return true;
             }
         });
+        mOpenRightDrawer.setOnClickListener(this);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //-----------
+        mFirstFileTypePdfViewLayout.addView(CommonMethods.loadView(R.layout.mydialog, this));
+        mFirstFileTypeProgressDialogLayout = (RelativeLayout) mFirstFileTypePdfViewLayout.findViewById(R.id.progressBarContainerLayout);
+        mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
+        mSecondFileTypePdfViewLayout.addView(CommonMethods.loadView(R.layout.mydialog, this));
+        mSecondFileTypeProgressDialogLayout = (RelativeLayout) mSecondFileTypePdfViewLayout.findViewById(R.id.progressBarContainerLayout);
+        mSecondFileTypeProgressDialogLayout.setVisibility(View.GONE);
 
-        //------------
+    }
+
+    private void doBindHeaderViews() {
+
         mFileOneRefId = (TextView) mHeaderView.findViewById(R.id.fileTypeOneRefID);
         mFileTwoRefId = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoRefID);
         mAdmissionDateOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneAdmissionDate);
@@ -216,58 +249,40 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mDoctorNameTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoDoctorName);
         mPatientAddress = (TextView) mHeaderView.findViewById(R.id.tvPatientLocation);
 
-        mFileOneRefId.setText(mSelectedFileTypeDataToCompare.get(0).getReferenceId().toString());
-        mAdmissionDateOne.setText(mSelectedFileTypeDataToCompare.get(0).getAdmissionDate().toString());
-        mDischargeDateOne.setText(mSelectedFileTypeDataToCompare.get(0).getDischargeDate().toString());
-        mFileTypeOne.setText(mSelectedFileTypeDataToCompare.get(0).getFileType().toString());
-
-        mPatientId.setText(mSelectedFileTypeDataToCompare.get(0).getRespectiveParentPatientID().toString());
+        mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTreeViewContainer);
+        mCompareSwitch = (Switch) mHeaderView.findViewById(R.id.et_uhid);
+        mRowScrollBoth = (TableRow) mHeaderView.findViewById(R.id.rowScrollBoth);
+        mFileOneDrawerLayout = (LinearLayout) mHeaderView.findViewById(R.id.fileOneLay);
+        mFileTwoDrawerLayout = (LinearLayout) mHeaderView.findViewById(R.id.fileTwoLay);
 
         mPatientName.setText(patientName);
         mDoctorNameTwo.setText(doctorName);
         mDoctorNameOne.setText(doctorName);
         mPatientAddress.setText(patientAddress);
 
-        mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTreeViewContainer);
-
-        mCompareSwitch = (Switch) mHeaderView.findViewById(R.id.et_uhid);
-        mRowScrollBoth = (TableRow) mHeaderView.findViewById(R.id.rowScrollBoth);
-        mFileOneDrawerLayout = (LinearLayout) mHeaderView.findViewById(R.id.fileOneLay);
-        mFileTwoDrawerLayout = (LinearLayout) mHeaderView.findViewById(R.id.fileTwoLay);
+        //----------
+        PatientFileData patientFileData = mSelectedFileTypeDataToCompare.get(0);
+        mFileOneRefId.setText(String.valueOf(patientFileData.getReferenceId()));
+        mAdmissionDateOne.setText(String.valueOf(patientFileData.getAdmissionDate()));
+        mDischargeDateOne.setText(String.valueOf(patientFileData.getDischargeDate()));
+        mFileTypeOne.setText(String.valueOf(patientFileData.getFileType()));
+        mPatientId.setText(String.valueOf(patientFileData.getRespectiveParentPatientID()));
+        //----------
 
         if (mSelectedFileTypeDataToCompare.size() == 2) {
-
-            mFileTwoRefId.setText(mSelectedFileTypeDataToCompare.get(1).getReferenceId().toString());
-            mAdmissionDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getAdmissionDate().toString());
-            mDischargeDateTwo.setText(mSelectedFileTypeDataToCompare.get(1).getDischargeDate().toString());
-            mFileTypeTwo.setText(mSelectedFileTypeDataToCompare.get(1).getFileType().toString());
 
             mSecondFileTypePdfViewLayout.setVisibility(View.VISIBLE);
             mRowScrollBoth.setVisibility(View.VISIBLE);
             mFileTwoDrawerLayout.setVisibility(View.VISIBLE);
 
-            mCompareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    isCompareChecked = isChecked;
-                }
-            });
+            patientFileData = mSelectedFileTypeDataToCompare.get(1);
+            mFileTwoRefId.setText(String.valueOf(patientFileData.getReferenceId()));
+            mAdmissionDateTwo.setText(String.valueOf(patientFileData.getAdmissionDate()));
+            mDischargeDateTwo.setText(String.valueOf(patientFileData.getDischargeDate()));
+            mFileTypeTwo.setText(String.valueOf(patientFileData.getFileType()));
+
         }
-
-        //------------
-        mOpenRightDrawer.setOnClickListener(this);
-        //-----------
-
-
     }
-
-    private void initializeVariables() {
-        mContext = getApplicationContext();
-        //-------------
-        mPatientsHelper = new PatientsHelper(this, this);
-        //------------
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -305,44 +320,47 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
 
     @Override
-    public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
-        switch (mOldDataTag) {
-            case DmsConstants.TASK_GET_PDF_DATA:
-                GetPdfDataResponseModel getPdfDataResponseModel = (GetPdfDataResponseModel) customResponse;
-                if (getPdfDataResponseModel.getCommon().getStatusCode().equals(DmsConstants.SUCCESS)) {
-                    String fileData = getPdfDataResponseModel.getGetPdfDataResponseData().getFileData();
-                    if (fileData != null) {
-                        if (mLoadPDFInFirstPDFView) {
+    public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
+
+        //Changed from switch to if..else, due to dynamically comparing received mOldDataTag.
+        if (mOldDataTag.startsWith(DmsConstants.TASK_GET_PDF_DATA + mClickedTreeStructureLevel)) {
+            GetPdfDataResponseModel getPdfDataResponseModel = (GetPdfDataResponseModel) customResponse;
+            if (getPdfDataResponseModel.getCommon().getStatusCode().equals(DmsConstants.SUCCESS)) {
+                String fileData = getPdfDataResponseModel.getGetPdfDataResponseData().getFileData();
+                if (fileData != null) {
+                    switch (mClickedTreeStructureLevel) {
+                        case 0:
+                            mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
                             loadPDFFromServer(mFirstPdfView, fileData, "file1", "pdf");
-                        } else {
+                            break;
+                        case 1:
+                            mSecondFileTypeProgressDialogLayout.setVisibility(View.GONE);
                             loadPDFFromServer(mSecondPdfView, fileData, "file2", "pdf");
-                        }
-                    } else
-                        Toast.makeText(mContext, "Document not available", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case DmsConstants.TASK_GET_ARCHIVED_LIST:
-                FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
-                mFileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
+                            break;
+                    }
+                } else
+                    Toast.makeText(mContext, "Document not available", Toast.LENGTH_SHORT).show();
+            }
 
-                createAnnotationTreeStructure(mFileTreeResponseData, true);
-
-                break;
+        } else if (String.valueOf(mOldDataTag).equalsIgnoreCase("" + DmsConstants.TASK_GET_ARCHIVED_LIST)) {
+            FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
+            mFileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
+            createAnnotationTreeStructure(mFileTreeResponseData, true);
         }
     }
 
     @Override
-    public void onParseError(int mOldDataTag, String errorMessage) {
+    public void onParseError(String mOldDataTag, String errorMessage) {
 
     }
 
     @Override
-    public void onServerError(int mOldDataTag, String serverErrorMessage) {
+    public void onServerError(String mOldDataTag, String serverErrorMessage) {
 
     }
 
     @Override
-    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
+    public void onNoConnectionError(String mOldDataTag, String serverErrorMessage) {
 
     }
 
@@ -351,24 +369,32 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         mFileTypeOneTreeViewContainer.removeAllViews();
 
-        mTreeRoot = TreeNode.root();
+        TreeNode treeRoot = TreeNode.root();
 
         int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
         int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
         int textColor = ContextCompat.getColor(this, R.color.black);
 
         List<ArchiveDatum> archiveData = fileTreeResponseData.getArchiveData();
+        int size = archiveData.size();
+
+        // To set mode of opening tree.
+        isTreeInMultipleRootMode = (size > 0) ? true : false;
 
         // For archived data list
-        for (int i = 0; i < archiveData.size(); i++) {
+        for (int i = 0; i < size; i++) {
             ArchiveDatum archiveDatumObject = archiveData.get(i);
 
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             selectableHeaderHolder.setNodeValueColor(textColor);
 
-            // Label|NA|pageCount @ fileOne Or fileTwo count id
-            String dataToShow = archiveDatumObject.getFileType() + " (" + archiveDatumObject.getTotalDocCategoryPageCount() + ")" + "|NA" + "@" + (i + 1);
-            TreeNode archiveDatumObjectFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, archiveDatumObject))
+            //---- To bold clicked text in tree
+            if (archiveDatumObject.getFileType().equalsIgnoreCase(mPreviousClickedTreeElement.get(i)))
+                selectableHeaderHolder.setTreeLabelBold(true);
+
+            // Label(pageCount)|NA
+            String dataToShow = archiveDatumObject.getFileType() + " (" + archiveDatumObject.getTotalDocCategoryPageCount() + ")" + "|NA";
+            TreeNode archiveDatumObjectFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, archiveDatumObject, i))
                     .setViewHolder(selectableHeaderHolder);
 
             //---- For list categories loop
@@ -377,13 +403,17 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             for (int j = 0; j < lstDocCategories.size(); j++) {
                 LstDocCategory lstDocCategoryObject = lstDocCategories.get(j);
 
-                // Label|id|pageCount @ fileOne Or fileTwo count id
-                dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId() + "@" + (i + 1);
+                // Label(pageCount)|id
+                dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId();
 
                 ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocCategoryObjectLeftPadding);
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);
 
-                TreeNode lstDocCategoryObjectFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, lstDocCategoryObject))
+                //---- To bold clicked text in tree
+                if (lstDocCategoryObject.getCategoryName().equalsIgnoreCase(mPreviousClickedTreeElement.get(i)))
+                    docCatSelectableHeaderHolder.setTreeLabelBold(true);
+
+                TreeNode lstDocCategoryObjectFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, lstDocCategoryObject, i))
                         .setViewHolder(docCatSelectableHeaderHolder);
                 //---
 
@@ -392,24 +422,28 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 for (int k = 0; k < lstDocTypesCategoriesChildList.size(); k++) {
                     LstDocType lstDocTypeChild = lstDocTypesCategoriesChildList.get(k);
 
-                    // Label|id|pageCount @ fileOne Or fileTwo count id
-                    dataToShow = lstDocTypeChild.getTypeName() + " (" + lstDocTypeChild.getPageCount() + ")" + "|" + lstDocTypeChild.getTypeId() + "@" + (i + 1);
+                    // Label(pageCount)|id
+                    dataToShow = lstDocTypeChild.getTypeName() + " (" + lstDocTypeChild.getPageCount() + ")" + "|" + lstDocTypeChild.getTypeId();
 
                     //-------
                     ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
                     lstDocTypeChildSelectableHeaderHolder.setNodeValueColor(textColor);
 
-                    TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, lstDocTypeChild))
+                    //---- To bold clicked text in tree
+                    if (lstDocTypeChild.getTypeName().equalsIgnoreCase(mPreviousClickedTreeElement.get(i)))
+                        lstDocTypeChildSelectableHeaderHolder.setTreeLabelBold(true);
+
+                    TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, lstDocTypeChild, i))
                             .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
                     //-------
                     lstDocCategoryObjectFolder.addChildren(lstDocTypeChildFolder);
                 }
                 archiveDatumObjectFolder.addChildren(lstDocCategoryObjectFolder);
             }
-            mTreeRoot.addChildren(archiveDatumObjectFolder);
+            treeRoot.addChildren(archiveDatumObjectFolder);
         }
 
-        mAndroidTreeView = new AndroidTreeView(this, mTreeRoot);
+        AndroidTreeView mAndroidTreeView = new AndroidTreeView(this, treeRoot);
         mAndroidTreeView.setDefaultAnimation(true);
         mAndroidTreeView.setUse2dScroll(true);
         mAndroidTreeView.setDefaultNodeClickListener(this);
@@ -516,27 +550,36 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         mDrawer.closeDrawer(GravityCompat.END);
 
+
         GetPdfDataRequestModel getPdfDataRequestModel = new GetPdfDataRequestModel();
         getPdfDataRequestModel.setPatientId(respectivePatientID);
-        getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(0).getFileType());
-        getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(0).getReferenceId());
 
         if (value instanceof ArrowExpandIconTreeItemHolder.IconTreeItem) {
             ArrowExpandIconTreeItemHolder.IconTreeItem value1 = (ArrowExpandIconTreeItemHolder.IconTreeItem) value;
 
-            //-----------
+            //----- THIS IS TO FIND OUT, WHICH level of treeView clicked
+            mClickedTreeStructureLevel = value1.level;
+
+            //--- Set fileType and refID based on mClickedTreeStructureLevel
+            getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(mClickedTreeStructureLevel).getFileType());
+            getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(mClickedTreeStructureLevel).getReferenceId());
+
+            //----- Get Object of clicked Element and create map to send  : Start------
             if (value1.objectData instanceof ArchiveDatum) {
                 ArchiveDatum tempData = (ArchiveDatum) value1.objectData;
                 List<LstDocCategory> lstDocCategories = tempData.getLstDocCategories();
+                mPreviousClickedTreeElement.put(mClickedTreeStructureLevel, tempData.getFileType());
                 getPdfDataRequestModel.setLstDocTypeRequests(createLstDocTypeRequest(lstDocCategories));
 
             } else if (value1.objectData instanceof LstDocCategory) {
+                LstDocCategory objectData = (LstDocCategory) value1.objectData;
                 List<LstDocCategory> lstDocCategories = new ArrayList<>();
-                lstDocCategories.add((LstDocCategory) value1.objectData);
+                lstDocCategories.add(objectData);
+                mPreviousClickedTreeElement.put(mClickedTreeStructureLevel, objectData.getCategoryName());
                 getPdfDataRequestModel.setLstDocTypeRequests(createLstDocTypeRequest(lstDocCategories));
             } else if (value1.objectData instanceof LstDocType) {
                 LstDocType tempData = (LstDocType) value1.objectData;
-
+                mPreviousClickedTreeElement.put(mClickedTreeStructureLevel, tempData.getTypeName());
                 //----
                 List<LstDocType> lstDocType = new ArrayList<>();
                 lstDocType.add(tempData);
@@ -548,38 +591,23 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 //---------
                 getPdfDataRequestModel.setLstDocTypeRequests(createLstDocTypeRequest(lstDocCategories));
             }
-            // call api
+            //----- Get Object of clicked Element and create map to send  : End------
 
-            //----- THIS IS TO FIND OUT, WHICH ITEM OF TREEVIEW IS CLICKED (EX. FileONE OR FileTWO PDF VIEW)
-            String nodeValue = value1.text.toString();
             List<LstDocTypeRequest> lstDocTypeRequestsToFetchFromServer = getPdfDataRequestModel.getLstDocTypeRequests();
 
-            if (nodeValue.contains("@")) {
-                String[] split = nodeValue.split("@");
-                if (split[1].equalsIgnoreCase("1")) {
-                    mLoadPDFInFirstPDFView = true;
-                    //-----TO grayed out pdfview based on no element in that view -----
-                    if (lstDocTypeRequestsToFetchFromServer.size() != 0) {
-                        mFirstPdfView.setVisibility(View.VISIBLE);
-                        mFirstFileTypePdfViewLayout.setBackgroundResource(R.drawable.pdfdecoration);
-                    } else {
-                        mFirstPdfView.setVisibility(View.GONE);
-                        mFirstFileTypePdfViewLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
-                    }
-                } else {
-                    mLoadPDFInFirstPDFView = false;
-
-                    //-----TO grayed out pdfview based on no element in that view -----
-                    if (lstDocTypeRequestsToFetchFromServer.size() != 0) {
-                        mSecondPdfView.setVisibility(View.VISIBLE);
-                        mSecondFileTypePdfViewLayout.setBackgroundResource(R.drawable.pdfdecoration);
-                    } else {
-                        mSecondPdfView.setVisibility(View.GONE);
-                        mSecondFileTypePdfViewLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
-                    }
+            if (isTreeInMultipleRootMode) {
+                switch (mClickedTreeStructureLevel) {
+                    case 0:
+                        doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mFirstPdfView, mFirstFileTypeProgressDialogLayout, mFirstFileTypePdfViewLayout);
+                        break;
+                    case 1:
+                        doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mSecondPdfView, mSecondFileTypeProgressDialogLayout, mSecondFileTypePdfViewLayout);
+                        break;
                 }
+            } else {
+                doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mFirstPdfView, mFirstFileTypeProgressDialogLayout, mFirstFileTypePdfViewLayout);
+                doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mSecondPdfView, mSecondFileTypeProgressDialogLayout, mSecondFileTypePdfViewLayout);
             }
-            mPatientsHelper.getPdfData(getPdfDataRequestModel);
         }
     }
 
@@ -615,5 +643,19 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 .enableAnnotationRendering(true)
                 .scrollHandle(new DefaultScrollHandle(this))
                 .load();
+    }
+
+
+    private void doCallPDFDataService(GetPdfDataRequestModel getPdfDataRequestModel, int size, PDFView pdfView, RelativeLayout progressBarLayout, FrameLayout pdfContainerLayout) {
+        //-----TO grayed out pdfview based on no element in that view -----
+        if (size != 0) {
+            pdfView.setVisibility(View.VISIBLE);
+            progressBarLayout.setVisibility(View.VISIBLE);
+            pdfContainerLayout.setBackgroundResource(R.drawable.pdfdecoration);
+        } else {
+            pdfView.setVisibility(View.GONE);
+            pdfContainerLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+        }
+        mPatientsHelper.getPdfData(getPdfDataRequestModel, (DmsConstants.TASK_GET_PDF_DATA + mClickedTreeStructureLevel));
     }
 }

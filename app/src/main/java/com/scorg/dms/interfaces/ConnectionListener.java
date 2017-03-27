@@ -14,7 +14,7 @@ public interface ConnectionListener extends ResponseResults {
      * @param customResponse This is the customResponse object we get it from Server side.
      * @param mOldDataTag
      */
-    public void onResponse(int responseResult, CustomResponse customResponse, int mOldDataTag);
+    public void onResponse(int responseResult, CustomResponse customResponse, String mOldDataTag);
 
     public void onTimeout(ConnectRequest request);
 }

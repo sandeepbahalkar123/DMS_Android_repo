@@ -33,11 +33,11 @@ import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
 import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
+import com.scorg.dms.model.responsemodel.iptestresponsemodel.IpTestResponseModel;
 import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.ui.activities.LoginActivity;
-import com.scorg.dms.ui.activities.SplashScreenActivity;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.Config;
 import com.scorg.dms.util.DmsConstants;
@@ -59,12 +59,12 @@ public class RequestManager extends ConnectRequest implements Connector, Request
     private String requestTag;
     private int connectionType = Request.Method.POST;
 
-    private int mDataTag;
+    private String mDataTag;
     private RequestTimer requestTimer;
     private JsonObjectRequest jsonRequest;
     private StringRequest stringRequest;
 
-    public RequestManager(Context mContext, ConnectionListener connectionListener, int dataTag, View viewById, boolean isProgressBarShown, int mOldDataTag, int connectionType) {
+    public RequestManager(Context mContext, ConnectionListener connectionListener, String dataTag, View viewById, boolean isProgressBarShown, String mOldDataTag, int connectionType) {
         super();
         this.mConnectionListener = connectionListener;
         this.mContext = mContext;
@@ -274,7 +274,6 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 } else
                     mConnectionListener.onResponse(ConnectionListener.SERVER_ERROR, null, mOldDataTag);
             } else if (error instanceof NetworkError) {
-                Log.d(TAG, error.getMessage());
                 if (mViewById != null)
                     CommonMethods.showSnack(mViewById, mContext.getString(R.string.internet));
                 else
@@ -326,6 +325,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 connect();
             } else {
                 // This success response is for respective api's
+
                 switch (this.mDataTag) {
                     case DmsConstants.REGISTRATION_CODE: //This is sample code
 //                    RegistrationModel  registrationModel = gson.fromJson(data, RegistrationModel.class);
@@ -347,10 +347,19 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                         FileTreeResponseModel fileTreeResponseModel = gson.fromJson(data, FileTreeResponseModel.class);
                         this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, fileTreeResponseModel, mOldDataTag);
                         break;
-                    case DmsConstants.TASK_GET_PDF_DATA: //This is for get archived list
-                        GetPdfDataResponseModel getPdfDataResponseModel = gson.fromJson(data, GetPdfDataResponseModel.class);
-                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, getPdfDataResponseModel, mOldDataTag);
+
+                    case DmsConstants.TASK_CHECK_SERVER_CONNECTION: //This is for get archived list
+                        IpTestResponseModel ipTestResponseModel = gson.fromJson(data, IpTestResponseModel.class);
+                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, ipTestResponseModel, mOldDataTag);
                         break;
+
+                    default:
+                        //This is for get PDF Data
+                        if (mOldDataTag.startsWith(DmsConstants.TASK_GET_PDF_DATA)) {
+                            GetPdfDataResponseModel getPdfDataResponseModel = gson.fromJson(data, GetPdfDataResponseModel.class);
+                            this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, getPdfDataResponseModel, mOldDataTag);
+                        }
+
                 }
             }
 
@@ -424,7 +433,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
     private void tokenRefreshRequest() {
         String url = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext) + Config.URL_LOGIN;
-        CommonMethods.Log(TAG,"Refersh token while sending refresh token api: "+DmsPreferencesManager.getString(DmsConstants.REFRESH_TOKEN, mContext));
+        CommonMethods.Log(TAG, "Refersh token while sending refresh token api: " + DmsPreferencesManager.getString(DmsConstants.REFRESH_TOKEN, mContext));
         Map<String, String> headerParams = new HashMap<>();
         headerParams.putAll(mHeaderParams);
         headerParams.remove(DmsConstants.CONTENT_TYPE);

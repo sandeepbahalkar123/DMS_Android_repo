@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -83,6 +84,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     NavigationView mRightNavigationView;
     View mRightHeaderView;
     View mLeftHeaderView;
+    private ImageView mUserImage;
     private TextView mUserName;
     private TextView mApplySearchFilter;
     private TextView mResetSearchFilter;
@@ -193,6 +195,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mRightNavigationView.setLayoutParams(params);
         mLeftNavigationView.setLayoutParams(leftParams);
         //---------------
+        mUserImage = (ImageView)mLeftHeaderView.findViewById(R.id.userImage);
         mUserName = (TextView) mLeftHeaderView.findViewById(R.id.userName);
         mSpinSelectedId = (Spinner) mRightHeaderView.findViewById(R.id.spinner_selectId);
         mSpinnerAmissionDate = (Spinner) mRightHeaderView.findViewById(R.id.spinner_admissionDate);
@@ -205,7 +208,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mApplySearchFilter = (TextView) mRightHeaderView.findViewById(R.id.apply);
         mResetSearchFilter = (TextView) mRightHeaderView.findViewById(R.id.reset);
         mAnnotationTreeViewContainer = (RelativeLayout) mRightHeaderView.findViewById(R.id.annotationTreeViewContainer);
-
+         if(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER,mContext).equals("M")){
+             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_male));
+         }else {
+             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_female));
+         }
         //---------
         // right navigation drawer clickListener
         mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -275,7 +282,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     }
 
     @Override
-    public void onSuccess(int mOldDataTag, CustomResponse customResponse) {
+    public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
         if (mOldDataTag == DmsConstants.TASK_PATIENT_LIST) {
             ShowSearchResultResponseModel showSearchResultResponseModel = (ShowSearchResultResponseModel) customResponse;
             List<SearchResult> searchResult = showSearchResultResponseModel.getSearchResultData().getSearchResult();
@@ -285,8 +292,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             mPatientListView.setAdapter(patientExpandableListAdapter);
             mPatientListView.setGroupIndicator(null);
             mPatientListView.setChildIndicator(null);
-            mPatientListView.setChildDivider(getResources().getDrawable(R.color.transparent));
-            mPatientListView.setDivider(getResources().getDrawable(R.color.white));
+            mPatientListView.setChildDivider(ContextCompat.getDrawable(this, R.color.transparent));
+            mPatientListView.setDivider(ContextCompat.getDrawable(this, R.color.white));
             mPatientListView.setDividerHeight(2);
 
             //mPatientListView.setDividerHeight(2);
@@ -299,17 +306,17 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     }
 
     @Override
-    public void onParseError(int mOldDataTag, String errorMessage) {
+    public void onParseError(String mOldDataTag, String errorMessage) {
 
     }
 
     @Override
-    public void onServerError(int mOldDataTag, String serverErrorMessage) {
+    public void onServerError(String mOldDataTag, String serverErrorMessage) {
 
     }
 
     @Override
-    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage) {
+    public void onNoConnectionError(String mOldDataTag, String serverErrorMessage) {
 
     }
 

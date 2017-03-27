@@ -19,7 +19,7 @@ public class ConnectRequest {
     protected CustomProgressDialog mProgressDialog;
     protected View mViewById;
     protected boolean isProgressBarShown;
-    protected int mOldDataTag;
+    protected String mOldDataTag;
     protected String mURL;
     protected int reqPostOrGet;
 }

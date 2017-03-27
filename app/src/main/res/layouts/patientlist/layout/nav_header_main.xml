@@ -13,10 +13,10 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/userImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/user_dummy_image" />
+        app:srcCompat="@drawable/image_male" />
 
     <TextView
         android:layout_width="match_parent"

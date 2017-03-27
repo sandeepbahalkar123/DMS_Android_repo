@@ -11,6 +11,12 @@ public class LoginResponseModel implements Serializable, CustomResponse {
     @SerializedName("access_token")
     @Expose
     private String accessToken;
+
+
+
+    @SerializedName("userGender")
+    @Expose
+    private String userGender;
     @SerializedName("token_type")
     @Expose
     private String tokenType;
@@ -51,6 +57,13 @@ public class LoginResponseModel implements Serializable, CustomResponse {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+    public String getUserGender() {
+        return userGender;
+    }
+
+    public void setUserGender(String userGender) {
+        this.userGender = userGender;
     }
 
 }
