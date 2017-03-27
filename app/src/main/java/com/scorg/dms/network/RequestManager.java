@@ -30,7 +30,6 @@ import com.scorg.dms.R;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.Connector;
 import com.scorg.dms.interfaces.CustomResponse;
-import com.scorg.dms.model.responsemodel.Common;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
 import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
@@ -171,11 +170,11 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
     }
 
-    private void stringRequest(String mURL, int connectionType, final Map<String, String> headerParams, final Map<String, String> postParams, final boolean isTokenExpired) {
+    private void stringRequest(String url, int connectionType, final Map<String, String> headerParams, final Map<String, String> postParams, final boolean isTokenExpired) {
 
         // ganesh for string request and delete method with string request
 
-        stringRequest = new StringRequest(connectionType, mURL,
+        stringRequest = new StringRequest(connectionType, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -236,6 +235,10 @@ public class RequestManager extends ConnectRequest implements Connector, Request
         }
 
         try {
+
+//            VolleyError error1 = new VolleyError(new String(error.networkResponse.data));
+//            error = error1;
+//            CommonMethods.Log("Error Message", error.getMessage() + "\n error Localize message" + error.getLocalizedMessage());
             CommonMethods.Log(TAG, "Goes into error response condition");
 
             if (error instanceof TimeoutError) {
@@ -267,7 +270,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                     // Redirect to Login
                     Intent intent = new Intent(mContext, LoginActivity.class);
                     mContext.startActivity(intent);
-                    ((AppCompatActivity) mContext).finish();
+                    ((AppCompatActivity) mContext).finishAffinity();
                 } else
                     mConnectionListener.onResponse(ConnectionListener.SERVER_ERROR, null, mOldDataTag);
             } else if (error instanceof NetworkError) {
@@ -278,7 +281,9 @@ public class RequestManager extends ConnectRequest implements Connector, Request
             } else if (error instanceof ParseError) {
                 mConnectionListener.onResponse(ConnectionListener.PARSE_ERR0R, null, mOldDataTag);
             } else if (error instanceof AuthFailureError) {
-                tokenRefreshRequest();
+                if (!isTokenExpired) {
+                    tokenRefreshRequest();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -311,6 +316,12 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 DmsPreferencesManager.putString(DmsConstants.ACCESS_TOKEN, loginResponseModel.getAccessToken(), mContext);
                 DmsPreferencesManager.putString(DmsConstants.TOKEN_TYPE, loginResponseModel.getTokenType(), mContext);
                 DmsPreferencesManager.putString(DmsConstants.REFRESH_TOKEN, loginResponseModel.getRefreshToken(), mContext);
+
+                String authorizationString = loginResponseModel.getTokenType()
+                        + " " + loginResponseModel.getAccessToken();
+
+                mHeaderParams.put(DmsConstants.AUTHORIZATION, authorizationString);
+
                 connect();
             } else {
                 // This success response is for respective api's
@@ -422,9 +433,10 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
     private void tokenRefreshRequest() {
         String url = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext) + Config.URL_LOGIN;
-
+        CommonMethods.Log(TAG, "Refersh token while sending refresh token api: " + DmsPreferencesManager.getString(DmsConstants.REFRESH_TOKEN, mContext));
         Map<String, String> headerParams = new HashMap<>();
         headerParams.putAll(mHeaderParams);
+        headerParams.remove(DmsConstants.CONTENT_TYPE);
         headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_URL_ENCODED);
 
         Map<String, String> postParams = new HashMap<>();
@@ -434,18 +446,4 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
         stringRequest(url, Request.Method.POST, headerParams, postParams, true);
     }
-
-   /* private void tokenRefreshed() {
-
-        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, mConnectionListener, mViewById, true, mDataTag, connectionType);
-        if (mHeaderParams != null)
-            mConnectionFactory.setHeaderParams(mHeaderParams);
-        if (customResponse != null)
-            mConnectionFactory.setPostParams(customResponse);
-        if (mPostParams != null)
-            mConnectionFactory.setPostParams(mPostParams);
-        mConnectionFactory.setUrl(mURL);
-        mConnectionFactory.createConnection(mDataTag);
-
-    }*/
 }
