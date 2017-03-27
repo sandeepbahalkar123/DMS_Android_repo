@@ -53,6 +53,7 @@ public class LoginHelper implements ConnectionListener {
                     DmsPreferencesManager.putString(DmsConstants.USERNAME, userName, mContext);
                     DmsPreferencesManager.putString(DmsConstants.PASSWORD, password, mContext);
                     DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER, userGender, mContext);
+                    CommonMethods.Log(TAG,"Refersh token after login response: "+model.getRefreshToken());
                     mHelperResponseManager.onSuccess(mOldDataTag, model);
                 }
                 break;
