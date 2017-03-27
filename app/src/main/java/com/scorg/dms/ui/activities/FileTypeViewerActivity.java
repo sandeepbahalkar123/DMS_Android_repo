@@ -250,7 +250,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mPatientAddress = (TextView) mHeaderView.findViewById(R.id.tvPatientLocation);
 
         mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTreeViewContainer);
-        mCompareSwitch = (Switch) mHeaderView.findViewById(R.id.et_uhid);
+        mCompareSwitch = (Switch) mHeaderView.findViewById(R.id.comparePdfOnOFF);
         mRowScrollBoth = (TableRow) mHeaderView.findViewById(R.id.rowScrollBoth);
         mFileOneDrawerLayout = (LinearLayout) mHeaderView.findViewById(R.id.fileOneLay);
         mFileTwoDrawerLayout = (LinearLayout) mHeaderView.findViewById(R.id.fileTwoLay);

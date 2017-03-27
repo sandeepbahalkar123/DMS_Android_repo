@@ -199,7 +199,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mUserName = (TextView) mLeftHeaderView.findViewById(R.id.userName);
         mSpinSelectedId = (Spinner) mRightHeaderView.findViewById(R.id.spinner_selectId);
         mSpinnerAmissionDate = (Spinner) mRightHeaderView.findViewById(R.id.spinner_admissionDate);
-        mUHIDEditText = (EditText) mRightHeaderView.findViewById(R.id.et_uhid);
+        mUHIDEditText = (EditText) mRightHeaderView.findViewById(R.id.comparePdfOnOFF);
         mFromDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_fromdate);
         mToDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_todate);
         mSearchPatientNameEditText = (EditText) mRightHeaderView.findViewById(R.id.et_searchPatientName);
