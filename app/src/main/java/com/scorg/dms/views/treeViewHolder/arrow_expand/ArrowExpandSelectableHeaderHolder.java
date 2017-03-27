@@ -1,6 +1,7 @@
 package com.scorg.dms.views.treeViewHolder.arrow_expand;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.unnamed.b.atv.model.TreeNode;
  */
 public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHolder<ArrowExpandIconTreeItemHolder.IconTreeItem> {
     private int nodeValueColor;
+    private boolean isTreeLabelBold;
     private int leftPadding;
     private boolean isDefaultExpanded;
     private TextView tvValue;
@@ -46,6 +48,11 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
 
         tvValue = (TextView) view.findViewById(R.id.node_value);
         tvValue.setTextColor(getNodeValueColor());
+
+        if (isTreeLabelBold())
+            tvValue.setTypeface(null, Typeface.BOLD);
+        else
+            tvValue.setTypeface(null, Typeface.NORMAL);
 
         if (value.text.toString().contains("|")) {
             tvValue.setText(value.text.toString().split("\\|")[0]);
@@ -99,5 +106,13 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
 
     public void setNodeValueColor(int nodeValueColor) {
         this.nodeValueColor = nodeValueColor;
+    }
+
+    public boolean isTreeLabelBold() {
+        return isTreeLabelBold;
+    }
+
+    public void setTreeLabelBold(boolean treeLabelBold) {
+        isTreeLabelBold = treeLabelBold;
     }
 }

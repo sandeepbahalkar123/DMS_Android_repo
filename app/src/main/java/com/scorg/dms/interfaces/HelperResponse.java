@@ -6,12 +6,12 @@ package com.scorg.dms.interfaces;
 
 public interface HelperResponse {
 
-    public void onSuccess(int mOldDataTag, CustomResponse customResponse);
+    public void onSuccess(String mOldDataTag, CustomResponse customResponse);
 
-    public void onParseError(int mOldDataTag, String errorMessage);
+    public void onParseError(String mOldDataTag, String errorMessage);
 
-    public void onServerError(int mOldDataTag, String serverErrorMessage);
+    public void onServerError(String mOldDataTag, String serverErrorMessage);
 
-    public void onNoConnectionError(int mOldDataTag, String serverErrorMessage);
+    public void onNoConnectionError(String mOldDataTag, String serverErrorMessage);
 
 }

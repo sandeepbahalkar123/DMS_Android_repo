@@ -27,7 +27,7 @@ public class ConnectionFactory extends ConnectRequest {
     Connector connector = null;
     private Device device;
 
-    public ConnectionFactory(Context context, ConnectionListener connectionListener, View viewById, boolean isProgressBarShown, int mOldDataTag, int reqPostOrGet) {
+    public ConnectionFactory(Context context, ConnectionListener connectionListener, View viewById, boolean isProgressBarShown, String mOldDataTag, int reqPostOrGet) {
         super();
         this.mConnectionListener = connectionListener;
         this.mContext = context;
@@ -83,7 +83,7 @@ public class ConnectionFactory extends ConnectRequest {
         CommonMethods.Log(TAG,"mURL: "+this.mURL);
     }
 
-    public Connector createConnection(int type) {
+    public Connector createConnection(String type) {
 
         connector = new RequestManager(mContext, mConnectionListener, type, mViewById, isProgressBarShown, mOldDataTag, reqPostOrGet);
 

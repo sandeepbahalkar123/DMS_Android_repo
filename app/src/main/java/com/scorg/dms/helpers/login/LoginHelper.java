@@ -41,7 +41,7 @@ public class LoginHelper implements ConnectionListener {
 
 
     @Override
-    public void onResponse(int responseResult, CustomResponse customResponse, int mOldDataTag) {
+    public void onResponse(int responseResult, CustomResponse customResponse, String mOldDataTag) {
 
         //CommonMethods.Log(TAG, customResponse.toString());
 
