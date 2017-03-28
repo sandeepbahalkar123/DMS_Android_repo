@@ -120,7 +120,6 @@ public class LoginHelper implements ConnectionListener {
     public void checkConnectionToServer(String serverPath) {
         this.mServerPath = serverPath;
         ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_CHECK_SERVER_CONNECTION, Request.Method.GET);
-        Log.e(TAG, "Config.URL_LOGIN: " + Config.URL_CHECK_SERVER_CONNECTION);
         mConnectionFactory.setUrl(Config.URL_CHECK_SERVER_CONNECTION);
         mConnectionFactory.createConnection(DmsConstants.TASK_CHECK_SERVER_CONNECTION);
     }
