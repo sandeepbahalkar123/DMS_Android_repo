@@ -108,7 +108,7 @@ public class ShowSearchResultRequestModel implements CustomResponse {
             String[] temp = new String[docTypeId.length];
             for (int i = 0; i < docTypeId.length; i++) {
                 String dataValue = docTypeId[i];
-                if (dataValue.contains("\\|")) {
+                if (dataValue.contains("|")) {
                     temp[i] = dataValue.split("\\|")[1];
                 } else {
                     temp[i] = dataValue;

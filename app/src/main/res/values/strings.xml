@@ -70,6 +70,12 @@
     <string name="uhid">UHID</string>
     <string name="patient_list">Patient List</string>
     <string name="compare">Compare</string>
+    <string name="from_date">FromDate:</string>
+    <string name="to_date">ToDate:</string>
+    <string name="patient_name">PatientName:</string>
+    <string name="date_type">DateType:</string>
+    <string name="documenttype">DocType:</string>
+    <string name="enter_annotation">Annotation:</string>
     <string name="cancel">Cancel</string>
     <string name="selected_1">File name one</string>
     <string name="selected_2">File name two</string>
