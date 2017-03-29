@@ -79,6 +79,7 @@
     <string name="error_select_second_file_type">Select up to two files type to compare</string>
     <string name="reset">Reset</string>
     <string name="apply">Apply</string>
+    <string name="run_only_on_tablet">Oops..., it seems you are running on phone, DMS is only supported to tablets.</string>
 
     <string-array name="select_id">
         <item>Select</item>

@@ -4,6 +4,7 @@ package com.scorg.dms.ui.activities;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,14 +20,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -80,22 +84,55 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     DrawerLayout mDrawer;
+
+
     NavigationView mLeftNavigationView;
-    NavigationView mRightNavigationView;
-    View mRightHeaderView;
+
+    //----------------
+    @BindView(R.id.nav_right_view)
+    FrameLayout mRightNavigationView;
+
+    @BindView(R.id.spinner_selectId)
+    Spinner mSpinSelectedId;
+
+    @BindView(R.id.spinner_admissionDate)
+    Spinner mSpinnerAmissionDate;
+
+    @BindView(R.id.et_uhid)
+    EditText mUHIDEditText;
+
+    @BindView(R.id.et_fromdate)
+    EditText mFromDateEditText;
+
+    @BindView(R.id.et_todate)
+    EditText mToDateEditText;
+
+    @BindView(R.id.et_searchPatientName)
+    EditText mSearchPatientNameEditText;
+
+    @BindView(R.id.et_userEnteredAnnotation)
+    EditText mAnnotationEditText;
+
+    @BindView(R.id.et_search_annotation)
+    EditText mSearchAnnotationEditText;
+
+    @BindView(R.id.apply)
+    TextView mApplySearchFilter;
+
+    @BindView(R.id.reset)
+    TextView mResetSearchFilter;
+
+    @BindView(R.id.annotationTreeViewContainer)
+    RelativeLayout mAnnotationTreeViewContainer;
+
+
+    //----------------
+
     View mLeftHeaderView;
     private ImageView mUserImage;
     private TextView mUserName;
-    private TextView mApplySearchFilter;
-    private TextView mResetSearchFilter;
-    private EditText mUHIDEditText;
-    private EditText mFromDateEditText;
-    private EditText mToDateEditText;
-    private EditText mSearchPatientNameEditText;
-    private EditText mAnnotationEditText;
-    private EditText mSearchAnnotationEditText;
-    private Spinner mSpinSelectedId;
-    private Spinner mSpinnerAmissionDate;
+
+
     private String mSelectedId;
     private String mAdmissionDate;
     private String[] mArrayId;
@@ -106,7 +143,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private RecyclerView mRecycleTag;
     private Handler mAddedTagsEventHandler;
     private HashMap<String, String> mAddedTagsForFiltering;
-    private RelativeLayout mAnnotationTreeViewContainer;
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
     private String TAG = this.getClass().getName();
@@ -183,45 +219,30 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mRecycleTag.setLayoutManager(layoutManager);
 
         mLeftNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
-        mRightHeaderView = mRightNavigationView.getHeaderView(0);
         mLeftHeaderView = mLeftNavigationView.getHeaderView(0);
         //---------------
-        DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
-        params.width = width;
 
         DrawerLayout.LayoutParams leftParams = (DrawerLayout.LayoutParams) mLeftNavigationView.getLayoutParams();
         leftParams.width = width;
-        mRightNavigationView.setLayoutParams(params);
         mLeftNavigationView.setLayoutParams(leftParams);
         //---------------
-        mUserImage = (ImageView)mLeftHeaderView.findViewById(R.id.userImage);
+        mUserImage = (ImageView) mLeftHeaderView.findViewById(R.id.userImage);
         mUserName = (TextView) mLeftHeaderView.findViewById(R.id.userName);
-        mSpinSelectedId = (Spinner) mRightHeaderView.findViewById(R.id.spinner_selectId);
-        mSpinnerAmissionDate = (Spinner) mRightHeaderView.findViewById(R.id.spinner_admissionDate);
-        mUHIDEditText = (EditText) mRightHeaderView.findViewById(R.id.et_uhid);
-        mFromDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_fromdate);
-        mToDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_todate);
-        mSearchPatientNameEditText = (EditText) mRightHeaderView.findViewById(R.id.et_searchPatientName);
-        mAnnotationEditText = (EditText) mRightHeaderView.findViewById(R.id.et_annotation);
-        mSearchAnnotationEditText = (EditText) mRightHeaderView.findViewById(R.id.et_search_annotation);
-        mApplySearchFilter = (TextView) mRightHeaderView.findViewById(R.id.apply);
-        mResetSearchFilter = (TextView) mRightHeaderView.findViewById(R.id.reset);
-        mAnnotationTreeViewContainer = (RelativeLayout) mRightHeaderView.findViewById(R.id.annotationTreeViewContainer);
-         if(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER,mContext).equals("M")){
-             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_male));
-         }else {
-             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_female));
-         }
+
+        if (DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER, mContext).equals("M")) {
+            mUserImage.setBackground(getResources().getDrawable(R.drawable.image_male));
+        } else {
+            mUserImage.setBackground(getResources().getDrawable(R.drawable.image_female));
+        }
         //---------
         // right navigation drawer clickListener
-        mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                mDrawer.closeDrawer(GravityCompat.END);
-                return true;
-            }
-        });
+//        mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(MenuItem item) {
+//                mDrawer.closeDrawer(GravityCompat.END);
+//                return true;
+//            }
+//        });
 
         // left navigation drawer clickListener
         mLeftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -279,6 +300,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             }
         });
 
+        ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
+        layoutParams.width = width;
+        mRightNavigationView.setLayoutParams(layoutParams);
     }
 
     @Override
@@ -525,7 +549,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             showSearchResultRequestModel.setToDate("" + data);
         }
 
-        showSearchResultRequestModel.setAnnotationText(DmsConstants.BLANK);
+        data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.ANNOTATION_TEXT);
+        if (data != null) {
+            showSearchResultRequestModel.setAnnotationText(data);
+        }
+
         showSearchResultRequestModel.setDocTypeId(getSelectedAnnotations());
         mPatientsHelper.doGetPatientList(showSearchResultRequestModel);
     }
@@ -589,7 +617,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mSpinnerAmissionDate.setEnabled(true);
                 mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.admission_date));
                 mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
-                mUHIDEditText.setHint(getResources().getString(R.string.uhid));
+                mUHIDEditText.setHint(getResources().getString(R.string.error_enter_uhid));
             }
         } else if (parent.getId() == R.id.spinner_admissionDate) {
             int indexSselectedId = parent.getSelectedItemPosition();
@@ -777,5 +805,14 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         });
 
         valueAnimator.start();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        int width = getResources().getDisplayMetrics().widthPixels / 2;
+        super.onConfigurationChanged(newConfig);
+        ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
+        layoutParams.width = width;
+        mRightNavigationView.setLayoutParams(layoutParams);
     }
 }
