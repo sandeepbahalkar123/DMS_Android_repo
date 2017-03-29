@@ -195,11 +195,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mRightNavigationView.setLayoutParams(params);
         mLeftNavigationView.setLayoutParams(leftParams);
         //---------------
-        mUserImage = (ImageView)mLeftHeaderView.findViewById(R.id.userImage);
+        mUserImage = (ImageView) mLeftHeaderView.findViewById(R.id.userImage);
         mUserName = (TextView) mLeftHeaderView.findViewById(R.id.userName);
         mSpinSelectedId = (Spinner) mRightHeaderView.findViewById(R.id.spinner_selectId);
         mSpinnerAmissionDate = (Spinner) mRightHeaderView.findViewById(R.id.spinner_admissionDate);
-        mUHIDEditText = (EditText) mRightHeaderView.findViewById(R.id.comparePdfOnOFF);
+        mUHIDEditText = (EditText) mRightHeaderView.findViewById(R.id.et_uhid);
         mFromDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_fromdate);
         mToDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_todate);
         mSearchPatientNameEditText = (EditText) mRightHeaderView.findViewById(R.id.et_searchPatientName);
@@ -208,11 +208,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mApplySearchFilter = (TextView) mRightHeaderView.findViewById(R.id.apply);
         mResetSearchFilter = (TextView) mRightHeaderView.findViewById(R.id.reset);
         mAnnotationTreeViewContainer = (RelativeLayout) mRightHeaderView.findViewById(R.id.annotationTreeViewContainer);
-         if(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER,mContext).equals("M")){
-             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_male));
-         }else {
-             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_female));
-         }
+        if (DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER, mContext).equals("M")) {
+            mUserImage.setBackground(getResources().getDrawable(R.drawable.image_male));
+        } else {
+            mUserImage.setBackground(getResources().getDrawable(R.drawable.image_female));
+        }
         //---------
         // right navigation drawer clickListener
         mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -414,23 +414,23 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     }
 
                     if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOC_TYPE_ID, mAdmissionDate);
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOC_TYPE_ID, getString(R.string.date_type) + mAdmissionDate);
                     }
 
                     if (!fromDate.equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, mFromDateEditText.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, getString(R.string.from_date) + mFromDateEditText.getText().toString());
                     }
 
                     if (!toDate.equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, mToDateEditText.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, getString(R.string.to_date) + mToDateEditText.getText().toString());
                     }
 
                     if (mSearchPatientNameEditText.getText().toString().trim().length() != 0) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, mSearchPatientNameEditText.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, getString(R.string.patient_name) + mSearchPatientNameEditText.getText().toString());
                     }
 
                     if (mAnnotationEditText.getText().toString().trim().length() != 0) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.ANNOTATION_TEXT, mAnnotationEditText.getText().toString());
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.ANNOTATION_TEXT, getString(R.string.enter_annotation) + mAnnotationEditText.getText().toString());
                     }
 
                     //----------
@@ -442,7 +442,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                             mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOC_TYPE_ID + "_" + dataValue, dataValue);
                         }
                     }
-                    //-------------
 
                     mTagsAdapter = new TagAdapter(mContext, mAddedTagsForFiltering, mAddedTagsEventHandler);
                     mRecycleTag.setAdapter(mTagsAdapter);
@@ -454,6 +453,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 break;
         }
     }
+
 
     private void doGetPatientList() {
 
@@ -482,6 +482,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 }
             }
         //----------
+
         if (getString(R.string.uhid).equalsIgnoreCase(mFileTypeTag)) {
             showSearchResultRequestModel.setPatientId(addedTagsForFiltering.get(DmsConstants.ID));
 
@@ -506,29 +507,29 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             showSearchResultRequestModel.setFileType("");
         }
 
-        String data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME);
-        if (data != null) {
-            showSearchResultRequestModel.setPatientName("" + data);
-        }
-
-        data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE);
-        if (data != null) {
-            showSearchResultRequestModel.setDateType("" + data);
-        }
-
-        data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE);
-        if (data != null) {
-            showSearchResultRequestModel.setFromDate("" + data);
-        }
-        data = addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE);
-        if (data != null) {
-            showSearchResultRequestModel.setToDate("" + data);
-        }
-
-        showSearchResultRequestModel.setAnnotationText(DmsConstants.BLANK);
-        showSearchResultRequestModel.setDocTypeId(getSelectedAnnotations());
+        showSearchResultRequestModel.setDateType(getSpiltValues(addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE)));
+        showSearchResultRequestModel.setFromDate(getSpiltValues(addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE)));
+        showSearchResultRequestModel.setToDate(getSpiltValues(addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE)));
+        showSearchResultRequestModel.setPatientName(getSpiltValues(addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME)));
+        showSearchResultRequestModel.setAnnotationText(getSpiltValues(addedTagsForFiltering.get(DmsConstants.PATIENT_LIST_PARAMS.ANNOTATION_TEXT)));
+        showSearchResultRequestModel.setDocTypeId(getDocumentTypeSplitValues(getSelectedAnnotations()));
         mPatientsHelper.doGetPatientList(showSearchResultRequestModel);
     }
+
+    private String[] getDocumentTypeSplitValues(String[] docTypeList) {
+        String[] mGeneratedValue = docTypeList;
+        if (mGeneratedValue != null)
+            if (mGeneratedValue.length > 0) {
+                for (int index = 0; index < mGeneratedValue.length; index++) {
+                    String[] separateValue = mGeneratedValue[index].split(":");
+                    if (separateValue.length == 2) {
+                        mGeneratedValue[index] = separateValue[1];
+                    }
+                }
+            }
+        return mGeneratedValue;
+    }
+
 
     private void createAnnotationTreeStructure(AnnotationListData annotationListData, boolean isExpanded) {
 
@@ -564,6 +565,17 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     }
 
+    private String getSpiltValues(String value) {
+        String mGeneratedValue = "";
+        if (value != null)
+            if (!value.equals("")) {
+                String[] separateValue = value.split(":");
+                if (separateValue.length == 2) {
+                    mGeneratedValue = separateValue[1];
+                }
+            }
+        return mGeneratedValue;
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -606,20 +618,24 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     }
 
     private String[] getSelectedAnnotations() {
+        String parent = "";
         HashSet<String> annotationList = new HashSet<String>();
         if (mAndroidTreeView != null) {
             List<TreeNode> selected = mAndroidTreeView.getSelected();
+
             if (selected.size() > 0) {
                 for (TreeNode data :
                         selected) {
+
                     String dataValue = data.getValue().toString();
                     //-- This is done for child only, no parent name will come in the list.
                     if (dataValue.contains("|")) {
-                        annotationList.add(dataValue);
+                        annotationList.add(getString(R.string.documenttype) + dataValue);
                     }
                 }
             }
         }
+
         String[] strings = annotationList.toArray(new String[annotationList.size()]);
         return strings;
     }
