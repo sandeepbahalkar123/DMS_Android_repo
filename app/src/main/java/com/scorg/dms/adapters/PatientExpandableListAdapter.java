@@ -33,15 +33,16 @@ import butterknife.ButterKnife;
  * Created by riteshpandhurkar on 24/2/17.
  */
 
-public class PatientExpandableListAdapter extends BaseExpandableListAdapter implements CompoundButton.OnCheckedChangeListener {
+public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
 
     private String TAG = this.getClass().getName();
     private Context _context;
-    private OnCompareListener onCompareListener;
+    private OnPatientListener onPatientListener;
 
-    private List<SearchResult> _listDataHeader; // header titles
+    private List<SearchResult> _listDataHeader = new ArrayList<>(); // header titles
     // child data in format of header title, child title
-    private HashMap<String, ArrayList<PatientFileData>> _listDataChild;
+    private HashMap<String, ArrayList<PatientFileData>> _listDataChild = new HashMap<String, ArrayList<PatientFileData>>();
+    ;
 
     private List<SearchResult> _originalListDataHeader; // header titles
     // child data in format of header title, child title
@@ -56,7 +57,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
     List<SearchResult> searchResultForPatientDetails;
 
     // Hashmap for keeping track of our checkbox check states
-    private HashMap<Integer, boolean[]> mChildCheckStates;
+    private HashMap<Integer, boolean[]> mChildCheckStates = new HashMap<Integer, boolean[]>();
     private String mCheckedBoxGroupName = null;
 
     public PatientExpandableListAdapter(Context context, List<SearchResult> searchResult) {
@@ -84,11 +85,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             listChildData.put(patientName, new ArrayList<PatientFileData>(patientFileData));
 
             try {
-                this.onCompareListener = ((PatientExpandableListAdapter.OnCompareListener) _context);
+                this.onPatientListener = ((OnPatientListener) _context);
             } catch (ClassCastException e) {
-                throw new ClassCastException("Activity must implement onCompareListener.");
+                throw new ClassCastException("Activity must implement onPatientListener.");
             }
-
 
         }
 
@@ -205,9 +205,9 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 childViewHolder.opdCheckBox.setChecked(getChecked[mChildPosition]);
             }
         } else {
-            boolean getChecked[] = new boolean[getChildrenCount(mGroupPosition)];
+            boolean getChecked[] = new boolean[_originalListDataChild.get(_originalListDataHeader.get(groupPosition).getPatientName())
+                    .size()];
 
-            // add getChecked[] to the mChildCheckStates hashmap using mGroupPosition as the key
             mChildCheckStates.put(mGroupPosition, getChecked);
 
             // set the check state of this position's checkbox based on the
@@ -231,9 +231,6 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                 checkBoxClicked(buttonView, isChecked, mGroupPosition, mChildPosition);
             }
         });
-        //--------------------
-
-        //------------------
 
         childViewHolder.moreOption.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,25 +255,9 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         childViewHolder.rowLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //------------------
-                Intent intent = new Intent(_context, FileTypeViewerActivity.class);
 
-                Bundle extra = new Bundle();
+                onPatientListener.onPatientListItemClick(childElement, getGroup(mGroupPosition).getPatientName());
 
-                ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
-                dataToSend.add(childElement);
-
-                SearchResult searchPatientInformation = searchPatientInfo(childElement.getRespectiveParentPatientID());
-                extra.putSerializable(_context.getString(R.string.compare), dataToSend);
-
-                extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
-                extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
-                extra.putString(DmsConstants.ID, childElement.getRespectiveParentPatientID());
-                extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, "" + getGroup(mGroupPosition).getPatientName());
-                intent.putExtra(DmsConstants.DATA, extra);
-
-                _context.startActivity(intent);
-                //-------------------
             }
         });
 
@@ -342,12 +323,6 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         return true;
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-    }
-
-
     static class GroupViewHolder {
         @BindView(R.id.userName)
         TextView userName;
@@ -409,17 +384,13 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
 
     private void manageChild(String groupName) {
 
-        _listDataChild = new HashMap<String, ArrayList<PatientFileData>>();
-        mChildCheckStates = new HashMap<Integer, boolean[]>();
+        _listDataChild.clear();
+        _listDataHeader.clear();
 
-        //-----
-        _listDataHeader = new ArrayList<>();
         _listDataHeader.addAll(_originalListDataHeader);
         //-------
 
-        HashMap<String, ArrayList<PatientFileData>> listDataChild = _originalListDataChild;
-
-        Iterator it = listDataChild.entrySet().iterator();
+        Iterator it = _originalListDataChild.entrySet().iterator();
 
         while (it.hasNext()) {
 
@@ -433,7 +404,6 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                     dataObject.setShowCompleteList(true);
                 }
                 //---------
-
                 _listDataChild.put((String) pair.getKey(), value);
             } else {
                 //----------
@@ -452,10 +422,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
                     _listDataChild.put((String) pair.getKey(), value);
                 }
             }
-
         }
-
-        // CommonMethods.Log(TAG, _listDataChild.toString());
 
         this.notifyDataSetChanged();
     }
@@ -523,104 +490,27 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
             if (tempCheckedDataToCompare.size() == 1) {
                 PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
 
-                onCompareListener.onCompareDialogShow(null, null, null, null, true);
-                onCompareListener.onCompareDialogShow(child, null, mCheckedBoxGroupName, tempName, true);
+                onPatientListener.onCompareDialogShow(null, null, null, null, true);
+                onPatientListener.onCompareDialogShow(child, null, mCheckedBoxGroupName, tempName, true);
 
-//                    showCompareOptionsDialog(child, null, mCheckedBoxGroupName, tempName);
             } else if (tempCheckedDataToCompare.size() == 2) {
                 PatientFileData child = getChild(mGroupPosition, tempCheckedDataToCompare.get(0));
                 PatientFileData child_1 = getChild(mGroupPosition, tempCheckedDataToCompare.get(1));
 
-                onCompareListener.onCompareDialogShow(null, null, null, null, true);
-                onCompareListener.onCompareDialogShow(child, child_1, mCheckedBoxGroupName, tempName, true);
+                onPatientListener.onCompareDialogShow(null, null, null, null, true);
+                onPatientListener.onCompareDialogShow(child, child_1, mCheckedBoxGroupName, tempName, true);
 
-//                    showCompareOptionsDialog(child, child_1, mCheckedBoxGroupName, tempName);
             } else if (tempCheckedDataToCompare.size() > 2) {
                 getChecked[mChildPosition] = false;
                 mChildCheckStates.put(mGroupPosition, getChecked);
                 CommonMethods.showToast(_context, _context.getString(R.string.error_max_two_reports));
-            }else {
-                onCompareListener.onCompareDialogShow(null, null, null, null, false);
+            } else {
+                onPatientListener.onCompareDialogShow(null, null, null, null, false);
             }
         }
         this.notifyDataSetChanged();
 
     }
-
-    /*public void showCompareOptionsDialog(final PatientFileData selectedOneValue_1, final PatientFileData selectedTwoValue_2, final String title, final String patientName) {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(_context);
-        final View mView = layoutInflaterAndroid.inflate(R.layout.compare_dialog, null);
-        final AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(_context);
-        alertDialogBuilderUserInput.setView(mView);
-        final AlertDialog showAlert = alertDialogBuilderUserInput.show();
-
-        alertDialogBuilderUserInput.setTitle(title);
-
-        TextView selectedOne = (TextView) mView.findViewById(R.id.selectedOne);
-        Button mCancel = (Button) mView.findViewById(R.id.cancel);
-        Button mCompare = (Button) mView.findViewById(R.id.compare);
-        TextView mTitle = (TextView) mView.findViewById(R.id.title);
-        TextView mFiletypeOne = (TextView) mView.findViewById(R.id.fileTypeOne);
-        TextView mFiletypeTwo = (TextView) mView.findViewById(R.id.fileTypeTwo);
-
-        selectedOne.setText("" + selectedOneValue_1.getReferenceId());
-        mFiletypeOne.setText("" + selectedOneValue_1.getFileType());
-        //----------
-        TextView selectedTwo = (TextView) mView.findViewById(R.id.selectedTwo);
-        if (selectedTwoValue_2 == null) {
-            selectedTwo.setVisibility(View.GONE);
-            mFiletypeTwo.setVisibility(View.GONE);
-
-            mTitle.setText(_context.getString(R.string.error_select_second_file_type));
-
-            mCompare.setAlpha(.6f);
-
-            mCompare.setEnabled(false);
-        } else {
-            selectedTwo.setVisibility(View.VISIBLE);
-            mFiletypeTwo.setVisibility(View.VISIBLE);
-            selectedTwo.setText("" + selectedTwoValue_2.getReferenceId());
-            mFiletypeTwo.setText("" + selectedTwoValue_2.getFileType());
-            mTitle.setText(title);
-        }
-
-        mCompare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedTwoValue_2 == null) {
-                    alertDialogBuilderUserInput.setTitle(_context.getString(R.string.error_select_second_file_type));
-                            *//*CommonMethods.showToast(_context, _context.getString(R.string.error_select_second_file_type));*//*
-                } else {
-                    //
-                    Intent intent = new Intent(_context, FileTypeViewerActivity.class);
-
-                    Bundle extra = new Bundle();
-
-                    ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
-                    dataToSend.add(selectedOneValue_1);
-                    dataToSend.add(selectedTwoValue_2);
-                    SearchResult searchPatientInformation = searchPatientInfo(selectedOneValue_1.getRespectiveParentPatientID());
-                    extra.putSerializable(_context.getString(R.string.compare), dataToSend);
-                    extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
-                    extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
-                    extra.putString(DmsConstants.ID, selectedOneValue_1.getRespectiveParentPatientID());
-                    extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, patientName);
-                    intent.putExtra(DmsConstants.DATA, extra);
-                    _context.startActivity(intent);
-                    showAlert.dismiss();
-                }
-
-            }
-        });
-
-        mCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlert.dismiss();
-            }
-        });
-
-    }*/
 
     public SearchResult searchPatientInfo(String patientId) {
         SearchResult searchResult = null;
@@ -633,8 +523,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter impl
         return searchResult;
     }
 
-    public interface OnCompareListener {
+    public interface OnPatientListener {
         void onCompareDialogShow(PatientFileData patientFileData1, PatientFileData patientFileData2, String mCheckedBoxGroupName, String tempName, boolean b);
+        void onPatientListItemClick(PatientFileData childElement, String patientName);
+
     }
 
 }

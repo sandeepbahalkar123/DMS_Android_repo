@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -66,7 +67,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnCompareListener {
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener {
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
@@ -81,8 +82,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     Toolbar mToolbar;
     DrawerLayout mDrawer;
     NavigationView mLeftNavigationView;
-    NavigationView mRightNavigationView;
-    View mRightHeaderView;
+    FrameLayout mRightNavigationView;
+    //    View mRightHeaderView;
     View mLeftHeaderView;
     private ImageView mUserImage;
     private TextView mUserName;
@@ -116,10 +117,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private TextView mCompareLabel;
     private ImageView mFileOneIcon;
     private TextView mFileOneType;
-    private TextView mFileOneReferenceID;
+    private TextView mFileOneAdmissionDate;
+    //    private TextView mFileOneDischargeDate;
     private ImageView mFileTwoIcon;
     private TextView mFileTwoType;
-    private TextView mFileTwoReferenceID;
+    private TextView mFileTwoAdmissionDate;
+    //    private TextView mFileTwoDischargeDate;
     private Button mCompareButton;
 
     private boolean isFileType = false;
@@ -183,8 +186,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mRecycleTag.setLayoutManager(layoutManager);
 
         mLeftNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
-        mRightHeaderView = mRightNavigationView.getHeaderView(0);
+        mRightNavigationView = (FrameLayout) findViewById(R.id.nav_right_view);
+//        mRightHeaderView = mRightNavigationView.getHeaderView(0);
         mLeftHeaderView = mLeftNavigationView.getHeaderView(0);
         //---------------
         DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
@@ -195,33 +198,33 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mRightNavigationView.setLayoutParams(params);
         mLeftNavigationView.setLayoutParams(leftParams);
         //---------------
-        mUserImage = (ImageView)mLeftHeaderView.findViewById(R.id.userImage);
+        mUserImage = (ImageView) mLeftHeaderView.findViewById(R.id.userImage);
         mUserName = (TextView) mLeftHeaderView.findViewById(R.id.userName);
-        mSpinSelectedId = (Spinner) mRightHeaderView.findViewById(R.id.spinner_selectId);
-        mSpinnerAmissionDate = (Spinner) mRightHeaderView.findViewById(R.id.spinner_admissionDate);
-        mUHIDEditText = (EditText) mRightHeaderView.findViewById(R.id.comparePdfOnOFF);
-        mFromDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_fromdate);
-        mToDateEditText = (EditText) mRightHeaderView.findViewById(R.id.et_todate);
-        mSearchPatientNameEditText = (EditText) mRightHeaderView.findViewById(R.id.et_searchPatientName);
-        mAnnotationEditText = (EditText) mRightHeaderView.findViewById(R.id.et_annotation);
-        mSearchAnnotationEditText = (EditText) mRightHeaderView.findViewById(R.id.et_search_annotation);
-        mApplySearchFilter = (TextView) mRightHeaderView.findViewById(R.id.apply);
-        mResetSearchFilter = (TextView) mRightHeaderView.findViewById(R.id.reset);
-        mAnnotationTreeViewContainer = (RelativeLayout) mRightHeaderView.findViewById(R.id.annotationTreeViewContainer);
-         if(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER,mContext).equals("M")){
-             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_male));
-         }else {
-             mUserImage.setBackground(getResources().getDrawable(R.drawable.image_female));
-         }
+        mSpinSelectedId = (Spinner) mRightNavigationView.findViewById(R.id.spinner_selectId);
+        mSpinnerAmissionDate = (Spinner) mRightNavigationView.findViewById(R.id.spinner_admissionDate);
+        mUHIDEditText = (EditText) mRightNavigationView.findViewById(R.id.et_uhid);
+        mFromDateEditText = (EditText) mRightNavigationView.findViewById(R.id.et_fromdate);
+        mToDateEditText = (EditText) mRightNavigationView.findViewById(R.id.et_todate);
+        mSearchPatientNameEditText = (EditText) mRightNavigationView.findViewById(R.id.et_searchPatientName);
+        mAnnotationEditText = (EditText) mRightNavigationView.findViewById(R.id.et_annotation);
+        mSearchAnnotationEditText = (EditText) mRightNavigationView.findViewById(R.id.et_search_annotation);
+        mApplySearchFilter = (TextView) mRightNavigationView.findViewById(R.id.apply);
+        mResetSearchFilter = (TextView) mRightNavigationView.findViewById(R.id.reset);
+        mAnnotationTreeViewContainer = (RelativeLayout) mRightNavigationView.findViewById(R.id.annotationTreeViewContainer);
+        if (DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER, mContext).equals("M")) {
+            mUserImage.setBackground(getResources().getDrawable(R.drawable.image_male));
+        } else {
+            mUserImage.setBackground(getResources().getDrawable(R.drawable.image_female));
+        }
         //---------
-        // right navigation drawer clickListener
+      /*  // right navigation drawer clickListener
         mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 mDrawer.closeDrawer(GravityCompat.END);
                 return true;
             }
-        });
+        });*/
 
         // left navigation drawer clickListener
         mLeftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -263,10 +266,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mCompareLabel = (TextView) findViewById(R.id.compareLabel);
         mFileOneIcon = (ImageView) findViewById(R.id.fileOneIcon);
         mFileOneType = (TextView) findViewById(R.id.fileOneType);
-        mFileOneReferenceID = (TextView) findViewById(R.id.fileOneReferenceID);
+        mFileOneAdmissionDate = (TextView) findViewById(R.id.fileOneAdmissionDate);
+//        mFileOneDischargeDate = (TextView) findViewById(R.id.fileOneDischargeDate);
         mFileTwoIcon = (ImageView) findViewById(R.id.fileTwoIcon);
         mFileTwoType = (TextView) findViewById(R.id.fileTwoType);
-        mFileTwoReferenceID = (TextView) findViewById(R.id.fileTwoReferenceID);
+        mFileTwoAdmissionDate = (TextView) findViewById(R.id.fileTwoAdmissionDate);
+//        mFileTwoDischargeDate = (TextView) findViewById(R.id.fileTwoDischargeDate);
         mCompareButton = (Button) findViewById(R.id.compareButton);
 
         mCompareLabel.setOnTouchListener(new View.OnTouchListener() {
@@ -401,9 +406,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     //adding field values in arrayList to generate tags in recycler view
                     //we are adding refrence id and file type value in FILE_TYPE parameter
                     //Reference id = UHID or OPD or IPD number
-                    if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select)) && mUHIDEditText.getText().toString().trim().length() != 0) {
+                    if (!mSelectedId.equalsIgnoreCase(getString(R.string.Select)) && mUHIDEditText.getText().toString().trim().length() != 0) {
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + mUHIDEditText.getText().toString());
-                    } else if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
+                    } else if (!mSelectedId.equalsIgnoreCase(getString(R.string.Select))) {
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId);
                         isFileType = true;
                     } else if (mUHIDEditText.getText().toString().trim().length() != 0) {
@@ -413,7 +418,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                         isFileType = false;
                     }
 
-                    if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
+                    if (!mAdmissionDate.equalsIgnoreCase(getString(R.string.Select))) {
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DOC_TYPE_ID, mAdmissionDate);
                     }
 
@@ -448,7 +453,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     mRecycleTag.setAdapter(mTagsAdapter);
                     mDrawer.closeDrawer(GravityCompat.END);
                     doGetPatientList();
-
+                    onCompareDialogShow(null, null, null, null, false);
                 }
 
                 break;
@@ -571,25 +576,25 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             int indexSselectedId = parent.getSelectedItemPosition();
             mArrayId = getResources().getStringArray(R.array.select_id);
             mSelectedId = mArrayId[indexSselectedId];
-            if (mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
+            if (mSelectedId.equalsIgnoreCase(getString(R.string.Select))) {
                 mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.admission_date));
                 mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
                 mSpinnerAmissionDate.setEnabled(true);
-            } else if (mSelectedId.equalsIgnoreCase(getResources().getString(R.string.ipd))) {
+            } else if (mSelectedId.equalsIgnoreCase(getString(R.string.ipd))) {
                 mSpinnerAmissionDate.setEnabled(true);
                 mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.IPD));
                 mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
-                mUHIDEditText.setHint(getResources().getString(R.string.IPD));
-            } else if (mSelectedId.equalsIgnoreCase(getResources().getString(R.string.opd))) {
+                mUHIDEditText.setHint(getString(R.string.IPD));
+            } else if (mSelectedId.equalsIgnoreCase(getString(R.string.opd))) {
                 mSpinnerAmissionDate.setEnabled(true);
                 mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.OPD));
                 mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
-                mUHIDEditText.setHint(getResources().getString(R.string.OPD));
-            } else if (mSelectedId.equalsIgnoreCase(getResources().getString(R.string.uhid))) {
+                mUHIDEditText.setHint(getString(R.string.OPD));
+            } else if (mSelectedId.equalsIgnoreCase(getString(R.string.uhid))) {
                 mSpinnerAmissionDate.setEnabled(true);
                 mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.admission_date));
                 mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
-                mUHIDEditText.setHint(getResources().getString(R.string.uhid));
+                mUHIDEditText.setHint(getString(R.string.uhid));
             }
         } else if (parent.getId() == R.id.spinner_admissionDate) {
             int indexSselectedId = parent.getSelectedItemPosition();
@@ -676,21 +681,42 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     public void onCompareDialogShow(final PatientFileData patientFileData1, final PatientFileData patientFileData2, String mCheckedBoxGroupName, final String tempName, boolean isChecked) {
 
         if (patientFileData2 == null && patientFileData1 == null) {
-            mFileOneReferenceID.setText("");
-            mFileOneType.setText(getResources().getString(R.string.adddocument));
+            mFileOneAdmissionDate.setText("");
+            mFileOneType.setText(getString(R.string.adddocument));
             mFileOneIcon.setImageResource(R.drawable.ic_unselected_document);
-            mFileTwoReferenceID.setText("");
-            mFileTwoType.setText(getResources().getString(R.string.adddocument));
+            mFileTwoAdmissionDate.setText("");
+            mFileTwoType.setText(getString(R.string.adddocument));
             mFileTwoIcon.setImageResource(R.drawable.ic_unselected_document);
             mCompareButton.setTextColor(getResources().getColor(R.color.grey_700));
             mCompareButton.setBackground(getResources().getDrawable(R.drawable.compare_button_grey_background));
             mCompareButton.setEnabled(false);
+
+//            mFileOneDischargeDate.setVisibility(View.GONE);
+            mFileOneAdmissionDate.setVisibility(View.GONE);
+
+//            mFileTwoDischargeDate.setVisibility(View.GONE);
+            mFileTwoAdmissionDate.setVisibility(View.GONE);
+
             if (!isCompareDialogCollapsed && !isChecked) {
                 collapseCompareDialog();
             }
         } else if (patientFileData2 == null && patientFileData1 != null) {
-            mFileOneReferenceID.setText(patientFileData1.getReferenceId().toString());
-            mFileOneType.setText(patientFileData1.getFileType());
+
+            if (getString(R.string.opd).equals(patientFileData1.getFileType())) {
+                String visitOneDate = CommonMethods.formatDateTime(patientFileData1.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                mFileOneAdmissionDate.setText("V: " + visitOneDate);
+//                mFileOneDischargeDate.setVisibility(View.GONE);
+                mFileOneAdmissionDate.setVisibility(View.VISIBLE);
+            } else if (getString(R.string.ipd).equals(patientFileData1.getFileType())) {
+                String admissionOneDate = CommonMethods.formatDateTime(patientFileData1.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                String dischargeOneDate = CommonMethods.formatDateTime(patientFileData1.getDischargeDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                mFileOneAdmissionDate.setText("A: " + admissionOneDate + " - D: " + dischargeOneDate);
+//                mFileOneDischargeDate.setText("D: " + dischargeOneDate);
+//                mFileOneDischargeDate.setVisibility(View.VISIBLE);
+                mFileOneAdmissionDate.setVisibility(View.VISIBLE);
+            }
+
+            mFileOneType.setText(patientFileData1.getFileType() + ":" + patientFileData1.getReferenceId().toString());
             mFileOneIcon.setImageResource(R.drawable.ic_selected_document);
             mCompareButton.setTextColor(getResources().getColor(R.color.grey_700));
             mCompareButton.setBackground(getResources().getDrawable(R.drawable.compare_button_grey_background));
@@ -698,8 +724,25 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             if (isCompareDialogCollapsed)
                 expandCompareDialog();
         } else if (patientFileData2 != null && patientFileData1 == null) {
-            mFileTwoReferenceID.setText(patientFileData2.getReferenceId().toString());
-            mFileTwoType.setText(patientFileData2.getFileType());
+
+            if (getString(R.string.opd).equals(patientFileData2.getFileType())) {
+                String visitTwoDate = CommonMethods.formatDateTime(patientFileData2.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                mFileTwoAdmissionDate.setText("V: " + visitTwoDate);
+
+//                mFileTwoDischargeDate.setVisibility(View.GONE);
+                mFileTwoAdmissionDate.setVisibility(View.VISIBLE);
+
+            } else if (getString(R.string.ipd).equals(patientFileData2.getFileType())) {
+                String admissionTwoDate = CommonMethods.formatDateTime(patientFileData2.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                String dischargeTwoDate = CommonMethods.formatDateTime(patientFileData2.getDischargeDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                mFileTwoAdmissionDate.setText("A: " + admissionTwoDate + " - D: " + dischargeTwoDate);
+//                mFileTwoDischargeDate.setText("D: " + dischargeTwoDate);
+
+//                mFileTwoDischargeDate.setVisibility(View.VISIBLE);
+                mFileTwoAdmissionDate.setVisibility(View.VISIBLE);
+            }
+
+            mFileTwoType.setText(patientFileData2.getFileType() + ":" + patientFileData2.getReferenceId().toString());
             mFileTwoIcon.setImageResource(R.drawable.ic_selected_document);
             mCompareButton.setTextColor(getResources().getColor(R.color.grey_700));
             mCompareButton.setBackground(getResources().getDrawable(R.drawable.compare_button_grey_background));
@@ -707,11 +750,46 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             if (isCompareDialogCollapsed)
                 expandCompareDialog();
         } else {
-            mFileOneReferenceID.setText(patientFileData1.getReferenceId().toString());
-            mFileOneType.setText(patientFileData1.getFileType());
+
+            if (getString(R.string.opd).equals(patientFileData1.getFileType())) {
+                String visitOneDate = CommonMethods.formatDateTime(patientFileData1.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                mFileOneAdmissionDate.setText("V: " + visitOneDate);
+
+//                mFileOneDischargeDate.setVisibility(View.GONE);
+                mFileOneAdmissionDate.setVisibility(View.VISIBLE);
+
+            } else if (getString(R.string.ipd).equals(patientFileData1.getFileType())) {
+                String admissionOneDate = CommonMethods.formatDateTime(patientFileData1.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                String dischargeOneDate = CommonMethods.formatDateTime(patientFileData1.getDischargeDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                mFileOneAdmissionDate.setText("A: " + admissionOneDate + " - D: " + dischargeOneDate);
+//                mFileOneDischargeDate.setText("D: " + dischargeOneDate);
+
+//                mFileOneDischargeDate.setVisibility(View.VISIBLE);
+                mFileOneAdmissionDate.setVisibility(View.VISIBLE);
+            }
+
+            if (getString(R.string.opd).equals(patientFileData2.getFileType())) {
+                String visitTwoDate = CommonMethods.formatDateTime(patientFileData2.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                mFileTwoAdmissionDate.setText("V: " + visitTwoDate);
+
+//                mFileTwoDischargeDate.setVisibility(View.GONE);
+                mFileTwoAdmissionDate.setVisibility(View.VISIBLE);
+
+            } else if (getString(R.string.ipd).equals(patientFileData2.getFileType())) {
+                String admissionTwoDate = CommonMethods.formatDateTime(patientFileData2.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                String dischargeTwoDate = CommonMethods.formatDateTime(patientFileData2.getDischargeDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
+                mFileTwoAdmissionDate.setText("A: " + admissionTwoDate + " - D: " + dischargeTwoDate);
+//                mFileTwoDischargeDate.setText("D: " + dischargeTwoDate);
+
+//                mFileTwoDischargeDate.setVisibility(View.VISIBLE);
+                mFileTwoAdmissionDate.setVisibility(View.VISIBLE);
+            }
+
+            mFileOneType.setText(patientFileData1.getFileType() + ":" + patientFileData1.getReferenceId().toString());
+
+            mFileTwoType.setText(patientFileData2.getFileType() + ":" + patientFileData2.getReferenceId().toString());
+
             mFileOneIcon.setImageResource(R.drawable.ic_selected_document);
-            mFileTwoReferenceID.setText(patientFileData2.getReferenceId().toString());
-            mFileTwoType.setText(patientFileData2.getFileType());
             mFileTwoIcon.setImageResource(R.drawable.ic_selected_document);
             mCompareButton.setTextColor(getResources().getColor(R.color.Red));
             mCompareButton.setBackground(getResources().getDrawable(R.drawable.compare_button_red_background));
@@ -777,5 +855,21 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         });
 
         valueAnimator.start();
+    }
+
+    @Override
+    public void onPatientListItemClick(PatientFileData childElement, String patientName) {
+        Intent intent = new Intent(mContext, FileTypeViewerActivity.class);
+        Bundle extra = new Bundle();
+        ArrayList<PatientFileData> dataToSend = new ArrayList<PatientFileData>();
+        dataToSend.add(childElement);
+        SearchResult searchPatientInformation = patientExpandableListAdapter.searchPatientInfo(childElement.getRespectiveParentPatientID());
+        extra.putSerializable(getString(R.string.compare), dataToSend);
+        extra.putString(DmsConstants.PATIENT_ADDRESS, searchPatientInformation.getPatientAddress());
+        extra.putString(DmsConstants.DOCTOR_NAME, searchPatientInformation.getDoctorName());
+        extra.putString(DmsConstants.ID, childElement.getRespectiveParentPatientID());
+        extra.putString(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, "" + patientName);
+        intent.putExtra(DmsConstants.DATA, extra);
+        startActivity(intent);
     }
 }

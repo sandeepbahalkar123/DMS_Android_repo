@@ -24,7 +24,6 @@ public class PatientFileData implements Serializable {
     @Expose
     private String dischargeDate;
 
-
     //-- THIS IS ADDED TO MAINTAIN RESPECTIVE PARENT PATIENT ID
     private String respectiveParentPatientID;
 
