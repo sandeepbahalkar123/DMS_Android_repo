@@ -96,6 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp0"
         android:layout_weight="0.5"
+
         android:gravity="bottom|center"
         android:orientation="vertical">
 
@@ -103,6 +104,7 @@
             android:id="@+id/signUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="@string/sign_up_hospital_name"
             android:textColor="@color/white" />
 
@@ -111,6 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp12"
+            android:visibility="gone"
             android:text="@string/forgot_password"
             android:textColor="@color/white" />
 

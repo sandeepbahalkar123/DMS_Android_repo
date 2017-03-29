@@ -542,7 +542,7 @@ public class CommonMethods {
 
 
     //this alert is shown for input of serverpath
-    public static Dialog showAlertDialog(Context activity, String dialogHeader, final boolean isReEnteredServerPath, CheckIpConnection checkIpConnection) {
+    public static Dialog showAlertDialog(Context activity, String dialogHeader, CheckIpConnection checkIpConnection) {
         mContext = activity;
         mCheckIpConnection = checkIpConnection;
         final Dialog dialog = new Dialog(activity);
@@ -566,8 +566,8 @@ public class CommonMethods {
 
                     Log.e(TAG, "SERVER PATH===" + mServerPath);
 
-                    mCheckIpConnection.onOkButtonClickListner(mServerPath, mContext);
-                    dialog.dismiss();
+                    mCheckIpConnection.onOkButtonClickListner(mServerPath, mContext,dialog);
+
 
 
                 } else {

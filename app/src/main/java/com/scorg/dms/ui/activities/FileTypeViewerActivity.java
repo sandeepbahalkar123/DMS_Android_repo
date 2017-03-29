@@ -26,6 +26,7 @@ import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnDrawListener;
@@ -246,7 +247,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
     private void doBindHeaderViews() {
-
+ 
         mPatientName.setText(patientName);
         mDoctorNameTwo.setText(doctorName);
         mDoctorNameOne.setText(doctorName);

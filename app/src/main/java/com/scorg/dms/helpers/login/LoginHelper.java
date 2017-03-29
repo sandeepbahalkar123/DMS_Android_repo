@@ -55,6 +55,7 @@ public class LoginHelper implements ConnectionListener {
                     DmsPreferencesManager.putString(DmsConstants.REFRESH_TOKEN, model.getRefreshToken(), mContext);
                     DmsPreferencesManager.putString(DmsConstants.USERNAME, userName, mContext);
                     DmsPreferencesManager.putString(DmsConstants.PASSWORD, password, mContext);
+                    CommonMethods.Log(TAG,"Refersh token after login response: "+model.getRefreshToken());
                     DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_GENDER, model.getUserGender(), mContext);
                     mHelperResponseManager.onSuccess(mOldDataTag, model);
 
@@ -119,7 +120,6 @@ public class LoginHelper implements ConnectionListener {
     public void checkConnectionToServer(String serverPath) {
         this.mServerPath = serverPath;
         ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_CHECK_SERVER_CONNECTION, Request.Method.GET);
-        Log.e(TAG, "Config.URL_LOGIN: " + Config.URL_CHECK_SERVER_CONNECTION);
         mConnectionFactory.setUrl(Config.URL_CHECK_SERVER_CONNECTION);
         mConnectionFactory.createConnection(DmsConstants.TASK_CHECK_SERVER_CONNECTION);
     }

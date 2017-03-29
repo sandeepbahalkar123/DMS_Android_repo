@@ -1,5 +1,6 @@
 package com.scorg.dms.interfaces;
 
+import android.app.Dialog;
 import android.content.Context;
 
 /**
@@ -7,5 +8,5 @@ import android.content.Context;
  */
 
 public interface CheckIpConnection {
-    public void onOkButtonClickListner(String serverPath,Context context);
+    public void onOkButtonClickListner(String serverPath, Context context, Dialog dialog);
 }

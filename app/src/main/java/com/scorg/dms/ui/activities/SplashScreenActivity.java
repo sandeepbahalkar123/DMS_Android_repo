@@ -1,5 +1,6 @@
 package com.scorg.dms.ui.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.DateFormat;
@@ -25,6 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
 
     private Context mContext;
     Boolean isEnteredServerPath;
+    Dialog mDialog;
     private LoginHelper mLoginHelper;
 
 
@@ -60,9 +62,10 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
                 if (DmsConstants.BLANK.equalsIgnoreCase(userName) || DmsConstants.BLANK.equalsIgnoreCase(password)) {
                     if (!DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG, mContext).equals(DmsConstants.TRUE)) {
                         //alert dialog for serverpath
-                        CommonMethods.showAlertDialog(SplashScreenActivity.this, getString(R.string.server_path) + "\n" + getString(R.string.for_example_server_path), false, new CheckIpConnection() {
+                        CommonMethods.showAlertDialog(SplashScreenActivity.this, getString(R.string.server_path) + "\n" + getString(R.string.for_example_server_path), new CheckIpConnection() {
                             @Override
-                            public void onOkButtonClickListner(String serverPath, Context context) {
+                            public void onOkButtonClickListner(String serverPath, Context context, Dialog dialog) {
+                                mDialog = dialog;
                                 mContext = context;
                                 DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, serverPath, context);
                                 mLoginHelper.checkConnectionToServer(serverPath);
@@ -100,7 +103,9 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
     }
 
     @Override
+
     public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
+        mDialog.dismiss();
         IpTestResponseModel ipTestResponseModel = (IpTestResponseModel) customResponse;
         if (ipTestResponseModel.getCommon().getStatusCode().equals(DmsConstants.SUCCESS)) {
             DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG, DmsConstants.TRUE, mContext);
@@ -122,9 +127,9 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
     @Override
     public void onServerError(String mOldDataTag, String serverErrorMessage) {
         DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
-        CommonMethods.showAlertDialog(SplashScreenActivity.this, getString(R.string.wrong_server_path) + "\n" + getString(R.string.for_example_server_path), true, new CheckIpConnection() {
+        CommonMethods.showAlertDialog(SplashScreenActivity.this, getString(R.string.wrong_server_path) + "\n" + getString(R.string.for_example_server_path), new CheckIpConnection() {
             @Override
-            public void onOkButtonClickListner(String serverPath, Context context) {
+            public void onOkButtonClickListner(String serverPath, Context context, Dialog dialog) {
                 DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, serverPath, context);
                 mLoginHelper.checkConnectionToServer(serverPath);
             }
@@ -135,9 +140,9 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
     @Override
     public void onNoConnectionError(String mOldDataTag, String serverErrorMessage) {
         DmsPreferencesManager.putString(DmsConstants.LOGIN_SUCCESS, DmsConstants.FALSE, mContext);
-        CommonMethods.showAlertDialog(SplashScreenActivity.this, getString(R.string.wrong_server_path) + "\n" + getString(R.string.for_example_server_path), true, new CheckIpConnection() {
+        CommonMethods.showAlertDialog(SplashScreenActivity.this, getString(R.string.wrong_server_path) + "\n" + getString(R.string.for_example_server_path), new CheckIpConnection() {
             @Override
-            public void onOkButtonClickListner(String serverPath, Context context) {
+            public void onOkButtonClickListner(String serverPath, Context context, Dialog dialog) {
 
                 DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, serverPath, context);
                 mLoginHelper.checkConnectionToServer(serverPath);
