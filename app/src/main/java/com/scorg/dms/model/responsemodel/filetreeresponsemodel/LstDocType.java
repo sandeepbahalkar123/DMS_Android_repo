@@ -24,6 +24,9 @@ public class LstDocType {
     @Expose
     private Integer pageNumber;
 
+
+    private String mergedFileCompareCustomeID;
+
     public Integer getTypeId() {
         return typeId;
     }
@@ -72,4 +75,24 @@ public class LstDocType {
         this.pageNumber = pageNumber;
     }
 
+
+    public String getMergedFileCompareCustomeID() {
+        return mergedFileCompareCustomeID;
+    }
+
+    public void setMergedFileCompareCustomeID(String mergedFileCompareCustomeID) {
+        this.mergedFileCompareCustomeID = mergedFileCompareCustomeID;
+    }
+
+    @Override
+    public String toString() {
+        return "LstDocType{" +
+                "typeId=" + typeId +
+                ", typeName='" + typeName + '\'' +
+                ", abbreviation='" + abbreviation + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", pageCount=" + pageCount +
+                ", pageNumber=" + pageNumber +
+                '}';
+    }
 }

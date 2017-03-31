@@ -24,6 +24,7 @@ public class LstDocCategory {
         return categoryId;
     }
 
+
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
@@ -60,5 +61,15 @@ public class LstDocCategory {
 
     public void setTotalDocTypePageCount(int totalDocTypePageCount) {
         this.totalDocTypePageCount = totalDocTypePageCount;
+    }
+
+    @Override
+    public String toString() {
+        return "LstDocCategory{" +
+                "categoryId=" + categoryId +
+                ", categoryName='" + categoryName + '\'' +
+                ", lstDocTypes=" + lstDocTypes +
+                ", totalDocTypePageCount=" + totalDocTypePageCount +
+                '}';
     }
 }

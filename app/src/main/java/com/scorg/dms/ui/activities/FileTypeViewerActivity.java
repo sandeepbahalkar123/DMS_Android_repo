@@ -41,6 +41,7 @@ import com.scorg.dms.model.requestmodel.filetreerequestmodel.FileTreeRequestMode
 import com.scorg.dms.model.requestmodel.filetreerequestmodel.LstSearchParam;
 import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.GetPdfDataRequestModel;
 import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.LstDocTypeRequest;
+import com.scorg.dms.model.responsemodel.Common;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.ArchiveDatum;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseData;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
@@ -58,8 +59,10 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -247,7 +250,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
     private void doBindHeaderViews() {
- 
+
         mPatientName.setText(patientName);
         mDoctorNameTwo.setText(doctorName);
         mDoctorNameOne.setText(doctorName);
@@ -338,6 +341,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         } else if (String.valueOf(mOldDataTag).equalsIgnoreCase("" + DmsConstants.TASK_GET_ARCHIVED_LIST)) {
             FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
             mFileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
+
+            doGetMergeArchiveList(mFileTreeResponseData);
             createAnnotationTreeStructure(mFileTreeResponseData, true);
         }
     }
@@ -662,5 +667,76 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
 
+    private void doGetMergeArchiveList(FileTreeResponseData originalFileTreeResponseData) {
+        FileTreeResponseData tempFileTreeResponseData = new FileTreeResponseData();
+        List<LstDocCategory> mergedALstDocCategoryListData = new ArrayList<LstDocCategory>();
 
+        List<ArchiveDatum> originalArchiveDataList = originalFileTreeResponseData.getArchiveData();
+        //---Merge LstDocCategory into single list-
+        for (ArchiveDatum originalArchiveDataObject :
+                originalArchiveDataList) {
+            if (originalArchiveDataObject.getFileType().equalsIgnoreCase(getString(R.string.ipd))) {
+                List<LstDocCategory> lstDocCategories = originalArchiveDataObject.getLstDocCategories();
+                for (LstDocCategory tempObject :
+                        lstDocCategories) {
+                    mergedALstDocCategoryListData.add(tempObject);
+                }
+            }
+        }
+        CommonMethods.Log(TAG, mergedALstDocCategoryListData.toString());
+        //-----------
+        HashMap<LstDocCategory, List<LstDocType>> mergedLstDocTypeHashMap = new HashMap<LstDocCategory, List<LstDocType>>();
+
+        for (int i = 0; i < mergedALstDocCategoryListData.size(); i++) {
+            boolean flag = false;
+            LstDocCategory iLoopLstDocCategory = mergedALstDocCategoryListData.get(i);
+
+            boolean mapInsertedStatus = false;
+
+            for (Map.Entry<LstDocCategory, List<LstDocType>> entry : mergedLstDocTypeHashMap.entrySet()) {
+                LstDocCategory key = entry.getKey();
+                mapInsertedStatus = (iLoopLstDocCategory.getCategoryId() == key.getCategoryId()) ? true : false;
+            }
+            //---
+
+            //--if already in map, then don't iterate
+            if (!mapInsertedStatus) {
+                for (int j = i + 1; j < mergedALstDocCategoryListData.size(); j++) {
+                    LstDocCategory jLoopLstDocCategory = mergedALstDocCategoryListData.get(j);
+                    if (iLoopLstDocCategory.getCategoryId() == jLoopLstDocCategory.getCategoryId()) {
+                        // got the duplicate element
+
+                        //---***************
+                        List<LstDocType> firstLstDocTypes = iLoopLstDocCategory.getLstDocTypes();
+                        // THIS IS DONE BZCZ, WE ARE ADDING List<LstDocType> into hashmap,
+                        // hence to avoid data redundancy
+                        iLoopLstDocCategory.setLstDocTypes(null);
+                        //---
+                        List<LstDocType> secondLstDocTypes = jLoopLstDocCategory.getLstDocTypes();
+                        //---
+                        List<LstDocType> tempLocalListToAddIntoMap = new ArrayList<>();
+                        tempLocalListToAddIntoMap.addAll(firstLstDocTypes);
+                        tempLocalListToAddIntoMap.addAll(secondLstDocTypes);
+                        mergedLstDocTypeHashMap.put(iLoopLstDocCategory, tempLocalListToAddIntoMap);
+                        //---***************
+                        flag = true;
+                    }
+                }
+
+                if (!flag) {
+                    LstDocCategory firstLstDocCategory = mergedALstDocCategoryListData.get(i);
+                    List<LstDocType> firstLstDocTypes = firstLstDocCategory.getLstDocTypes();
+                    // THIS IS DONE BZCZ, WE ARE ADDING List<LstDocType> into hashmap,
+                    // hence to avoid data redundancy
+                    firstLstDocCategory.setLstDocTypes(null);
+                    //---
+                    mergedLstDocTypeHashMap.put(firstLstDocCategory, firstLstDocTypes);
+                }
+            }
+
+        }
+
+        CommonMethods.Log(TAG, "COMBINED HASHMAP LIST: " + mergedLstDocTypeHashMap.toString());
+
+    }
 }
