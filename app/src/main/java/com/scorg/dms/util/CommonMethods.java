@@ -597,7 +597,7 @@ public class CommonMethods {
         return mtch.find();
     }
 
-    public static String getCachePath(Context context, String base64Pdf, String filename, String extension) {
+    public static File getCacheFile(Context context, String base64Pdf, String filename, String extension) {
         // Create a file in the Internal Storage
 
         byte[] pdfAsBytes = Base64.decode(base64Pdf, 0);
@@ -615,7 +615,35 @@ public class CommonMethods {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return file.getAbsolutePath();
+        return file;
+    }
+
+    public static File storeAndGetDocument(Context context, String base64Pdf, String filename, String extension) {
+        // Create a file in the Internal Storage
+
+        String filepath = Environment.getExternalStorageDirectory().getPath();
+        File file = null;
+
+        byte[] pdfAsBytes = Base64.decode(base64Pdf, 0);
+
+        FileOutputStream outputStream;
+        try {
+
+            file = new File(filepath + "/Android/data/" + context.getPackageName() + "/Documents");
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+
+            file = new File(file.getAbsolutePath(), filename + "." + extension);
+
+            outputStream = new FileOutputStream(file);
+            outputStream.write(pdfAsBytes);
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
     public static float convertPixelsToDp(float px) {

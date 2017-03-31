@@ -99,7 +99,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/fileOneIcon"
@@ -112,16 +112,26 @@
                     android:id="@+id/fileOneType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
+                    android:gravity="center"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    tools:text="Document1" />
+                    tools:text="IPD:1229" />
 
                 <TextView
-                    android:id="@+id/fileOneReferenceID"
+                    android:id="@+id/fileOneAdmissionDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:textStyle="bold"
-                    tools:text="1234" />
+                    tools:text="Admission Date: 12/Sep/1091" />
+
+               <!-- <TextView
+                    android:id="@+id/fileOneDischargeDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    tools:text="Discharge Date: 12/Sep/1091" />-->
 
             </LinearLayout>
 
@@ -145,29 +155,40 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/fileTwoIcon"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:padding="10dp"
-                    tools:src="@drawable/ic_unselected_document" />
+                    tools:src="@drawable/ic_selected_document" />
 
                 <TextView
                     android:id="@+id/fileTwoType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
+                    android:gravity="center"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    tools:text="Document1" />
+                    tools:text="UPD:1263" />
 
                 <TextView
-                    android:id="@+id/fileTwoReferenceID"
+                    android:id="@+id/fileTwoAdmissionDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:textStyle="bold"
-                    tools:text="1234" />
+                    tools:text="Admission Date: 12/Sep/1091" />
+
+              <!--  <TextView
+                    android:id="@+id/fileTwoDischargeDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    tools:text="Discharge Date: 12/Sep/1091"
+                    tools:visibility="visible" />-->
 
             </LinearLayout>
         </LinearLayout>

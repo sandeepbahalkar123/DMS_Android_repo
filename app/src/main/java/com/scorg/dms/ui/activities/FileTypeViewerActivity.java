@@ -1,10 +1,12 @@
 package com.scorg.dms.ui.activities;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +14,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,6 @@ import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnDrawListener;
@@ -57,7 +57,6 @@ import com.shockwave.pdfium.PdfDocument;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -75,6 +74,8 @@ import butterknife.ButterKnife;
 public class FileTypeViewerActivity extends AppCompatActivity implements View.OnClickListener, HelperResponse, OnLoadCompleteListener, OnErrorListener, OnDrawListener, TreeNode.TreeNodeClickListener {
 
     private static final String TAG = FileTypeViewerActivity.class.getName();
+    private static final int REQUEST_CODE_WRITE_FILE_ONE_PERMISSIONS = 101;
+    private static final int REQUEST_CODE_WRITE_FILE_TWO_PERMISSIONS = 102;
     private Integer mPageNumber = 0;
     private boolean isFirstPdf = true;
     private float mCurrentXOffset = -1;
@@ -168,6 +169,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     private RelativeLayout mFirstFileTypeProgressDialogLayout;
     private RelativeLayout mSecondFileTypeProgressDialogLayout;
     private HashMap<Integer, String> mPreviousClickedTreeElement = null;
+    private String fileOneData;
+    private String fileTwoData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -327,11 +330,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                     switch (mClickedTreeStructureLevel) {
                         case 0:
                             mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
-                            loadPDFFromServer(mFirstPdfView, fileData, "file1", "pdf");
+                            fileOneData = fileData;
+                            askWriteExtenralStoragePermission(REQUEST_CODE_WRITE_FILE_ONE_PERMISSIONS);
                             break;
                         case 1:
                             mSecondFileTypeProgressDialogLayout.setVisibility(View.GONE);
-                            loadPDFFromServer(mSecondPdfView, fileData, "file2", "pdf");
+                            fileTwoData = fileData;
+                            askWriteExtenralStoragePermission(REQUEST_CODE_WRITE_FILE_TWO_PERMISSIONS);
                             break;
                     }
                 } else
@@ -504,14 +509,19 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     @Override
     public void loadComplete(PDFView pdfView, int nbPages) {
+
+        if (pdfView == mFirstPdfView)
+            mMessageForFirstFile.setVisibility(View.GONE);
+
+        if (pdfView == mSecondPdfView)
+            mMessageForSecondFile.setVisibility(View.GONE);
+
         try {
             PdfDocument.Meta meta = null;
             if (pdfView == mFirstPdfView) {
-                mMessageForFirstFile.setVisibility(View.GONE);
                 meta = mFirstPdfView.getDocumentMeta();
                 printBookmarksTree(mFirstPdfView.getTableOfContents(), "-");
             } else if (pdfView == mSecondPdfView) {
-                mMessageForSecondFile.setVisibility(View.GONE);
                 meta = mSecondPdfView.getDocumentMeta();
                 printBookmarksTree(mSecondPdfView.getTableOfContents(), "-");
             }
@@ -528,6 +538,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             }
         } catch (Exception e) {
             e.getStackTrace();
+
         }
     }
 
@@ -633,8 +644,33 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         return docList;
     }
 
+    private void askWriteExtenralStoragePermission(int requestCode) {
+        int hasWriteContactsPermissionCamera = ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (hasWriteContactsPermissionCamera != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+            }
+            return;
+        }
+
+        switch (requestCode) {
+            case REQUEST_CODE_WRITE_FILE_ONE_PERMISSIONS:
+                loadPDFFromServer(mFirstPdfView, fileOneData, "file1", "pdf");
+                break;
+
+            case REQUEST_CODE_WRITE_FILE_TWO_PERMISSIONS:
+                loadPDFFromServer(mSecondPdfView, fileTwoData, "file2", "pdf");
+                break;
+
+            default:
+                CommonMethods.Log(TAG, String.valueOf(requestCode));
+        }
+
+    }
+
     private void loadPDFFromServer(PDFView pdfViewToLoad, String base64Pdf, String fileName, String extension) {
-        pdfViewToLoad.fromFile(new File(CommonMethods.getCachePath(this, base64Pdf, fileName, extension)))
+        pdfViewToLoad.fromFile(CommonMethods.storeAndGetDocument(this, base64Pdf, fileName, extension))
                 .defaultPage(mPageNumber)
                 .onError(this)
                 .onDraw(this)
@@ -643,6 +679,35 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 .load();
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_WRITE_FILE_ONE_PERMISSIONS:
+
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    loadPDFFromServer(mFirstPdfView, fileOneData, "file1", "pdf");
+                } else {
+                    // Permission Denied
+                    CommonMethods.showToast(mContext, getString(R.string.denied_permission_read_document));
+                }
+                break;
+
+            case REQUEST_CODE_WRITE_FILE_TWO_PERMISSIONS:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    loadPDFFromServer(mSecondPdfView, fileTwoData, "file2", "pdf");
+                } else {
+                    // Permission Denied
+                    CommonMethods.showToast(mContext, getString(R.string.denied_permission_read_document));
+                }
+                break;
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
     private void doCallPDFDataService(GetPdfDataRequestModel getPdfDataRequestModel, int size, PDFView pdfView, RelativeLayout progressBarLayout, FrameLayout pdfContainerLayout) {
         //-----TO grayed out pdfview based on no element in that view -----
@@ -665,6 +730,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
     }
+
 
 
     private void doGetMergeArchiveList(FileTreeResponseData originalFileTreeResponseData) {
@@ -739,4 +805,5 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         CommonMethods.Log(TAG, "COMBINED HASHMAP LIST: " + mergedLstDocTypeHashMap.toString());
 
     }
-}
+
+}a

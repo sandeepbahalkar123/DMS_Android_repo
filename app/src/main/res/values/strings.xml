@@ -57,12 +57,12 @@
         completions."
     </string>
 
-    <string name="visit_date">Visit Date:</string>
+    <string name="visit_date">Visit Date:\u0020</string>
     <string name="OPD">Enter OPD</string>
     <string name="IPD">Enter IPD</string>
     <string name="Select">Select</string>
-    <string name="admission_date">Admission Date:</string>
-    <string name="discharge_date">Discharge Date:</string>
+    <string name="admission_date">Admission Date:\u0020</string>
+    <string name="discharge_date">Discharge Date:\u0020</string>
     <string name="more">More</string>
     <string name="less">Less</string>
     <string name="opd">OPD</string>
@@ -145,4 +145,5 @@
     <string name="error_in_ip">Please enter valid IP address</string>
     <string name="comparedocument">Compare Document</string>
     <string name="adddocument">Add Document</string>
+    <string name="denied_permission_read_document">Denied permission read Document.</string>
 </resources>

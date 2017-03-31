@@ -5,7 +5,7 @@
     <dimen name="twenty">44px</dimen>
     <dimen name="four">12px</dimen>
     <dimen name="font_x_normal">34px</dimen>
-    <dimen name="tenDp">10dp</dimen>
+    <dimen name="tenDp">11dp</dimen>
     <dimen name="dp0">0dp</dimen>
     <dimen name="dp20">30dp</dimen>
     <dimen name="dp22">32dp</dimen>
