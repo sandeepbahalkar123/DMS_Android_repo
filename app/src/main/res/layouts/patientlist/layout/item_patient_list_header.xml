@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:padding="2dp">
+    android:padding="@dimen/dp2">
 
     <TextView
         android:id="@+id/uhid"
@@ -12,16 +12,18 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/rounded_button_blue"
         android:gravity="center"
-        android:text="111"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        tools:text="111" />
 
     <TextView
         android:id="@+id/patientId"
         android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize"
-        tools:text="111"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingLeft="5dp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingStart="5dp"
-        android:paddingLeft="5dp"/>
+        tools:text="111" />
 
     <TextView
         android:id="@+id/userName"
@@ -29,9 +31,9 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp5"
         android:drawableLeft="@mipmap/userfill"
+        android:drawablePadding="@dimen/dp10"
         android:gravity="center_vertical"
         android:text="@string/user_name"
-        android:drawablePadding="@dimen/dp10"
         android:textStyle="bold" />
 
     <!--<LinearLayout
@@ -39,10 +41,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
        <include layout="@layout/item_patient_content" />
     </LinearLayout>
-
     <TextView
         android:id="@+id/moreOption"
         android:layout_width="wrap_content"

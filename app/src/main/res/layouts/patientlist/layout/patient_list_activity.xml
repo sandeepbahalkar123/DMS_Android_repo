@@ -22,17 +22,19 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
-    <android.support.design.widget.NavigationView
+    <FrameLayout
         android:id="@+id/nav_right_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/patient_filter_right_drawer">
+        android:background="@color/white"
+        android:fitsSystemWindows="true">
 
-
-    </android.support.design.widget.NavigationView>
-
+        <include
+            layout="@layout/patient_filter_right_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 </android.support.v4.widget.DrawerLayout>
 
 

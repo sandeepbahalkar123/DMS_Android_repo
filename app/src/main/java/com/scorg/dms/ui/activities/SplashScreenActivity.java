@@ -39,6 +39,16 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
         mContext = this;
         mLoginHelper = new LoginHelper(this, this);
 
+
+        if (CommonMethods.isTablet(this)) {
+            doAppCheckLogin();
+        } else {
+            CommonMethods.showToast(this, getString(R.string.run_only_on_tablet));
+            finish();
+        }
+    }
+
+    private void doAppCheckLogin() {
         //handler to close the splash activity after the set time
         new Handler().postDelayed(new Runnable() {
             @Override
