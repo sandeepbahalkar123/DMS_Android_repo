@@ -660,4 +660,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
     }
+
+
+
 }

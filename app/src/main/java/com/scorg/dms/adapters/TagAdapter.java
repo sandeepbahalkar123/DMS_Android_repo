@@ -58,7 +58,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         for (Map.Entry<String, String> entry : mAddedTagsForFiltering.entrySet()) {
             if (!DmsConstants.BLANK.equalsIgnoreCase(entry.getValue())) {
 
-                if (entry.getValue().contains("\\|")) {
+                if (entry.getValue().contains("|")) {
                     mTagsDataSet.add("" + entry.getValue());
                 } else {
                     //-- For other than annotation list
@@ -101,7 +101,23 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         if (data.contains("|")) {
             String[] temp = data.split("\\|");
             dataToShow = temp[0];
-            dataToSet = temp[1];
+
+
+            //TODO: THIS IS HACK
+            //---- To replace data if fileType contains Select:<enteredID> :START
+            if (dataToShow.startsWith(mContext.getString(R.string.Select)) && dataToShow.contains(":")) {
+                dataToShow = dataToShow.replace(mContext.getString(R.string.Select) + ":", "");
+            }
+            //---------------END
+
+            //---- TO set dataToSet : START
+            //TODO: This is hack, done to fix the issue of docTypeID key remove
+            if (dataToShow.startsWith(mContext.getString(R.string.documenttype))) {
+                dataToSet = data;
+            } else
+                dataToSet = temp[1];
+            //---- TO set dataToSet : END
+
         }
         holder.mTextView.setText(dataToShow);
 
@@ -259,8 +275,43 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         return Color.HSVToColor(hsv);
     }
 
-    public HashMap<String, String> getAddedTagsForFiltering() {
-        return mAddedTagsForFiltering;
-    }
 
+    //-- THIS is to get values from mAddedTagsForFiltering, based on tags used.
+    public String getUpdatedTagValues(String key, String position) {
+        StringBuilder mGeneratedValue = new StringBuilder();
+        if (key.startsWith(mContext.getString(R.string.documenttype))) {
+            for (Map.Entry<String, String> entry : mAddedTagsForFiltering.entrySet()) {
+                if (entry.getKey().startsWith(key)) {
+                    if (entry.getValue().contains("|")) {
+                        String[] split = entry.getValue().split("\\|");
+                        mGeneratedValue.append(split[1] + ",");
+                    } else {
+                        mGeneratedValue.append(entry.getValue());
+                    }
+                }
+            }
+        } else {
+            String s = mAddedTagsForFiltering.get(key);
+            if (s != null) {
+                if (s.contains(":")) {
+                    String[] split = s.split(":");
+                    if (position != null) {
+                        if (split.length >= Integer.parseInt(position)) {
+                            mGeneratedValue.append(split[Integer.parseInt(position)]);
+                        }
+                    } else {
+                        mGeneratedValue.append(split[1]);
+                    }
+                } else {
+                    mGeneratedValue.append(s);
+                }
+            } else {
+                mGeneratedValue.append(DmsConstants.BLANK);
+            }
+        }
+
+        CommonMethods.Log(TAG, "" + mGeneratedValue);
+        CommonMethods.Log(TAG, "" + mGeneratedValue.toString());
+        return mGeneratedValue.toString();
+    }
 }
