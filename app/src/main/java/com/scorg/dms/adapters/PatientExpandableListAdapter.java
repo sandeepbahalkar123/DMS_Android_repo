@@ -1,8 +1,6 @@
 package com.scorg.dms.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import com.scorg.dms.R;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
-import com.scorg.dms.ui.activities.FileTypeViewerActivity;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 
@@ -59,6 +56,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
     // Hashmap for keeping track of our checkbox check states
     private HashMap<Integer, boolean[]> mChildCheckStates = new HashMap<Integer, boolean[]>();
     private String mCheckedBoxGroupName = null;
+    private int mGroupPosition = -1;
 
     public PatientExpandableListAdapter(Context context, List<SearchResult> searchResult) {
         this._context = context;
@@ -438,6 +436,8 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         //------------------
         int counterToCheckValues = 0;
 
+        this.mGroupPosition = mGroupPosition;
+
         // To make arrayList of elements
         ArrayList<Boolean> tempStatusList = new ArrayList<>();
         for (Map.Entry<Integer, boolean[]> entries : mChildCheckStates.entrySet()) {
@@ -468,6 +468,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
             flag = true;
         } else if (!tempName.equalsIgnoreCase(mCheckedBoxGroupName)) {
             CommonMethods.showToast(_context, _context.getString(R.string.error_compare_patient));
+            goPreviousPosition();
             flag = false;
         }
 
@@ -504,12 +505,32 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
                 getChecked[mChildPosition] = false;
                 mChildCheckStates.put(mGroupPosition, getChecked);
                 CommonMethods.showToast(_context, _context.getString(R.string.error_max_two_reports));
+                goPreviousPosition();
             } else {
                 onPatientListener.onCompareDialogShow(null, null, null, null, false);
             }
         }
         this.notifyDataSetChanged();
 
+    }
+
+    private void goPreviousPosition() {
+        Iterator it = mChildCheckStates.entrySet().iterator();
+        int childPos = 0;
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            boolean selected[] = (boolean[]) pair.getValue();
+
+            for (boolean select : selected) {
+                childPos += 1;
+                if (select) {
+                    int prePosition = (Integer) pair.getKey();
+                    manageChild(_originalListDataHeader.get(prePosition).getPatientName());
+                    onPatientListener.smoothScrollToPosition(prePosition + childPos);
+                    break;
+                }
+            }
+        }
     }
 
     public SearchResult searchPatientInfo(String patientId) {
@@ -525,8 +546,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
 
     public interface OnPatientListener {
         void onCompareDialogShow(PatientFileData patientFileData1, PatientFileData patientFileData2, String mCheckedBoxGroupName, String tempName, boolean b);
+
         void onPatientListItemClick(PatientFileData childElement, String patientName);
 
+        void smoothScrollToPosition(int previousPosition);
     }
 
 }

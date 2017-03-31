@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,9 +75,17 @@
 
             <CheckBox
                 android:id="@+id/opdCheckBox"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp" />
+                android:button="@null"
+                android:drawableEnd="@drawable/checkbox_selector"
+                android:drawableRight="@drawable/checkbox_selector"
+                android:paddingBottom="@dimen/tenDp"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/tenDp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -167,9 +175,17 @@
 
             <CheckBox
                 android:id="@+id/ipdCheckBox"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp" />
+                android:button="@null"
+                android:drawableEnd="@drawable/checkbox_selector"
+                android:drawableRight="@drawable/checkbox_selector"
+                android:paddingBottom="@dimen/tenDp"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/tenDp" />
         </LinearLayout>
     </LinearLayout>
 

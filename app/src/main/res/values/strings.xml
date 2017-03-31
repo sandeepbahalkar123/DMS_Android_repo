@@ -138,4 +138,5 @@
     <string name="error_in_ip">Please enter valid IP address</string>
     <string name="comparedocument">Compare Document</string>
     <string name="adddocument">Add Document</string>
+    <string name="denied_permission_read_document">Denied permission read Document.</string>
 </resources>

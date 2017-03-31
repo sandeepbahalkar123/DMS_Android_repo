@@ -872,4 +872,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         intent.putExtra(DmsConstants.DATA, extra);
         startActivity(intent);
     }
+
+    @Override
+    public void smoothScrollToPosition(int previousPosition) {
+        mPatientListView.smoothScrollToPosition(previousPosition);
+    }
 }
