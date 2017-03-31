@@ -493,6 +493,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         if (getString(R.string.uhid).equalsIgnoreCase(selectedFileType)) {
             showSearchResultRequestModel.setPatientId(enteredID);
             showSearchResultRequestModel.setReferenceId(DmsConstants.BLANK);
+            showSearchResultRequestModel.setFileType(DmsConstants.BLANK);
         } else {
             showSearchResultRequestModel.setPatientId(DmsConstants.BLANK);
             showSearchResultRequestModel.setReferenceId(enteredID);
