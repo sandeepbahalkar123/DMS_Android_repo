@@ -3,10 +3,10 @@ package com.scorg.dms.ui.activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,9 +14,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -103,35 +103,55 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     @BindView(R.id.openRightDrawer)
     ImageView mOpenRightDrawer;
     // End
+
+
+    @BindView(R.id.fileTypeOneDoctorName)
     TextView mDoctorNameOne;
+    @BindView(R.id.fileTypeTwoDoctorName)
     TextView mDoctorNameTwo;
+    @BindView(R.id.tvPatientLocation)
     TextView mPatientAddress;
+
+    @BindView(R.id.fileTypeOneRefID)
     TextView mFileOneRefId;
+    @BindView(R.id.fileTypeTwoRefID)
     TextView mFileTwoRefId;
+    @BindView(R.id.fileTypeOneAdmissionDate)
     TextView mAdmissionDateOne;
+
+    @BindView(R.id.fileTypeTwoAdmissionDate)
     TextView mAdmissionDateTwo;
+    @BindView(R.id.fileTypeOneDischargeDate)
     TextView mDischargeDateOne;
+    @BindView(R.id.fileTypeTwoDischargeDate)
     TextView mDischargeDateTwo;
+    @BindView(R.id.tvPatientUHID)
     TextView mPatientId;
+    @BindView(R.id.tvPatientName)
     TextView mPatientName;
+    @BindView(R.id.fileTypeOneFileTypeName)
     TextView mFileTypeOne;
+    @BindView(R.id.fileTypeTwoFileTypeName)
     TextView mFileTypeTwo;
+    @BindView(R.id.fileTypeTreeViewContainer)
+    RelativeLayout mFileTypeOneTreeViewContainer;
+    @BindView(R.id.et_uhid)
+    Switch mCompareSwitch;
+    @BindView(R.id.rowScrollBoth)
+    TableRow mRowScrollBoth;
+
+    @BindView(R.id.fileOneLay)
+    LinearLayout mFileOneDrawerLayout;
+    @BindView(R.id.fileTwoLay)
+    LinearLayout mFileTwoDrawerLayout;
+    @BindView(R.id.nav_right_view)
+    FrameLayout mRightNavigationView;
+
     DrawerLayout mDrawer;
 
-    NavigationView mRightNavigationView;
-    View mHeaderView;
     private PatientsHelper mPatientsHelper;
 
-    private RelativeLayout mFileTypeOneTreeViewContainer;
-
-    private Switch mCompareSwitch;
-    private TableRow mRowScrollBoth;
-
-    private LinearLayout mFileOneDrawerLayout;
-    private LinearLayout mFileTwoDrawerLayout;
-
     private boolean isCompareChecked = false;
-
     //---------
     ArrayList<PatientFileData> mSelectedFileTypeDataToCompare;
     String respectivePatientID;
@@ -197,17 +217,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         toggle.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.back));
         toggle.syncState();
 
-        //------RightNavigationView initialize---------
-        mRightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
-
-        DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) mRightNavigationView.getLayoutParams();
-        params.width = width;
-
-        mRightNavigationView.setLayoutParams(params);
-
-        mHeaderView = mRightNavigationView.getHeaderView(0);
         doBindHeaderViews();
-
         //-------Listeners-----
         mCompareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -215,13 +225,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 isCompareChecked = isChecked;
             }
         });
-        mRightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                mDrawer.closeDrawer(GravityCompat.END);
-                return true;
-            }
-        });
+
         mOpenRightDrawer.setOnClickListener(this);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,29 +241,15 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mSecondFileTypeProgressDialogLayout = (RelativeLayout) mSecondFileTypePdfViewLayout.findViewById(R.id.progressBarContainerLayout);
         mSecondFileTypeProgressDialogLayout.setVisibility(View.GONE);
 
+        //------RightNavigationView initialize---------
+
+        ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
+        layoutParams.width = width;
+        mRightNavigationView.setLayoutParams(layoutParams);
+
     }
 
     private void doBindHeaderViews() {
-
-        mFileOneRefId = (TextView) mHeaderView.findViewById(R.id.fileTypeOneRefID);
-        mFileTwoRefId = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoRefID);
-        mAdmissionDateOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneAdmissionDate);
-        mAdmissionDateTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoAdmissionDate);
-        mDischargeDateOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneDischargeDate);
-        mDischargeDateTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoDischargeDate);
-        mPatientId = (TextView) mHeaderView.findViewById(R.id.tvPatientUHID);
-        mPatientName = (TextView) mHeaderView.findViewById(R.id.tvPatientName);
-        mFileTypeOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneFileTypeName);
-        mFileTypeTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoFileTypeName);
-        mDoctorNameOne = (TextView) mHeaderView.findViewById(R.id.fileTypeOneDoctorName);
-        mDoctorNameTwo = (TextView) mHeaderView.findViewById(R.id.fileTypeTwoDoctorName);
-        mPatientAddress = (TextView) mHeaderView.findViewById(R.id.tvPatientLocation);
-
-        mFileTypeOneTreeViewContainer = (RelativeLayout) mHeaderView.findViewById(R.id.fileTypeTreeViewContainer);
-        mCompareSwitch = (Switch) mHeaderView.findViewById(R.id.comparePdfOnOFF);
-        mRowScrollBoth = (TableRow) mHeaderView.findViewById(R.id.rowScrollBoth);
-        mFileOneDrawerLayout = (LinearLayout) mHeaderView.findViewById(R.id.fileOneLay);
-        mFileTwoDrawerLayout = (LinearLayout) mHeaderView.findViewById(R.id.fileTwoLay);
 
         mPatientName.setText(patientName);
         mDoctorNameTwo.setText(doctorName);
@@ -726,4 +716,15 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         }
         mPatientsHelper.getPdfData(getPdfDataRequestModel, (DmsConstants.TASK_GET_PDF_DATA + mClickedTreeStructureLevel));
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        int width = getResources().getDisplayMetrics().widthPixels / 2;
+        super.onConfigurationChanged(newConfig);
+        ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
+        layoutParams.width = width;
+        mRightNavigationView.setLayoutParams(layoutParams);
+    }
+
+
 }

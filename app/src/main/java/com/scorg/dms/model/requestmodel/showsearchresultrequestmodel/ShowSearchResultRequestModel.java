@@ -31,7 +31,7 @@ public class ShowSearchResultRequestModel implements CustomResponse {
     @Expose
     private String annotationText = "";
 
-    private String[] DocTypeId;
+    private String[] DocTypeId = new String[0];
 
     public String getPatientId() {
         return patientId;
@@ -105,18 +105,12 @@ public class ShowSearchResultRequestModel implements CustomResponse {
     public void setDocTypeId(String[] docTypeId) {
 
         if (docTypeId != null) {
-            String[] temp = new String[docTypeId.length];
-            for (int i = 0; i < docTypeId.length; i++) {
-                String dataValue = docTypeId[i];
-                if (dataValue.contains("\\|")) {
-                    temp[i] = dataValue.split("\\|")[1];
-                } else {
-                    temp[i] = dataValue;
+            for (String str :
+                    docTypeId) {
+                if (str.contains(",")) {
+                    DocTypeId = str.split(",");
                 }
             }
-            DocTypeId = temp;
-        } else {
-            DocTypeId = docTypeId;
         }
     }
 

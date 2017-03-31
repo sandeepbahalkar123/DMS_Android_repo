@@ -38,6 +38,8 @@ import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.ui.activities.LoginActivity;
+import com.scorg.dms.ui.activities.PatientList;
+import com.scorg.dms.ui.activities.SplashScreenActivity;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.Config;
 import com.scorg.dms.util.DmsConstants;
@@ -267,10 +269,18 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
             } else if (error instanceof ServerError) {
                 if (isTokenExpired) {
-                    // Redirect to Login
-                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    // Redirect to SplashScreen then Login
+//                    Intent intent = new Intent(mContext, LoginActivity.class);
+//                    mContext.startActivity(intent);
+//                    ((AppCompatActivity) mContext).finishAffinity();
+
+                    DmsPreferencesManager.clearSharedPref(mContext);
+                    Intent intent = new Intent(mContext, SplashScreenActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);
-                    ((AppCompatActivity) mContext).finishAffinity();
+
                 } else
                     mConnectionListener.onResponse(ConnectionListener.SERVER_ERROR, null, mOldDataTag);
             } else if (error instanceof NetworkError) {
