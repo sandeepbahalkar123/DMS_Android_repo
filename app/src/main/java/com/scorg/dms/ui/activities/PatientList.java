@@ -61,6 +61,8 @@ import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -347,11 +349,13 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
      *
      * @return
      */
-    private boolean validate(String fromDate, String toDate) {
-
+    private boolean validate(String fromDate, String toDate) throws ParseException {
+        SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
         String message = null;
         if (fromDate.equalsIgnoreCase(toDate)) {
             message = getString(R.string.error_date_not_same);
+        } else if (dfDate.parse(fromDate).after(dfDate.parse(toDate))) {
+            message = getString(R.string.error_previous_date);
         }
 
         if (message != null) {
@@ -417,7 +421,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 String toDate = mToDateEditText.getText().toString().trim();
                 boolean dateValidate = false;
                 if ((fromDate.length() != 0 && toDate.length() != 0)) {
-                    dateValidate = validate(fromDate, toDate);
+                    try {
+                        dateValidate = validate(fromDate, toDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if (!dateValidate) {
 
