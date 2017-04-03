@@ -612,7 +612,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 for (TreeNode data :
                         selected) {
 
-                    String dataValue = data.getValue().toString();
+                    String dataValue = ((ArrowExpandIconTreeItemHolder.IconTreeItem) data.getValue()).text.toString();
                     //-- This is done for child only, no parent name will come in the list.
                     if (dataValue.contains("|")) {
                         annotationList.add(getString(R.string.documenttype) + dataValue);
