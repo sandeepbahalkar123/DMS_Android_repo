@@ -404,7 +404,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 // Label(pageCount)|id
                 dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId();
 
-                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocCategoryObjectLeftPadding);
+                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);
 
                 //---- To bold clicked text in tree

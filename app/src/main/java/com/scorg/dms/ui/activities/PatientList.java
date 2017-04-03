@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
@@ -58,6 +59,8 @@ import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
+import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
+import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandSelectableHeaderHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
@@ -72,7 +75,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener {
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener,TreeNode.TreeNodeClickListener {
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
@@ -509,7 +512,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 showSearchResultRequestModel.setFileType(DmsConstants.BLANK);
             }
         }
-
         showSearchResultRequestModel.setDateType(mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE, null));
         showSearchResultRequestModel.setFromDate(mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, null));
         showSearchResultRequestModel.setToDate(mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, null));
@@ -526,15 +528,20 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mAnnotationTreeViewContainer.removeAllViews();
 
         TreeNode root = TreeNode.root();
+        int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
+        int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
+        int textColor = ContextCompat.getColor(this, R.color.black);
 
         List<AnnotationList> annotationLists = annotationListData.getAnnotationLists();
 
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
 
-            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded);
-            TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() + "|" + DmsConstants.CATEGORY_NAME))
+            ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
+            selectableHeaderHolder.setParentNodeChecked(true);
+            TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() ,annotationCategoryObject,i))
                     .setViewHolder(selectableHeaderHolder);
+
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
 
@@ -542,16 +549,24 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 DocTypeList docTypeListObject = docTypeList.get(j);
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
-                TreeNode file3 = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this));
-                folder1.addChildren(file3);
+                ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
+                lstDocTypeChildSelectableHeaderHolder.setParentNodeChecked(true);
+                TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, docTypeListObject, i))
+                        .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
+
+                folder1.addChildren(lstDocTypeChildFolder);
             }
             root.addChildren(folder1);
         }
 
         mAndroidTreeView = new AndroidTreeView(this, root);
         mAndroidTreeView.setDefaultAnimation(true);
-        mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
+        mAndroidTreeView.setUse2dScroll(true);
+        mAndroidTreeView.setDefaultNodeClickListener(this);
+        mAndroidTreeView.setUseAutoToggle(false);
         mAndroidTreeView.setSelectionModeEnabled(true);
+        mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
+
 
     }
 
@@ -875,5 +890,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    public void onClick(TreeNode node, Object value) {
+
+
+
     }
 }

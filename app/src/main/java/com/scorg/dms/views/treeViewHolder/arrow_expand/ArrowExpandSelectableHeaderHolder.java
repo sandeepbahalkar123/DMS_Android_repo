@@ -26,8 +26,10 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
     private PrintView arrowView;
     private CheckBox nodeSelector;
     private LinearLayout mainContentLayout;
+    private boolean isParentNodeChecked;
 
     public ArrowExpandSelectableHeaderHolder(Context context, boolean isDefaultExpanded) {
+
         this(context, isDefaultExpanded, (int) (context.getResources().getDimension(R.dimen.dp10) / context.getResources().getDisplayMetrics().density));
     }
 
@@ -59,6 +61,22 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         } else {
             tvValue.setText(value.text.toString());
         }
+        if (isParentNodeChecked()) {
+            mainContentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isParentNodeChecked()) {
+                        setSelectedChildNodesChecked(node);
+                        setParentNodeChecked(false);
+                    } else {
+                        setSelectedChildNodesChecked(node);
+                        setParentNodeChecked(true);
+
+                    }
+                }
+            });
+        }
+
 
         arrowView = (PrintView) view.findViewById(R.id.arrow_icon);
         arrowView.setPadding(20, 10, 10, 10);
@@ -76,17 +94,29 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         nodeSelector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                node.setSelected(isChecked);
-                for (TreeNode n : node.getChildren()) {
-                    getTreeView().selectNode(n, isChecked);
+                if (isParentNodeChecked()) {
+                    setSelectedChildNodesChecked(node);
+                    setParentNodeChecked(false);
+                } else {
+                    setSelectedChildNodesChecked(node);
+                    setParentNodeChecked(true);
+
                 }
             }
+
         });
-        nodeSelector.setChecked(node.isSelected());
 
         node.setExpanded(isDefaultExpanded);
 
         return view;
+    }
+
+    private void setSelectedChildNodesChecked(TreeNode node) {
+        node.setSelected(isParentNodeChecked());
+        for (TreeNode n : node.getChildren()) {
+            getTreeView().selectNode(n, isParentNodeChecked());
+        }
+        nodeSelector.setChecked(node.isSelected());
     }
 
     @Override
@@ -112,7 +142,16 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         return isTreeLabelBold;
     }
 
+    public void setParentNodeChecked(boolean parentNodeChecked) {
+        isParentNodeChecked = parentNodeChecked;
+    }
+
+    public boolean isParentNodeChecked() {
+        return isParentNodeChecked;
+    }
+
     public void setTreeLabelBold(boolean treeLabelBold) {
         isTreeLabelBold = treeLabelBold;
     }
+
 }
