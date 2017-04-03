@@ -3,9 +3,9 @@
 
     <item
         android:state_checked="true"
-        android:drawable="@drawable/ic_check_box" />
+        android:drawable="@drawable/ic_check_box_grey_24dp" />
 
     <item
-        android:drawable="@drawable/ic_check_box_empty" />
+        android:drawable="@drawable/ic_check_box_outline_blank_grey_24dp" />
 
 </selector>
