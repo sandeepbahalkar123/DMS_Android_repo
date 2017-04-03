@@ -70,7 +70,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener{
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener {
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
@@ -534,8 +534,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
-            if (i % 2 == 0)
-                annotationCategoryObject.setSelected(true);
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
                     .setViewHolder(selectableHeaderHolder).setClickListener(this);
@@ -544,8 +542,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
             for (int j = 0; j < docTypeList.size(); j++) {
                 DocTypeList docTypeListObject = docTypeList.get(j);
-                if (j % 2 == 0)
-                    docTypeListObject.setSelected(true);
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
                 ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
