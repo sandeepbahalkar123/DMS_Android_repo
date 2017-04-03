@@ -3,24 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="horizontal"
-    android:padding="@dimen/dp2">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp2">
 
         <TextView
             android:id="@+id/uhid"
             android:layout_width="?attr/actionBarSize"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/rounded_button_blue"
             android:gravity="center"
             android:paddingBottom="@dimen/uhid"
             android:paddingTop="@dimen/uhid"
-            tools:text="111"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            tools:text="111" />
 
         <TextView
             android:id="@+id/patientId"

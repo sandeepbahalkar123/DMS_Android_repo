@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rowLay"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/opdLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
         android:padding="@dimen/dp2">
 
@@ -92,7 +92,7 @@
     <LinearLayout
         android:id="@+id/ipdLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
         android:padding="@dimen/dp2">
 

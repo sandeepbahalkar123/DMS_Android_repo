@@ -15,6 +15,8 @@ public class DocTypeList {
     @Expose
     private String abbreviation;
 
+    private Boolean isSelected = false;
+
     public Integer getTypeId() {
         return typeId;
     }
@@ -38,5 +40,13 @@ public class DocTypeList {
 
     public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
     }
 }
