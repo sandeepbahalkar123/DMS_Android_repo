@@ -70,7 +70,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener{
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener {
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
@@ -115,6 +115,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     @BindView(R.id.et_search_annotation)
     EditText mSearchAnnotationEditText;
+
+    @BindView(R.id.bt_clear_search_annotation)
+    ImageView mClearSearchAnnotationButton;
 
     @BindView(R.id.apply)
     TextView mApplySearchFilter;
@@ -269,6 +272,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mApplySearchFilter.setOnClickListener(this);
         mFromDateEditText.setOnClickListener(this);
         mToDateEditText.setOnClickListener(this);
+        mClearSearchAnnotationButton.setOnClickListener(this);
         mUserName.setText(DmsPreferencesManager.getString(DmsConstants.USERNAME, mContext));
         //--------
         // setting adapter for spinner in header view of right drawer
@@ -483,6 +487,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 }
 
                 break;
+
+            case R.id.bt_clear_search_annotation:
+                mSearchAnnotationEditText.setText("");
+                break;
         }
     }
 
@@ -534,8 +542,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
-            if (i % 2 == 0)
-                annotationCategoryObject.setSelected(true);
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
                     .setViewHolder(selectableHeaderHolder).setClickListener(this);
@@ -544,8 +550,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
             for (int j = 0; j < docTypeList.size(); j++) {
                 DocTypeList docTypeListObject = docTypeList.get(j);
-                if (j % 2 == 0)
-                    docTypeListObject.setSelected(true);
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
                 ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
@@ -616,7 +620,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 for (TreeNode data :
                         selected) {
 
-                    String dataValue = data.getValue().toString();
+                    String dataValue = ((ArrowExpandIconTreeItemHolder.IconTreeItem) data.getValue()).text.toString();
                     //-- This is done for child only, no parent name will come in the list.
                     if (dataValue.contains("|")) {
                         annotationList.add(getString(R.string.documenttype) + dataValue);
@@ -890,5 +894,15 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     @Override
     public void onClick(TreeNode node, Object value) {
         Log.d(TAG, String.valueOf(node.isSelected()));
+
+        DocTypeList docTypeList = null;
+        if (((ArrowExpandIconTreeItemHolder.IconTreeItem) node.getValue()).objectData instanceof DocTypeList) {
+            docTypeList = (DocTypeList) ((ArrowExpandIconTreeItemHolder.IconTreeItem) node.getValue()).objectData;
+
+        }
+
+        if (docTypeList != null) {
+            docTypeList.setSelected(node.isSelected());
+        }
     }
 }

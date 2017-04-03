@@ -220,32 +220,42 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp30"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:background="@color/white">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/dp5"
-                    android:layout_marginRight="@dimen/dp5">
+                    android:layout_toLeftOf="@+id/bt_clear_search_annotation"
+                    android:layout_toStartOf="@+id/bt_clear_search_annotation">
 
                     <EditText
                         android:id="@+id/et_search_annotation"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:drawableRight="@mipmap/search"
                         android:ellipsize="end"
                         android:hint="@string/searchAnnotation"
                         android:imeOptions="actionDone"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12" />
                 </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/bt_clear_search_annotation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/crosswithcircle" />
+
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 
