@@ -39,4 +39,5 @@
     <dimen name="button_height">40dp</dimen>
     <dimen name="dp160">180dp</dimen>
     <dimen name="filenotfoundmessagetextsize">24sp</dimen>
+    <dimen name="dp42">42dp</dimen>
 </resources>

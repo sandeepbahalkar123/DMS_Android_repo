@@ -43,5 +43,6 @@
     <dimen name="sp26">62sp</dimen>
 
     <dimen name="offer_detail_image_bottom_margin">20dp</dimen>
+    <dimen name="dp42">42dp</dimen>
 
 </resources>

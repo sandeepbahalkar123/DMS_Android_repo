@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener {
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener{
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
@@ -528,7 +529,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 annotationCategoryObject.setSelected(true);
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
-                    .setViewHolder(selectableHeaderHolder);
+                    .setViewHolder(selectableHeaderHolder).setClickListener(this);
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
 
@@ -549,6 +550,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         }
 
         mAndroidTreeView = new AndroidTreeView(this, root);
+        mAndroidTreeView.setDefaultNodeClickListener(this);
         mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
         mAndroidTreeView.setSelectionModeEnabled(true);
 
@@ -874,5 +876,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    public void onClick(TreeNode node, Object value) {
+        Log.d(TAG, String.valueOf(node.isSelected()));
     }
 }
