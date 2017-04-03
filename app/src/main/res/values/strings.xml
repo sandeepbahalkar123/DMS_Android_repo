@@ -30,7 +30,7 @@
     <string name="error_enter_uhid">Enter UHID</string>
     <string name="searchbyPatient">Search By Patient Name</string>
     <string name="enterAnnotation">Enter Annotation</string>
-    <string name="searchAnnotation">Search Doc Type</string>
+    <string name="searchAnnotation">Search Documents</string>
     <string name="scrollingBoth">Scrolling Both</string>
     <string name="patientInformation">Patient Information</string>
     <string name="refId">REF ID</string>
