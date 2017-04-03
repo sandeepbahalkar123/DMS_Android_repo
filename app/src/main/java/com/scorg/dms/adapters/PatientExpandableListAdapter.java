@@ -211,10 +211,28 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
             // set the check state of this position's checkbox based on the
             // boolean value of getChecked[position]
             if (childViewHolder.ipdLayout.getVisibility() == View.VISIBLE) {
+                if (getChildrenCount(groupPosition) > 1) {
+                    childViewHolder.ipdCheckBox.setEnabled(true);
+                }else {
+                    childViewHolder.ipdCheckBox.setEnabled(false);
+                }
                 childViewHolder.ipdCheckBox.setChecked(false);
             } else if (childViewHolder.opdLayout.getVisibility() == View.VISIBLE) {
+                if (getChildrenCount(groupPosition) > 1) {
+                    childViewHolder.opdCheckBox.setEnabled(true);
+                }else {
+                    childViewHolder.opdCheckBox.setEnabled(false);
+                }
                 childViewHolder.opdCheckBox.setChecked(false);
             }
+        }
+
+        if (getChildrenCount(groupPosition) == 1) {
+            childViewHolder.opdCheckBox.setEnabled(false);
+            childViewHolder.ipdCheckBox.setEnabled(false);
+        }else {
+            childViewHolder.opdCheckBox.setEnabled(true);
+            childViewHolder.ipdCheckBox.setEnabled(true);
         }
 
         childViewHolder.opdCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

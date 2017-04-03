@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/opdLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/dp42"
         android:orientation="horizontal"
         android:padding="@dimen/dp2">
 
@@ -92,7 +92,7 @@
     <LinearLayout
         android:id="@+id/ipdLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/dp42"
         android:orientation="horizontal"
         android:padding="@dimen/dp2">
 
