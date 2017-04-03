@@ -20,9 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -55,9 +53,8 @@ import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearc
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
-import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
-import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
-import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
+import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
+import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandSelectableHeaderHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
@@ -416,6 +413,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             //  on click of Apply in right drawer
             case R.id.apply:
 
+                onCompareDialogShow(null, null, null, null, false);
+
                 mAddedTagsForFiltering.clear();
                 String fromDate = mFromDateEditText.getText().toString().trim();
                 String toDate = mToDateEditText.getText().toString().trim();
@@ -526,30 +525,39 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mAnnotationTreeViewContainer.removeAllViews();
 
         TreeNode root = TreeNode.root();
+        int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
+        int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
+        int textColor = ContextCompat.getColor(this, R.color.black);
 
         List<AnnotationList> annotationLists = annotationListData.getAnnotationLists();
 
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
-
-            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded);
-            TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() + "|" + DmsConstants.CATEGORY_NAME))
+            if (i % 2 == 0)
+                annotationCategoryObject.setSelected(true);
+            ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
+            TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
                     .setViewHolder(selectableHeaderHolder);
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
 
             for (int j = 0; j < docTypeList.size(); j++) {
                 DocTypeList docTypeListObject = docTypeList.get(j);
+                if (j % 2 == 0)
+                    docTypeListObject.setSelected(true);
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
-                TreeNode file3 = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this));
-                folder1.addChildren(file3);
+                ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
+
+                TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, docTypeListObject, i))
+                        .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
+
+                folder1.addChildren(lstDocTypeChildFolder);
             }
             root.addChildren(folder1);
         }
 
         mAndroidTreeView = new AndroidTreeView(this, root);
-        mAndroidTreeView.setDefaultAnimation(true);
         mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
         mAndroidTreeView.setSelectionModeEnabled(true);
 
