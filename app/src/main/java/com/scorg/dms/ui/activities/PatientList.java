@@ -54,8 +54,10 @@ import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearc
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
+import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
+import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
+import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
-import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandSelectableHeaderHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
@@ -526,17 +528,15 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mAnnotationTreeViewContainer.removeAllViews();
 
         TreeNode root = TreeNode.root();
-        int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
-        int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
-        int textColor = ContextCompat.getColor(this, R.color.black);
 
         List<AnnotationList> annotationLists = annotationListData.getAnnotationLists();
 
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
-            ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
-            TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
-                    .setViewHolder(selectableHeaderHolder).setClickListener(this);
+
+            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded);
+            TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() + "|" + DmsConstants.CATEGORY_NAME))
+                    .setViewHolder(selectableHeaderHolder);
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
 
@@ -544,18 +544,14 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 DocTypeList docTypeListObject = docTypeList.get(j);
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
-                ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
-
-                TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, docTypeListObject, i))
-                        .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
-
-                folder1.addChildren(lstDocTypeChildFolder);
+                TreeNode file3 = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this));
+                folder1.addChildren(file3);
             }
             root.addChildren(folder1);
         }
 
         mAndroidTreeView = new AndroidTreeView(this, root);
-        mAndroidTreeView.setDefaultNodeClickListener(this);
+        mAndroidTreeView.setDefaultAnimation(true);
         mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
         mAndroidTreeView.setSelectionModeEnabled(true);
 
@@ -612,7 +608,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 for (TreeNode data :
                         selected) {
 
-                    String dataValue = ((ArrowExpandIconTreeItemHolder.IconTreeItem) data.getValue()).text.toString();
+                    String dataValue = data.getValue().toString();
                     //-- This is done for child only, no parent name will come in the list.
                     if (dataValue.contains("|")) {
                         annotationList.add(getString(R.string.documenttype) + dataValue);
