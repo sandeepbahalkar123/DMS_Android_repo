@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.github.johnkil.print.PrintView;
 import com.scorg.dms.R;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationList;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
 import com.unnamed.b.atv.model.TreeNode;
 
 /**
@@ -73,6 +75,7 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         });
 
         nodeSelector = (CheckBox) view.findViewById(R.id.node_selector);
+        nodeSelector.setClickable(false);
         nodeSelector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -80,9 +83,35 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
                 for (TreeNode n : node.getChildren()) {
                     getTreeView().selectNode(n, isChecked);
                 }
+
+                if (node.isLeaf()) {
+                    int totalBrother = node.getParent().getChildren().size();
+                    int checkedCount = 0;
+                    for (TreeNode treeNode : node.getParent().getChildren()) {
+                        if (treeNode.isSelected())
+                            checkedCount += 1;
+                    }
+
+                    if (isChecked) {
+                        if (checkedCount == totalBrother)
+                            getTreeView().selectNode(node.getParent(), isChecked);
+                    } else {
+                        if (checkedCount == totalBrother - 1)
+                            getTreeView().selectNode(node.getParent(), isChecked);
+                    }
+                }
             }
         });
         nodeSelector.setChecked(node.isSelected());
+
+        if (value.objectData instanceof AnnotationList)
+            nodeSelector.setChecked(((AnnotationList) value.objectData).
+
+                    getSelected());
+        else if (value.objectData instanceof DocTypeList)
+            nodeSelector.setChecked(((DocTypeList) value.objectData).
+
+                    getSelected());
 
         node.setExpanded(isDefaultExpanded);
 

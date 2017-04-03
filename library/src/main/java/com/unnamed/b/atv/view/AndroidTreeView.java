@@ -265,9 +265,9 @@ public class AndroidTreeView {
             @Override
             public void onClick(View v) {
                 if (n.getClickListener() != null) {
-                    n.getClickListener().onClick(n, n.getValue());
+                    n.getClickListener().onClick(n, n.getValue(), nodeView);
                 } else if (nodeClickListener != null) {
-                    nodeClickListener.onClick(n, n.getValue());
+                    nodeClickListener.onClick(n, n.getValue(), nodeView);
                 }
                 if (enableAutoToggle) {
                     toggleNode(n);

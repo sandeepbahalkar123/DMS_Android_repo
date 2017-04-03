@@ -550,7 +550,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     //-- For treeview annotations
     @Override
-    public void onClick(TreeNode node, Object value) {
+    public void onClick(TreeNode node, Object value, View nodeView) {
 
         mDrawer.closeDrawer(GravityCompat.END);
 
