@@ -538,7 +538,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationList annotationCategoryObject = annotationLists.get(i);
 
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
-            selectableHeaderHolder.setParentNodeChecked(true);
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() ,annotationCategoryObject,i))
                     .setViewHolder(selectableHeaderHolder);
 
@@ -550,7 +549,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
                 ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
-                lstDocTypeChildSelectableHeaderHolder.setParentNodeChecked(true);
                 TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, docTypeListObject, i))
                         .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
 
