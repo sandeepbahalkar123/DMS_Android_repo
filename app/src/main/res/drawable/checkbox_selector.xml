@@ -2,10 +2,14 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:state_checked="true"
-        android:drawable="@drawable/ic_check_box" />
+        android:state_enabled="false"
+        android:drawable="@drawable/ic_check_box_outline_blank_disabled_24dp" />
 
     <item
-        android:drawable="@drawable/ic_check_box_empty" />
+        android:state_checked="true"
+        android:drawable="@drawable/ic_check_box_grey_24dp" />
+
+    <item
+        android:drawable="@drawable/ic_check_box_outline_blank_grey_24dp" />
 
 </selector>

@@ -10,10 +10,10 @@
 
 
     <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/loader" />
+        android:src="@mipmap/ic_launcher" />
 
         <ProgressBar
             android:id="@+id/customProgressBar"
@@ -24,10 +24,5 @@
             android:indeterminateDuration="1500" />
 
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/ic_launcher" />
     </RelativeLayout>
 </RelativeLayout>

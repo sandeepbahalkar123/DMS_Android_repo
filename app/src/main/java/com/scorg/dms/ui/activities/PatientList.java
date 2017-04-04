@@ -20,9 +20,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -56,26 +55,22 @@ import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearc
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
-import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
-import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
-import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandSelectableHeaderHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener,TreeNode.TreeNodeClickListener {
+
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
@@ -418,6 +413,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 break;
             //  on click of Apply in right drawer
             case R.id.apply:
+
+                onCompareDialogShow(null, null, null, null, false);
 
                 mAddedTagsForFiltering.clear();
                 String fromDate = mFromDateEditText.getText().toString().trim();
@@ -892,8 +889,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     @Override
     public void onClick(TreeNode node, Object value) {
-
-
 
     }
 }
