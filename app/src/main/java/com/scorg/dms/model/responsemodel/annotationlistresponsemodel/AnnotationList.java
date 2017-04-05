@@ -21,6 +21,8 @@ public class AnnotationList {
     @Expose
     private List<DocTypeList> docTypeList = null;
 
+    private Boolean isSelected = false;
+
     public Integer getCategoryId() {
         return categoryId;
     }
@@ -45,4 +47,11 @@ public class AnnotationList {
         this.docTypeList = docTypeList;
     }
 
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
+    }
 }

@@ -20,9 +20,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -58,9 +57,12 @@ import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
 import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
+import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,7 +72,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener {
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener {
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
@@ -347,11 +349,13 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
      *
      * @return
      */
-    private boolean validate(String fromDate, String toDate) {
-
+    private boolean validate(String fromDate, String toDate) throws ParseException {
+        SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
         String message = null;
         if (fromDate.equalsIgnoreCase(toDate)) {
             message = getString(R.string.error_date_not_same);
+        } else if (dfDate.parse(fromDate).after(dfDate.parse(toDate))) {
+            message = getString(R.string.error_previous_date);
         }
 
         if (message != null) {
@@ -412,12 +416,18 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             //  on click of Apply in right drawer
             case R.id.apply:
 
+                onCompareDialogShow(null, null, null, null, false);
+
                 mAddedTagsForFiltering.clear();
                 String fromDate = mFromDateEditText.getText().toString().trim();
                 String toDate = mToDateEditText.getText().toString().trim();
                 boolean dateValidate = false;
                 if ((fromDate.length() != 0 && toDate.length() != 0)) {
-                    dateValidate = validate(fromDate, toDate);
+                    try {
+                        dateValidate = validate(fromDate, toDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if (!dateValidate) {
 
@@ -867,5 +877,10 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    public void onClick(TreeNode node, Object value) {
+        Log.d(TAG, String.valueOf(node.isSelected()));
     }
 }

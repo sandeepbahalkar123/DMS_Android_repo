@@ -25,11 +25,12 @@
     <string name="patientName">Enter patient name</string>
     <string name="annotation">Enter annotation</string>
     <string name="error_date_not_same">Date cannot be same</string>
+    <string name="error_previous_date">To date should be greater than from date</string>
     <string name="selectToDate">Enter to date</string>
     <string name="error_enter_uhid">Enter UHID</string>
     <string name="searchbyPatient">Search By Patient Name</string>
     <string name="enterAnnotation">Enter Annotation</string>
-    <string name="searchAnnotation">Search Annotation</string>
+    <string name="searchAnnotation">Search Documents</string>
     <string name="scrollingBoth">Scrolling Both</string>
     <string name="patientInformation">Patient Information</string>
     <string name="refId">REF ID</string>
