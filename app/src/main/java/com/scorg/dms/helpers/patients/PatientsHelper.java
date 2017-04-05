@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.google.gson.Gson;
+import com.scorg.dms.R;
 import com.scorg.dms.interfaces.ConnectionListener;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
@@ -11,6 +12,11 @@ import com.scorg.dms.model.requestmodel.filetreerequestmodel.FileTreeRequestMode
 import com.scorg.dms.model.requestmodel.filetreerequestmodel.LstSearchParam;
 import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.GetPdfDataRequestModel;
 import com.scorg.dms.model.requestmodel.showsearchresultrequestmodel.ShowSearchResultRequestModel;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.ArchiveDatum;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseData;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocCategory;
+import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocType;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.network.ConnectRequest;
 import com.scorg.dms.network.ConnectionFactory;
@@ -86,7 +92,32 @@ public class PatientsHelper implements ConnectionListener {
 
         switch (responseResult) {
             case ConnectionListener.RESPONSE_OK:
-                mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
+
+                if (String.valueOf(mOldDataTag).equalsIgnoreCase("" + DmsConstants.TASK_GET_ARCHIVED_LIST)) {
+                    //-- THIS IS DONE FOR MERGING OF TREE.
+                    FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
+                    FileTreeResponseData fileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
+
+                    String tempList[] = {"0", "1"};
+
+                    for (int k = 0; k < fileTreeResponseData.getArchiveData().size(); k++) {
+                        ArchiveDatum dataTemp = fileTreeResponseData.getArchiveData().get(k);
+                        List<LstDocCategory> lstDocCategories = dataTemp.getLstDocCategories();
+                        for (int i = 0; i < lstDocCategories.size(); i++) {
+                            LstDocCategory dataTempLstDocCategory = lstDocCategories.get(i);
+                            dataTempLstDocCategory.setMergedFileCompareCustomID(new String[]{tempList[k]});
+                            List<LstDocType> lstDocTypeList = dataTempLstDocCategory.getLstDocTypes();
+                            for (int j = 0; j < lstDocTypeList.size(); j++) {
+                                LstDocType lstDocType = lstDocTypeList.get(j);
+                                lstDocType.setMergedFileCompareCustomID(new String[]{tempList[k]});
+                            }
+                        }
+                    }
+                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
+
+                } else {
+                    mHelperResponseManager.onSuccess(mOldDataTag, customResponse);
+                }
                 break;
 
             case ConnectionListener.PARSE_ERR0R:
@@ -113,16 +144,16 @@ public class PatientsHelper implements ConnectionListener {
 
     }
 
-    public ShowSearchResultResponseModel loadJSONFromAsset() {
-        ShowSearchResultResponseModel showSearchResultResponseModel;
+    public FileTreeResponseModel loadJSONFromAsset() {
+        FileTreeResponseModel showSearchResultResponseModel;
         try {
-            InputStream is = mContext.getAssets().open("searchresult.json");
+            InputStream is = mContext.getAssets().open("temp.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
             String json = new String(buffer, "UTF-8");
-            showSearchResultResponseModel = new Gson().fromJson(json, ShowSearchResultResponseModel.class);
+            showSearchResultResponseModel = new Gson().fromJson(json, FileTreeResponseModel.class);
 
         } catch (IOException ex) {
             ex.printStackTrace();

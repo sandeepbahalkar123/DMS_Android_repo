@@ -296,8 +296,10 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 if (s.contains(":")) {
                     String[] split = s.split(":");
                     if (position != null) {
-                        if (split.length >= Integer.parseInt(position)) {
+                        if (split.length > Integer.parseInt(position)) {
                             mGeneratedValue.append(split[Integer.parseInt(position)]);
+                        } else {
+                            mGeneratedValue.append(DmsConstants.BLANK);
                         }
                     } else {
                         mGeneratedValue.append(split[1]);

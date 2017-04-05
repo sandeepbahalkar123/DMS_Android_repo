@@ -1,14 +1,169 @@
 {
-  "lstSearchParam": [
-    {
-      "fileType": "IPD",
-      "fileTypeRefId": "2276",
-      "patientId": "31"
-    },
-    {
-      "fileType": "IPD",
-      "fileTypeRefId": "2274",
-      "patientId": "31"
-    }
-  ]
+  "common": {
+    "success": 1,
+    "statusCode": 200,
+    "statusMessage": ""
+  },
+  "data": {
+    "archiveData": [
+      {
+        "fileType": "IPD",
+        "lstDocCategories": [
+          {
+            "categoryId": 1,
+            "categoryName": "ADMISSION",
+            "lstDocTypes": [
+              {
+                "typeId": 49,
+                "typeName": "Admission23",
+                "abbreviation": "IADM48",
+                "createdDate": "2017-03-09T16:00:51.92",
+                "pageCount": 8,
+                "pageNumber": 1
+              },
+              {
+                "typeId": 72,
+                "typeName": "DISCHARGE SUMMARY",
+                "abbreviation": "IADM71",
+                "createdDate": "2017-03-09T16:00:51.95",
+                "pageCount": 11,
+                "pageNumber": 9
+              },
+              {
+                "typeId": 73,
+                "typeName": "DISCHARGE CHECKLIST",
+                "abbreviation": "IADM72",
+                "createdDate": "2017-03-09T16:00:51.96",
+                "pageCount": 12,
+                "pageNumber": 20
+              },
+              {
+                "typeId": 74,
+                "typeName": "MEDICAL /SURGICAL APPOINTMENT LETTER",
+                "abbreviation": "IADM73",
+                "createdDate": "2017-03-09T16:00:51.99",
+                "pageCount": 19,
+                "pageNumber": 32
+              },
+              {
+                "typeId": 75,
+                "typeName": "GENERAL EXAMINATION FORM",
+                "abbreviation": "IADM74",
+                "createdDate": "2017-03-09T16:00:52.03",
+                "pageCount": 12,
+                "pageNumber": 51
+              },
+              {
+                "typeId": 76,
+                "typeName": "ANAESTHESIA CONSENT",
+                "abbreviation": "IADM75",
+                "createdDate": "2017-03-09T16:00:52.04",
+                "pageCount": 6,
+                "pageNumber": 63
+              },
+              {
+                "typeId": 77,
+                "typeName": "PROCEDURE CONSENT",
+                "abbreviation": "IADM76",
+                "createdDate": "2017-03-09T16:00:52.05",
+                "pageCount": 2,
+                "pageNumber": 69
+              },
+              {
+                "typeId": 49,
+                "typeName": "Admission23",
+                "abbreviation": "IADM48",
+                "createdDate": "2017-03-09T16:04:21.973",
+                "pageCount": 8,
+                "pageNumber": 71
+              },
+              {
+                "typeId": 72,
+                "typeName": "DISCHARGE SUMMARY",
+                "abbreviation": "IADM71",
+                "createdDate": "2017-03-09T16:04:22.043",
+                "pageCount": 11,
+                "pageNumber": 79
+              },
+              {
+                "typeId": 73,
+                "typeName": "DISCHARGE CHECKLIST",
+                "abbreviation": "IADM72",
+                "createdDate": "2017-03-09T16:04:22.083",
+                "pageCount": 12,
+                "pageNumber": 90
+              },
+              {
+                "typeId": 74,
+                "typeName": "MEDICAL /SURGICAL APPOINTMENT LETTER",
+                "abbreviation": "IADM73",
+                "createdDate": "2017-03-09T16:04:22.113",
+                "pageCount": 19,
+                "pageNumber": 102
+              },
+              {
+                "typeId": 75,
+                "typeName": "GENERAL EXAMINATION FORM",
+                "abbreviation": "IADM74",
+                "createdDate": "2017-03-09T16:04:22.323",
+                "pageCount": 12,
+                "pageNumber": 121
+              },
+              {
+                "typeId": 76,
+                "typeName": "ANAESTHESIA CONSENT",
+                "abbreviation": "IADM75",
+                "createdDate": "2017-03-09T16:04:22.353",
+                "pageCount": 6,
+                "pageNumber": 133
+              },
+              {
+                "typeId": 77,
+                "typeName": "PROCEDURE CONSENT",
+                "abbreviation": "IADM76",
+                "createdDate": "2017-03-09T16:04:22.363",
+                "pageCount": 2,
+                "pageNumber": 139
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "fileType": "IPD",
+        "lstDocCategories": [
+          {
+            "categoryId": 1,
+            "categoryName": "ADMISSION",
+            "lstDocTypes": [
+              {
+                "typeId": 121,
+                "typeName": "Admission2223",
+                "abbreviation": "IADM48",
+                "createdDate": "2017-03-09T16:00:51.92",
+                "pageCount": 8,
+                "pageNumber": 1
+              },
+              {
+                "typeId": 72,
+                "typeName": "DISCHARGE SUMMARY",
+                "abbreviation": "IADM71",
+                "createdDate": "2017-03-09T16:00:51.95",
+                "pageCount": 11,
+                "pageNumber": 9
+              },
+              {
+                "typeId": 73,
+                "typeName": "DISCHARGE CHECKLIST",
+                "abbreviation": "IADM72",
+                "createdDate": "2017-03-09T16:00:51.96",
+                "pageCount": 12,
+                "pageNumber": 20
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

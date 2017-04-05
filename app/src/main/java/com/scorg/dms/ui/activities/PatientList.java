@@ -433,7 +433,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 //                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, enteredUHIDValue);
 //                    }
 
-                    if (enteredUHIDValue.length() != 0) {
+                    if ((enteredUHIDValue.length() != 0) || !mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + enteredUHIDValue);
                     }
 
@@ -486,7 +486,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         String selectedFileType = mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, "0");
 
         //THIS IS DONE BCAZ, FILETYPE contains (IPD/OPD/UHID:enteredID)
-        String enteredID = mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, null);
+        String enteredID = mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, "1");
 
         showSearchResultRequestModel.setFileType(selectedFileType);
 

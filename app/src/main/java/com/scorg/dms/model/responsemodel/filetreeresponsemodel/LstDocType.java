@@ -25,7 +25,7 @@ public class LstDocType {
     private Integer pageNumber;
 
 
-    private String mergedFileCompareCustomeID;
+    private String[] mergedFileCompareCustomID = null;
 
     public Integer getTypeId() {
         return typeId;
@@ -75,13 +75,12 @@ public class LstDocType {
         this.pageNumber = pageNumber;
     }
 
-
-    public String getMergedFileCompareCustomeID() {
-        return mergedFileCompareCustomeID;
+    public String[] getMergedFileCompareCustomID() {
+        return mergedFileCompareCustomID;
     }
 
-    public void setMergedFileCompareCustomeID(String mergedFileCompareCustomeID) {
-        this.mergedFileCompareCustomeID = mergedFileCompareCustomeID;
+    public void setMergedFileCompareCustomID(String[] mergedFileCompareCustomID) {
+        this.mergedFileCompareCustomID = mergedFileCompareCustomID;
     }
 
     @Override

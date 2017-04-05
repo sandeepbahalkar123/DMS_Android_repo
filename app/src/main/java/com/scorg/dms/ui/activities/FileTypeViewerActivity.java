@@ -2,6 +2,7 @@ package com.scorg.dms.ui.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -33,6 +34,8 @@ import com.github.barteksc.pdfviewer.listener.OnDrawListener;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.github.barteksc.pdfviewer.util.ArrayUtils;
+import com.github.barteksc.pdfviewer.util.Constants;
 import com.scorg.dms.R;
 import com.scorg.dms.helpers.patients.PatientsHelper;
 import com.scorg.dms.interfaces.CustomResponse;
@@ -49,6 +52,7 @@ import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocCategory;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocType;
 import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
+import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
@@ -60,6 +64,7 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -163,7 +168,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     String patientAddress;
     //---------
     private int mClickedTreeStructureLevel;
-    private boolean isTreeInMultipleRootMode = true; // true--> if tree contains two main root like (IPD,OPD) , false--> (IPD OR OPD only)
+    private String mMergedRequestCalled = DmsConstants.BLANK;
     private FileTreeResponseData mFileTreeResponseData;
 
     private RelativeLayout mFirstFileTypeProgressDialogLayout;
@@ -171,6 +176,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     private HashMap<Integer, String> mPreviousClickedTreeElement = null;
     private String fileOneData;
     private String fileTwoData;
+    private boolean isComparingBetweenSameFileType = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,22 +328,19 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
 
         //Changed from switch to if..else, due to dynamically comparing received mOldDataTag.
-        if (mOldDataTag.startsWith(DmsConstants.TASK_GET_PDF_DATA + mClickedTreeStructureLevel)) {
+        if (mOldDataTag.startsWith(DmsConstants.TASK_GET_PDF_DATA + mMergedRequestCalled)) {
             GetPdfDataResponseModel getPdfDataResponseModel = (GetPdfDataResponseModel) customResponse;
             if (getPdfDataResponseModel.getCommon().getStatusCode().equals(DmsConstants.SUCCESS)) {
                 String fileData = getPdfDataResponseModel.getGetPdfDataResponseData().getFileData();
                 if (fileData != null) {
-                    switch (mClickedTreeStructureLevel) {
-                        case 0:
-                            mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
-                            fileOneData = fileData;
-                            askWriteExtenralStoragePermission(REQUEST_CODE_WRITE_FILE_ONE_PERMISSIONS);
-                            break;
-                        case 1:
-                            mSecondFileTypeProgressDialogLayout.setVisibility(View.GONE);
-                            fileTwoData = fileData;
-                            askWriteExtenralStoragePermission(REQUEST_CODE_WRITE_FILE_TWO_PERMISSIONS);
-                            break;
+                    if (mMergedRequestCalled.equalsIgnoreCase("0") || mOldDataTag.endsWith("0")) {
+                        mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
+                        fileOneData = fileData;
+                        askWriteExtenralStoragePermission(REQUEST_CODE_WRITE_FILE_ONE_PERMISSIONS);
+                    } else if (mMergedRequestCalled.equalsIgnoreCase(("1")) || mOldDataTag.endsWith("1")) {
+                        mSecondFileTypeProgressDialogLayout.setVisibility(View.GONE);
+                        fileTwoData = fileData;
+                        askWriteExtenralStoragePermission(REQUEST_CODE_WRITE_FILE_TWO_PERMISSIONS);
                     }
                 } else
                     Toast.makeText(mContext, "Document not available", Toast.LENGTH_SHORT).show();
@@ -347,8 +350,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             FileTreeResponseModel fileTreeResponseModel = (FileTreeResponseModel) customResponse;
             mFileTreeResponseData = fileTreeResponseModel.getFileTreeResponseData();
 
-            doGetMergeArchiveList(mFileTreeResponseData);
+            if (mFileTypeOne.getText().toString().equalsIgnoreCase(mFileTypeTwo.getText().toString())) {
+                isComparingBetweenSameFileType = true;
+                doGetMergeArchiveList(mFileTreeResponseData, mFileTypeOne.getText().toString());
+            }
             createAnnotationTreeStructure(mFileTreeResponseData, true);
+            //------
+
         }
     }
 
@@ -381,9 +389,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         List<ArchiveDatum> archiveData = fileTreeResponseData.getArchiveData();
         int size = archiveData.size();
 
-        // To set mode of opening tree.
-        isTreeInMultipleRootMode = (size > 0) ? true : false;
-
         // For archived data list
         for (int i = 0; i < size; i++) {
             ArchiveDatum archiveDatumObject = archiveData.get(i);
@@ -397,6 +402,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
             // Label(pageCount)|NA
             String dataToShow = archiveDatumObject.getFileType() + " (" + archiveDatumObject.getTotalDocCategoryPageCount() + ")" + "|NA";
+
             TreeNode archiveDatumObjectFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, archiveDatumObject, i))
                     .setViewHolder(selectableHeaderHolder);
 
@@ -558,7 +564,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     public void onClick(TreeNode node, Object value) {
 
         mDrawer.closeDrawer(GravityCompat.END);
-
+        String idToFetch[] = null;
 
         GetPdfDataRequestModel getPdfDataRequestModel = new GetPdfDataRequestModel();
         getPdfDataRequestModel.setPatientId(respectivePatientID);
@@ -568,10 +574,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
             //----- THIS IS TO FIND OUT, WHICH level of treeView clicked
             mClickedTreeStructureLevel = value1.level;
-
-            //--- Set fileType and refID based on mClickedTreeStructureLevel
-            getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(mClickedTreeStructureLevel).getFileType());
-            getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(mClickedTreeStructureLevel).getReferenceId());
+            mMergedRequestCalled = DmsConstants.BLANK;
 
             //----- Get Object of clicked Element and create map to send  : Start------
             if (value1.objectData instanceof ArchiveDatum) {
@@ -586,36 +589,83 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 lstDocCategories.add(objectData);
                 mPreviousClickedTreeElement.put(mClickedTreeStructureLevel, objectData.getCategoryName());
                 getPdfDataRequestModel.setLstDocTypeRequests(createLstDocTypeRequest(lstDocCategories));
+
+                //----
+                if (objectData.getMergedFileCompareCustomID().length != 2) {
+                    mMergedRequestCalled = objectData.getMergedFileCompareCustomID()[0];
+                } else {
+                    idToFetch = objectData.getMergedFileCompareCustomID();
+                }
+                //----
+
             } else if (value1.objectData instanceof LstDocType) {
-                LstDocType tempData = (LstDocType) value1.objectData;
-                mPreviousClickedTreeElement.put(mClickedTreeStructureLevel, tempData.getTypeName());
+                LstDocType clickedLstDocTypeElement = (LstDocType) value1.objectData;
+                mPreviousClickedTreeElement.put(mClickedTreeStructureLevel, clickedLstDocTypeElement.getTypeName());
                 //----
                 List<LstDocType> lstDocType = new ArrayList<>();
-                lstDocType.add(tempData);
+                lstDocType.add(clickedLstDocTypeElement);
                 //-----
                 List<LstDocCategory> lstDocCategories = new ArrayList<>();
                 LstDocCategory temp = new LstDocCategory();
                 temp.setLstDocTypes(lstDocType);
                 lstDocCategories.add(temp);
-                //---------
+
                 getPdfDataRequestModel.setLstDocTypeRequests(createLstDocTypeRequest(lstDocCategories));
+
+                //--------
+                if (clickedLstDocTypeElement.getMergedFileCompareCustomID().length != 2) {
+                    mMergedRequestCalled = clickedLstDocTypeElement.getMergedFileCompareCustomID()[0];
+                } else {
+                    idToFetch = clickedLstDocTypeElement.getMergedFileCompareCustomID();
+                }
+                //--------
             }
             //----- Get Object of clicked Element and create map to send  : End------
 
             List<LstDocTypeRequest> lstDocTypeRequestsToFetchFromServer = getPdfDataRequestModel.getLstDocTypeRequests();
 
-            if (isTreeInMultipleRootMode) {
-                switch (mClickedTreeStructureLevel) {
-                    case 0:
-                        doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mFirstPdfView, mFirstFileTypeProgressDialogLayout, mFirstFileTypePdfViewLayout);
-                        break;
-                    case 1:
-                        doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mSecondPdfView, mSecondFileTypeProgressDialogLayout, mSecondFileTypePdfViewLayout);
-                        break;
-                }
-            } else {
-                doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mFirstPdfView, mFirstFileTypeProgressDialogLayout, mFirstFileTypePdfViewLayout);
-                doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mSecondPdfView, mSecondFileTypeProgressDialogLayout, mSecondFileTypePdfViewLayout);
+            switch (mMergedRequestCalled) {
+
+                case "0":
+                    //--- Set fileType and refID based on mClickedTreeStructureLevel
+                    getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(Integer.parseInt(mMergedRequestCalled)).getFileType());
+                    getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(Integer.parseInt(mMergedRequestCalled)).getReferenceId());
+
+                    //-- To Grayed out alternate views based on selection :START----
+                    if (isComparingBetweenSameFileType) {
+                        mSecondPdfView.setVisibility(View.GONE);
+                        mSecondFileTypePdfViewLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                    }
+                    //-- To Grayed out alternate views based on selection : END ----
+
+                    doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mFirstPdfView, mFirstFileTypeProgressDialogLayout, mFirstFileTypePdfViewLayout, mMergedRequestCalled);
+                    break;
+                case "1":
+                    //--- Set fileType and refID based on mClickedTreeStructureLevel
+                    getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(Integer.parseInt(mMergedRequestCalled)).getFileType());
+                    getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(Integer.parseInt(mMergedRequestCalled)).getReferenceId());
+
+                    //-- To Grayed out alternate views based on selection :START----
+                    if (isComparingBetweenSameFileType) {
+                        mFirstPdfView.setVisibility(View.GONE);
+                        mFirstFileTypePdfViewLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
+                    }
+                    //-- To Grayed out alternate views based on selection : END ----
+
+                    doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mSecondPdfView, mSecondFileTypeProgressDialogLayout, mSecondFileTypePdfViewLayout, mMergedRequestCalled);
+                    break;
+                default:
+                    if (idToFetch != null) {
+                        for (int i = 0; i < idToFetch.length; i++) {
+                            //--- Set fileType and refID based on mClickedTreeStructureLevel
+                            getPdfDataRequestModel.setFileType(mSelectedFileTypeDataToCompare.get(Integer.parseInt(idToFetch[i])).getFileType());
+                            getPdfDataRequestModel.setFileTypeRefId("" + mSelectedFileTypeDataToCompare.get(Integer.parseInt(idToFetch[i])).getReferenceId());
+                            if (i == 0)
+                                doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mFirstPdfView, mFirstFileTypeProgressDialogLayout, mFirstFileTypePdfViewLayout, i + "");
+                            else
+                                doCallPDFDataService(getPdfDataRequestModel, lstDocTypeRequestsToFetchFromServer.size(), mSecondPdfView, mSecondFileTypeProgressDialogLayout, mSecondFileTypePdfViewLayout, i + "");
+                        }
+                    }
             }
         }
     }
@@ -709,7 +759,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         }
     }
 
-    private void doCallPDFDataService(GetPdfDataRequestModel getPdfDataRequestModel, int size, PDFView pdfView, RelativeLayout progressBarLayout, FrameLayout pdfContainerLayout) {
+    private void doCallPDFDataService(GetPdfDataRequestModel getPdfDataRequestModel, int size, PDFView pdfView, RelativeLayout progressBarLayout, FrameLayout pdfContainerLayout, String mTagID) {
         //-----TO grayed out pdfview based on no element in that view -----
         if (size != 0) {
             pdfView.setVisibility(View.VISIBLE);
@@ -719,7 +769,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             pdfView.setVisibility(View.GONE);
             pdfContainerLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Gray));
         }
-        mPatientsHelper.getPdfData(getPdfDataRequestModel, (DmsConstants.TASK_GET_PDF_DATA + mClickedTreeStructureLevel));
+        mPatientsHelper.getPdfData(getPdfDataRequestModel, (DmsConstants.TASK_GET_PDF_DATA + mTagID));
     }
 
     @Override
@@ -732,16 +782,14 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
 
-
-    private void doGetMergeArchiveList(FileTreeResponseData originalFileTreeResponseData) {
-        FileTreeResponseData tempFileTreeResponseData = new FileTreeResponseData();
+    private void doGetMergeArchiveList(FileTreeResponseData originalFileTreeResponseData, String fileType) {
         List<LstDocCategory> mergedALstDocCategoryListData = new ArrayList<LstDocCategory>();
 
         List<ArchiveDatum> originalArchiveDataList = originalFileTreeResponseData.getArchiveData();
         //---Merge LstDocCategory into single list-
         for (ArchiveDatum originalArchiveDataObject :
                 originalArchiveDataList) {
-            if (originalArchiveDataObject.getFileType().equalsIgnoreCase(getString(R.string.ipd))) {
+            if (originalArchiveDataObject.getFileType().equalsIgnoreCase(fileType)) {
                 List<LstDocCategory> lstDocCategories = originalArchiveDataObject.getLstDocCategories();
                 for (LstDocCategory tempObject :
                         lstDocCategories) {
@@ -749,7 +797,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 }
             }
         }
-        CommonMethods.Log(TAG, mergedALstDocCategoryListData.toString());
+        CommonMethods.Log(TAG, "MERGED mergedALstDocCategoryListData :" + mergedALstDocCategoryListData.toString());
         //-----------
         HashMap<LstDocCategory, List<LstDocType>> mergedLstDocTypeHashMap = new HashMap<LstDocCategory, List<LstDocType>>();
 
@@ -777,13 +825,31 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                         // THIS IS DONE BZCZ, WE ARE ADDING List<LstDocType> into hashmap,
                         // hence to avoid data redundancy
                         iLoopLstDocCategory.setLstDocTypes(null);
+
+
                         //---
                         List<LstDocType> secondLstDocTypes = jLoopLstDocCategory.getLstDocTypes();
-                        //---
+
                         List<LstDocType> tempLocalListToAddIntoMap = new ArrayList<>();
+
                         tempLocalListToAddIntoMap.addAll(firstLstDocTypes);
                         tempLocalListToAddIntoMap.addAll(secondLstDocTypes);
-                        mergedLstDocTypeHashMap.put(iLoopLstDocCategory, tempLocalListToAddIntoMap);
+
+                        //-- To Merge getMergedFileCompareCustomID--
+                        String[] iLoopMergedFileCompareCustomID = iLoopLstDocCategory.getMergedFileCompareCustomID();
+                        String[] jLoopMergedFileCompareCustomID = jLoopLstDocCategory.getMergedFileCompareCustomID();
+
+                        String[] tempTotal = new String[iLoopMergedFileCompareCustomID.length + jLoopMergedFileCompareCustomID.length];
+
+                        System.arraycopy(iLoopMergedFileCompareCustomID, 0, tempTotal, 0, iLoopMergedFileCompareCustomID.length);
+                        System.arraycopy(jLoopMergedFileCompareCustomID, 0, tempTotal, iLoopMergedFileCompareCustomID.length, jLoopMergedFileCompareCustomID.length);
+
+                        iLoopLstDocCategory.setMergedFileCompareCustomID(tempTotal);
+                        //----
+
+                        HashSet<LstDocType> lstDocTypes = mergeLstDocTypeElement(tempLocalListToAddIntoMap);
+
+                        mergedLstDocTypeHashMap.put(iLoopLstDocCategory, new ArrayList<LstDocType>(lstDocTypes));
                         //---***************
                         flag = true;
                     }
@@ -795,15 +861,101 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                     // THIS IS DONE BZCZ, WE ARE ADDING List<LstDocType> into hashmap,
                     // hence to avoid data redundancy
                     firstLstDocCategory.setLstDocTypes(null);
-                    //---
+
                     mergedLstDocTypeHashMap.put(firstLstDocCategory, firstLstDocTypes);
                 }
             }
+        }
+        CommonMethods.Log(TAG, "COMBINED HASHMAP LIST: " + mergedLstDocTypeHashMap.toString());
 
+        //----final object creation
+        ArchiveDatum archiveDatum = new ArchiveDatum();
+        for (Map.Entry<LstDocCategory, List<LstDocType>> entry : mergedLstDocTypeHashMap.entrySet()) {
+            LstDocCategory key = entry.getKey();
+            archiveDatum.setFileType(fileType);
+            key.setLstDocTypes(entry.getValue());
+            ArrayList<LstDocCategory> lstDocCategories = new ArrayList<LstDocCategory>();
+            lstDocCategories.add(key);
+            archiveDatum.setLstDocCategories(lstDocCategories);
         }
 
-        CommonMethods.Log(TAG, "COMBINED HASHMAP LIST: " + mergedLstDocTypeHashMap.toString());
+        ArrayList<ArchiveDatum> lstArchiveDatum = new ArrayList<ArchiveDatum>();
+        lstArchiveDatum.add(archiveDatum);
+        mFileTreeResponseData.setArchiveData(lstArchiveDatum);
+        CommonMethods.Log(TAG, "FINAL COMBINED HASHMAP LIST: " + mFileTreeResponseData.toString());
+        //-----
 
     }
 
-}a
+
+    private HashSet<LstDocType> mergeLstDocTypeElement(List<LstDocType> tempLstDocTypeList) {
+
+        HashSet<LstDocType> hashSet = new HashSet<>();
+        for (int i = 0; i < tempLstDocTypeList.size(); i++) {
+            boolean flag = false;
+            LstDocType iLoopLstDocType = tempLstDocTypeList.get(i);
+            for (int j = i + 1; j < tempLstDocTypeList.size(); j++) {
+                LstDocType jLoopLstDocType = tempLstDocTypeList.get(j);
+                if (iLoopLstDocType.getTypeId() == jLoopLstDocType.getTypeId()) {
+                    LstDocType lstDocType = new LstDocType();
+                    lstDocType.setTypeId(iLoopLstDocType.getTypeId());
+                    lstDocType.setTypeName(iLoopLstDocType.getTypeName());
+                    lstDocType.setAbbreviation(iLoopLstDocType.getAbbreviation());
+                    lstDocType.setCreatedDate(iLoopLstDocType.getCreatedDate());
+                    lstDocType.setPageCount(iLoopLstDocType.getPageCount() + jLoopLstDocType.getPageCount());
+                    lstDocType.setPageNumber(iLoopLstDocType.getPageNumber());
+
+                    //-- To Merge getMergedFileCompareCustomID--
+                    String[] iLoopMergedFileCompareCustomID = iLoopLstDocType.getMergedFileCompareCustomID();
+                    String[] jLoopMergedFileCompareCustomID = jLoopLstDocType.getMergedFileCompareCustomID();
+
+                    String[] tempTotal = new String[iLoopMergedFileCompareCustomID.length + jLoopMergedFileCompareCustomID.length];
+
+                    System.arraycopy(iLoopMergedFileCompareCustomID, 0, tempTotal, 0, iLoopMergedFileCompareCustomID.length);
+                    System.arraycopy(jLoopMergedFileCompareCustomID, 0, tempTotal, iLoopMergedFileCompareCustomID.length, jLoopMergedFileCompareCustomID.length);
+
+                    lstDocType.setMergedFileCompareCustomID(tempTotal);
+                    //----
+                    //-------
+                    boolean tempFlag = true;
+                    for (LstDocType tempData :
+                            hashSet) {
+                        if (tempData.getTypeId() == iLoopLstDocType.getTypeId()) {
+                            tempFlag = false;
+                            break;
+                        }
+                    }
+                    if (tempFlag)
+                        hashSet.add(lstDocType);
+                    //----
+                    flag = true;
+                }
+            }
+
+            if (!flag) {
+                LstDocType lstDocType = new LstDocType();
+                lstDocType.setTypeId(iLoopLstDocType.getTypeId());
+                lstDocType.setTypeName(iLoopLstDocType.getTypeName());
+                lstDocType.setAbbreviation(iLoopLstDocType.getAbbreviation());
+                lstDocType.setCreatedDate(iLoopLstDocType.getCreatedDate());
+                lstDocType.setPageCount(iLoopLstDocType.getPageCount());
+                lstDocType.setPageNumber(iLoopLstDocType.getPageNumber());
+                lstDocType.setMergedFileCompareCustomID(iLoopLstDocType.getMergedFileCompareCustomID());
+                //-------
+                boolean tempFlag = true;
+                for (LstDocType tempData :
+                        hashSet) {
+                    if (tempData.getTypeId() == iLoopLstDocType.getTypeId()) {
+                        tempFlag = false;
+                        break;
+                    }
+                }
+                if (tempFlag)
+                    hashSet.add(lstDocType);
+                //----
+            }
+        }
+        return hashSet;
+    }
+
+}

@@ -26,6 +26,10 @@ public class LstDocTypeRequest {
     @Expose
     private Integer pageNumber;
 
+
+    private String mergedFileCompareCustomID = "";
+
+
     public String getCreatedDate() {
         return createdDate;
     }
@@ -73,5 +77,13 @@ public class LstDocTypeRequest {
 
     public void setPageNumber(Integer pageNumber) {
         this.pageNumber = pageNumber;
+    }
+
+    public String getMergedFileCompareCustomID() {
+        return mergedFileCompareCustomID;
+    }
+
+    public void setMergedFileCompareCustomID(String mergedFileCompareCustomID) {
+        this.mergedFileCompareCustomID = mergedFileCompareCustomID;
     }
 }

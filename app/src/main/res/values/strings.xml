@@ -79,6 +79,7 @@
     <string name="cancel">Cancel</string>
     <string name="selected_1">File name one</string>
     <string name="selected_2">File name two</string>
+    <string name="selected_files">File name both (one and two)</string>
     <string name="error_compare_patient">Please select same patient record to compare</string>
     <string name="ok">Ok</string>
     <string name="error_max_two_reports">You can not select more than two reports to compare</string>

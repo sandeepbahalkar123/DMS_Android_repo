@@ -20,6 +20,8 @@ public class LstDocCategory {
 
     private int totalDocTypePageCount = -1;
 
+    private String[] mergedFileCompareCustomID = null;
+
     public Integer getCategoryId() {
         return categoryId;
     }
@@ -50,10 +52,13 @@ public class LstDocCategory {
 
         if (totalDocTypePageCount == -1) {
             int count = 0;
-            for (LstDocType temp :
-                    lstDocTypes) {
-                count = count + temp.getPageCount();
+            if (lstDocTypes != null) {
+                for (LstDocType temp :
+                        lstDocTypes) {
+                    count = count + temp.getPageCount();
+                }
             }
+
             setTotalDocTypePageCount(count);
         }
         return totalDocTypePageCount;
@@ -61,6 +66,14 @@ public class LstDocCategory {
 
     public void setTotalDocTypePageCount(int totalDocTypePageCount) {
         this.totalDocTypePageCount = totalDocTypePageCount;
+    }
+
+    public String[] getMergedFileCompareCustomID() {
+        return mergedFileCompareCustomID;
+    }
+
+    public void setMergedFileCompareCustomID(String[] mergedFileCompareCustomID) {
+        this.mergedFileCompareCustomID = mergedFileCompareCustomID;
     }
 
     @Override

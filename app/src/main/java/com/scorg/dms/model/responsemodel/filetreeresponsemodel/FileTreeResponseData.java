@@ -20,4 +20,10 @@ public class FileTreeResponseData {
         this.archiveData = archiveData;
     }
 
+    @Override
+    public String toString() {
+        return "FileTreeResponseData{" +
+                "archiveData=" + archiveData +
+                '}';
+    }
 }
