@@ -565,6 +565,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     //-- For treeview annotations
     @Override
     public void onClick(TreeNode node, Object value, View nodeView) {
+
+        //---To invisible pdf error message pdf view
+        mMessageForFirstFile.setVisibility(View.GONE);
+        mMessageForSecondFile.setVisibility(View.GONE);
+        //---
+
         mDrawer.closeDrawer(GravityCompat.END);
         String idToFetch[] = null;
 
