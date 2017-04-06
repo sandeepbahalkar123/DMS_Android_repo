@@ -567,7 +567,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         }
 
         mAndroidTreeView = new AndroidTreeView(this, root);
-        mAndroidTreeView.setDefaultAnimation(true);
+        mAndroidTreeView.setDefaultAnimation(false);
         mAndroidTreeView.setUse2dScroll(true);
         mAndroidTreeView.setDefaultNodeClickListener(this);
         mAndroidTreeView.setUseAutoToggle(false);
