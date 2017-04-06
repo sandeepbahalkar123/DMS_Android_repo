@@ -1,13 +1,11 @@
 package com.scorg.dms.adapters;
 
 import android.content.Context;
-
 import android.graphics.Color;
 import android.graphics.EmbossMaskFilter;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Message;
-
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scorg.dms.R;
-
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationList;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 
@@ -33,14 +31,14 @@ import java.util.Random;
 
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     private Handler mAddedTagsEventHandler;
-    private HashMap<String, String> mAddedTagsForFiltering;
+    private HashMap<String, Object> mAddedTagsForFiltering;
     private ArrayList<String> mTagsDataSet;
     private Context mContext;
     LayoutInflater inflater;
     private Random mRandom = new Random();
     private String TAG = this.getClass().getName();
 
-    public TagAdapter(Context context, ArrayList<String> list, HashMap<String, String> mAddedTagsForFiltering, Handler mAddedTagsEventHandler) {
+    public TagAdapter(Context context, ArrayList<String> list, HashMap<String, Object> mAddedTagsForFiltering, Handler mAddedTagsEventHandler) {
         mTagsDataSet = list;
         mContext = context;
         this.mAddedTagsForFiltering = mAddedTagsForFiltering;
@@ -48,23 +46,23 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public TagAdapter(Context context, HashMap<String, String> mAddedTagsForFiltering, Handler mAddedTagsEventHandler) {
+    public TagAdapter(Context context, HashMap<String, Object> mAddedTagsForFiltering, Handler mAddedTagsEventHandler) {
         mContext = context;
         this.mAddedTagsForFiltering = mAddedTagsForFiltering;
         this.mAddedTagsEventHandler = mAddedTagsEventHandler;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mTagsDataSet = new ArrayList<String>();
 
-        for (Map.Entry<String, String> entry : mAddedTagsForFiltering.entrySet()) {
-            if (!DmsConstants.BLANK.equalsIgnoreCase(entry.getValue())) {
-
-                if (entry.getValue().contains("|")) {
-                    mTagsDataSet.add("" + entry.getValue());
-                } else {
-                    //-- For other than annotation list
-                    mTagsDataSet.add(entry.getValue() + "|" + entry.getKey());
-                }
+        for (Map.Entry<String, Object> entry : mAddedTagsForFiltering.entrySet()) {
+            String tempValue;
+            if (entry.getValue() instanceof DocTypeList || entry.getValue() instanceof AnnotationList) {
+                tempValue = entry.getKey();
+            } else {
+                tempValue = (entry.getValue().toString() + "|" + entry.getKey());
             }
+            if (!DmsConstants.BLANK.equalsIgnoreCase(tempValue))
+                mTagsDataSet.add(tempValue);
+
         }
     }
 
@@ -193,8 +191,6 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 notifyItemRangeChanged(position, mTagsDataSet.size());
 
                 mAddedTagsForFiltering.remove(tag);
-
-
                 mAddedTagsEventHandler.sendMessage(new Message());
 
                 CommonMethods.Log(TAG, mAddedTagsForFiltering.toString());
@@ -280,18 +276,19 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     public String getUpdatedTagValues(String key, String position) {
         StringBuilder mGeneratedValue = new StringBuilder();
         if (key.startsWith(mContext.getString(R.string.documenttype))) {
-            for (Map.Entry<String, String> entry : mAddedTagsForFiltering.entrySet()) {
-                if (entry.getKey().startsWith(key)) {
-                    if (entry.getValue().contains("|")) {
-                        String[] split = entry.getValue().split("\\|");
-                        mGeneratedValue.append(split[1] + ",");
-                    } else {
-                        mGeneratedValue.append(entry.getValue());
-                    }
-                }
+            for (Map.Entry<String, Object> entry : mAddedTagsForFiltering.entrySet()) {
+                if (entry.getValue() instanceof AnnotationList) {
+                    for (DocTypeList docTypeList : ((AnnotationList) entry.getValue()).getDocTypeList())
+                        mGeneratedValue.append(docTypeList.getTypeId() + ",");
+                } else if (entry.getValue() instanceof DocTypeList)
+                    mGeneratedValue.append(((DocTypeList) entry.getValue()).getTypeId() + ",");
             }
         } else {
-            String s = mAddedTagsForFiltering.get(key);
+            Object o = mAddedTagsForFiltering.get(key);
+            String s = null;
+            if (o != null)
+                s = o.toString();
+
             if (s != null) {
                 if (s.contains(":")) {
                     String[] split = s.split(":");

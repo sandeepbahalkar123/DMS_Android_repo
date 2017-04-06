@@ -209,12 +209,12 @@ public class AndroidTreeView {
         } else {
             expandNode(node, false);
             if (expandedOrCollapsed)
-            if (node.getParent() != null)
-                for (TreeNode node1 : node.getParent().getChildren()) {
-                    if (node1 == node)
-                        expandNode(node1, false);
-                    else collapseNode(node1, false);
-                }
+                if (node.getParent() != null)
+                    for (TreeNode node1 : node.getParent().getChildren()) {
+                        if (node1 == node)
+                            expandNode(node1, false);
+                        else collapseNode(node1, false);
+                    }
         }
 
     }
@@ -271,9 +271,9 @@ public class AndroidTreeView {
             @Override
             public void onClick(View v) {
                 if (n.getClickListener() != null) {
-                    n.getClickListener().onClick(n, n.getValue(),nodeView);
+                    n.getClickListener().onClick(n, n.getValue(), nodeView);
                 } else if (nodeClickListener != null) {
-                    nodeClickListener.onClick(n, n.getValue(),nodeView);
+                    nodeClickListener.onClick(n, n.getValue(), nodeView);
                 }
                 if (enableAutoToggle) {
                     toggleNode(n, false);
