@@ -2,6 +2,7 @@
 <resources>
 
     <color name="reset_yellow">#ffa100</color>
+    <color name="apply_blue">#6AB0D3</color>
     <color name="dcr_customer_name">#010101</color>
     <color name="dialog_cancel">#ed1c24</color>
     <color name="dialog_compare">#f8b911</color>

@@ -394,6 +394,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             ArchiveDatum archiveDatumObject = archiveData.get(i);
 
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
+            selectableHeaderHolder.setExpandedOrCollapsed(true);
             selectableHeaderHolder.setNodeValueColor(textColor);
 
             //---- To bold clicked text in tree
@@ -415,7 +416,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 // Label(pageCount)|id
                 dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId();
 
-                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocCategoryObjectLeftPadding);
+                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded,lstDocTypeChildLeftPadding);
+                docCatSelectableHeaderHolder.setExpandedOrCollapsed(true);
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);
 
                 //---- To bold clicked text in tree
@@ -436,6 +438,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
                     //-------
                     ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
+                    lstDocTypeChildSelectableHeaderHolder.setExpandedOrCollapsed(true);
                     lstDocTypeChildSelectableHeaderHolder.setNodeValueColor(textColor);
 
                     //---- To bold clicked text in tree
@@ -561,7 +564,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     //-- For treeview annotations
     @Override
-    public void onClick(TreeNode node, Object value) {
+    public void onClick(TreeNode node, Object value , View nodeView) {
 
         mDrawer.closeDrawer(GravityCompat.END);
         String idToFetch[] = null;

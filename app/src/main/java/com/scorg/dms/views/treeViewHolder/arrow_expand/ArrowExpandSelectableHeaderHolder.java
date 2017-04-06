@@ -23,11 +23,14 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
     private int leftPadding;
     private boolean isDefaultExpanded;
     private TextView tvValue;
+    private boolean isExpandedOrCollapsed;
     private PrintView arrowView;
     private CheckBox nodeSelector;
     private LinearLayout mainContentLayout;
 
+
     public ArrowExpandSelectableHeaderHolder(Context context, boolean isDefaultExpanded) {
+
         this(context, isDefaultExpanded, (int) (context.getResources().getDimension(R.dimen.dp10) / context.getResources().getDisplayMetrics().density));
     }
 
@@ -39,7 +42,7 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
     }
 
     @Override
-    public View createNodeView(final TreeNode node, ArrowExpandIconTreeItemHolder.IconTreeItem value) {
+    public View createNodeView(final TreeNode node, final ArrowExpandIconTreeItemHolder.IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.treeview_arrow_expandable_header, null, false);
 
@@ -60,6 +63,7 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
             tvValue.setText(value.text.toString());
         }
 
+
         arrowView = (PrintView) view.findViewById(R.id.arrow_icon);
         arrowView.setPadding(20, 10, 10, 10);
         if (node.isLeaf()) {
@@ -68,7 +72,12 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         arrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tView.toggleNode(node);
+                if (isExpandedOrCollapsed()) {
+                    tView.toggleNode(node, isExpandedOrCollapsed());
+                }
+                else{
+                    tView.toggleNode(node, isExpandedOrCollapsed());
+                }
             }
         });
 
@@ -80,14 +89,22 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
                 for (TreeNode n : node.getChildren()) {
                     getTreeView().selectNode(n, isChecked);
                 }
-            }
-        });
-        nodeSelector.setChecked(node.isSelected());
+                nodeSelector.setChecked(node.isSelected());
 
-        node.setExpanded(isDefaultExpanded);
+            }
+
+        });
+        if (isExpandedOrCollapsed) {
+            if (node.isFirstChild()) {
+                node.setExpanded(isDefaultExpanded);
+            }
+        }else{
+            node.setExpanded(isDefaultExpanded);
+        }
 
         return view;
     }
+
 
     @Override
     public void toggle(boolean active) {
@@ -112,7 +129,16 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         return isTreeLabelBold;
     }
 
+    public boolean isExpandedOrCollapsed() {
+        return isExpandedOrCollapsed;
+    }
+
+    public void setExpandedOrCollapsed(boolean expandedOrCollapsed) {
+        isExpandedOrCollapsed = expandedOrCollapsed;
+    }
+
     public void setTreeLabelBold(boolean treeLabelBold) {
         isTreeLabelBold = treeLabelBold;
     }
+
 }

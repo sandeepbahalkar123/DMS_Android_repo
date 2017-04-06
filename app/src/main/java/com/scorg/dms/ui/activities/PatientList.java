@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
@@ -34,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
@@ -54,25 +56,22 @@ import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearc
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
-import com.scorg.dms.views.treeViewHolder.IconTreeItemHolder;
-import com.scorg.dms.views.treeViewHolder.SelectableHeaderHolder;
-import com.scorg.dms.views.treeViewHolder.SelectableItemHolder;
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
+import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandSelectableHeaderHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener {
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener,TreeNode.TreeNodeClickListener {
+
 
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
@@ -511,7 +510,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 showSearchResultRequestModel.setFileType(DmsConstants.BLANK);
             }
         }
-
         showSearchResultRequestModel.setDateType(mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE, null));
         showSearchResultRequestModel.setFromDate(mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, null));
         showSearchResultRequestModel.setToDate(mTagsAdapter.getUpdatedTagValues(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, null));
@@ -528,15 +526,20 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mAnnotationTreeViewContainer.removeAllViews();
 
         TreeNode root = TreeNode.root();
+        int lstDocCategoryObjectLeftPadding = (int) (getResources().getDimension(R.dimen.dp30) / getResources().getDisplayMetrics().density);
+        int lstDocTypeChildLeftPadding = (int) (getResources().getDimension(R.dimen.dp50) / getResources().getDisplayMetrics().density);
+        int textColor = ContextCompat.getColor(this, R.color.black);
 
         List<AnnotationList> annotationLists = annotationListData.getAnnotationLists();
 
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
 
-            SelectableHeaderHolder selectableHeaderHolder = new SelectableHeaderHolder(this, isExpanded);
-            TreeNode folder1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() + "|" + DmsConstants.CATEGORY_NAME))
+            ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
+            selectableHeaderHolder.setExpandedOrCollapsed(true);
+            TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() ,annotationCategoryObject,i))
                     .setViewHolder(selectableHeaderHolder);
+
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
 
@@ -544,16 +547,24 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 DocTypeList docTypeListObject = docTypeList.get(j);
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
-                TreeNode file3 = new TreeNode(dataToShow).setViewHolder(new SelectableItemHolder(this));
-                folder1.addChildren(file3);
+                ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
+                lstDocTypeChildSelectableHeaderHolder.setExpandedOrCollapsed(true);
+                TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, docTypeListObject, i))
+                        .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
+
+                folder1.addChildren(lstDocTypeChildFolder);
             }
             root.addChildren(folder1);
         }
 
         mAndroidTreeView = new AndroidTreeView(this, root);
         mAndroidTreeView.setDefaultAnimation(true);
-        mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
+        mAndroidTreeView.setUse2dScroll(true);
+        mAndroidTreeView.setDefaultNodeClickListener(this);
+        mAndroidTreeView.setUseAutoToggle(false);
         mAndroidTreeView.setSelectionModeEnabled(true);
+        mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
+
 
     }
 
@@ -597,7 +608,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
     private String[] getSelectedAnnotations() {
         String parent = "";
         HashSet<String> annotationList = new HashSet<String>();
@@ -608,7 +618,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 for (TreeNode data :
                         selected) {
 
-                    String dataValue = data.getValue().toString();
+                    String dataValue = ((ArrowExpandIconTreeItemHolder.IconTreeItem) data.getValue()).text.toString();
                     //-- This is done for child only, no parent name will come in the list.
                     if (dataValue.contains("|")) {
                         annotationList.add(getString(R.string.documenttype) + dataValue);
@@ -620,6 +630,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         String[] strings = annotationList.toArray(new String[annotationList.size()]);
         return strings;
     }
+
+
 
 
     protected void onTextChanged() {
@@ -880,7 +892,16 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     }
 
     @Override
-    public void onClick(TreeNode node, Object value) {
-        Log.d(TAG, String.valueOf(node.isSelected()));
+    public void onClick(TreeNode node, Object value, View nodeView) {
+
+        CheckBox nodeSelector = (CheckBox) nodeView.findViewById(R.id.node_selector);
+        if (nodeSelector.isChecked()) {
+            nodeSelector.setChecked(false);
+            node.setSelected(false);
+        } else {
+            nodeSelector.setChecked(true);
+            node.setSelected(true);
+        }
+
     }
 }
