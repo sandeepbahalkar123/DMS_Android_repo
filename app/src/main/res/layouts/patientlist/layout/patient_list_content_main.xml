@@ -50,7 +50,7 @@
             android:layout_marginEnd="@dimen/fab_margin_right"
             android:layout_marginRight="@dimen/fab_margin"
             app:backgroundTint="@color/colorPrimaryDark"
-            app:srcCompat="@mipmap/funnel" />
+            app:srcCompat="@drawable/ic_filter" />
 
     </FrameLayout>
 
