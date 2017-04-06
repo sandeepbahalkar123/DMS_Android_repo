@@ -549,7 +549,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() ,annotationCategoryObject,i))
                     .setViewHolder(selectableHeaderHolder);
 
-
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
 
             for (int j = 0; j < docTypeList.size(); j++) {
