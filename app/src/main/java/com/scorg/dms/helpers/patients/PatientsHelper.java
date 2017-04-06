@@ -102,6 +102,7 @@ public class PatientsHelper implements ConnectionListener {
 
                     for (int k = 0; k < fileTreeResponseData.getArchiveData().size(); k++) {
                         ArchiveDatum dataTemp = fileTreeResponseData.getArchiveData().get(k);
+                        dataTemp.setMergedFileCompareCustomID(new String[]{tempList[k]});
                         List<LstDocCategory> lstDocCategories = dataTemp.getLstDocCategories();
                         for (int i = 0; i < lstDocCategories.size(); i++) {
                             LstDocCategory dataTempLstDocCategory = lstDocCategories.get(i);
