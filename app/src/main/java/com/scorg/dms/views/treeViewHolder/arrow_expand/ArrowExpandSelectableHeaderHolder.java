@@ -23,6 +23,7 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
     private int leftPadding;
     private boolean isDefaultExpanded;
     private TextView tvValue;
+    private boolean isExpandedOrCollapsed;
     private PrintView arrowView;
     private CheckBox nodeSelector;
     private LinearLayout mainContentLayout;
@@ -41,7 +42,7 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
     }
 
     @Override
-    public View createNodeView(final TreeNode node, ArrowExpandIconTreeItemHolder.IconTreeItem value) {
+    public View createNodeView(final TreeNode node, final ArrowExpandIconTreeItemHolder.IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.treeview_arrow_expandable_header, null, false);
 
@@ -71,7 +72,12 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         arrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tView.toggleNode(node);
+                if (isExpandedOrCollapsed()) {
+                    tView.toggleNode(node, isExpandedOrCollapsed());
+                }
+                else{
+                    tView.toggleNode(node, isExpandedOrCollapsed());
+                }
             }
         });
 
@@ -88,8 +94,13 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
             }
 
         });
-
-        node.setExpanded(isDefaultExpanded);
+        if (isExpandedOrCollapsed) {
+            if (node.isFirstChild()) {
+                node.setExpanded(isDefaultExpanded);
+            }
+        }else{
+            node.setExpanded(isDefaultExpanded);
+        }
 
         return view;
     }
@@ -118,8 +129,13 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
         return isTreeLabelBold;
     }
 
+    public boolean isExpandedOrCollapsed() {
+        return isExpandedOrCollapsed;
+    }
 
-
+    public void setExpandedOrCollapsed(boolean expandedOrCollapsed) {
+        isExpandedOrCollapsed = expandedOrCollapsed;
+    }
 
     public void setTreeLabelBold(boolean treeLabelBold) {
         isTreeLabelBold = treeLabelBold;

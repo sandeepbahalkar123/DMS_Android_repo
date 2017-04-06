@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
@@ -535,6 +536,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationList annotationCategoryObject = annotationLists.get(i);
 
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
+            selectableHeaderHolder.setExpandedOrCollapsed(true);
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() ,annotationCategoryObject,i))
                     .setViewHolder(selectableHeaderHolder);
 
@@ -546,6 +548,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
                 ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
+                lstDocTypeChildSelectableHeaderHolder.setExpandedOrCollapsed(true);
                 TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, docTypeListObject, i))
                         .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
 
@@ -605,7 +608,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
     private String[] getSelectedAnnotations() {
         String parent = "";
         HashSet<String> annotationList = new HashSet<String>();
@@ -616,7 +618,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 for (TreeNode data :
                         selected) {
 
-                    String dataValue = data.getValue().toString();
+                    String dataValue = ((ArrowExpandIconTreeItemHolder.IconTreeItem) data.getValue()).text.toString();
                     //-- This is done for child only, no parent name will come in the list.
                     if (dataValue.contains("|")) {
                         annotationList.add(getString(R.string.documenttype) + dataValue);
@@ -628,6 +630,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         String[] strings = annotationList.toArray(new String[annotationList.size()]);
         return strings;
     }
+
+
 
 
     protected void onTextChanged() {
@@ -888,7 +892,16 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     }
 
     @Override
-    public void onClick(TreeNode node, Object value) {
+    public void onClick(TreeNode node, Object value, View nodeView) {
+
+        CheckBox nodeSelector = (CheckBox) nodeView.findViewById(R.id.node_selector);
+        if (nodeSelector.isChecked()) {
+            nodeSelector.setChecked(false);
+            node.setSelected(false);
+        } else {
+            nodeSelector.setChecked(true);
+            node.setSelected(true);
+        }
 
     }
 }

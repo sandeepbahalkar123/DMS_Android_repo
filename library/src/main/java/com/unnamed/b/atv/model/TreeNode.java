@@ -212,7 +212,7 @@ public class TreeNode {
     }
 
     public interface TreeNodeClickListener {
-        void onClick(TreeNode node, Object value);
+        void onClick(TreeNode node, Object value, View nodeView);
     }
 
     public interface TreeNodeLongClickListener {

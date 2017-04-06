@@ -203,15 +203,21 @@ public class AndroidTreeView {
         }
     }
 
-    public void toggleNode(TreeNode node) {
+    public void toggleNode(TreeNode node, boolean expandedOrCollapsed) {
         if (node.isExpanded()) {
             collapseNode(node, false);
         } else {
             expandNode(node, false);
+            if (expandedOrCollapsed)
+            if (node.getParent() != null)
+                for (TreeNode node1 : node.getParent().getChildren()) {
+                    if (node1 == node)
+                        expandNode(node1, false);
+                    else collapseNode(node1, false);
+                }
         }
 
     }
-
     private void collapseNode(TreeNode node, final boolean includeSubnodes) {
         node.setExpanded(false);
         TreeNode.BaseNodeViewHolder nodeViewHolder = getViewHolderForNode(node);
@@ -265,12 +271,12 @@ public class AndroidTreeView {
             @Override
             public void onClick(View v) {
                 if (n.getClickListener() != null) {
-                    n.getClickListener().onClick(n, n.getValue());
+                    n.getClickListener().onClick(n, n.getValue(),nodeView);
                 } else if (nodeClickListener != null) {
-                    nodeClickListener.onClick(n, n.getValue());
+                    nodeClickListener.onClick(n, n.getValue(),nodeView);
                 }
                 if (enableAutoToggle) {
-                    toggleNode(n);
+                    toggleNode(n, false);
                 }
             }
         });
@@ -284,7 +290,7 @@ public class AndroidTreeView {
                     return nodeLongClickListener.onLongClick(n, n.getValue());
                 }
                 if (enableAutoToggle) {
-                    toggleNode(n);
+                    toggleNode(n, false);
                 }
                 return false;
             }
