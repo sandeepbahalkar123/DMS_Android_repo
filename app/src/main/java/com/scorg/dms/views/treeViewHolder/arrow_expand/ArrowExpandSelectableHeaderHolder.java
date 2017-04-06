@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.github.johnkil.print.PrintView;
 import com.scorg.dms.R;
-import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationList;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -41,7 +40,7 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
     }
 
     @Override
-    public View createNodeView(final TreeNode node, ArrowExpandIconTreeItemHolder.IconTreeItem value) {
+    public View createNodeView(final TreeNode node, final ArrowExpandIconTreeItemHolder.IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.treeview_arrow_expandable_header, null, false);
 
@@ -80,10 +79,6 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 node.setSelected(isChecked);
-                for (TreeNode n : node.getChildren()) {
-                    getTreeView().selectNode(n, isChecked);
-                }
-
                 if (node.isLeaf()) {
                     int totalBrother = node.getParent().getChildren().size();
                     int checkedCount = 0;
@@ -93,27 +88,30 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
                     }
 
                     if (isChecked) {
-                        if (checkedCount == totalBrother)
+                        if (checkedCount == totalBrother) {
                             getTreeView().selectNode(node.getParent(), isChecked);
+                        }
                     } else {
-                        if (checkedCount == totalBrother - 1)
+                        if (checkedCount == totalBrother - 1) {
                             getTreeView().selectNode(node.getParent(), isChecked);
+                        }
                     }
                 }
             }
         });
+
+        if (value.objectData instanceof DocTypeList) {
+            node.setSelected(((DocTypeList) value.objectData).
+                    getSelected());
+            nodeSelector.setChecked(((DocTypeList) value.objectData).
+                    getSelected());
+        }
+
         nodeSelector.setChecked(node.isSelected());
 
-        if (value.objectData instanceof AnnotationList)
-            nodeSelector.setChecked(((AnnotationList) value.objectData).
-
-                    getSelected());
-        else if (value.objectData instanceof DocTypeList)
-            nodeSelector.setChecked(((DocTypeList) value.objectData).
-
-                    getSelected());
-
-        node.setExpanded(isDefaultExpanded);
+        if (node.isFirstChild())
+            node.setExpanded(isDefaultExpanded);
+        else node.setExpanded(false);
 
         return view;
     }

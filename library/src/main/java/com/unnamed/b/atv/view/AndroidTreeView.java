@@ -208,6 +208,12 @@ public class AndroidTreeView {
             collapseNode(node, false);
         } else {
             expandNode(node, false);
+            if (node.getParent() != null)
+                for (TreeNode node1 : node.getParent().getChildren()) {
+                    if (node1 == node)
+                        expandNode(node1, false);
+                    else collapseNode(node1, false);
+                }
         }
 
     }

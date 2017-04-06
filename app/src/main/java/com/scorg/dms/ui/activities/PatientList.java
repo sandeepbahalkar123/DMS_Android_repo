@@ -20,7 +20,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +63,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -146,7 +145,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private TagAdapter mTagsAdapter;
     private RecyclerView mRecycleTag;
     private Handler mAddedTagsEventHandler;
-    private HashMap<String, String> mAddedTagsForFiltering;
+    private HashMap<String, Object> mAddedTagsForFiltering;
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
     private String TAG = this.getClass().getName();
@@ -186,7 +185,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     // intialize variables
     private void initializeVariables() {
         mContext = getApplicationContext();
-        mAddedTagsForFiltering = new HashMap<String, String>();
+        mAddedTagsForFiltering = new HashMap<String, Object>();
         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, DmsConstants.BLANK);
         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, DmsConstants.BLANK);
         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, DmsConstants.BLANK);
@@ -274,6 +273,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mFromDateEditText.setOnClickListener(this);
         mToDateEditText.setOnClickListener(this);
         mClearSearchAnnotationButton.setOnClickListener(this);
+        mClearSearchAnnotationButton.setVisibility(View.GONE);
         mUserName.setText(DmsPreferencesManager.getString(DmsConstants.USERNAME, mContext));
         //--------
         // setting adapter for spinner in header view of right drawer
@@ -471,12 +471,16 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     }
 
                     //----------
-                    String[] selectedAnnotations = getSelectedAnnotations();
-                    if (selectedAnnotations.length > 0) {
-                        for (String dataValue :
-                                selectedAnnotations) {
-                            //--- hashMap Data : childName|id
-                            mAddedTagsForFiltering.put(dataValue, dataValue);
+                    ArrayList<Object> selectedAnnotations = getSelectedAnnotations();
+                    for (Object dataValue :
+                            selectedAnnotations) {
+                        //--- hashMap Data : childName|id
+                        if (dataValue instanceof DocTypeList) {
+                            String dataValueString = getString(R.string.documenttype) + ((DocTypeList) dataValue).getTypeName() + "|" + String.valueOf(((DocTypeList) dataValue).getTypeId());
+                            mAddedTagsForFiltering.put(dataValueString, dataValue);
+                        } else if (dataValue instanceof AnnotationList) {
+                            String dataValueString = getString(R.string.documenttype) + ((AnnotationList) dataValue).getCategoryName() + "|" + String.valueOf(((AnnotationList) dataValue).getCategoryId());
+                            mAddedTagsForFiltering.put(dataValueString, dataValue);
                         }
                     }
 
@@ -493,6 +497,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mSearchAnnotationEditText.setText("");
                 break;
         }
+
     }
 
 
@@ -543,8 +548,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
-          /*  if (i % 2 == 0)
-                annotationCategoryObject.setSelected(true);*/
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
                     .setViewHolder(selectableHeaderHolder).setClickListener(this);
@@ -553,10 +556,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
             for (int j = 0; j < docTypeList.size(); j++) {
                 DocTypeList docTypeListObject = docTypeList.get(j);
-
-                /*if (j % 2 == 0)
-                    docTypeListObject.setSelected(true);*/
-
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
                 ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
@@ -572,8 +571,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mAndroidTreeView = new AndroidTreeView(this, root);
         mAndroidTreeView.setUseAutoToggle(false);
         mAndroidTreeView.setDefaultNodeClickListener(this);
-        mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
         mAndroidTreeView.setSelectionModeEnabled(true);
+        mAnnotationTreeViewContainer.addView(mAndroidTreeView.getView());
 
     }
 
@@ -618,9 +617,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     }
 
-    private String[] getSelectedAnnotations() {
+    private ArrayList<Object> getSelectedAnnotations() {
         String parent = "";
-        HashSet<String> annotationList = new HashSet<String>();
+        ArrayList<Object> annotationList = new ArrayList<>();
         if (mAndroidTreeView != null) {
             List<TreeNode> selected = mAndroidTreeView.getSelected();
 
@@ -628,17 +627,17 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 for (TreeNode data :
                         selected) {
 
-                    String dataValue = ((ArrowExpandIconTreeItemHolder.IconTreeItem) data.getValue()).text.toString();
-                    //-- This is done for child only, no parent name will come in the list.
-                    if (dataValue.contains("|")) {
-                        annotationList.add(getString(R.string.documenttype) + dataValue);
+                    if (data.getParent().isSelected()) {
+                        annotationList.add(((ArrowExpandIconTreeItemHolder.IconTreeItem) data.getParent().getValue()).objectData);
+                    } else {
+                        //-- This is done for child only, no parent name will come in the list.
+                        annotationList.add(((ArrowExpandIconTreeItemHolder.IconTreeItem) data.getValue()).objectData);
                     }
                 }
             }
         }
 
-        String[] strings = annotationList.toArray(new String[annotationList.size()]);
-        return strings;
+        return annotationList;
     }
 
 
@@ -658,6 +657,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             @Override
             public void afterTextChanged(Editable s) {
                 String enteredString = mSearchAnnotationEditText.getText().toString();
+                if (enteredString.equals(""))
+                    mClearSearchAnnotationButton.setVisibility(View.GONE);
+                else mClearSearchAnnotationButton.setVisibility(View.VISIBLE);
                 CommonMethods.Log(TAG, "onSearchAnnotationEditor:" + enteredString);
                 AnnotationListData annotationListData = new AnnotationListData();
                 List<AnnotationList> annotationTempList = new ArrayList<>();
@@ -666,20 +668,24 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     if (parentAnnotationList.size() > 0) {
 
                         for (AnnotationList tempParentObject : parentAnnotationList) {
-                            if (tempParentObject.getCategoryName().toLowerCase().contains(enteredString.toLowerCase())) {
-                                annotationTempList.add(tempParentObject);
-                            } else {
-                                //-------
-                                List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
-                                for (DocTypeList tempDocTypeObject : childDocTypeList) {
-                                    if (tempDocTypeObject.getTypeName().toLowerCase().startsWith(enteredString.toLowerCase())) {
-                                        annotationTempList.add(tempParentObject);
-                                        break;
-                                    }
+                            //-------
+                            List<DocTypeList> childDocTypeTemp = new ArrayList<DocTypeList>();
+                            List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
+                            for (DocTypeList tempDocTypeObject : childDocTypeList) {
+                                if (tempDocTypeObject.getTypeName().toLowerCase().startsWith(enteredString.toLowerCase())) {
+                                    childDocTypeTemp.add(tempDocTypeObject);
                                 }
-                                //------
                             }
 
+                            if (childDocTypeTemp.size() > 0) {
+                                AnnotationList annotationListTemp = new AnnotationList();
+//                                annotationListTemp.setSelected(tempParentObject.getSelected());
+                                annotationListTemp.setCategoryId(tempParentObject.getCategoryId());
+                                annotationListTemp.setCategoryName(tempParentObject.getCategoryName());
+                                annotationListTemp.setDocTypeList(childDocTypeTemp);
+                                annotationTempList.add(annotationListTemp);
+                            }
+                            //------
                         }
                     }
                 }
@@ -901,42 +907,35 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     @Override
     public void onClick(TreeNode node, Object value, View nodeView) {
-        Log.d(TAG, String.valueOf(node.isSelected()));
 
         CheckBox nodeSelector = (CheckBox) nodeView.findViewById(R.id.node_selector);
         if (nodeSelector.isChecked()) {
             nodeSelector.setChecked(false);
-            node.setSelected(false);
         } else {
             nodeSelector.setChecked(true);
-            node.setSelected(true);
         }
 
-        AnnotationList annotationListTemp = null;
+        if (!node.isLeaf()) {
+            for (TreeNode n : node.getChildren()) {
+                mAndroidTreeView.selectNode(n, nodeSelector.isChecked());
+            }
+            for (DocTypeList docTypeList : ((AnnotationList) ((ArrowExpandIconTreeItemHolder.IconTreeItem) value).objectData).getDocTypeList()) {
+                docTypeList.setSelected(nodeSelector.isChecked());
+            }
+        }
+
         DocTypeList docTypeListTemp = null;
         if (((ArrowExpandIconTreeItemHolder.IconTreeItem) value).objectData instanceof DocTypeList)
             docTypeListTemp = (DocTypeList) ((ArrowExpandIconTreeItemHolder.IconTreeItem) value).objectData;
-        else if (((ArrowExpandIconTreeItemHolder.IconTreeItem) value).objectData instanceof AnnotationList)
-            annotationListTemp = (AnnotationList) ((ArrowExpandIconTreeItemHolder.IconTreeItem) value).objectData;
 
-        for (int i = 0; i < mAnnotationListData.getAnnotationLists().size(); i++) {
-            AnnotationList annotationCategoryObject = mAnnotationListData.getAnnotationLists().get(i);
+        for (AnnotationList annotationCategoryObject : mAnnotationListData.getAnnotationLists()) {
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
-
-            if (annotationListTemp != null)
-                if (annotationCategoryObject.getCategoryId().equals(annotationListTemp.getCategoryId())) {
-                    annotationCategoryObject.setSelected(nodeSelector.isChecked());
-                    for (int j = 0; j < docTypeList.size(); j++) {
-                        DocTypeList docTypeListObject = docTypeList.get(j);
-                        docTypeListObject.setSelected(nodeSelector.isChecked());
-                    }
-                }
-
             if (docTypeListTemp != null)
-                for (int j = 0; j < docTypeList.size(); j++) {
-                    DocTypeList docTypeListObject = docTypeList.get(j);
-                    if (docTypeListObject.getTypeId().equals(docTypeListTemp.getTypeId()))
+                for (DocTypeList docTypeListObject : docTypeList) {
+                    if (docTypeListObject.getTypeId().equals(docTypeListTemp.getTypeId())) {
                         docTypeListObject.setSelected(nodeSelector.isChecked());
+                        node.setSelected(nodeSelector.isChecked());
+                    }
                 }
         }
 
