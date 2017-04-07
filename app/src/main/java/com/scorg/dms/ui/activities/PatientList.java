@@ -349,13 +349,17 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
      *
      * @return
      */
-    private boolean validate(String fromDate, String toDate) throws ParseException {
+    private boolean validate(String fromDate, String toDate)  {
         SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
         String message = null;
         if (fromDate.equalsIgnoreCase(toDate)) {
             message = getString(R.string.error_date_not_same);
-        } else if (dfDate.parse(fromDate).after(dfDate.parse(toDate))) {
-            message = getString(R.string.error_previous_date);
+        } else try {
+            if (dfDate.parse(fromDate).after(dfDate.parse(toDate))) {
+                message = getString(R.string.error_previous_date);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         if (message != null) {
@@ -423,11 +427,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 String toDate = mToDateEditText.getText().toString().trim();
                 boolean dateValidate = false;
                 if ((fromDate.length() != 0 && toDate.length() != 0)) {
-                    try {
+
                         dateValidate = validate(fromDate, toDate);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+
                 }
                 if (!dateValidate) {
 

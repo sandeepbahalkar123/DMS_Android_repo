@@ -71,11 +71,11 @@
     <string name="uhid">UHID</string>
     <string name="patient_list">Patient List</string>
     <string name="compare">Compare</string>
-    <string name="from_date">FromDate:</string>
-    <string name="to_date">ToDate:</string>
-    <string name="patient_name">PatientName:</string>
-    <string name="date_type">DateType:</string>
-    <string name="documenttype">DocType:</string>
+    <string name="from_date">From:</string>
+    <string name="to_date">To:</string>
+    <string name="patient_name">PName:</string>
+    <string name="date_type">DType:</string>
+    <string name="documenttype">DT:</string>
     <string name="enter_annotation">Annotation:</string>
     <string name="cancel">Cancel</string>
     <string name="selected_1">File name one</string>
@@ -98,19 +98,19 @@
 
     <string-array name="admission_date">
         <item>Select</item>
-        <item>IPD-Admission Date</item>
-        <item>IPD-Discharge Date</item>
-        <item>OPD-Visit Date</item>
+        <item>Admission Date</item>
+        <item>Discharge Date</item>
+        <item>Visit Date</item>
     </string-array>
 
     <string-array name="IPD">
         <item>Select</item>
-        <item>IPD-Admission Date</item>
-        <item>IPD-Discharge Date</item>
+        <item>Admission Date</item>
+        <item>Discharge Date</item>
     </string-array>
     <string-array name="OPD">
         <item>Select</item>
-        <item>OPD-Visit Date</item>
+        <item>Visit Date</item>
     </string-array>
     <string-array name="ids">
         <item>0</item>
