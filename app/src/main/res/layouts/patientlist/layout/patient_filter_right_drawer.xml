@@ -29,9 +29,10 @@
                 android:layout_weight="1"
                 android:drawableLeft="@mipmap/reset"
                 android:drawablePadding="@dimen/dp5"
+                android:textSize="@dimen/sp12"
+                android:textStyle="bold"
                 android:gravity="center|left"
                 android:text="@string/reset"
-                android:textStyle="bold"
                 android:textColor="@color/reset_yellow" />
 
             <TextView
@@ -39,8 +40,9 @@
                 android:layout_width="@dimen/dp0"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:textStyle="bold"
+                android:textSize="@dimen/sp12"
+                android:gravity="center"
                 android:text="Filter"
                 android:textColor="@color/white" />
 
@@ -49,9 +51,10 @@
                 android:layout_width="@dimen/dp0"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textStyle="bold"
                 android:drawableEnd="@mipmap/apply"
                 android:drawablePadding="@dimen/dp5"
+                android:textStyle="bold"
+                android:textSize="@dimen/sp12"
                 android:drawableRight="@mipmap/apply"
                 android:gravity="right|center_vertical"
                 android:text="@string/apply"
