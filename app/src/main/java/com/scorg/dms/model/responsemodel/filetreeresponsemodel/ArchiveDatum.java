@@ -1,6 +1,7 @@
 package com.scorg.dms.model.responsemodel.filetreeresponsemodel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -15,6 +16,7 @@ public class ArchiveDatum {
     @Expose
     private List<LstDocCategory> lstDocCategories = new ArrayList<LstDocCategory>();
 
+    private String[] mergedFileCompareCustomID = null;
 
     private int totalDocCategoryPageCount = -1;
 
@@ -52,11 +54,21 @@ public class ArchiveDatum {
         this.totalDocCategoryPageCount = totalDocCategoryPageCount;
     }
 
+    public String[] getMergedFileCompareCustomID() {
+        return mergedFileCompareCustomID;
+    }
+
+    public void setMergedFileCompareCustomID(String[] mergedFileCompareCustomID) {
+        this.mergedFileCompareCustomID = mergedFileCompareCustomID;
+    }
+
     @Override
     public String toString() {
         return "ArchiveDatum{" +
                 "fileType='" + fileType + '\'' +
                 ", lstDocCategories=" + lstDocCategories +
+                ", mergedFileCompareCustomID=" + Arrays.toString(mergedFileCompareCustomID) +
+                ", totalDocCategoryPageCount=" + totalDocCategoryPageCount +
                 '}';
     }
 }

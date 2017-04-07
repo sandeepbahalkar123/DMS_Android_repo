@@ -416,8 +416,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 // Label(pageCount)|id
                 dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId();
 
+
                 ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded,lstDocTypeChildLeftPadding);
                 docCatSelectableHeaderHolder.setOnlyOneNodeExpanded(true);
+
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);
 
                 //---- To bold clicked text in tree
@@ -564,7 +566,13 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     //-- For treeview annotations
     @Override
-    public void onClick(TreeNode node, Object value , View nodeView) {
+    public void onClick(TreeNode node, Object value, View nodeView) {
+
+        //---To invisible pdf error message pdf view
+        mMessageForFirstFile.setVisibility(View.GONE);
+        mMessageForSecondFile.setVisibility(View.GONE);
+        //---
+
         mDrawer.closeDrawer(GravityCompat.END);
         String idToFetch[] = null;
 
@@ -584,6 +592,14 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 List<LstDocCategory> lstDocCategories = tempData.getLstDocCategories();
                 mPreviousClickedTreeElement.put(mClickedTreeStructureLevel, tempData.getFileType());
                 getPdfDataRequestModel.setLstDocTypeRequests(createLstDocTypeRequest(lstDocCategories));
+
+                //----
+                if (tempData.getMergedFileCompareCustomID().length != 2) {
+                    mMergedRequestCalled = tempData.getMergedFileCompareCustomID()[0];
+                } else {
+                    idToFetch = tempData.getMergedFileCompareCustomID();
+                }
+                //----
 
             } else if (value1.objectData instanceof LstDocCategory) {
                 LstDocCategory objectData = (LstDocCategory) value1.objectData;
@@ -880,9 +896,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             lstDocCategories.add(key);
             archiveDatum.setLstDocCategories(lstDocCategories);
         }
+        //-- This is done to maintain parent element pattern for both first & second file view.
+        archiveDatum.setMergedFileCompareCustomID(new String[]{"0", "1"});
 
         ArrayList<ArchiveDatum> lstArchiveDatum = new ArrayList<ArchiveDatum>();
         lstArchiveDatum.add(archiveDatum);
+
         mFileTreeResponseData.setArchiveData(lstArchiveDatum);
         CommonMethods.Log(TAG, "FINAL COMBINED HASHMAP LIST: " + mFileTreeResponseData.toString());
         //-----
