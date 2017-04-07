@@ -106,6 +106,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
             if (dataToShow.startsWith(mContext.getString(R.string.Select)) && dataToShow.contains(":")) {
                 dataToShow = dataToShow.replace(mContext.getString(R.string.Select) + ":", "");
             }
+
             //---------------END
 
             //---- TO set dataToSet : START
