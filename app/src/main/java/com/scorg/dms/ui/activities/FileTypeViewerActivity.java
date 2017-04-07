@@ -825,7 +825,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
             for (Map.Entry<LstDocCategory, List<LstDocType>> entry : mergedLstDocTypeHashMap.entrySet()) {
                 LstDocCategory key = entry.getKey();
-                mapInsertedStatus = (iLoopLstDocCategory.getCategoryId() == key.getCategoryId()) ? true : false;
+                if (iLoopLstDocCategory.getCategoryId() == key.getCategoryId()) {
+                    mapInsertedStatus = true;
+                    break;
+                } else {
+                    mapInsertedStatus = false;
+                }
             }
             //---
 
@@ -886,14 +891,14 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         //----final object creation
         ArchiveDatum archiveDatum = new ArchiveDatum();
+        ArrayList<LstDocCategory> lstDocCategories = new ArrayList<LstDocCategory>();
         for (Map.Entry<LstDocCategory, List<LstDocType>> entry : mergedLstDocTypeHashMap.entrySet()) {
             LstDocCategory key = entry.getKey();
             archiveDatum.setFileType(fileType);
             key.setLstDocTypes(entry.getValue());
-            ArrayList<LstDocCategory> lstDocCategories = new ArrayList<LstDocCategory>();
             lstDocCategories.add(key);
-            archiveDatum.setLstDocCategories(lstDocCategories);
         }
+        archiveDatum.setLstDocCategories(lstDocCategories);
         //-- This is done to maintain parent element pattern for both first & second file view.
         archiveDatum.setMergedFileCompareCustomID(new String[]{"0", "1"});
 

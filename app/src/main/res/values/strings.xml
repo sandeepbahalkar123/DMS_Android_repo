@@ -27,7 +27,6 @@
     <string name="error_date_not_same">Date cannot be same</string>
     <string name="error_previous_date">To date should be greater than from date</string>
     <string name="selectToDate">Enter to date</string>
-    <string name="error_enter_uhid">Enter UHID</string>
     <string name="searchbyPatient">Search By Patient Name</string>
     <string name="enterAnnotation">Enter Annotation</string>
     <string name="searchAnnotation">Search Documents</string>
@@ -59,8 +58,10 @@
     </string>
 
     <string name="visit_date">Visit Date:\u0020</string>
-    <string name="OPD">Enter OPD</string>
-    <string name="IPD">Enter IPD</string>
+    <string name="error_enter_opd">Enter OPD</string>
+    <string name="error_enter_ipd">Enter IPD</string>
+    <string name="error_enter_uhid">Enter UHID</string>
+
     <string name="Select">Select</string>
     <string name="admission_date">Admission Date:\u0020</string>
     <string name="discharge_date">Discharge Date:\u0020</string>
@@ -103,12 +104,12 @@
         <item>OPD-Visit Date</item>
     </string-array>
 
-    <string-array name="IPD">
+    <string-array name="ipd_array">
         <item>Select</item>
         <item>IPD-Admission Date</item>
         <item>IPD-Discharge Date</item>
     </string-array>
-    <string-array name="OPD">
+    <string-array name="opd_array">
         <item>Select</item>
         <item>OPD-Visit Date</item>
     </string-array>
