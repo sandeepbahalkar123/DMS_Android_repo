@@ -325,7 +325,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
 
-            createAnnotationTreeStructure(mAnnotationListData, true);
+            createAnnotationTreeStructure(mAnnotationListData, false);
         }
     }
 
@@ -378,7 +378,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 if (mAnnotationListData == null) {
                     mPatientsHelper.doGetAllAnnotations();
                 } else {
-                    createAnnotationTreeStructure(mAnnotationListData, true);
+                    createAnnotationTreeStructure(mAnnotationListData, false);
                 }
 
                 break;
@@ -545,7 +545,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         for (int i = 0; i < annotationLists.size(); i++) {
             AnnotationList annotationCategoryObject = annotationLists.get(i);
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
-            selectableHeaderHolder.setExpandedOrCollapsed(true);
+            selectableHeaderHolder.setOnlyOneNodeExpanded(true);
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() ,annotationCategoryObject,i))
                     .setViewHolder(selectableHeaderHolder);
 
@@ -556,7 +556,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 String dataToShow = docTypeListObject.getTypeName() + "|" + docTypeListObject.getTypeId();
 
                 ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
-                lstDocTypeChildSelectableHeaderHolder.setExpandedOrCollapsed(true);
+                lstDocTypeChildSelectableHeaderHolder.setOnlyOneNodeExpanded(true);
                 TreeNode lstDocTypeChildFolder = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, dataToShow, docTypeListObject, i))
                         .setViewHolder(lstDocTypeChildSelectableHeaderHolder);
 
@@ -689,7 +689,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     }
                 }
                 annotationListData.setAnnotationLists(annotationTempList);
-                createAnnotationTreeStructure(annotationListData, true);
+                createAnnotationTreeStructure(annotationListData, false);
             }
         });
     }

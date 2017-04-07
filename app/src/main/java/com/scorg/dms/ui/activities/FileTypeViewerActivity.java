@@ -394,7 +394,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             ArchiveDatum archiveDatumObject = archiveData.get(i);
 
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
-            selectableHeaderHolder.setExpandedOrCollapsed(true);
+            selectableHeaderHolder.setOnlyOneNodeExpanded(true);
             selectableHeaderHolder.setNodeValueColor(textColor);
 
             //---- To bold clicked text in tree
@@ -416,8 +416,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 // Label(pageCount)|id
                 dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId();
 
-                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
-                docCatSelectableHeaderHolder.setExpandedOrCollapsed(true);
+
+                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded,lstDocTypeChildLeftPadding);
+                docCatSelectableHeaderHolder.setOnlyOneNodeExpanded(true);
+
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);
 
                 //---- To bold clicked text in tree
@@ -438,7 +440,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
                     //-------
                     ArrowExpandSelectableHeaderHolder lstDocTypeChildSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
-                    lstDocTypeChildSelectableHeaderHolder.setExpandedOrCollapsed(true);
+                    lstDocTypeChildSelectableHeaderHolder.setOnlyOneNodeExpanded(true);
                     lstDocTypeChildSelectableHeaderHolder.setNodeValueColor(textColor);
 
                     //---- To bold clicked text in tree
