@@ -351,7 +351,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
      *
      * @return
      */
-    private boolean validate(String fromDate, String toDate)  {
+    private boolean validate(String fromDate, String toDate) {
         SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
         String message = null;
         if (fromDate.equalsIgnoreCase(toDate)) {
@@ -429,31 +429,27 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 String toDate = mToDateEditText.getText().toString().trim();
                 boolean dateValidate = false;
                 if ((fromDate.length() != 0 && toDate.length() != 0)) {
-
-                        dateValidate = validate(fromDate, toDate);
-
+                    dateValidate = validate(fromDate, toDate);
                 }
                 if (!dateValidate) {
 
                     //*********adding field values in arrayList to generate tags in recycler view
                     //we are adding refrence id and file type value in FILE_TYPE parameter
                     //Reference id = UHID or OPD or IPD number *********//
+                    //--- FileType and enteredValue validation : START
                     String enteredUHIDValue = mUHIDEditText.getText().toString().trim();
-
-                    if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
-                        if (mSelectedId.equalsIgnoreCase(getString(R.string.uhid)) && (enteredUHIDValue.length() == 0)) {
-                            CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_uhid));
-                            break;
-                        } else if (mSelectedId.equalsIgnoreCase(getString(R.string.ipd)) && (enteredUHIDValue.length() == 0)) {
-                            CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_ipd));
-                            break;
-                        } else if (mSelectedId.equalsIgnoreCase(getString(R.string.opd)) && (enteredUHIDValue.length() == 0)) {
-                            CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_opd));
-                            break;
-                        } else {
+                    if (mSelectedId.equalsIgnoreCase(getString(R.string.uhid)) && (enteredUHIDValue.length() == 0)) {
+                        CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_uhid));
+                        break;
+                    } else if ((enteredUHIDValue.length() != 0) && (mSelectedId.equalsIgnoreCase(getString(R.string.Select)))) {
+                        CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.Select) + " " + getString(R.string.ipd) + "/" + getString(R.string.opd) + "/" + getString(R.string.uhid));
+                        break;
+                    } else {
+                        if (!mSelectedId.equalsIgnoreCase(getString(R.string.Select))) {
                             mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + enteredUHIDValue);
                         }
                     }
+                    //--- FileType and enteredValue validation : END
 
                     if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
                         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE, getString(R.string.date_type) + mAdmissionDate);

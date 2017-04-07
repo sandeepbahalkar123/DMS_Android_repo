@@ -417,7 +417,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId();
 
 
-                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded,lstDocTypeChildLeftPadding);
+                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
                 docCatSelectableHeaderHolder.setOnlyOneNodeExpanded(true);
 
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);

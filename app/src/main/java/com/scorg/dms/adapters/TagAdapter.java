@@ -107,6 +107,11 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 dataToShow = dataToShow.replace(mContext.getString(R.string.Select) + ":", "");
             }
 
+            // THIS IS DONE FOR IF, ONLY FILETYPE SELECTED(IPD/OPD) And no value enter
+            if (dataToShow.endsWith(":")) {
+                dataToShow = dataToShow.replace(":", "");
+            }
+
             //---------------END
 
             //---- TO set dataToSet : START
