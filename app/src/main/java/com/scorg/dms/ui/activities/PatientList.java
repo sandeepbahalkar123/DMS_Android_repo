@@ -59,17 +59,19 @@ import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHo
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandSelectableHeaderHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener,TreeNode.TreeNodeClickListener {
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener {
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
     private static final int ANIMATION_LAYOUT_MAX_HEIGHT = 270; // in milliseconds
@@ -422,16 +424,20 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     //we are adding refrence id and file type value in FILE_TYPE parameter
                     //Reference id = UHID or OPD or IPD number *********//
                     String enteredUHIDValue = mUHIDEditText.getText().toString().trim();
-//                    if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select)) && enteredUHIDValue.length() != 0) {
-//                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + enteredUHIDValue);
-//                    } else if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
-//                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId);
-//                    } else if (enteredUHIDValue.length() != 0) {
-//                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, enteredUHIDValue);
-//                    }
 
-                    if ((enteredUHIDValue.length() != 0) || !mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + enteredUHIDValue);
+                    if (!mSelectedId.equalsIgnoreCase(getResources().getString(R.string.Select))) {
+                        if (mSelectedId.equalsIgnoreCase(getString(R.string.uhid)) && (enteredUHIDValue.length() == 0)) {
+                            CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_uhid));
+                            break;
+                        } else if (mSelectedId.equalsIgnoreCase(getString(R.string.ipd)) && (enteredUHIDValue.length() == 0)) {
+                            CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_ipd));
+                            break;
+                        } else if (mSelectedId.equalsIgnoreCase(getString(R.string.opd)) && (enteredUHIDValue.length() == 0)) {
+                            CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_opd));
+                            break;
+                        } else {
+                            mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + enteredUHIDValue);
+                        }
                     }
 
                     if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
@@ -533,7 +539,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationList annotationCategoryObject = annotationLists.get(i);
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             selectableHeaderHolder.setOnlyOneNodeExpanded(true);
-            TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() ,annotationCategoryObject,i))
+
+            TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
                     .setViewHolder(selectableHeaderHolder);
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
@@ -574,14 +581,14 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mSpinnerAmissionDate.setEnabled(true);
             } else if (mSelectedId.equalsIgnoreCase(getResources().getString(R.string.ipd))) {
                 mSpinnerAmissionDate.setEnabled(true);
-                mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.IPD));
+                mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.ipd_array));
                 mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
-                mUHIDEditText.setHint(getResources().getString(R.string.IPD));
+                mUHIDEditText.setHint(getResources().getString(R.string.error_enter_ipd));
             } else if (mSelectedId.equalsIgnoreCase(getResources().getString(R.string.opd))) {
                 mSpinnerAmissionDate.setEnabled(true);
-                mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.OPD));
+                mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.opd_array));
                 mSpinnerAmissionDate.setAdapter(mCustomSpinAdapter);
-                mUHIDEditText.setHint(getResources().getString(R.string.OPD));
+                mUHIDEditText.setHint(getResources().getString(R.string.error_enter_opd));
             } else if (mSelectedId.equalsIgnoreCase(getResources().getString(R.string.uhid))) {
                 mSpinnerAmissionDate.setEnabled(true);
                 mCustomSpinAdapter = new Custom_Spin_Adapter(mContext, mArrayId, getResources().getStringArray(R.array.admission_date));
@@ -623,8 +630,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         return annotationList;
     }
-
-
 
 
     protected void onTextChanged() {
