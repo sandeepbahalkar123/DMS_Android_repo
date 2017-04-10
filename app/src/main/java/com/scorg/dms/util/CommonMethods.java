@@ -28,18 +28,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.scorg.dms.R;
 import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
-import com.scorg.dms.preference.DmsPreferencesManager;
-import com.scorg.dms.ui.activities.LoginActivity;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -60,7 +55,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -72,7 +66,6 @@ public class CommonMethods {
     private static final String TAG = "Dms/Common";
     private static boolean encryptionIsOn = true;
     private static String aBuffer = "";
-
     private int mYear, mMonth, mDay, mHour, mMinute;
     private DatePickerDialogListener mDatePickerDialogListener;
     private static CheckIpConnection mCheckIpConnection;
@@ -516,7 +509,7 @@ public class CommonMethods {
 
     }
 
-    public void datePickerDialog(Context context, DatePickerDialogListener datePickerDialogListener, Date dateToSet) {
+    public void datePickerDialog(Context context, DatePickerDialogListener datePickerDialogListener, Date dateToSet, final Boolean isFromDateClicked, final Date date) {
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         if (dateToSet != null) {
@@ -527,17 +520,44 @@ public class CommonMethods {
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
         mDatePickerDialogListener = datePickerDialogListener;
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(context,
                 new DatePickerDialog.OnDateSetListener() {
+
+
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
-                        mDatePickerDialogListener.getSelectedDate(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+
+                        if(isFromDateClicked) {
+                            mDatePickerDialogListener.getSelectedDate(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        }
+                        else {
+                            mDatePickerDialogListener.getSelectedDate(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        }
+
+
+
                     }
                 }, mYear, mMonth, mDay);
+        if(isFromDateClicked) {
+            datePickerDialog.getDatePicker().setCalendarViewShown(false);
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            datePickerDialog.show();
+        }else{
+            if(date!=null) {
+                datePickerDialog.getDatePicker().setCalendarViewShown(false);
+                datePickerDialog.getDatePicker().setMinDate(date.getTime());
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                datePickerDialog.show();
+            }
+            else{
+                datePickerDialog.getDatePicker().setCalendarViewShown(false);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                datePickerDialog.show();
+            }
+        }
 
-        //  datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // To set min date
-        datePickerDialog.show();
     }
 
 
@@ -563,19 +583,11 @@ public class CommonMethods {
 
                 if (isValidIP(etServerPath.getText().toString())) {
                     String mServerPath = Config.HTTP + etServerPath.getText().toString() + Config.API;
-
                     Log.e(TAG, "SERVER PATH===" + mServerPath);
-
                     mCheckIpConnection.onOkButtonClickListner(mServerPath, mContext,dialog);
-
-
-
                 } else {
                     Toast.makeText(mContext, R.string.error_in_ip, Toast.LENGTH_LONG).show();
                 }
-
-                //overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-
             }
         });
         dialog.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {

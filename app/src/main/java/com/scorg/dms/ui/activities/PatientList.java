@@ -62,6 +62,7 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import butterknife.BindView;
@@ -73,19 +74,19 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private static final long ANIMATION_DURATION = 500; // in milliseconds
     private static final int ANIMATION_LAYOUT_MAX_HEIGHT = 270; // in milliseconds
     private static final int ANIMATION_LAYOUT_MIN_HEIGHT = 0; // in milliseconds
+    SimpleDateFormat dfDate = new SimpleDateFormat(DmsConstants.DATE_PATTERN.yyyy_MM_dd);
 
     @BindView(R.id.expandableListView)
     ExpandableListView mPatientListView;
+
     @BindView(R.id.openFilterRightDrawerFAB)
     FloatingActionButton mOpenFilterViewFAB;
+
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     DrawerLayout mDrawer;
-
-
     NavigationView mLeftNavigationView;
 
-    //----------------
     @BindView(R.id.nav_right_view)
     FrameLayout mRightNavigationView;
 
@@ -131,12 +132,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     View mLeftHeaderView;
     private ImageView mUserImage;
     private TextView mUserName;
-
-
     private String mSelectedId;
+    private String mSelectedFromDate;
     private String mAdmissionDate;
     private String[] mArrayId;
     private Context mContext;
+    Date mFromDate;
     private Custom_Spin_Adapter mCustomSpinAdapter;
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
@@ -159,8 +160,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private TextView mFileTwoAdmissionDate;
     //    private TextView mFileTwoDischargeDate;
     private Button mCompareButton;
-
-    private boolean isFileType = false;
     private PatientExpandableListAdapter patientExpandableListAdapter;
 
     @Override
@@ -349,27 +348,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
      *
      * @return
      */
-    private boolean validate(String fromDate, String toDate)  {
-        SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
-        String message = null;
-        if (fromDate.equalsIgnoreCase(toDate)) {
-            message = getString(R.string.error_date_not_same);
-        } else try {
-            if (dfDate.parse(fromDate).after(dfDate.parse(toDate))) {
-                message = getString(R.string.error_previous_date);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (message != null) {
-            CommonMethods.showSnack(mFromDateEditText, message);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     //onClick listener
     @Override
     public void onClick(View v) {
@@ -389,12 +367,20 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             // on click of fromDate editext in right drawer
             case R.id.et_fromdate:
 
+
                 new CommonMethods().datePickerDialog(this, new DatePickerDialogListener() {
                     @Override
                     public void getSelectedDate(String selectedTime) {
+                        mSelectedFromDate = selectedTime;
                         mFromDateEditText.setText("" + selectedTime);
+                        try {
+                            mFromDate = dfDate.parse(mSelectedFromDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
                     }
-                }, null);
+                }, null,true,mFromDate);
                 break;
             // on click of endDate ediText in right drawer
             case R.id.et_todate:
@@ -402,8 +388,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     @Override
                     public void getSelectedDate(String selectedTime) {
                         mToDateEditText.setText("" + selectedTime);
+
                     }
-                }, null);
+                }, null,false,mFromDate);
                 break;
             //  on click of Reset in right drawer
             case R.id.reset:
@@ -416,6 +403,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mSearchPatientNameEditText.setText(DmsConstants.BLANK);
                 mSpinnerAmissionDate.setSelection(0);
                 mSpinSelectedId.setSelection(0);
+                try {
+                    mFromDate = dfDate.parse("0000-00-00");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             //  on click of Apply in right drawer
             case R.id.apply:
@@ -425,15 +417,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mAddedTagsForFiltering.clear();
                 String fromDate = mFromDateEditText.getText().toString().trim();
                 String toDate = mToDateEditText.getText().toString().trim();
-                boolean dateValidate = false;
-                if ((fromDate.length() != 0 && toDate.length() != 0)) {
 
-                        dateValidate = validate(fromDate, toDate);
-
-                }
-                if (!dateValidate) {
-
-                    //*********adding field values in arrayList to generate tags in recycler view
+                //*********adding field values in arrayList to generate tags in recycler view
                     //we are adding refrence id and file type value in FILE_TYPE parameter
                     //Reference id = UHID or OPD or IPD number *********//
                     String enteredUHIDValue = mUHIDEditText.getText().toString().trim();
@@ -488,7 +473,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     mDrawer.closeDrawer(GravityCompat.END);
                     doGetPatientList();
 
-                }
+
 
                 break;
 
