@@ -59,16 +59,21 @@ import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHo
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandSelectableHeaderHolder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MAX_SCALE;
+import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MIN_SCALE;
 
-public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener,TreeNode.TreeNodeClickListener {
+
+public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener {
 
     private static final long ANIMATION_DURATION = 500; // in milliseconds
     private static final int ANIMATION_LAYOUT_MAX_HEIGHT = 270; // in milliseconds
@@ -212,6 +217,28 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                if (mAnnotationListData == null) {
+                    mPatientsHelper.doGetAllAnnotations();
+                } else {
+                    createAnnotationTreeStructure(mAnnotationListData, true);
+                }
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
@@ -324,7 +351,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
-
             createAnnotationTreeStructure(mAnnotationListData, true);
         }
     }
@@ -374,13 +400,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             //onclick on floating button
             case R.id.openFilterRightDrawerFAB:
                 mDrawer.openDrawer(GravityCompat.END);
-
-                if (mAnnotationListData == null) {
-                    mPatientsHelper.doGetAllAnnotations();
-                } else {
-                    createAnnotationTreeStructure(mAnnotationListData, true);
-                }
-
                 break;
             // on click of fromDate editext in right drawer
             case R.id.et_fromdate:
@@ -546,7 +565,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationList annotationCategoryObject = annotationLists.get(i);
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             selectableHeaderHolder.setExpandedOrCollapsed(true);
-            TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName() ,annotationCategoryObject,i))
+            TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
                     .setViewHolder(selectableHeaderHolder);
 
             List<DocTypeList> docTypeList = annotationCategoryObject.getDocTypeList();
@@ -636,8 +655,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         return annotationList;
     }
-
-
 
 
     protected void onTextChanged() {
