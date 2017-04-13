@@ -2,7 +2,6 @@ package com.scorg.dms.ui.activities;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -34,8 +33,6 @@ import com.github.barteksc.pdfviewer.listener.OnDrawListener;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
-import com.github.barteksc.pdfviewer.util.ArrayUtils;
-import com.github.barteksc.pdfviewer.util.Constants;
 import com.scorg.dms.R;
 import com.scorg.dms.helpers.patients.PatientsHelper;
 import com.scorg.dms.interfaces.CustomResponse;
@@ -44,7 +41,6 @@ import com.scorg.dms.model.requestmodel.filetreerequestmodel.FileTreeRequestMode
 import com.scorg.dms.model.requestmodel.filetreerequestmodel.LstSearchParam;
 import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.GetPdfDataRequestModel;
 import com.scorg.dms.model.requestmodel.getpdfdatarequestmodel.LstDocTypeRequest;
-import com.scorg.dms.model.responsemodel.Common;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.ArchiveDatum;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseData;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseModel;
@@ -52,7 +48,6 @@ import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocCategory;
 import com.scorg.dms.model.responsemodel.filetreeresponsemodel.LstDocType;
 import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
-import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.DmsConstants;
 import com.scorg.dms.views.treeViewHolder.arrow_expand.ArrowExpandIconTreeItemHolder;
@@ -62,7 +57,6 @@ import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -70,6 +64,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MAX_SCALE;
+import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MIN_SCALE;
 
 /**
  * Created by jeetal on 14/3/17.
@@ -415,8 +412,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
                 // Label(pageCount)|id
                 dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId();
-
-
                 ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
                 docCatSelectableHeaderHolder.setOnlyOneNodeExpanded(true);
 
@@ -567,12 +562,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     //-- For treeview annotations
     @Override
     public void onClick(TreeNode node, Object value, View nodeView) {
-
         //---To invisible pdf error message pdf view
         mMessageForFirstFile.setVisibility(View.GONE);
         mMessageForSecondFile.setVisibility(View.GONE);
         //---
-
         mDrawer.closeDrawer(GravityCompat.END);
         String idToFetch[] = null;
 
@@ -797,6 +790,19 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
+
+        if (mCompareSwitch.isChecked()) {
+            // Checks the orientation of the screen
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mFirstPdfView.zoomTo(DEFAULT_MAX_SCALE);
+                mSecondPdfView.zoomTo(DEFAULT_MAX_SCALE);
+//            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                mFirstPdfView.zoomTo(DEFAULT_MIN_SCALE);
+                mSecondPdfView.zoomTo(DEFAULT_MIN_SCALE);
+//            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 
