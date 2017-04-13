@@ -10,8 +10,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
+/*import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;*/
 import com.scorg.dms.R;
 import com.scorg.dms.util.LruBitmapCache;
 
@@ -82,13 +82,13 @@ public class DmsApplication extends  Application /*MultiDexApplication*/ {
         }
     }
 
-    //Analytics
+    /*//Analytics
     private Tracker mTracker;
 
-    /**
+    *//**
      * Gets the default {@link Tracker} for this {@link Application}.
      * @return tracker
-     */
+     *//*
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
@@ -96,7 +96,7 @@ public class DmsApplication extends  Application /*MultiDexApplication*/ {
             mTracker = analytics.newTracker(R.xml.app_tracker);
         }
         return mTracker;
-    }
+    }*/
 
 
 }

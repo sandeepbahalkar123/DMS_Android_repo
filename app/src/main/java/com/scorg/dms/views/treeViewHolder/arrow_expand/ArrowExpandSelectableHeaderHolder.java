@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.github.johnkil.print.PrintView;
 import com.scorg.dms.R;
+import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationList;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -125,7 +126,12 @@ public class ArrowExpandSelectableHeaderHolder extends TreeNode.BaseNodeViewHold
                     getSelected());
         }
 
-        nodeSelector.setChecked(node.isSelected());
+        if (value.objectData instanceof AnnotationList) {
+            node.setSelected(((AnnotationList) value.objectData).
+                    getSelected());
+            nodeSelector.setChecked(((AnnotationList) value.objectData).
+                    getSelected());
+        }
 
 
         return view;
