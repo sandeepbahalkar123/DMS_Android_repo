@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse {
 
         if (message != null) {
             CommonMethods.showSnack(mUserName, message);
-            CommonMethods.Log(TAG,"Message: "+message);
+            CommonMethods.Log(TAG,"Message : "+message);
             return true;
         } else {
             return false;
