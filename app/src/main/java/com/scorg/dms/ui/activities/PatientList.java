@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -108,7 +110,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     EditText mToDateEditText;
 
     @BindView(R.id.et_searchPatientName)
-    EditText mSearchPatientNameEditText;
+    AutoCompleteTextView mSearchPatientNameEditText;
 
     @BindView(R.id.et_userEnteredAnnotation)
     EditText mAnnotationEditText;
@@ -140,6 +142,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private String[] mArrayId;
     private Context mContext;
     Date mFromDate;
+    private RelativeLayout mFirstFileTypeProgressDialogLayout;
     private Custom_Spin_Adapter mCustomSpinAdapter;
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
@@ -150,7 +153,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private AnnotationListData mAnnotationListData;
     private String TAG = this.getClass().getName();
     private boolean isCompareDialogCollapsed = true;
-
+    String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
     private RelativeLayout mCompareDialogLayout;
     private TextView mCompareLabel;
     private ImageView mFileOneIcon;
@@ -304,6 +307,12 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
+        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,languages);
+        mSearchPatientNameEditText.setAdapter(adapter);
+        mAnnotationTreeViewContainer.addView(CommonMethods.loadView(R.layout.mydialog, this));
+        mFirstFileTypeProgressDialogLayout = (RelativeLayout) mAnnotationTreeViewContainer.findViewById(R.id.progressBarContainerLayout);
+
+
     }
 
     @Override
@@ -323,26 +332,28 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
             //mPatientListView.setDividerHeight(2);
         } else if (mOldDataTag == DmsConstants.TASK_ANNOTATIONS_LIST) {
+
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
 
             createAnnotationTreeStructure(mAnnotationListData, false);
+           mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onParseError(String mOldDataTag, String errorMessage) {
-
+        mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void onServerError(String mOldDataTag, String serverErrorMessage) {
-
+        mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void onNoConnectionError(String mOldDataTag, String serverErrorMessage) {
-
+        mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
     }
 
     /**
@@ -361,6 +372,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mDrawer.openDrawer(GravityCompat.END);
 
                 if (mAnnotationListData == null) {
+                   mFirstFileTypeProgressDialogLayout.setVisibility(View.VISIBLE);
                     mPatientsHelper.doGetAllAnnotations();
                 } else {
                     createAnnotationTreeStructure(mAnnotationListData, false);

@@ -55,7 +55,7 @@ public class PatientsHelper implements ConnectionListener {
     }
 
     public void doGetAllAnnotations() {
-        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_ANNOTATIONS_LIST, Request.Method.GET);
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, false, DmsConstants.TASK_ANNOTATIONS_LIST, Request.Method.GET);
         mConnectionFactory.setHeaderParams();
         mConnectionFactory.setUrl(Config.URL_ANNOTATIONS_LIST);
         mConnectionFactory.createConnection(DmsConstants.TASK_ANNOTATIONS_LIST);
