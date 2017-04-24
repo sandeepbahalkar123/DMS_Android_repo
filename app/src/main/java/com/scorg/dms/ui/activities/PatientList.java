@@ -34,7 +34,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
@@ -68,9 +67,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MAX_SCALE;
-import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MIN_SCALE;
 
 
 public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener {
@@ -224,11 +220,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                if (mAnnotationListData == null) {
+                if (mAnnotationListData == null)
                     mPatientsHelper.doGetAllAnnotations();
-                } else {
-                    createAnnotationTreeStructure(mAnnotationListData, true);
-                }
             }
 
             @Override
@@ -673,40 +666,44 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             @Override
             public void afterTextChanged(Editable s) {
                 String enteredString = mSearchAnnotationEditText.getText().toString();
-                if (enteredString.equals(""))
+                if (enteredString.equals("")) {
                     mClearSearchAnnotationButton.setVisibility(View.GONE);
-                else mClearSearchAnnotationButton.setVisibility(View.VISIBLE);
-                CommonMethods.Log(TAG, "onSearchAnnotationEditor:" + enteredString);
-                AnnotationListData annotationListData = new AnnotationListData();
-                List<AnnotationList> annotationTempList = new ArrayList<>();
-                if (mAnnotationListData != null) {
-                    List<AnnotationList> parentAnnotationList = mAnnotationListData.getAnnotationLists();
-                    if (parentAnnotationList.size() > 0) {
+                    createAnnotationTreeStructure(mAnnotationListData, true);
+                } else {
+                    mClearSearchAnnotationButton.setVisibility(View.VISIBLE);
 
-                        for (AnnotationList tempParentObject : parentAnnotationList) {
-                            //-------
-                            List<DocTypeList> childDocTypeTemp = new ArrayList<DocTypeList>();
-                            List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
-                            for (DocTypeList tempDocTypeObject : childDocTypeList) {
-                                if (tempDocTypeObject.getTypeName().toLowerCase().startsWith(enteredString.toLowerCase())) {
-                                    childDocTypeTemp.add(tempDocTypeObject);
+                    CommonMethods.Log(TAG, "onSearchAnnotationEditor:" + enteredString);
+                    AnnotationListData annotationListData = new AnnotationListData();
+                    List<AnnotationList> annotationTempList = new ArrayList<>();
+                    if (mAnnotationListData != null) {
+                        List<AnnotationList> parentAnnotationList = mAnnotationListData.getAnnotationLists();
+                        if (parentAnnotationList.size() > 0) {
+
+                            for (AnnotationList tempParentObject : parentAnnotationList) {
+                                //-------
+                                List<DocTypeList> childDocTypeTemp = new ArrayList<DocTypeList>();
+                                List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
+                                for (DocTypeList tempDocTypeObject : childDocTypeList) {
+                                    if (tempDocTypeObject.getTypeName().toLowerCase().startsWith(enteredString.toLowerCase())) {
+                                        childDocTypeTemp.add(tempDocTypeObject);
+                                    }
                                 }
-                            }
 
-                            if (childDocTypeTemp.size() > 0) {
-                                AnnotationList annotationListTemp = new AnnotationList();
+                                if (childDocTypeTemp.size() > 0) {
+                                    AnnotationList annotationListTemp = new AnnotationList();
 //                                annotationListTemp.setSelected(tempParentObject.getSelected());
-                                annotationListTemp.setCategoryId(tempParentObject.getCategoryId());
-                                annotationListTemp.setCategoryName(tempParentObject.getCategoryName());
-                                annotationListTemp.setDocTypeList(childDocTypeTemp);
-                                annotationTempList.add(annotationListTemp);
+                                    annotationListTemp.setCategoryId(tempParentObject.getCategoryId());
+                                    annotationListTemp.setCategoryName(tempParentObject.getCategoryName());
+                                    annotationListTemp.setDocTypeList(childDocTypeTemp);
+                                    annotationTempList.add(annotationListTemp);
+                                }
+                                //------
                             }
-                            //------
                         }
                     }
+                    annotationListData.setAnnotationLists(annotationTempList);
+                    createAnnotationTreeStructure(annotationListData, true);
                 }
-                annotationListData.setAnnotationLists(annotationTempList);
-                createAnnotationTreeStructure(annotationListData, true);
             }
         });
     }

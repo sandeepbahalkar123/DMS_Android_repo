@@ -13,7 +13,7 @@
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|left"
+        android:layout_gravity="center_horizontal|start"
         android:layout_margin="@dimen/dp10" />
 
     <LinearLayout
@@ -25,9 +25,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center|right"
-            android:textColor="@color/black"
             android:layout_marginLeft="@dimen/dp10"
+            android:textColor="@color/black"
+            android:layout_marginStart="@dimen/dp10"
+            android:gravity="center|end"
             android:text="@string/selected_1" />
         <TextView
             android:id="@+id/fileTypeOne"
@@ -39,6 +40,7 @@
             android:layout_marginLeft="@dimen/dp10"
             android:background="@color/JadeGreen"
             android:gravity="center"
+            android:layout_marginStart="@dimen/dp10"
             android:text="" />
         <TextView
             android:id="@+id/selectedOne"
@@ -47,6 +49,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp10"
             android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp10"
             android:text="" />
     </LinearLayout>
 
@@ -58,9 +61,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center|right"
-            android:textColor="@color/black"
             android:layout_marginLeft="@dimen/dp10"
+            android:textColor="@color/black"
+            android:layout_marginStart="@dimen/dp10"
+            android:gravity="center|end"
             android:text="@string/selected_2" />
         <TextView
             android:id="@+id/fileTypeTwo"
@@ -72,6 +76,7 @@
             android:layout_marginLeft="@dimen/dp10"
             android:background="@color/JadeGreen"
             android:gravity="center"
+            android:layout_marginStart="@dimen/dp10"
             android:text="" />
         <TextView
             android:id="@+id/selectedTwo"
@@ -80,15 +85,14 @@
             android:textColor="@color/black"
             android:layout_marginLeft="@dimen/dp10"
             android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp10"
             android:text="" />
     </LinearLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_add"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-
-        >
+        android:layout_height="?attr/actionBarSize">
 
         <Button
             android:id="@+id/cancel"
@@ -107,7 +111,7 @@
             android:id="@+id/compare"
             android:layout_width="@dimen/dp100"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:background="@color/dialog_compare"
             android:drawablePadding="@dimen/margin_tiny"
             android:text="@string/compare"

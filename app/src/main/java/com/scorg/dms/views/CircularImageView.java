@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
@@ -20,7 +21,7 @@ import com.scorg.dms.R;
 /**
  * Created by Sandeep Bahalkar
  */
-public class CircularImageView extends ImageView {
+public class CircularImageView extends AppCompatImageView {
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
     // Default Values
@@ -76,6 +77,7 @@ public class CircularImageView extends ImageView {
             shadowRadius = DEFAULT_SHADOW_RADIUS;
             drawShadow(attributes.getFloat(R.styleable.CircularImageView_shadow_radius, shadowRadius), attributes.getColor(R.styleable.CircularImageView_shadow_color, shadowColor));
         }
+        attributes.recycle();
     }
     //endregion
 
