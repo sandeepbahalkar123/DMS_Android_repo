@@ -2,44 +2,20 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_margin_right">48dp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
-    <dimen name="item_width">200dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
-    <dimen name="text_margin_large">18dp</dimen>
-    <dimen name="dp123">18dp</dimen>
-    <dimen name="zero_dp">0dp</dimen>
-    <dimen name="padding_small">10dp</dimen>
-    <dimen name="dp00">10dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="pdf_middle_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="center_margin">100dp</dimen>
     <dimen name="dp24">24dp</dimen>
     <dimen name="dp12">12dp</dimen>
     <dimen name="dp1">1dp</dimen>
-    <dimen name="dp45">60dp</dimen>
-    <dimen name="margin_crate">80dp</dimen>
     <dimen name="padding_tiny">5dp</dimen>
-    <dimen name="width_xsmall">80dp</dimen>
-    <dimen name="text_small">13sp</dimen>
-    <dimen name="dp43">60dp</dimen>
-    <dimen name="margin_l">40dp</dimen>
-    <dimen name="margin_small">60dp</dimen>
-    <dimen name="height_xsmall">100dp</dimen>
-    <dimen name="dp001">100dp</dimen>
-    <dimen name="dp100">100dp</dimen>
     <dimen name="dp10">10dp</dimen>
     <dimen name="dp5">5dp</dimen>
     <dimen name="dp0">0dp</dimen>
     <dimen name="uhid">8dp</dimen>
-    <dimen name="dp60">60dp</dimen>
     <dimen name="margin_tiny">5dp</dimen>
     <dimen name="text_medium">20sp</dimen>
-    <dimen name="padding_medium">15dp</dimen>
-    <dimen name="sp18">12sp</dimen>
     <dimen name="button_height">40dp</dimen>
-    <dimen name="dp160">180dp</dimen>
     <dimen name="filenotfoundmessagetextsize">24sp</dimen>
     <dimen name="dp42">42dp</dimen>
 </resources>

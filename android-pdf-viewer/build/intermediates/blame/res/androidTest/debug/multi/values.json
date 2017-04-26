@@ -1,6 +1,10 @@
 [
     {
+<<<<<<< HEAD
         "outputFile": "/home/sandeep/Android_Studio_Projects/DMS_Android_repo/android-pdf-viewer/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+=======
+        "outputFile": "/home/ganeshshirole/AndroidStudioProjects/DMS_Android_New/android-pdf-viewer/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+>>>>>>> dev_additionalchange
         "map": [
             {
                 "to": {
@@ -11,7 +15,11 @@
                     "endOffset": 383
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "/home/sandeep/Android_Studio_Projects/DMS_Android_repo/android-pdf-viewer/build/intermediates/exploded-aar/com.github.barteksc/pdfium-android/1.5.0/res/values/values.xml",
+=======
+                    "file": "/home/ganeshshirole/AndroidStudioProjects/DMS_Android_New/android-pdf-viewer/build/intermediates/exploded-aar/com.github.barteksc/pdfium-android/1.5.0/res/values/values.xml",
+>>>>>>> dev_additionalchange
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,

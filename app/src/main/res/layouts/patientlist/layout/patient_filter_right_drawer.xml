@@ -9,7 +9,6 @@
 
     <android.support.v7.widget.Toolbar
 
-        android:id="@+id/toolbar_add"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp30"
         android:background="@color/black"
@@ -24,31 +23,31 @@
 
             <TextView
                 android:id="@+id/reset"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableLeft="@mipmap/reset"
                 android:drawablePadding="@dimen/dp5"
                 android:textSize="@dimen/sp12"
-                android:textStyle="bold"
-                android:gravity="center|left"
+                android:drawableStart="@mipmap/reset"
                 android:text="@string/reset"
-                android:textColor="@color/reset_yellow" />
+                android:gravity="center|start"
+                android:textColor="@color/reset_yellow"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:textSize="@dimen/sp12"
                 android:gravity="center"
-                android:text="Filter"
+                android:text="@string/filter"
                 android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/apply"
-                android:layout_width="@dimen/dp0"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableEnd="@mipmap/apply"
@@ -56,7 +55,7 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/sp12"
                 android:drawableRight="@mipmap/apply"
-                android:gravity="right|center_vertical"
+                android:gravity="end|center_vertical"
                 android:text="@string/apply"
                 android:textColor="@color/apply_blue" />
         </LinearLayout>
@@ -68,7 +67,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -80,14 +79,14 @@
 
                 <Spinner
                     android:id="@+id/spinner_selectId"
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:textColor="@color/dcr_customer_name" />
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/dp30"
                     android:layout_gravity="center"
                     android:layout_weight="1"
@@ -97,6 +96,7 @@
                         android:id="@+id/et_uhid"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp30"
+                        android:inputType="text"
                         android:background="@null"
                         android:ellipsize="end"
                         android:imeOptions="actionNext"
@@ -129,13 +129,15 @@
                 android:layout_height="@dimen/dp30"
                 android:layout_marginBottom="@dimen/dp5"
                 android:background="@color/grey_200"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/dp30"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
                     android:layout_weight="1">
 
                     <EditText
@@ -144,22 +146,25 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@null"
-                        android:drawableRight="@mipmap/calendar"
+                        android:drawableEnd="@mipmap/calendar"
                         android:ellipsize="end"
                         android:focusableInTouchMode="false"
                         android:hint="@string/from"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"
+                        android:maxLines="1"
                         android:textColor="@color/black"
+                        android:drawableRight="@mipmap/calendar"
                         android:textSize="@dimen/sp12" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="@dimen/dp0"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/dp30"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/dp2"
+                    android:layout_marginEnd="@dimen/dp5"
                     android:layout_marginRight="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp2"
+                    android:layout_marginLeft="@dimen/dp2"
                     android:layout_weight="1">
 
                     <EditText
@@ -168,12 +173,13 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@null"
-                        android:drawableRight="@mipmap/calendar"
+                        android:drawableEnd="@mipmap/calendar"
                         android:ellipsize="end"
                         android:focusableInTouchMode="false"
                         android:hint="@string/to"
                         android:imeOptions="actionNext"
                         android:textColor="@color/black"
+                        android:drawableRight="@mipmap/calendar"
                         android:textSize="@dimen/sp12" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -185,15 +191,16 @@
                 android:layout_height="@dimen/dp30"
                 android:layout_marginBottom="@dimen/dp5">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/et_searchPatientName"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp30"
-                    android:drawableRight="@mipmap/user"
+                    android:drawableEnd="@mipmap/user"
                     android:ellipsize="end"
                     android:hint="@string/searchbyPatient"
                     android:imeOptions="actionNext"
                     android:textColor="@color/black"
+                    android:drawableRight="@mipmap/user"
                     android:textSize="@dimen/sp12" />
             </android.support.design.widget.TextInputLayout>
 
@@ -216,11 +223,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:drawableRight="@mipmap/annotation"
+                        android:drawableEnd="@mipmap/annotation"
                         android:ellipsize="end"
                         android:hint="@string/enterAnnotation"
                         android:imeOptions="actionNext"
                         android:textColor="@color/black"
+                        android:drawableRight="@mipmap/annotation"
                         android:textSize="@dimen/sp12" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -235,8 +243,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/dp5"
                     android:layout_toLeftOf="@+id/bt_clear_search_annotation"
+                    android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
                     android:layout_toStartOf="@+id/bt_clear_search_annotation">
 
                     <EditText
@@ -256,9 +265,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:src="@mipmap/crosswithcircle" />
 
             </RelativeLayout>
@@ -268,28 +279,21 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp0"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dp1">
 
             <RelativeLayout
                 android:id="@+id/annotationTreeViewContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></RelativeLayout>
+                android:layout_height="match_parent"/>
 
-            <TextView
-                android:id="@+id/emptyListView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text=""
-                android:textSize="@dimen/sp24" />
         </LinearLayout>
     </ScrollView>
 

@@ -60,12 +60,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MAX_SCALE;
+import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MID_SCALE;
 import static com.github.barteksc.pdfviewer.PDFView.DEFAULT_MIN_SCALE;
 
 /**
@@ -515,7 +516,6 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     @Override
     public void loadComplete(PDFView pdfView, int nbPages) {
-
         if (pdfView == mFirstPdfView)
             mMessageForFirstFile.setVisibility(View.GONE);
 
@@ -546,11 +546,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             e.getStackTrace();
 
         }
+        setPDFScale(getResources().getConfiguration());
     }
 
     public void printBookmarksTree(List<PdfDocument.Bookmark> tree, String sep) {
         for (PdfDocument.Bookmark b : tree) {
-            CommonMethods.Log(TAG, String.format("%s %s, p %d", sep, b.getTitle(), b.getPageIdx()));
+            CommonMethods.Log(TAG, String.format("%s %s, p %d", Locale.US,sep, b.getTitle(), b.getPageIdx()));
             if (b.hasChildren()) {
                 printBookmarksTree(b.getChildren(), sep + "-");
             }
@@ -735,6 +736,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 .defaultPage(mPageNumber)
                 .onError(this)
                 .onDraw(this)
+                .onLoad(this)
                 .enableAnnotationRendering(true)
                 .scrollHandle(new DefaultScrollHandle(this))
                 .load();
@@ -790,19 +792,31 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
+        setPDFScale(newConfig);
+    }
 
-        if (mCompareSwitch.isChecked()) {
+    private void setPDFScale(Configuration newConfig) {
+        if (mSecondFileTypePdfViewLayout.getVisibility() == View.VISIBLE) {
             // Checks the orientation of the screen
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mFirstPdfView.zoomTo(DEFAULT_MAX_SCALE);
-                mSecondPdfView.zoomTo(DEFAULT_MAX_SCALE);
-//            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+                mFirstPdfView.zoomTo(5.0f);
+                mSecondPdfView.zoomTo(5.0f);
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                mFirstPdfView.zoomTo(DEFAULT_MID_SCALE);
+                mSecondPdfView.zoomTo(DEFAULT_MID_SCALE);
+            }
+        } else {
+            // Checks the orientation of the screen
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mFirstPdfView.zoomTo(2.5f);
+                mSecondPdfView.zoomTo(2.5f);
             } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 mFirstPdfView.zoomTo(DEFAULT_MIN_SCALE);
                 mSecondPdfView.zoomTo(DEFAULT_MIN_SCALE);
-//            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
             }
         }
+        mFirstPdfView.moveTo(mFirstPdfView.getCurrentXOffset(), mFirstPdfView.getCurrentYOffset());
+        mSecondPdfView.moveTo(mSecondPdfView.getCurrentXOffset(), mSecondPdfView.getCurrentYOffset());
     }
 
 

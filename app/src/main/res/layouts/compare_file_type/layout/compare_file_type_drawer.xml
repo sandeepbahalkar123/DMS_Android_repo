@@ -23,7 +23,6 @@
                 android:weightSum="6">
 
                 <TextView
-                    android:id="@+id/tv_scrollingBoth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -40,7 +39,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="2"
                     android:checked="false"
-                    android:singleLine="true"
+                   android:maxLines="1"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -56,12 +55,11 @@
                 android:weightSum="6">
 
                 <TextView
-                    android:id="@+id/tvPatienntInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:gravity="center_vertical"
-                    android:singleLine="true"
+                   android:maxLines="1"
                     android:text="@string/patientInformation"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -80,8 +78,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_tiny"
                 android:layout_marginLeft="@dimen/dp5"
+                android:layout_marginStart="@dimen/dp5"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:drawableLeft="@mipmap/usercheck"
+                android:drawableStart="@mipmap/usercheck"
                 android:drawablePadding="@dimen/dp5"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
@@ -92,9 +92,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_tiny"
-
+                android:layout_marginStart="@dimen/dp5"
                 android:layout_marginLeft="@dimen/dp5"
                 android:drawableLeft="@mipmap/keyblack"
+                android:drawableStart="@mipmap/keyblack"
                 android:drawablePadding="@dimen/dp5"
                 android:gravity="center_vertical"
                 android:text=""
@@ -108,7 +109,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_tiny"
                 android:layout_marginLeft="@dimen/dp5"
+                android:layout_marginStart="@dimen/dp5"
                 android:drawableLeft="@mipmap/placeholderblack"
+                android:drawableStart="@mipmap/placeholderblack"
                 android:drawablePadding="@dimen/dp5"
                 android:gravity="center_vertical"
                 android:text=""
@@ -135,14 +138,13 @@
                     android:weightSum="3">
 
                     <TextView
-                        android:id="@+id/tvFileNoOne"
                         android:layout_width="@dimen/dp0"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawablePadding="@dimen/padding_tiny"
                         android:gravity="center_vertical"
-                        android:text="File-One"
+                        android:text="@string/file_one"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -186,6 +188,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/referenceidblack"
+                        android:drawableStart="@mipmap/referenceidblack"
                         android:drawablePadding="@dimen/padding_tiny"
                         android:gravity="center_vertical"
                         android:text="@string/refId"
@@ -223,6 +226,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp5"
                     android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -232,6 +236,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/doctorblack"
+                        android:drawableStart="@mipmap/doctorblack"
                         android:drawablePadding="@dimen/dp5"
                         android:gravity="center_vertical"
                         android:text="@string/doctor"
@@ -245,8 +250,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                        android:singleLine="true"
-                        android:text="asd"
+                       android:maxLines="1"
+
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
                         android:textStyle="bold" />
@@ -259,6 +264,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp5"
                     android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -268,6 +274,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/calendarblack"
+                        android:drawableStart="@mipmap/calendarblack"
                         android:drawablePadding="@dimen/dp5"
                         android:gravity="center_vertical"
                         android:text="@string/admission"
@@ -281,7 +288,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                        android:singleLine="true"
+                        android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -296,6 +303,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -306,6 +314,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/calendarblack"
+                        android:drawableStart="@mipmap/calendarblack"
                         android:drawablePadding="@dimen/dp5"
                         android:gravity="center_vertical"
                         android:text="@string/discharge"
@@ -319,7 +328,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                        android:singleLine="true"
+                       android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -350,14 +359,13 @@
                     android:weightSum="3">
 
                     <TextView
-                        android:id="@+id/tvFileNoTwo"
                         android:layout_width="@dimen/dp0"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawablePadding="@dimen/padding_tiny"
                         android:gravity="center_vertical"
-                        android:text="File-Two"
+                        android:text="@string/file_two"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -404,6 +412,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/referenceidblack"
+                        android:drawableStart="@mipmap/referenceidblack"
                         android:drawablePadding="@dimen/padding_tiny"
                         android:gravity="center_vertical"
                         android:text="@string/refId"
@@ -414,6 +423,7 @@
                         android:layout_width="@dimen/dp0"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp5"
+                        android:layout_marginStart="@dimen/dp5"
                         android:layout_weight="2">
 
                         <TextView
@@ -443,6 +453,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp5"
                     android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -452,6 +463,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/doctorblack"
+                        android:drawableStart="@mipmap/doctorblack"
                         android:drawablePadding="@dimen/dp5"
                         android:gravity="center_vertical"
                         android:text="@string/doctor"
@@ -465,7 +477,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                        android:singleLine="true"
+                       android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -479,6 +491,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp5"
                     android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -488,6 +501,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/calendarblack"
+                        android:drawableStart="@mipmap/calendarblack"
                         android:drawablePadding="@dimen/dp5"
                         android:gravity="center_vertical"
                         android:text="@string/admission"
@@ -501,7 +515,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                        android:singleLine="true"
+                       android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -516,6 +530,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -525,6 +540,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/calendarblack"
+                        android:drawableStart="@mipmap/calendarblack"
                         android:drawablePadding="@dimen/dp5"
                         android:gravity="center_vertical"
                         android:text="@string/discharge"
@@ -538,7 +554,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                        android:singleLine="true"
+                       android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -556,23 +572,15 @@
 
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
         <RelativeLayout
             android:id="@+id/fileTypeTreeViewContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="" />
+                android:layout_height="@dimen/dp1"/>
         </RelativeLayout>
 
-    </LinearLayout>
 
 </LinearLayout>

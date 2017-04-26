@@ -17,8 +17,6 @@ import com.scorg.dms.util.DmsConstants;
 public class Device {
 
     private static final String TAG = "Device";
-    private static Device devicewithContext;
-    private static Device devicewithWindowManager;
     private Context context;
     private WindowManager windowManager;
 
@@ -27,17 +25,13 @@ public class Device {
      */
 
     public static Device getInstance(Context context){
-        if(devicewithContext == null){
-            devicewithContext = new Device(context);
-        }
-        return devicewithContext;
+
+        return new Device(context);
     }
 
     public static Device getInstance(WindowManager windowManager){
-        if(devicewithWindowManager == null){
-            devicewithWindowManager = new Device(windowManager);
-        }
-        return devicewithWindowManager;
+
+        return new Device(windowManager);
     }
 
     public Device(WindowManager windowManager) {

@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-   >
+    android:orientation="horizontal">
 
     <TextView
         android:layout_width="@dimen/dp5"
@@ -25,29 +24,29 @@
             android:layout_marginLeft="@dimen/dp5"
             android:layout_weight="4"
             android:textSize="@dimen/sp12"
-            android:paddingLeft="@dimen/dp5"
-            android:gravity="left|center_vertical"
+            android:layout_marginStart="@dimen/dp5"
+            android:gravity="start|center_vertical"
             android:textColor="@color/black"
+            android:paddingLeft="@dimen/dp5"
+            android:paddingStart="@dimen/dp5"
             android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/ib_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
+            android:layout_gravity="end|center_vertical"
             android:layout_margin="@dimen/dp5"
             android:layout_weight="2"
             android:background="@mipmap/crosswithcircle"
             android:paddingRight="@dimen/padding_very_tiny"
+            android:paddingEnd="@dimen/padding_very_tiny"
             android:singleLine="true"
-            android:textColor="@color/black"
-
-            />
+            android:textColor="@color/black" />
     </TableRow>
 
     <View
         android:layout_width="@dimen/dp1"
         android:layout_height="@dimen/dp1" />
-
 
 </LinearLayout>

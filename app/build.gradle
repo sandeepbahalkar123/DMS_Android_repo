@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'scorg'
+            keyPassword 'scorg123'
+            storeFile file('scorg_key.jks')
+            storePassword 'scorg123'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     signingConfigs {
@@ -19,14 +27,16 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
-    lintOptions {
+   /* lintOptions {
         abortOnError false
-    }
+    }*/
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
+//            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -44,7 +54,8 @@ android {
                     ]
         }
     }
-
+    productFlavors {
+    }
 }
 
 dependencies {

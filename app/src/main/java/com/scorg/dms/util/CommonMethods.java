@@ -26,9 +26,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.scorg.dms.R;
 import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,8 +48,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -62,7 +66,7 @@ public class CommonMethods {
     private int mYear, mMonth, mDay, mHour, mMinute;
     private DatePickerDialogListener mDatePickerDialogListener;
     private static CheckIpConnection mCheckIpConnection;
-    public static Context mContext;
+
 
     public static void showToast(Context context, String error) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -280,7 +284,7 @@ public class CommonMethods {
     public static String getCurrentTimeStamp() {
         try {
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.US);
             String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
 
             return currentTimeStamp;
@@ -292,7 +296,7 @@ public class CommonMethods {
     }
 
     public static int getTimeStampDifference(String startTime, String endTime) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.US);
 
         Date secondParsedDate = null;
         Date firstParsedDate = null;
@@ -378,20 +382,6 @@ public class CommonMethods {
         Log.e(tag, message);
     }
 
-
-    public static String yyyy_dd__mm_To_Words(String date) {
-        String output = "";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date d = simpleDateFormat.parse(date);
-            simpleDateFormat.applyPattern("dd MMM yyyy");
-            output = simpleDateFormat.format(d);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return output;
-    }
 
     public static View loadView(int resourceName, Context mActivity) {
 
@@ -511,7 +501,7 @@ public class CommonMethods {
 
     //this alert is shown for input of serverpath
     public static Dialog showAlertDialog(Context activity, String dialogHeader, CheckIpConnection checkIpConnection) {
-        mContext = activity;
+         final Context  mContext = activity;
         mCheckIpConnection = checkIpConnection;
         final Dialog dialog = new Dialog(activity);
 
