@@ -47,7 +47,8 @@
             android:layout_marginEnd="@dimen/fab_margin_right"
             android:layout_marginRight="@dimen/fab_margin"
             app:backgroundTint="@color/colorPrimaryDark"
-            app:srcCompat="@drawable/ic_filter" />
+            app:srcCompat="@drawable/ic_filter"
+            tools:ignore="VectorDrawableCompat" />
 
     </FrameLayout>
 
