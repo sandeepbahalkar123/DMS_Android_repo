@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -14,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,10 +29,7 @@ import android.widget.Toast;
 import com.scorg.dms.R;
 import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -251,7 +246,7 @@ public class CommonMethods {
     public static void showSnack(Context mContext, View mViewById, String msg) {
         Snackbar snack = Snackbar.make(mViewById, msg, Snackbar.LENGTH_SHORT);
         ViewGroup group = (ViewGroup) snack.getView();
-        group.setBackgroundColor(ContextCompat.getColor(mContext, R.color.errorColor));
+        group.setBackgroundColor(mContext.getColor(R.color.errorColor));
         snack.show();
     }
 
@@ -282,51 +277,6 @@ public class CommonMethods {
 
         float finalvalue = hour + minuite;
         return "" + new DecimalFormat("##.##").format(finalvalue);
-    }
-
-    public static boolean comparedTwoTimezone(String serverdatetimezone) {
-        String str1 = serverdatetimezone.substring(0, serverdatetimezone.indexOf(" "));
-        String str2 = serverdatetimezone.substring(serverdatetimezone.indexOf(" ") + 1, serverdatetimezone.indexOf("+"));
-        String finalserverdatestr = str1 + "T" + str2 + "Z";
-        boolean flag = false;
-        Date ds = new Date();
-        DateTime d = new DateTime(ds);
-        DateTime e = new DateTime(finalserverdatestr/*"2016-02-24T07:35:00Z"*/);  //2016-02-24 07:35:00+0000
-        if (e.toLocalDateTime().isAfter(d.toLocalDateTime())) {
-            flag = true;
-//            System.out.println("After" + e.toLocalDateTime().isAfter(d.toLocalDateTime()));
-        } else {
-//            System.out.println("Before"+e.toLocalDateTime().isBefore(d.toLocalDateTime()));
-        }
-        return flag;
-    }
-
-    public static String dateFormatUtcToIst(String utcText, String utcPattern, String utcNewPattern, String finalPattern, String toTimeZone) {
-        String finalDate = "";
-        try {
-            DateTimeFormatter utcFormatter = DateTimeFormat
-                    .forPattern(utcPattern)
-                    .withLocale(Locale.US)
-                    .withZoneUTC();
-            DateTimeZone indianZone = DateTimeZone.forID(toTimeZone);
-            DateTimeFormatter indianZoneFormatter = utcFormatter.withZone(indianZone);
-
-
-            DateTime parsed = utcFormatter.parseDateTime(utcText);
-            String indianText = indianZoneFormatter.print(parsed);
-
-            final SimpleDateFormat sdf = new SimpleDateFormat(utcNewPattern,Locale.US);
-            final Date dateObj1;
-
-            dateObj1 = sdf.parse(indianText);
-
-            finalDate = new SimpleDateFormat(finalPattern,Locale.US).format(dateObj1);
-            return finalDate;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-
-        return finalDate;
     }
 
     public static String getCurrentTimeStamp() {
@@ -433,7 +383,7 @@ public class CommonMethods {
 
     public static String yyyy_dd__mm_To_Words(String date) {
         String output = "";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.US );
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US );
         try {
             Date d = simpleDateFormat.parse(date);
             simpleDateFormat.applyPattern("dd MMM yyyy");

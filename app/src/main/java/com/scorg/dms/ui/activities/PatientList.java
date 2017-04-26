@@ -36,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
@@ -72,7 +71,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 
 public class PatientList extends AppCompatActivity implements HelperResponse, View.OnClickListener, AdapterView.OnItemSelectedListener, PatientExpandableListAdapter.OnPatientListener, TreeNode.TreeNodeClickListener {
 
@@ -217,6 +215,28 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                if (mAnnotationListData == null) {
+                    mPatientsHelper.doGetAllAnnotations();
+                } else {
+                    createAnnotationTreeStructure(mAnnotationListData, false);
+                }
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
@@ -336,7 +356,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
-
             createAnnotationTreeStructure(mAnnotationListData, false);
            mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
         }
@@ -371,7 +390,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             //onclick on floating button
             case R.id.openFilterRightDrawerFAB:
                 mDrawer.openDrawer(GravityCompat.END);
-
                 if (mAnnotationListData == null) {
                    mFirstFileTypeProgressDialogLayout.setVisibility(View.VISIBLE);
                     mPatientsHelper.doGetAllAnnotations();
@@ -552,7 +570,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationList annotationCategoryObject = annotationLists.get(i);
             ArrowExpandSelectableHeaderHolder selectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded);
             selectableHeaderHolder.setOnlyOneNodeExpanded(true);
-
             TreeNode folder1 = new TreeNode(new ArrowExpandIconTreeItemHolder.IconTreeItem(R.string.ic_shopping_cart, annotationCategoryObject.getCategoryName(), annotationCategoryObject, i))
                     .setViewHolder(selectableHeaderHolder);
 
