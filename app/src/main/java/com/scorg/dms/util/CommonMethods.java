@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.scorg.dms.R;
 import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
@@ -50,6 +51,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -380,20 +382,6 @@ public class CommonMethods {
         Log.e(tag, message);
     }
 
-
-    public static String yyyy_dd__mm_To_Words(String date) {
-        String output = "";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US );
-        try {
-            Date d = simpleDateFormat.parse(date);
-            simpleDateFormat.applyPattern("dd MMM yyyy");
-            output = simpleDateFormat.format(d);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return output;
-    }
 
     public static View loadView(int resourceName, Context mActivity) {
 

@@ -1,9 +1,6 @@
 package com.scorg.dms.util;
 
 import android.content.Context;
-import android.util.Log;
-
-import com.scorg.dms.preference.DmsPreferencesManager;
 
 /**
  * Created by Sandeep Bahalkar
@@ -15,7 +12,7 @@ public class Config {
     public static final String TOKEN_TYPE = "Bearer";
     public static boolean DEV_BUILD = true;
     public static String BASE_URL = "";
-    public  Context mContext;
+    public Context mContext;
 
    /* static {
         if (DEV_BUILD) {

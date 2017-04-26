@@ -10,7 +10,6 @@
     tools:context=".ui.activities.FileTypeViewerActivity"
     tools:showIn="@layout/compare_file_type_app_bar_drawer">
 
-
     <FrameLayout
         android:id="@+id/firstPdfViewFrameLayout"
         android:layout_width="match_parent"

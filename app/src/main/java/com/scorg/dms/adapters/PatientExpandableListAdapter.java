@@ -39,24 +39,23 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
     private List<SearchResult> _listDataHeader = new ArrayList<>(); // header titles
     // child data in format of header title, child title
     private HashMap<String, ArrayList<PatientFileData>> _listDataChild = new HashMap<String, ArrayList<PatientFileData>>();
-    ;
 
     private List<SearchResult> _originalListDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, ArrayList<PatientFileData>> _originalListDataChild;
 
     // @BindString(R.string.opd)
-    String opd;
+    private String opd;
     // @BindString(R.string.ipd)
-    String ipd;
-    String uhid;
-    int dataShowMaxValue = 2;
-    List<SearchResult> searchResultForPatientDetails;
+    private String ipd;
+    private String uhid;
+    private int dataShowMaxValue = 2;
+    private List<SearchResult> searchResultForPatientDetails;
 
     // Hashmap for keeping track of our checkbox check states
-    private HashMap<Integer, boolean[]> mChildCheckStates = new HashMap<Integer, boolean[]>();
+    private HashMap<Integer, boolean[]> mChildCheckStates = new HashMap<>();
     private String mCheckedBoxGroupName = null;
-    private int mGroupPosition = -1;
+//    private int mGroupPosition = -1;
 
     public PatientExpandableListAdapter(Context context, List<SearchResult> searchResult) {
         this._context = context;
@@ -119,16 +118,12 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final int mGroupPosition = groupPosition;
-        final int mChildPosition = childPosition;
-
-
         final ChildViewHolder childViewHolder;
         if (convertView == null) {
-            LayoutInflater inflaInflater = (LayoutInflater) this._context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflaInflater.inflate(R.layout
-                    .item_patient_content, null);
+
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_patient_content, parent, false);
+
             childViewHolder = new ChildViewHolder(convertView);
             convertView.setTag(childViewHolder);
         } else {
@@ -136,11 +131,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         final PatientFileData childElement = getChild(groupPosition, childPosition);
-
         //---
         if (opd.equalsIgnoreCase(childElement.getFileType())) {
             childViewHolder.opd.setText(opd);
-            childViewHolder.opdValue.setText("" + childElement.getReferenceId());
+            childViewHolder.opdValue.setText(String.valueOf(childElement.getReferenceId()));
             //---------
             //-- TODO: visit date is not getting from API
             String s = CommonMethods.formatDateTime(childElement.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
@@ -154,7 +148,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         } else {
 
             childViewHolder.ipd.setText(ipd);
-            childViewHolder.ipdValue.setText("" + childElement.getReferenceId());
+            childViewHolder.ipdValue.setText(String.valueOf(childElement.getReferenceId()));
 
             String date = CommonMethods.formatDateTime(childElement.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);
 
@@ -195,18 +189,18 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         childViewHolder.ipdCheckBox.setOnCheckedChangeListener(null);
         childViewHolder.opdCheckBox.setOnCheckedChangeListener(null);
 
-        if (mChildCheckStates.containsKey(mGroupPosition)) {
-            boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
+        if (mChildCheckStates.containsKey(groupPosition)) {
+            boolean getChecked[] = mChildCheckStates.get(groupPosition);
             if (childViewHolder.ipdLayout.getVisibility() == View.VISIBLE) {
-                childViewHolder.ipdCheckBox.setChecked(getChecked[mChildPosition]);
+                childViewHolder.ipdCheckBox.setChecked(getChecked[childPosition]);
             } else if (childViewHolder.opdLayout.getVisibility() == View.VISIBLE) {
-                childViewHolder.opdCheckBox.setChecked(getChecked[mChildPosition]);
+                childViewHolder.opdCheckBox.setChecked(getChecked[childPosition]);
             }
         } else {
             boolean getChecked[] = new boolean[_originalListDataChild.get(_originalListDataHeader.get(groupPosition).getPatientName())
                     .size()];
 
-            mChildCheckStates.put(mGroupPosition, getChecked);
+            mChildCheckStates.put(groupPosition, getChecked);
 
             // set the check state of this position's checkbox based on the
             // boolean value of getChecked[position]
@@ -238,13 +232,13 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         childViewHolder.opdCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkBoxClicked(buttonView, isChecked, mGroupPosition, mChildPosition);
+                checkBoxClicked(isChecked, groupPosition, childPosition);
             }
         });
         childViewHolder.ipdCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkBoxClicked(buttonView, isChecked, mGroupPosition, mChildPosition);
+                checkBoxClicked(isChecked, groupPosition, childPosition);
             }
         });
 
@@ -272,7 +266,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
 
-                onPatientListener.onPatientListItemClick(childElement, getGroup(mGroupPosition).getPatientName());
+                onPatientListener.onPatientListItemClick(childElement, getGroup(groupPosition).getPatientName());
 
             }
         });
@@ -306,10 +300,10 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
                              View convertView, ViewGroup parent) {
         GroupViewHolder groupViewHolder;
         if (convertView == null) {
-            LayoutInflater inflaInflater = (LayoutInflater) this._context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflaInflater.inflate(R.layout
-                    .item_patient_list_header, null);
+
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_patient_list_header, parent, false);
+
             groupViewHolder = new GroupViewHolder(convertView);
             convertView.setTag(groupViewHolder);
         } else {
@@ -320,7 +314,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         mExpandableListView.expandGroup(groupPosition);
 
         SearchResult groupHeader = getGroup(groupPosition);
-        int childrenCount = getChildrenCount(groupPosition);
+//        int childrenCount = getChildrenCount(groupPosition);
 
         groupViewHolder.userName.setText(groupHeader.getPatientName());
         groupViewHolder.patientId.setText(groupHeader.getPatientId());
@@ -347,7 +341,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         @BindView(R.id.patientId)
         TextView patientId;
 
-        public GroupViewHolder(View view) {
+        GroupViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
@@ -392,7 +386,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         @BindView(R.id.moreOption)
         TextView moreOption;
 
-        public ChildViewHolder(View view) {
+        ChildViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
@@ -406,21 +400,18 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         _listDataHeader.addAll(_originalListDataHeader);
         //-------
 
-        Iterator it = _originalListDataChild.entrySet().iterator();
+        for (Map.Entry<String, ArrayList<PatientFileData>> pair : _originalListDataChild.entrySet()) {
 
-        while (it.hasNext()) {
+            ArrayList<PatientFileData> value = pair.getValue();
 
-            Map.Entry pair = (Map.Entry) it.next();
-            ArrayList<PatientFileData> value = (ArrayList<PatientFileData>) pair.getValue();
-
-            if (((String) pair.getKey()).equalsIgnoreCase(groupName)) {
+            if ((pair.getKey()).equalsIgnoreCase(groupName)) {
                 //----------
                 for (PatientFileData dataObject :
                         value) {
                     dataObject.setShowCompleteList(true);
                 }
                 //---------
-                _listDataChild.put((String) pair.getKey(), value);
+                _listDataChild.put(pair.getKey(), value);
             } else {
                 //----------
                 for (PatientFileData dataObject :
@@ -429,13 +420,13 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
                 }
                 //---------
                 if (value.size() > dataShowMaxValue) {
-                    ArrayList<PatientFileData> tempList = new ArrayList<PatientFileData>();
+                    ArrayList<PatientFileData> tempList = new ArrayList<>();
                     for (int i = 0; i < dataShowMaxValue; i++) {
                         tempList.add(value.get(i));
                     }
-                    _listDataChild.put((String) pair.getKey(), tempList);
+                    _listDataChild.put(pair.getKey(), tempList);
                 } else {
-                    _listDataChild.put((String) pair.getKey(), value);
+                    _listDataChild.put(pair.getKey(), value);
                 }
             }
         }
@@ -449,17 +440,17 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
                 .size();
     }
 
-    private void checkBoxClicked(CompoundButton buttonView, boolean isChecked, int mGroupPosition, int mChildPosition) {
+    private void checkBoxClicked(boolean isChecked, int mGroupPosition, int mChildPosition) {
 
         //------------------
         int counterToCheckValues = 0;
 
-        this.mGroupPosition = mGroupPosition;
+//        this.mGroupPosition = mGroupPosition;
 
         // To make arrayList of elements
         ArrayList<Boolean> tempStatusList = new ArrayList<>();
         for (Map.Entry<Integer, boolean[]> entries : mChildCheckStates.entrySet()) {
-            boolean[] value = (boolean[]) entries.getValue();
+            boolean[] value = entries.getValue();
             for (boolean tempData :
                     value) {
                 tempStatusList.add(tempData);
@@ -501,7 +492,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
 
             for (int i = 0; i < checkedValues.length; i++) {
                 boolean checkedValue = checkedValues[i];
-                if (checkedValue == true) {
+                if (checkedValue) {
                     tempCheckedDataToCompare.add(i);
                 }
             }

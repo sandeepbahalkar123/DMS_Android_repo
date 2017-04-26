@@ -14,6 +14,7 @@
         android:layout_centerVertical="true"
         android:gravity="center"
         android:orientation="horizontal"
+        android:paddingStart="10dp"
         android:paddingLeft="10dp">
 
         <com.github.johnkil.print.PrintView
@@ -29,6 +30,7 @@
             android:id="@+id/node_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tools:visibility="visible"
             android:visibility="gone" />
 
         <!--  <com.github.johnkil.print.PrintView
@@ -49,9 +51,10 @@
             android:id="@+id/node_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp5"
+            android:layout_marginEnd="@dimen/dp5"
             android:textColor="@color/black"
             android:textSize="@dimen/sp14"
-            tools:text="asdasd" />
+            tools:text="asdasd"
+            android:layout_marginRight="@dimen/dp5" />
     </LinearLayout>
 </RelativeLayout>

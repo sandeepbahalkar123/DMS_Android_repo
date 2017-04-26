@@ -77,7 +77,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private static final long ANIMATION_DURATION = 500; // in milliseconds
     private static final int ANIMATION_LAYOUT_MAX_HEIGHT = 270; // in milliseconds
     private static final int ANIMATION_LAYOUT_MIN_HEIGHT = 0; // in milliseconds
-    SimpleDateFormat dfDate = new SimpleDateFormat(DmsConstants.DATE_PATTERN.yyyy_MM_dd);
+    SimpleDateFormat dfDate = new SimpleDateFormat(DmsConstants.DATE_PATTERN.yyyy_MM_dd, Locale.US);
 
     @BindView(R.id.expandableListView)
     ExpandableListView mPatientListView;
@@ -265,7 +265,6 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         }
         //---------
 
-
         // left navigation drawer clickListener
         mLeftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -437,6 +436,15 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mSearchPatientNameEditText.setText(DmsConstants.BLANK);
                 mSpinnerAmissionDate.setSelection(0);
                 mSpinSelectedId.setSelection(0);
+                // Reset Tree
+                for (AnnotationList annotationList: mAnnotationListData.getAnnotationLists()) {
+                    annotationList.setSelected(false);
+                    for (DocTypeList docTypeList : annotationList.getDocTypeList())
+                        docTypeList.setSelected(false);
+                }
+
+                createAnnotationTreeStructure(mAnnotationListData, false);
+                // Reset Tree End
                 try {
                     mFromDate = dfDate.parse("0000-00-00");
                 } catch (ParseException e) {
@@ -678,40 +686,44 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             @Override
             public void afterTextChanged(Editable s) {
                 String enteredString = mSearchAnnotationEditText.getText().toString();
-                if (enteredString.equals(""))
+                if (enteredString.equals("")) {
                     mClearSearchAnnotationButton.setVisibility(View.GONE);
-                else mClearSearchAnnotationButton.setVisibility(View.VISIBLE);
-                CommonMethods.Log(TAG, "onSearchAnnotationEditor:" + enteredString);
-                AnnotationListData annotationListData = new AnnotationListData();
-                List<AnnotationList> annotationTempList = new ArrayList<>();
-                if (mAnnotationListData != null) {
-                    List<AnnotationList> parentAnnotationList = mAnnotationListData.getAnnotationLists();
-                    if (parentAnnotationList.size() > 0) {
+                    createAnnotationTreeStructure(mAnnotationListData, false);
+                } else {
+                    mClearSearchAnnotationButton.setVisibility(View.VISIBLE);
 
-                        for (AnnotationList tempParentObject : parentAnnotationList) {
-                            //-------
-                            List<DocTypeList> childDocTypeTemp = new ArrayList<DocTypeList>();
-                            List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
-                            for (DocTypeList tempDocTypeObject : childDocTypeList) {
-                                if (tempDocTypeObject.getTypeName().toLowerCase(Locale.US).startsWith(enteredString.toLowerCase())) {
-                                    childDocTypeTemp.add(tempDocTypeObject);
+                    CommonMethods.Log(TAG, "onSearchAnnotationEditor:" + enteredString);
+                    AnnotationListData annotationListData = new AnnotationListData();
+                    List<AnnotationList> annotationTempList = new ArrayList<>();
+                    if (mAnnotationListData != null) {
+                        List<AnnotationList> parentAnnotationList = mAnnotationListData.getAnnotationLists();
+                        if (parentAnnotationList.size() > 0) {
+
+                            for (AnnotationList tempParentObject : parentAnnotationList) {
+                                //-------
+                                List<DocTypeList> childDocTypeTemp = new ArrayList<DocTypeList>();
+                                List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
+                                for (DocTypeList tempDocTypeObject : childDocTypeList) {
+                                    if (tempDocTypeObject.getTypeName().toLowerCase().startsWith(enteredString.toLowerCase())) {
+                                        childDocTypeTemp.add(tempDocTypeObject);
+                                    }
                                 }
-                            }
 
-                            if (childDocTypeTemp.size() > 0) {
-                                AnnotationList annotationListTemp = new AnnotationList();
+                                if (childDocTypeTemp.size() > 0) {
+                                    AnnotationList annotationListTemp = new AnnotationList();
 //                                annotationListTemp.setSelected(tempParentObject.getSelected());
-                                annotationListTemp.setCategoryId(tempParentObject.getCategoryId());
-                                annotationListTemp.setCategoryName(tempParentObject.getCategoryName());
-                                annotationListTemp.setDocTypeList(childDocTypeTemp);
-                                annotationTempList.add(annotationListTemp);
+                                    annotationListTemp.setCategoryId(tempParentObject.getCategoryId());
+                                    annotationListTemp.setCategoryName(tempParentObject.getCategoryName());
+                                    annotationListTemp.setDocTypeList(childDocTypeTemp);
+                                    annotationTempList.add(annotationListTemp);
+                                }
+                                //------
                             }
-                            //------
                         }
                     }
+                    annotationListData.setAnnotationLists(annotationTempList);
+                    createAnnotationTreeStructure(annotationListData, false);
                 }
-                annotationListData.setAnnotationLists(annotationTempList);
-                createAnnotationTreeStructure(annotationListData, false);
             }
         });
     }
