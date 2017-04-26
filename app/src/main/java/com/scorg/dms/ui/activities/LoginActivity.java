@@ -1,24 +1,16 @@
 package com.scorg.dms.ui.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.scorg.dms.R;
 import com.scorg.dms.helpers.login.LoginHelper;
-import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
-import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
-import com.scorg.dms.util.Config;
-import com.scorg.dms.util.DmsConstants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
