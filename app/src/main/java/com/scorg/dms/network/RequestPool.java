@@ -12,9 +12,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 public class RequestPool {
-	private static RequestPool mInstance;
     private RequestQueue mRequestQueue;
-    private static Context mContext;
+    private Context mContext;
 
     private RequestPool(Context context) {
         mContext = context;
@@ -22,10 +21,8 @@ public class RequestPool {
     }
 
     public static synchronized RequestPool getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new RequestPool(context);
-        }
-        return mInstance;
+
+        return new RequestPool(context);
     }
 
     public void cancellAllPreviousRequestWithSameTag(String tag){

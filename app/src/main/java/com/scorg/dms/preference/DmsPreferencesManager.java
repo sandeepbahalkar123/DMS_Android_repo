@@ -47,7 +47,7 @@ public class DmsPreferencesManager {
                     String value = sharedPreferences.getString(key, null);
                     if (value == null) {
                         value = generateAesKeyValue();
-                        sharedPreferences.edit().putString(key, value).commit();
+                        sharedPreferences.edit().putString(key, value).apply();
                     }
                     sKey = decode(value);
                 } catch (Exception e) {
@@ -86,7 +86,7 @@ public class DmsPreferencesManager {
         // String mValue = encrypt(Boolean.toString(value));
 //        CommonMethods.Log(TAG, "--------------------------" + Boolean.toString(value));
         //getSharedPreference(context).edit().putString(mKey, encrypt(mValue)).commit();
-        getSharedPreference(context).edit().putBoolean(key, value).commit();
+        getSharedPreference(context).edit().putBoolean(key, value).apply();
         return value;
     }
 
@@ -94,19 +94,19 @@ public class DmsPreferencesManager {
         //String mKey = encrypt(key);
         //String mValue = encrypt(value);
 //        CommonMethods.Log(TAG, "putString--mKey--->" + key + "<----mValue-------->" + value);
-        getSharedPreference(context).edit().putString(key, value).commit();
+        getSharedPreference(context).edit().putString(key, value).apply();
     }
 
     public static void putLong(String key, long value, Context context) {
         //String mKey = encrypt(key);
         // String mValue = encrypt(Ln.toString(value));
-        getSharedPreference(context).edit().putLong(key, value).commit();
+        getSharedPreference(context).edit().putLong(key, value).apply();
     }
 
     public static void putInt(String key, int value, Context context) {
 //        String mKey = encrypt(key);
         // String mValue = encrypt(Integer.toString(value));
-        getSharedPreference(context).edit().putInt(key, value).commit();
+        getSharedPreference(context).edit().putInt(key, value).apply();
     }
 
     public static int getInt(String key, Context context) {
@@ -145,7 +145,7 @@ public class DmsPreferencesManager {
     }
 
     public static void clearSharedPref(Context context) {
-        getSharedPreference(context).edit().clear().commit();
+        getSharedPreference(context).edit().clear().apply();
     }
 
 

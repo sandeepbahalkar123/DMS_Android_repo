@@ -9,7 +9,6 @@
 
     <android.support.v7.widget.Toolbar
 
-        android:id="@+id/toolbar_add"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp30"
         android:background="@color/black"
@@ -36,7 +35,6 @@
                 android:textColor="@color/reset_yellow" />
 
             <TextView
-                android:id="@+id/toolbar_title"
                 android:layout_width="@dimen/dp0"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -68,7 +66,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -230,7 +228,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp30"
-                android:id="@+id/annotationTreeConatiner"
                 android:background="@color/white">
 
                 <android.support.design.widget.TextInputLayout
@@ -276,7 +273,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
 
@@ -286,7 +283,6 @@
                 android:layout_height="match_parent"></RelativeLayout>
 
             <TextView
-                android:id="@+id/emptyListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"

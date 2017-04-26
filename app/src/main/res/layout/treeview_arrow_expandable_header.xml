@@ -20,10 +20,6 @@
             android:id="@+id/arrow_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/node_selector"
             app:iconColor="@color/black"
             app:iconFont="fonts/material-icon-font.ttf"
             app:iconSize="@dimen/dp22"
@@ -33,9 +29,6 @@
             android:id="@+id/node_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:visibility="gone" />
 
         <!--  <com.github.johnkil.print.PrintView

@@ -69,7 +69,7 @@ public class CommonMethods {
     private int mYear, mMonth, mDay, mHour, mMinute;
     private DatePickerDialogListener mDatePickerDialogListener;
     private static CheckIpConnection mCheckIpConnection;
-    public static Context mContext;
+
 
     public static void showToast(Context context, String error) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -315,12 +315,12 @@ public class CommonMethods {
             DateTime parsed = utcFormatter.parseDateTime(utcText);
             String indianText = indianZoneFormatter.print(parsed);
 
-            final SimpleDateFormat sdf = new SimpleDateFormat(utcNewPattern);
+            final SimpleDateFormat sdf = new SimpleDateFormat(utcNewPattern,Locale.US);
             final Date dateObj1;
 
             dateObj1 = sdf.parse(indianText);
 
-            finalDate = new SimpleDateFormat(finalPattern).format(dateObj1);
+            finalDate = new SimpleDateFormat(finalPattern,Locale.US).format(dateObj1);
             return finalDate;
         } catch (java.text.ParseException e) {
             e.printStackTrace();
@@ -332,7 +332,7 @@ public class CommonMethods {
     public static String getCurrentTimeStamp() {
         try {
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.US);
             String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
 
             return currentTimeStamp;
@@ -344,7 +344,7 @@ public class CommonMethods {
     }
 
     public static int getTimeStampDifference(String startTime, String endTime) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.US);
 
         Date secondParsedDate = null;
         Date firstParsedDate = null;
@@ -433,7 +433,7 @@ public class CommonMethods {
 
     public static String yyyy_dd__mm_To_Words(String date) {
         String output = "";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.US );
         try {
             Date d = simpleDateFormat.parse(date);
             simpleDateFormat.applyPattern("dd MMM yyyy");
@@ -563,7 +563,7 @@ public class CommonMethods {
 
     //this alert is shown for input of serverpath
     public static Dialog showAlertDialog(Context activity, String dialogHeader, CheckIpConnection checkIpConnection) {
-        mContext = activity;
+         final Context  mContext = activity;
         mCheckIpConnection = checkIpConnection;
         final Dialog dialog = new Dialog(activity);
 

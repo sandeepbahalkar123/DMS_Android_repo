@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:singleLine="true"
+        android:maxLines="1"
         android:textColor="@color/black"
         android:textSize="@dimen/sp12" />
 

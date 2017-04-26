@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:baselineAligned="false"
         android:id="@+id/opdLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp42"
@@ -19,7 +20,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="@dimen/uhid"
+                android:layout_width="@dimen/dp0"
                 android:layout_height="@dimen/uhid"
                 android:layout_weight="1" />
 
@@ -68,12 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="right"
             android:orientation="horizontal">
 
@@ -92,6 +87,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:baselineAligned="false"
         android:id="@+id/ipdLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp42"
@@ -105,7 +101,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="@dimen/uhid"
+                android:layout_width="@dimen/dp0"
                 android:layout_height="@dimen/uhid"
                 android:layout_weight="1" />
 

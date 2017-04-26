@@ -68,6 +68,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -147,7 +148,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
     private RecyclerView mRecycleTag;
-    private Handler mAddedTagsEventHandler;
+    private static Handler mAddedTagsEventHandler;
     private HashMap<String, Object> mAddedTagsForFiltering;
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
@@ -675,7 +676,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                             List<DocTypeList> childDocTypeTemp = new ArrayList<DocTypeList>();
                             List<DocTypeList> childDocTypeList = tempParentObject.getDocTypeList();
                             for (DocTypeList tempDocTypeObject : childDocTypeList) {
-                                if (tempDocTypeObject.getTypeName().toLowerCase().startsWith(enteredString.toLowerCase())) {
+                                if (tempDocTypeObject.getTypeName().toLowerCase(Locale.US).startsWith(enteredString.toLowerCase())) {
                                     childDocTypeTemp.add(tempDocTypeObject);
                                 }
                             }

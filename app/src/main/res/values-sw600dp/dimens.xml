@@ -2,47 +2,23 @@
 <resources>
     <dimen name="dp0">0dp</dimen>
 
-    <dimen name="pdf_middle_margin">32dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="dp1">2dp</dimen>
     <dimen name="dp2">3dp</dimen>
     <dimen name="dp4">7dp</dimen>
     <dimen name="dp5">5dp</dimen>
-    <dimen name="dp8">12dp</dimen>
     <dimen name="dp10">15dp</dimen>
     <dimen name="dp15">22dp</dimen>
-    <dimen name="dp19">28dp</dimen>
     <dimen name="dp20">30dp</dimen>
-    <dimen name="dp25">38dp</dimen>
     <dimen name="dp30">45dp</dimen>
-    <dimen name="dp40">55dp</dimen>
-    <dimen name="dp45">60dp</dimen>
     <dimen name="dp50">70dp</dimen>
-    <dimen name="dp60">80dp</dimen>
-    <dimen name="dp70">105dp</dimen>
-    <dimen name="dp80">120dp</dimen>
-    <dimen name="dp100">150dp</dimen>
-    <dimen name="dp120">180dp</dimen>
-    <dimen name="dp150">220dp</dimen>
-    <dimen name="dp175">150dp</dimen>
     <dimen name="dp200">275dp</dimen>
-    <dimen name="dp300">400dp</dimen>
     <dimen name="uhid">8dp</dimen>
-    <dimen name="dp16">16dp</dimen>
 
     <!--  ====================SP====================== -->
-    <dimen name="sp10">10sp</dimen>
     <dimen name="sp12">14sp</dimen>
     <dimen name="sp14">17sp</dimen>
-    <dimen name="sp14_1">20sp</dimen>
-    <dimen name="sp15">22sp</dimen>
-    <dimen name="sp16">24sp</dimen>
-    <dimen name="sp18">27sp</dimen>
-    <dimen name="sp20">32sp</dimen>
-    <dimen name="sp22">36sp</dimen>
     <dimen name="sp24">40sp</dimen>
-    <dimen name="sp26">46sp</dimen>
-    <dimen name="offer_detail_image_bottom_margin">15dp</dimen>
 
 
 </resources>

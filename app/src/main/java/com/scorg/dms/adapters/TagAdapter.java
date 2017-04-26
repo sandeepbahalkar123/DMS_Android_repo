@@ -88,7 +88,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(TagAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final TagAdapter.ViewHolder holder, int position) {
 
 
 //        String.valueOf(mTagsDataSet.get(position).split("\\|")[1])
@@ -163,7 +163,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 String tag = (String) view.getTag();
 
                 // Remove the item on remove/button click
-                mTagsDataSet.remove(position);
+                mTagsDataSet.remove(holder.getAdapterPosition());
 
                 /*
                     public final void notifyItemRemoved (int position)
@@ -178,7 +178,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                     Parameters
                         position : Position of the item that has now been removed
                 */
-                notifyItemRemoved(position);
+                notifyItemRemoved(holder.getAdapterPosition());
 
                 /*
                     public final void notifyItemRangeChanged (int positionStart, int itemCount)
@@ -194,7 +194,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                         positionStart : Position of the first item that has changed
                         itemCount : Number of items that have changed
                 */
-                notifyItemRangeChanged(position, mTagsDataSet.size());
+                notifyItemRangeChanged(holder.getAdapterPosition(), mTagsDataSet.size());
 
                 mAddedTagsForFiltering.remove(tag);
                 mAddedTagsEventHandler.sendMessage(new Message());

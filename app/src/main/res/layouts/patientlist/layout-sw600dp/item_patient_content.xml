@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:baselineAligned="false"
         android:id="@+id/opdLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp42"
@@ -60,11 +61,6 @@
                 android:text="@string/visit_date" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,6 +84,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:baselineAligned="false"
         android:id="@+id/ipdLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp42"

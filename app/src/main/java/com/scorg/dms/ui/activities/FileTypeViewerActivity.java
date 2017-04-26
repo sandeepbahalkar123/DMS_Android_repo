@@ -66,6 +66,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -555,7 +556,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     public void printBookmarksTree(List<PdfDocument.Bookmark> tree, String sep) {
         for (PdfDocument.Bookmark b : tree) {
-            CommonMethods.Log(TAG, String.format("%s %s, p %d", sep, b.getTitle(), b.getPageIdx()));
+            CommonMethods.Log(TAG, String.format("%s %s, p %d", Locale.US,sep, b.getTitle(), b.getPageIdx()));
             if (b.hasChildren()) {
                 printBookmarksTree(b.getChildren(), sep + "-");
             }

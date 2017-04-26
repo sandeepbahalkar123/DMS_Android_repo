@@ -15,7 +15,7 @@ public class Config {
     public static final String TOKEN_TYPE = "Bearer";
     public static boolean DEV_BUILD = true;
     public static String BASE_URL = "";
-    public static Context mContext;
+    public  Context mContext;
 
    /* static {
         if (DEV_BUILD) {
