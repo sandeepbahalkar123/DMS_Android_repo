@@ -45,10 +45,11 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mContext = getApplicationContext();
-        // Log.d("Server PAth",mServerPath);
+         Log.d("Server PAth",mServerPath);
 
         ButterKnife.bind(this);
         mLoginHelper = new LoginHelper(this, this);
+
 
     }
 
