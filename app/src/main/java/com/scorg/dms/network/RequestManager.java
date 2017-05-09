@@ -274,7 +274,11 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 //                    mContext.startActivity(intent);
 //                    ((AppCompatActivity) mContext).finishAffinity();
 
+                    String mServerPath = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mContext);
+                    String isValidConfig = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG,mContext);
                     DmsPreferencesManager.clearSharedPref(mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mServerPath,mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG,isValidConfig,mContext);
                     Intent intent = new Intent(mContext, SplashScreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
