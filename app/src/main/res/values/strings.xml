@@ -19,7 +19,7 @@
     <string name="patientInformation">Patient Information</string>
     <string name="refId">REF ID</string>
     <string name="logout">Logout</string>
-    <string name="for_example_server_path">e.g. 192.168.0.25:81</string>
+    <string name="for_example_server_path">e.g. 192.168.0.180:80</string>
     <string name="server_path">Enter the server path</string>
     <string name="doctor">Doctor</string>
     <string name="admission">Admission</string>
