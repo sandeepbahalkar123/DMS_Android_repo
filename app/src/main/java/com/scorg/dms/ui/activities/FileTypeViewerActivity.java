@@ -417,7 +417,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
                 dataToShow = lstDocCategoryObject.getCategoryName() + " (" + lstDocCategoryObject.getTotalDocTypePageCount() + ")" + "|" + lstDocCategoryObject.getCategoryId();
 
 
-                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded,lstDocTypeChildLeftPadding);
+                ArrowExpandSelectableHeaderHolder docCatSelectableHeaderHolder = new ArrowExpandSelectableHeaderHolder(this, isExpanded, lstDocTypeChildLeftPadding);
                 docCatSelectableHeaderHolder.setOnlyOneNodeExpanded(true);
 
                 docCatSelectableHeaderHolder.setNodeValueColor(textColor);
@@ -894,12 +894,18 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         //----final object creation
         ArchiveDatum archiveDatum = new ArchiveDatum();
         ArrayList<LstDocCategory> lstDocCategories = new ArrayList<LstDocCategory>();
-        for (Map.Entry<LstDocCategory, List<LstDocType>> entry : mergedLstDocTypeHashMap.entrySet()) {
-            LstDocCategory key = entry.getKey();
+
+        if (mergedLstDocTypeHashMap.isEmpty()) {
             archiveDatum.setFileType(fileType);
-            key.setLstDocTypes(entry.getValue());
-            lstDocCategories.add(key);
+        } else {
+            for (Map.Entry<LstDocCategory, List<LstDocType>> entry : mergedLstDocTypeHashMap.entrySet()) {
+                LstDocCategory key = entry.getKey();
+                archiveDatum.setFileType(fileType);
+                key.setLstDocTypes(entry.getValue());
+                lstDocCategories.add(key);
+            }
         }
+
         archiveDatum.setLstDocCategories(lstDocCategories);
         //-- This is done to maintain parent element pattern for both first & second file view.
         archiveDatum.setMergedFileCompareCustomID(new String[]{"0", "1"});
