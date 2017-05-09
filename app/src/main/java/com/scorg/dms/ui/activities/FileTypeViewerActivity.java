@@ -551,7 +551,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
     public void printBookmarksTree(List<PdfDocument.Bookmark> tree, String sep) {
         for (PdfDocument.Bookmark b : tree) {
-            CommonMethods.Log(TAG, String.format("%s %s, p %d", Locale.US,sep, b.getTitle(), b.getPageIdx()));
+            CommonMethods.Log(TAG, String.format("%s %s, p %d", Locale.US, sep, b.getTitle(), b.getPageIdx()));
             if (b.hasChildren()) {
                 printBookmarksTree(b.getChildren(), sep + "-");
             }
@@ -914,11 +914,15 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         //----final object creation
         ArchiveDatum archiveDatum = new ArchiveDatum();
         ArrayList<LstDocCategory> lstDocCategories = new ArrayList<LstDocCategory>();
-        for (Map.Entry<LstDocCategory, List<LstDocType>> entry : mergedLstDocTypeHashMap.entrySet()) {
-            LstDocCategory key = entry.getKey();
+        if (mergedLstDocTypeHashMap.isEmpty()) {
             archiveDatum.setFileType(fileType);
-            key.setLstDocTypes(entry.getValue());
-            lstDocCategories.add(key);
+        } else {
+            for (Map.Entry<LstDocCategory, List<LstDocType>> entry : mergedLstDocTypeHashMap.entrySet()) {
+                LstDocCategory key = entry.getKey();
+                archiveDatum.setFileType(fileType);
+                key.setLstDocTypes(entry.getValue());
+                lstDocCategories.add(key);
+            }
         }
         archiveDatum.setLstDocCategories(lstDocCategories);
         //-- This is done to maintain parent element pattern for both first & second file view.
