@@ -32,7 +32,7 @@ public class Config {
     public static final String URL_LOGIN = "userLogin";
     public static final String URL_PATIENT_LIST = "result/ShowSearchResults";
     public static final String URL_ANNOTATIONS_LIST = "documenttype/getAnnotations";
-
+    public static final String URL_PATIENT_NAME_LIST = "Patient";
 
     public static final String URL_GET_ARCHIVED_LIST = "getArchived";
     public static final String URL_GET_PDF_DATA = "showfile";

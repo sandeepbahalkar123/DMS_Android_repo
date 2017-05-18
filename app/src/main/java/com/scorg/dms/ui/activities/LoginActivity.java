@@ -10,6 +10,7 @@ import com.scorg.dms.R;
 import com.scorg.dms.helpers.login.LoginHelper;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
+import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
 
 import butterknife.BindView;
@@ -75,7 +76,8 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse {
 
     @Override
     public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
-
+        DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_NAME,mUserName.getText().toString(),mContext);
+        DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.PASSWORD,mPassword.getText().toString(),mContext);
         Intent intent = new Intent(this, PatientList.class);
         startActivity(intent);
 

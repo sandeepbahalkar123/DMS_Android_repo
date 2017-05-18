@@ -35,6 +35,7 @@ import com.scorg.dms.model.responsemodel.filetreeresponsemodel.FileTreeResponseM
 import com.scorg.dms.model.responsemodel.getpdfdataresponsemodel.GetPdfDataResponseModel;
 import com.scorg.dms.model.responsemodel.iptestresponsemodel.IpTestResponseModel;
 import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
+import com.scorg.dms.model.responsemodel.patientnamelistresponsemodel.PatientNameListResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.ui.activities.LoginActivity;
@@ -245,6 +246,12 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
             if (error instanceof TimeoutError) {
 
+                if (error.getMessage().equalsIgnoreCase("java.io.IOException: No authentication challenges found") || error.getMessage().equalsIgnoreCase("invalid_grant")) {
+                    if (!isTokenExpired) {
+                        tokenRefreshRequest();
+                    }
+                }
+
 //                if (error.getMessage().equalsIgnoreCase("java.io.IOException: No authentication challenges found") || error.getMessage().equalsIgnoreCase("invalid_grant")) {
 //                    if (mViewById != null)
 //                        CommonMethods.showSnack(mViewById, mContext.getString(R.string.authentication));
@@ -261,6 +268,12 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
             } else if (error instanceof NoConnectionError) {
 
+                if (error.getMessage().equalsIgnoreCase("java.io.IOException: No authentication challenges found") || error.getMessage().equalsIgnoreCase("invalid_grant")) {
+                    if (!isTokenExpired) {
+                        tokenRefreshRequest();
+                    }
+                }
+
                 if (mViewById != null)
                     CommonMethods.showSnack(mViewById, mContext.getString(R.string.internet));
                 else {
@@ -274,12 +287,20 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 //                    mContext.startActivity(intent);
 //                    ((AppCompatActivity) mContext).finishAffinity();
 
+                    /*String mServerPath = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mContext);
+                    String isValidConfig = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG,mContext);
                     DmsPreferencesManager.clearSharedPref(mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mServerPath,mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG,isValidConfig,mContext);
                     Intent intent = new Intent(mContext, SplashScreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(intent);
+                    mContext.startActivity(intent);*/
+
+                    // ganesh
+
+                    loginRequest();
 
                 } else
                     mConnectionListener.onResponse(ConnectionListener.SERVER_ERROR, null, mOldDataTag);
@@ -362,9 +383,13 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                         IpTestResponseModel ipTestResponseModel = gson.fromJson(data, IpTestResponseModel.class);
                         this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, ipTestResponseModel, mOldDataTag);
                         break;
+                    case DmsConstants.TASK_GET_PATIENT_NAME_LIST: //This is for get archived list
+                        PatientNameListResponseModel patientNameListResponseModel = gson.fromJson(data, PatientNameListResponseModel.class);
+                        this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, patientNameListResponseModel, mOldDataTag);
+                        break;
 
                     default:
-                        //This is for get PDF Data
+                        //This is for get PDF PatientNameListData
                         if (mOldDataTag.startsWith(DmsConstants.TASK_GET_PDF_DATA)) {
                             GetPdfDataResponseModel getPdfDataResponseModel = gson.fromJson(data, GetPdfDataResponseModel.class);
                             this.mConnectionListener.onResponse(ConnectionListener.RESPONSE_OK, getPdfDataResponseModel, mOldDataTag);
@@ -453,7 +478,22 @@ public class RequestManager extends ConnectRequest implements Connector, Request
         postParams.put(DmsConstants.GRANT_TYPE_KEY, DmsConstants.REFRESH_TOKEN);
         postParams.put(DmsConstants.REFRESH_TOKEN, DmsPreferencesManager.getString(DmsConstants.REFRESH_TOKEN, mContext));
         postParams.put(DmsConstants.CLIENT_ID_KEY, DmsConstants.CLIENT_ID_VALUE);
-
         stringRequest(url, Request.Method.POST, headerParams, postParams, true);
     }
+
+    private void loginRequest() {
+        String url = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext) + Config.URL_LOGIN;
+        CommonMethods.Log(TAG, "Refersh token while sending refresh token api: " + DmsPreferencesManager.getString(DmsConstants.REFRESH_TOKEN, mContext));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.putAll(mHeaderParams);
+        headerParams.remove(DmsConstants.CONTENT_TYPE);
+        headerParams.put(DmsConstants.CONTENT_TYPE, DmsConstants.APPLICATION_URL_ENCODED);
+        Map<String, String> postParams = new HashMap<String, String>();
+        postParams.put(DmsConstants.GRANT_TYPE_KEY, DmsConstants.PASSWORD);
+        postParams.put(DmsConstants.USERNAME, DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_NAME, mContext));
+        postParams.put(DmsConstants.PASSWORD, DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.PASSWORD, mContext));
+        postParams.put(DmsConstants.CLIENT_ID_KEY, DmsConstants.CLIENT_ID_VALUE);
+        stringRequest(url, Request.Method.POST, headerParams, postParams, true);
+    }
+
 }

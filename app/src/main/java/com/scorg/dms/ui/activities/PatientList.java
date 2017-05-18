@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ import android.widget.TextView;
 import com.scorg.dms.R;
 import com.scorg.dms.adapters.Custom_Spin_Adapter;
 import com.scorg.dms.adapters.PatientExpandableListAdapter;
+import com.scorg.dms.adapters.ShowPatientNameAdapter;
 import com.scorg.dms.adapters.TagAdapter;
 import com.scorg.dms.helpers.patients.PatientsHelper;
 import com.scorg.dms.interfaces.CustomResponse;
@@ -50,6 +52,9 @@ import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationL
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListData;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.AnnotationListResponseModel;
 import com.scorg.dms.model.responsemodel.annotationlistresponsemodel.DocTypeList;
+import com.scorg.dms.model.responsemodel.patientnamelistresponsemodel.LstPatient;
+import com.scorg.dms.model.responsemodel.patientnamelistresponsemodel.PatientNameListData;
+import com.scorg.dms.model.responsemodel.patientnamelistresponsemodel.PatientNameListResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.PatientFileData;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.SearchResult;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
@@ -120,6 +125,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     @BindView(R.id.bt_clear_search_annotation)
     ImageView mClearSearchAnnotationButton;
 
+    @BindView(R.id.bt_clear_patient_name)
+    ImageView mClearPatientNameButton;
+
     @BindView(R.id.apply)
     TextView mApplySearchFilter;
 
@@ -145,11 +153,15 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private Custom_Spin_Adapter mCustomSpinAdapter;
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
+    private List<LstPatient> mLstPatient ;
     private RecyclerView mRecycleTag;
     private static Handler mAddedTagsEventHandler;
     private HashMap<String, Object> mAddedTagsForFiltering;
     private AndroidTreeView mAndroidTreeView;
     private AnnotationListData mAnnotationListData;
+    private PatientNameListData mPatientNameListData;
+    String patientName;
+    ArrayList mPatientLists;
     private String TAG = this.getClass().getName();
     private boolean isCompareDialogCollapsed = true;
     String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
@@ -185,6 +197,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     // intialize variables
     private void initializeVariables() {
         mContext = getApplicationContext();
+        mPatientsHelper = new PatientsHelper(this, this);
+        doGetPatientNameList();
         mAddedTagsForFiltering = new HashMap<String, Object>();
         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, DmsConstants.BLANK);
         mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, DmsConstants.BLANK);
@@ -200,12 +214,19 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             @Override
             public void handleMessage(Message msg) {
                 doGetPatientList();
+
+
             }
         };
         //-------------
-        mPatientsHelper = new PatientsHelper(this, this);
+
         //------------
         mTagsAdapter = new TagAdapter(mContext, mAddedTagsForFiltering, mAddedTagsEventHandler);
+
+    }
+
+    private void doGetPatientNameList() {
+        mPatientsHelper.doGetPatientNameList();
 
     }
 
@@ -271,7 +292,11 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.nav_logout) {
+                    String mServerPath = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mContext);
+                    String isValidConfig = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG,mContext);
                     DmsPreferencesManager.clearSharedPref(mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mServerPath,mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG,isValidConfig,mContext);
                     Intent intent = new Intent(PatientList.this, SplashScreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -295,6 +320,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         mToDateEditText.setOnClickListener(this);
         mClearSearchAnnotationButton.setOnClickListener(this);
         mClearSearchAnnotationButton.setVisibility(View.GONE);
+        mClearPatientNameButton.setOnClickListener(this);
+        mClearPatientNameButton.setBackground(getResources().getDrawable(R.mipmap.user));
         mUserName.setText(DmsPreferencesManager.getString(DmsConstants.USERNAME, mContext));
         //--------
         // setting adapter for spinner in header view of right drawer
@@ -327,8 +354,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,languages);
-        mSearchPatientNameEditText.setAdapter(adapter);
+        Log.e(TAG,"++++++++++++++++++++++");
+
         mAnnotationTreeViewContainer.addView(CommonMethods.loadView(R.layout.mydialog, this));
         mFirstFileTypeProgressDialogLayout = (RelativeLayout) mAnnotationTreeViewContainer.findViewById(R.id.progressBarContainerLayout);
 
@@ -357,8 +384,23 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
             createAnnotationTreeStructure(mAnnotationListData, false);
            mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
+        }else if (mOldDataTag == DmsConstants.TASK_GET_PATIENT_NAME_LIST) {
+            PatientNameListResponseModel patientNameListResponseModel = (PatientNameListResponseModel) customResponse;
+            mPatientNameListData = patientNameListResponseModel.getData();
+            mLstPatient = mPatientNameListData.getLstPatients();
+            mPatientLists = new ArrayList();
+            for(int i =0;i<mLstPatient.size();i++){
+
+                patientName = mLstPatient.get(i).getPatientName();
+                mPatientLists.add(patientName);
+
+            }
+            ShowPatientNameAdapter adapter = new ShowPatientNameAdapter(this,R.layout.patient_filter_right_drawer,R.id.custom_spinner_txt_view_Id,mLstPatient);
+            mSearchPatientNameEditText.setAdapter(adapter);
+            Log.d(TAG,""+mLstPatient);
         }
-    }
+
+        }
 
     @Override
     public void onParseError(String mOldDataTag, String errorMessage) {
@@ -503,7 +545,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     ArrayList<Object> selectedAnnotations = getSelectedAnnotations();
                     for (Object dataValue :
                             selectedAnnotations) {
-                        //--- hashMap Data : childName|id
+                        //--- hashMap PatientNameListData : childName|id
                         if (dataValue instanceof DocTypeList) {
                             String dataValueString = getString(R.string.documenttype) + ((DocTypeList) dataValue).getTypeName() + "|" + String.valueOf(((DocTypeList) dataValue).getTypeId());
                             mAddedTagsForFiltering.put(dataValueString, dataValue);
@@ -524,6 +566,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
             case R.id.bt_clear_search_annotation:
                 mSearchAnnotationEditText.setText("");
+                break;
+            case R.id.bt_clear_patient_name:
+                mSearchPatientNameEditText.setText("");
                 break;
         }
 
@@ -671,6 +716,32 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
 
     protected void onTextChanged() {
+        mSearchPatientNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String enteredString = mSearchPatientNameEditText.getText().toString();
+                if (enteredString.equals("")) {
+                    mClearPatientNameButton.setBackground(getResources().getDrawable(R.mipmap.user));
+
+                }
+
+                else {
+                   mClearPatientNameButton.setBackground(getResources().getDrawable(R.mipmap.crosswithcircle));
+
+                }
+
+            }
+        });
 
         mSearchAnnotationEditText.addTextChangedListener(new TextWatcher() {
             @Override

@@ -36,6 +36,8 @@ public class DmsPreferencesManager {
         String USER_GENDER = "user_gender";
         String SERVER_CONNECTION_SUCCESS = "success";
         String IS_VALID_IP_CONFIG = "isvalidipconfig";
+        String USER_NAME = "user_name";
+        String PASSWORD = "password";
     }
 
     public static SharedPreferences getSharedPreference(final Context context) {
