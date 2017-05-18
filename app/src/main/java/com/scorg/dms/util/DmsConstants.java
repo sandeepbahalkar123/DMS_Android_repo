@@ -74,6 +74,7 @@ public class DmsConstants {
     public static final String TASK_GET_ARCHIVED_LIST = DmsConstants.BLANK + 4;
     public static final String TASK_GET_PDF_DATA = DmsConstants.BLANK + "PDF_DATA";
     public static final String TASK_CHECK_SERVER_CONNECTION = DmsConstants.BLANK +5;
+    public static final String TASK_GET_PATIENT_NAME_LIST = DmsConstants.BLANK +6;
 
     public static class DATE_PATTERN {
         public static String YYYY_MM_DD = "yyyy-MM-dd";

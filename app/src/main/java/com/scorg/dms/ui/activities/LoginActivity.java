@@ -83,7 +83,8 @@ public class LoginActivity extends AppCompatActivity implements HelperResponse {
 
     @Override
     public void onSuccess(String mOldDataTag, CustomResponse customResponse) {
-
+        DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.USER_NAME,mUserName.getText().toString(),mContext);
+        DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.PASSWORD,mPassword.getText().toString(),mContext);
         Intent intent = new Intent(this, PatientList.class);
         startActivity(intent);
 

@@ -43,7 +43,12 @@ public class PatientsHelper implements ConnectionListener {
         this.mContext = context;
         this.mHelperResponseManager = loginActivity1;
     }
-
+    public void doGetPatientNameList() {
+        ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, true, DmsConstants.TASK_GET_PATIENT_NAME_LIST, Request.Method.GET);
+        mConnectionFactory.setHeaderParams();
+        mConnectionFactory.setUrl(Config.URL_PATIENT_NAME_LIST);
+        mConnectionFactory.createConnection(DmsConstants.TASK_GET_PATIENT_NAME_LIST);
+    }
 
     //-- TO get Patient list from server
     public void doGetPatientList(ShowSearchResultRequestModel showSearchResultRequestModel) {
@@ -53,6 +58,7 @@ public class PatientsHelper implements ConnectionListener {
         mConnectionFactory.setUrl(Config.URL_PATIENT_LIST);
         mConnectionFactory.createConnection(DmsConstants.TASK_PATIENT_LIST);
     }
+
 
     public void doGetAllAnnotations() {
         ConnectionFactory mConnectionFactory = new ConnectionFactory(mContext, this, null, false, DmsConstants.TASK_ANNOTATIONS_LIST, Request.Method.GET);
