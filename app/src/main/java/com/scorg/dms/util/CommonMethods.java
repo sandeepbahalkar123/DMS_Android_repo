@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -30,6 +31,8 @@ import android.widget.Toast;
 import com.scorg.dms.R;
 import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.DatePickerDialogListener;
+import com.scorg.dms.preference.DmsPreferencesManager;
+import com.scorg.dms.ui.activities.SplashScreenActivity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -495,6 +498,39 @@ public class CommonMethods {
             }
         }
 
+    }
+    public static void showDialog(String msg,String changeIpAddress , final Context mContext) {
+
+
+        final Dialog dialog = new Dialog(mContext);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.change_ip_address_dialog);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+
+        ((TextView) dialog.findViewById(R.id.textview_ipaddress_label)).setText(msg);
+        ((TextView) dialog.findViewById(R.id.textview_change_ip_address)).setText(changeIpAddress);
+        dialog.findViewById(R.id.button_yes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                DmsPreferencesManager.clearSharedPref(mContext);
+                ((Activity) mContext).finish();
+                mContext.startActivity(new Intent(mContext, SplashScreenActivity.class));
+
+            }
+        });
+        dialog.findViewById(R.id.button_no).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
     }
 
 

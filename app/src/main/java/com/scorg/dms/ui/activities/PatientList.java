@@ -196,7 +196,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     // intialize variables
     private void initializeVariables() {
-        mContext = getApplicationContext();
+        mContext = PatientList.this;
         mPatientsHelper = new PatientsHelper(this, this);
         doGetPatientNameList();
         mAddedTagsForFiltering = new HashMap<String, Object>();
@@ -303,6 +303,9 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     // Handle the camera action
+                }else if(id == R.id.change_ip_address){
+                    CommonMethods.showDialog(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mContext),getString(R.string.change_ip),mContext);
+
                 }
 
                 mDrawer.closeDrawer(GravityCompat.START);
