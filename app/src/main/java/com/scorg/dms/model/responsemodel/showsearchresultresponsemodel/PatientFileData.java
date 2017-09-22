@@ -16,7 +16,7 @@ public class PatientFileData implements Serializable {
     private String fileType;
     @SerializedName("referenceId")
     @Expose
-    private Integer referenceId;
+    private String referenceId;
     @SerializedName("admissionDate")
     @Expose
     private String admissionDate;
@@ -37,11 +37,11 @@ public class PatientFileData implements Serializable {
         this.fileType = fileType;
     }
 
-    public Integer getReferenceId() {
+    public String getReferenceId() {
         return referenceId;
     }
 
-    public void setReferenceId(Integer referenceId) {
+    public void setReferenceId(String referenceId) {
         this.referenceId = referenceId;
     }
 
