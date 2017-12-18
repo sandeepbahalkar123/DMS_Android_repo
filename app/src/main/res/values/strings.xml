@@ -116,6 +116,6 @@
     <string name="filter">Filter</string>
     <string name="userimage">User Image</string>
     <string name="username">Username</string>
-    <string name="file_one">File-One</string>
-    <string name="file_two">File-Two</string>
+    <string name="file_one">FileType-1</string>
+    <string name="file_two">FileType-2</string>
 </resources>

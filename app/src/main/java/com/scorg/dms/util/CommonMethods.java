@@ -414,7 +414,7 @@ public class CommonMethods {
     public static String formatDateTime(String selectedDateTime, String requestedFormat, String currentDateFormat, String formatString) {
 
         if (formatString.equalsIgnoreCase(DmsConstants.TIME)) {
-            SimpleDateFormat ft = new SimpleDateFormat(DmsConstants.DATE_PATTERN.HH_MM);
+            SimpleDateFormat ft = new SimpleDateFormat(DmsConstants.DATE_PATTERN.HH_MM, Locale.US);
             Date dateObj = null;
 
             try {
@@ -425,12 +425,12 @@ public class CommonMethods {
             }
 
             long millis = dateObj.getTime();
-            SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat(requestedFormat);
+            SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat(requestedFormat, Locale.US);
             return simpleDateFormatObj.format(millis);
 
         }//if
         else if (formatString.equalsIgnoreCase(DmsConstants.DATE)) {
-            SimpleDateFormat ft = new SimpleDateFormat(currentDateFormat);
+            SimpleDateFormat ft = new SimpleDateFormat(currentDateFormat, Locale.US);
             Date dateObj = null;
 
             try {
@@ -441,7 +441,7 @@ public class CommonMethods {
                 e.printStackTrace();
             }
 
-            SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat(requestedFormat);
+            SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat(requestedFormat, Locale.US);
             return simpleDateFormatObj.format(dateObj);
 
 
@@ -470,10 +470,10 @@ public class CommonMethods {
                                           int monthOfYear, int dayOfMonth) {
 
                         if(isFromDateClicked) {
-                            mDatePickerDialogListener.getSelectedDate(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            mDatePickerDialogListener.getSelectedDate(getDateWithZero(dayOfMonth) + "/" + getDateWithZero(monthOfYear + 1) + "/" + year);
                         }
                         else {
-                            mDatePickerDialogListener.getSelectedDate(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            mDatePickerDialogListener.getSelectedDate(getDateWithZero(dayOfMonth) + "/" + getDateWithZero(monthOfYear + 1) + "/" + year);
                         }
 
 
@@ -499,6 +499,11 @@ public class CommonMethods {
         }
 
     }
+
+    private String getDateWithZero(int dayOfMonth) {
+        return dayOfMonth < 10 ? ("0" + dayOfMonth) : String.valueOf(dayOfMonth);
+    }
+
     public static void showDialog(String msg,String changeIpAddress , final Context mContext) {
 
 

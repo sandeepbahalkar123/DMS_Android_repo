@@ -8,6 +8,7 @@
     <dimen name="dp4">10dp</dimen>
     <dimen name="dp5">5dp</dimen>
     <dimen name="dp10">20dp</dimen>
+    <dimen name="dp8">10dp</dimen>
     <dimen name="dp15">30dp</dimen>
     <dimen name="dp20">40dp</dimen>
     <dimen name="dp30">60dp</dimen>
@@ -20,6 +21,7 @@
     <dimen name="sp24">55sp</dimen>
 
     <dimen name="dp42">42dp</dimen>
+    <dimen name="patientIdWidth">140dp</dimen>
 
 
 </resources>

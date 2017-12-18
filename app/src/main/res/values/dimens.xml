@@ -10,6 +10,7 @@
     <dimen name="dp1">1dp</dimen>
     <dimen name="padding_tiny">5dp</dimen>
     <dimen name="dp10">10dp</dimen>
+    <dimen name="dp8">8dp</dimen>
     <dimen name="dp5">5dp</dimen>
     <dimen name="dp0">0dp</dimen>
     <dimen name="uhid">8dp</dimen>
