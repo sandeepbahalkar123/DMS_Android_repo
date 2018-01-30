@@ -2,11 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp200">
+        android:layout_height="@dimen/dp200"
+        tools:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +41,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="2"
                     android:checked="false"
-                   android:maxLines="1"
+                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -59,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:gravity="center_vertical"
-                   android:maxLines="1"
+                    android:maxLines="1"
                     android:text="@string/patientInformation"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -81,42 +83,83 @@
                 android:layout_marginStart="@dimen/dp5"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:drawableLeft="@mipmap/usercheck"
+                android:drawablePadding="@dimen/dp5"
                 android:drawableStart="@mipmap/usercheck"
-                android:drawablePadding="@dimen/dp5"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvPatientUHID"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_tiny"
-                android:layout_marginStart="@dimen/dp5"
-                android:layout_marginLeft="@dimen/dp5"
-                android:drawableLeft="@mipmap/keyblack"
-                android:drawableStart="@mipmap/keyblack"
-                android:drawablePadding="@dimen/dp5"
-                android:gravity="center_vertical"
-                android:text=""
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvPatientUHIDText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_tiny"
+                    android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
+                    android:layout_weight="1"
+                    android:drawableLeft="@mipmap/keyblack"
+                    android:drawablePadding="@dimen/dp5"
+                    android:drawableStart="@mipmap/keyblack"
+                    android:gravity="center_vertical"
+                    android:text="@string/uhid"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvPatientUHID"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_tiny"
+                    android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    tools:text="@string/uhid" />
+
+            </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/tvPatientLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_tiny"
-                android:layout_marginLeft="@dimen/dp5"
-                android:layout_marginStart="@dimen/dp5"
-                android:drawableLeft="@mipmap/placeholderblack"
-                android:drawableStart="@mipmap/placeholderblack"
-                android:drawablePadding="@dimen/dp5"
-                android:gravity="center_vertical"
-                android:text=""
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvPatientLocationText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_tiny"
+                    android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
+                    android:layout_weight="1"
+                    android:drawableLeft="@mipmap/placeholderblack"
+                    android:drawablePadding="@dimen/dp5"
+                    android:drawableStart="@mipmap/placeholderblack"
+                    android:gravity="center_vertical"
+                    android:text="@string/address"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvPatientLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_tiny"
+                    android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginStart="@dimen/dp5"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    tools:text="@string/address" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/fileOneLay"
@@ -188,8 +231,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/referenceidblack"
-                        android:drawableStart="@mipmap/referenceidblack"
                         android:drawablePadding="@dimen/padding_tiny"
+                        android:drawableStart="@mipmap/referenceidblack"
                         android:gravity="center_vertical"
                         android:text="@string/refId"
                         android:textColor="@color/black"
@@ -236,8 +279,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/doctorblack"
-                        android:drawableStart="@mipmap/doctorblack"
                         android:drawablePadding="@dimen/dp5"
+                        android:drawableStart="@mipmap/doctorblack"
                         android:gravity="center_vertical"
                         android:text="@string/doctor"
                         android:textColor="@color/black"
@@ -250,7 +293,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                       android:maxLines="1"
+                        android:maxLines="1"
 
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -274,8 +317,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/calendarblack"
-                        android:drawableStart="@mipmap/calendarblack"
                         android:drawablePadding="@dimen/dp5"
+                        android:drawableStart="@mipmap/calendarblack"
                         android:gravity="center_vertical"
                         android:text="@string/admission"
                         android:textColor="@color/black"
@@ -299,6 +342,7 @@
 
 
                 <TableRow
+                    android:id="@+id/dischargeDateRow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp10"
@@ -308,14 +352,13 @@
                     android:weightSum="3">
 
                     <TextView
-
                         android:layout_width="@dimen/dp0"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/calendarblack"
-                        android:drawableStart="@mipmap/calendarblack"
                         android:drawablePadding="@dimen/dp5"
+                        android:drawableStart="@mipmap/calendarblack"
                         android:gravity="center_vertical"
                         android:text="@string/discharge"
                         android:textColor="@color/black"
@@ -328,7 +371,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                       android:maxLines="1"
+                        android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -349,7 +392,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -412,8 +456,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/referenceidblack"
-                        android:drawableStart="@mipmap/referenceidblack"
                         android:drawablePadding="@dimen/padding_tiny"
+                        android:drawableStart="@mipmap/referenceidblack"
                         android:gravity="center_vertical"
                         android:text="@string/refId"
                         android:textColor="@color/black"
@@ -463,8 +507,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/doctorblack"
-                        android:drawableStart="@mipmap/doctorblack"
                         android:drawablePadding="@dimen/dp5"
+                        android:drawableStart="@mipmap/doctorblack"
                         android:gravity="center_vertical"
                         android:text="@string/doctor"
                         android:textColor="@color/black"
@@ -477,7 +521,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                       android:maxLines="1"
+                        android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -501,8 +545,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/calendarblack"
-                        android:drawableStart="@mipmap/calendarblack"
                         android:drawablePadding="@dimen/dp5"
+                        android:drawableStart="@mipmap/calendarblack"
                         android:gravity="center_vertical"
                         android:text="@string/admission"
                         android:textColor="@color/black"
@@ -515,7 +559,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                       android:maxLines="1"
+                        android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -526,6 +570,7 @@
 
 
                 <TableRow
+                    android:id="@+id/dischargeDateRowTwo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp10"
@@ -540,8 +585,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/calendarblack"
-                        android:drawableStart="@mipmap/calendarblack"
                         android:drawablePadding="@dimen/dp5"
+                        android:drawableStart="@mipmap/calendarblack"
                         android:gravity="center_vertical"
                         android:text="@string/discharge"
                         android:textColor="@color/black"
@@ -554,7 +599,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                       android:maxLines="1"
+                        android:maxLines="1"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp12"
@@ -572,15 +617,17 @@
 
     </ScrollView>
 
-        <RelativeLayout
-            android:id="@+id/fileTypeTreeViewContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp1"
+        android:background="@color/grey_500" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp1"/>
-        </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/fileTypeTreeViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
 
 
 </LinearLayout>

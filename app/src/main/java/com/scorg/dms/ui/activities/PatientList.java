@@ -236,6 +236,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {

@@ -47,7 +47,7 @@
     <string name="compare">Compare</string>
     <string name="from_date">From:</string>
     <string name="to_date">To:</string>
-    <string name="patient_name">PName:</string>
+    <string name="patient_name">Patient Name:</string>
     <string name="change_ip">Do you want to change IP address?</string>
     <string name="date_type">DType:</string>
     <string name="documenttype">DT:</string>
@@ -118,4 +118,5 @@
     <string name="username">Username</string>
     <string name="file_one">FileType-1</string>
     <string name="file_two">FileType-2</string>
+    <string name="address">Address</string>
 </resources>

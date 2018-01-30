@@ -153,6 +153,12 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     @BindView(R.id.nav_right_view)
     FrameLayout mRightNavigationView;
 
+    @BindView(R.id.dischargeDateRow)
+    TableRow dischargeDateRow;
+
+    @BindView(R.id.dischargeDateRowTwo)
+    TableRow dischargeDateRowTwo;
+
     DrawerLayout mDrawer;
 
     private PatientsHelper mPatientsHelper;
@@ -218,6 +224,8 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerIndicatorEnabled(false);
@@ -272,6 +280,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         mPatientId.setText(String.valueOf(patientFileData.getRespectiveParentPatientID()));
         //----------
 
+        if (String.valueOf(patientFileData.getFileType()).equalsIgnoreCase(getResources().getString(R.string.opd)))
+            dischargeDateRow.setVisibility(View.GONE);
+        else dischargeDateRow.setVisibility(View.VISIBLE);
+
         if (mSelectedFileTypeDataToCompare.size() == 2) {
 
             mSecondFileTypePdfViewLayout.setVisibility(View.VISIBLE);
@@ -283,6 +295,10 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
             mAdmissionDateTwo.setText(String.valueOf(patientFileData.getAdmissionDate()));
             mDischargeDateTwo.setText(String.valueOf(patientFileData.getDischargeDate()));
             mFileTypeTwo.setText(String.valueOf(patientFileData.getFileType()));
+
+            if (String.valueOf(patientFileData.getFileType()).equalsIgnoreCase(getResources().getString(R.string.opd)))
+                dischargeDateRowTwo.setVisibility(View.GONE);
+            else dischargeDateRowTwo.setVisibility(View.VISIBLE);
 
         }
     }
