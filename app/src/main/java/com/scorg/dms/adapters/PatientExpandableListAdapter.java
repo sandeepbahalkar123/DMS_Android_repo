@@ -134,7 +134,7 @@ public class PatientExpandableListAdapter extends BaseExpandableListAdapter {
         //---
         if (opd.equalsIgnoreCase(childElement.getFileType())) {
             childViewHolder.opd.setText(opd);
-            childViewHolder.opdValue.setText(String.valueOf(childElement.getReferenceId()));
+            childViewHolder.opdValue.setText(childElement.getReferenceId());
             //---------
             //-- TODO: visit date is not getting from API
             String s = CommonMethods.formatDateTime(childElement.getAdmissionDate(), DmsConstants.DATE_PATTERN.DD_MM_YYYY, DmsConstants.DATE_PATTERN.DD_MM_YYYY_hh_mm, DmsConstants.DATE);

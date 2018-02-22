@@ -6,7 +6,6 @@ package com.scorg.dms.network;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,9 +37,6 @@ import com.scorg.dms.model.responsemodel.loginresponsemodel.LoginResponseModel;
 import com.scorg.dms.model.responsemodel.patientnamelistresponsemodel.PatientNameListResponseModel;
 import com.scorg.dms.model.responsemodel.showsearchresultresponsemodel.ShowSearchResultResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
-import com.scorg.dms.ui.activities.LoginActivity;
-import com.scorg.dms.ui.activities.PatientList;
-import com.scorg.dms.ui.activities.SplashScreenActivity;
 import com.scorg.dms.util.CommonMethods;
 import com.scorg.dms.util.Config;
 import com.scorg.dms.util.DmsConstants;
@@ -138,7 +134,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        succesResponse(response.toString(), false);
+                        successResponse(response.toString(), false);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -181,7 +177,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        succesResponse(response, isTokenExpired);
+                        successResponse(response, isTokenExpired);
                     }
                 },
                 new Response.ErrorListener() {
@@ -221,7 +217,7 @@ public class RequestManager extends ConnectRequest implements Connector, Request
 
     }
 
-    private void succesResponse(String response, boolean isTokenExpired) {
+    private void successResponse(String response, boolean isTokenExpired) {
         requestTimer.cancel();
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();

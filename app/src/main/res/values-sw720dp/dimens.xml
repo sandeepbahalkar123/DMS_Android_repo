@@ -21,7 +21,6 @@
     <dimen name="sp24">55sp</dimen>
 
     <dimen name="dp42">42dp</dimen>
-    <dimen name="patientIdWidth">140dp</dimen>
-
+    <dimen name="patientIdWidth">205dp</dimen>
 
 </resources>
