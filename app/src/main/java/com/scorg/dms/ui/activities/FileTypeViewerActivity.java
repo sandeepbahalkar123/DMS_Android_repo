@@ -224,7 +224,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -262,6 +262,21 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawer != null) {
+            if (mDrawer.isDrawerOpen(GravityCompat.END) && mDrawer.isDrawerOpen(GravityCompat.START)) {
+                mDrawer.closeDrawer(GravityCompat.END);
+                mDrawer.closeDrawer(GravityCompat.START);
+            } else if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+                mDrawer.closeDrawer(GravityCompat.END);
+            } else if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                mDrawer.closeDrawer(GravityCompat.START);
+            } else super.onBackPressed();
+        } else
+            super.onBackPressed();
     }
 
     private void doBindHeaderViews() {

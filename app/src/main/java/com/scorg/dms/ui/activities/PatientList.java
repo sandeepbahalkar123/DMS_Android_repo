@@ -153,7 +153,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     private Custom_Spin_Adapter mCustomSpinAdapter;
     private PatientsHelper mPatientsHelper;
     private TagAdapter mTagsAdapter;
-    private List<LstPatient> mLstPatient ;
+    private List<LstPatient> mLstPatient;
     private RecyclerView mRecycleTag;
     private static Handler mAddedTagsEventHandler;
     private HashMap<String, Object> mAddedTagsForFiltering;
@@ -164,7 +164,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
     ArrayList mPatientLists;
     private String TAG = this.getClass().getName();
     private boolean isCompareDialogCollapsed = true;
-    String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
+    String[] languages = {"Android ", "java", "IOS", "SQL", "JDBC", "Web services"};
     private RelativeLayout mCompareDialogLayout;
     private TextView mCompareLabel;
     private ImageView mFileOneIcon;
@@ -227,7 +227,21 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     private void doGetPatientNameList() {
         mPatientsHelper.doGetPatientNameList();
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawer != null) {
+            if (mDrawer.isDrawerOpen(GravityCompat.END) && mDrawer.isDrawerOpen(GravityCompat.START)) {
+                mDrawer.closeDrawer(GravityCompat.END);
+                mDrawer.closeDrawer(GravityCompat.START);
+            } else if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+                mDrawer.closeDrawer(GravityCompat.END);
+            } else if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                mDrawer.closeDrawer(GravityCompat.START);
+            } else super.onBackPressed();
+        } else
+            super.onBackPressed();
     }
 
     // register all views
@@ -236,7 +250,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
 
         mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -294,19 +308,19 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.nav_logout) {
-                    String mServerPath = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mContext);
-                    String isValidConfig = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG,mContext);
+                    String mServerPath = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext);
+                    String isValidConfig = DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG, mContext);
                     DmsPreferencesManager.clearSharedPref(mContext);
-                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mServerPath,mContext);
-                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG,isValidConfig,mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mServerPath, mContext);
+                    DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.IS_VALID_IP_CONFIG, isValidConfig, mContext);
                     Intent intent = new Intent(PatientList.this, SplashScreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     // Handle the camera action
-                }else if(id == R.id.change_ip_address){
-                    CommonMethods.showDialog(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH,mContext),getString(R.string.change_ip),mContext);
+                } else if (id == R.id.change_ip_address) {
+                    CommonMethods.showDialog(DmsPreferencesManager.getString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, mContext), getString(R.string.change_ip), mContext);
 
                 }
 
@@ -359,7 +373,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
         ViewGroup.LayoutParams layoutParams = mRightNavigationView.getLayoutParams();
         layoutParams.width = width;
         mRightNavigationView.setLayoutParams(layoutParams);
-        Log.e(TAG,"++++++++++++++++++++++");
+        Log.e(TAG, "++++++++++++++++++++++");
 
         mAnnotationTreeViewContainer.addView(CommonMethods.loadView(R.layout.mydialog, this));
         mFirstFileTypeProgressDialogLayout = (RelativeLayout) mAnnotationTreeViewContainer.findViewById(R.id.progressBarContainerLayout);
@@ -388,24 +402,24 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             AnnotationListResponseModel annotationListResponseModel = (AnnotationListResponseModel) customResponse;
             mAnnotationListData = annotationListResponseModel.getAnnotationListData();
             createAnnotationTreeStructure(mAnnotationListData, false);
-           mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
-        }else if (mOldDataTag == DmsConstants.TASK_GET_PATIENT_NAME_LIST) {
+            mFirstFileTypeProgressDialogLayout.setVisibility(View.GONE);
+        } else if (mOldDataTag == DmsConstants.TASK_GET_PATIENT_NAME_LIST) {
             PatientNameListResponseModel patientNameListResponseModel = (PatientNameListResponseModel) customResponse;
             mPatientNameListData = patientNameListResponseModel.getData();
             mLstPatient = mPatientNameListData.getLstPatients();
             mPatientLists = new ArrayList();
-            for(int i =0;i<mLstPatient.size();i++){
+            for (int i = 0; i < mLstPatient.size(); i++) {
 
                 patientName = mLstPatient.get(i).getPatientName();
                 mPatientLists.add(patientName);
 
             }
-            ShowPatientNameAdapter adapter = new ShowPatientNameAdapter(this,R.layout.patient_filter_right_drawer,R.id.custom_spinner_txt_view_Id,mLstPatient);
+            ShowPatientNameAdapter adapter = new ShowPatientNameAdapter(this, R.layout.patient_filter_right_drawer, R.id.custom_spinner_txt_view_Id, mLstPatient);
             mSearchPatientNameEditText.setAdapter(adapter);
-            Log.d(TAG,""+mLstPatient);
+            Log.d(TAG, "" + mLstPatient);
         }
 
-        }
+    }
 
     @Override
     public void onParseError(String mOldDataTag, String errorMessage) {
@@ -437,7 +451,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
             case R.id.openFilterRightDrawerFAB:
                 mDrawer.openDrawer(GravityCompat.END);
                 if (mAnnotationListData == null) {
-                   mFirstFileTypeProgressDialogLayout.setVisibility(View.VISIBLE);
+                    mFirstFileTypeProgressDialogLayout.setVisibility(View.VISIBLE);
                     mPatientsHelper.doGetAllAnnotations();
                 } else {
                     createAnnotationTreeStructure(mAnnotationListData, false);
@@ -460,7 +474,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                         }
 
                     }
-                }, null,true,mFromDate);
+                }, null, true, mFromDate);
                 break;
             // on click of endDate ediText in right drawer
             case R.id.et_todate:
@@ -470,7 +484,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                         mToDateEditText.setText("" + selectedTime);
 
                     }
-                }, null,false,mFromDate);
+                }, null, false, mFromDate);
                 break;
             //  on click of Reset in right drawer
             case R.id.reset:
@@ -484,7 +498,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 mSpinnerAmissionDate.setSelection(0);
                 mSpinSelectedId.setSelection(0);
                 // Reset Tree
-                for (AnnotationList annotationList: mAnnotationListData.getAnnotationLists()) {
+                for (AnnotationList annotationList : mAnnotationListData.getAnnotationLists()) {
                     annotationList.setSelected(false);
                     for (DocTypeList docTypeList : annotationList.getDocTypeList())
                         docTypeList.setSelected(false);
@@ -509,62 +523,61 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
 
                 //*********adding field values in arrayList to generate tags in recycler view
-                    //we are adding refrence id and file type value in FILE_TYPE parameter
-                    //Reference id = UHID or OPD or IPD number *********//
-                    //--- FileType and enteredValue validation : START
-                    String enteredUHIDValue = mUHIDEditText.getText().toString().trim();
-                    if (mSelectedId.equalsIgnoreCase(getString(R.string.uhid)) && (enteredUHIDValue.length() == 0)) {
-                        CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_uhid));
-                        break;
-                    } else if ((enteredUHIDValue.length() != 0) && (mSelectedId.equalsIgnoreCase(getString(R.string.Select)))) {
-                        CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.Select) + " " + getString(R.string.ipd) + "/" + getString(R.string.opd) + "/" + getString(R.string.uhid));
-                        break;
-                    } else {
-                        if (!mSelectedId.equalsIgnoreCase(getString(R.string.Select))) {
-                            mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + enteredUHIDValue);
-                        }
+                //we are adding refrence id and file type value in FILE_TYPE parameter
+                //Reference id = UHID or OPD or IPD number *********//
+                //--- FileType and enteredValue validation : START
+                String enteredUHIDValue = mUHIDEditText.getText().toString().trim();
+                if (mSelectedId.equalsIgnoreCase(getString(R.string.uhid)) && (enteredUHIDValue.length() == 0)) {
+                    CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.error_enter_uhid));
+                    break;
+                } else if ((enteredUHIDValue.length() != 0) && (mSelectedId.equalsIgnoreCase(getString(R.string.Select)))) {
+                    CommonMethods.showSnack(mContext, mUHIDEditText, getString(R.string.Select) + " " + getString(R.string.ipd) + "/" + getString(R.string.opd) + "/" + getString(R.string.uhid));
+                    break;
+                } else {
+                    if (!mSelectedId.equalsIgnoreCase(getString(R.string.Select))) {
+                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FILE_TYPE, mSelectedId + ":" + enteredUHIDValue);
                     }
-                    //--- FileType and enteredValue validation : END
+                }
+                //--- FileType and enteredValue validation : END
 
-                    if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE, getString(R.string.date_type) + mAdmissionDate);
+                if (!mAdmissionDate.equalsIgnoreCase(getResources().getString(R.string.Select))) {
+                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.DATE_TYPE, getString(R.string.date_type) + mAdmissionDate);
+                }
+
+                if (!fromDate.equalsIgnoreCase(DmsConstants.BLANK)) {
+                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, getString(R.string.from_date) + mFromDateEditText.getText().toString());
+                }
+
+                if (!toDate.equalsIgnoreCase(DmsConstants.BLANK)) {
+                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, getString(R.string.to_date) + mToDateEditText.getText().toString());
+                }
+
+                if (mSearchPatientNameEditText.getText().toString().trim().length() != 0) {
+                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, getString(R.string.patient_name) + mSearchPatientNameEditText.getText().toString());
+                }
+
+                if (mAnnotationEditText.getText().toString().trim().length() != 0) {
+                    mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.ANNOTATION_TEXT, getString(R.string.enter_annotation) + mAnnotationEditText.getText().toString());
+                }
+
+                //----------
+                ArrayList<Object> selectedAnnotations = getSelectedAnnotations();
+                for (Object dataValue :
+                        selectedAnnotations) {
+                    //--- hashMap PatientNameListData : childName|id
+                    if (dataValue instanceof DocTypeList) {
+                        String dataValueString = getString(R.string.documenttype) + ((DocTypeList) dataValue).getTypeName() + "|" + String.valueOf(((DocTypeList) dataValue).getTypeId());
+                        mAddedTagsForFiltering.put(dataValueString, dataValue);
+                    } else if (dataValue instanceof AnnotationList) {
+                        String dataValueString = getString(R.string.documenttype) + ((AnnotationList) dataValue).getCategoryName() + "|" + String.valueOf(((AnnotationList) dataValue).getCategoryId());
+                        mAddedTagsForFiltering.put(dataValueString, dataValue);
                     }
+                }
 
-                    if (!fromDate.equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.FROM_DATE, getString(R.string.from_date) + mFromDateEditText.getText().toString());
-                    }
-
-                    if (!toDate.equalsIgnoreCase(DmsConstants.BLANK)) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.TO_DATE, getString(R.string.to_date) + mToDateEditText.getText().toString());
-                    }
-
-                    if (mSearchPatientNameEditText.getText().toString().trim().length() != 0) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.PATIENT_NAME, getString(R.string.patient_name) + mSearchPatientNameEditText.getText().toString());
-                    }
-
-                    if (mAnnotationEditText.getText().toString().trim().length() != 0) {
-                        mAddedTagsForFiltering.put(DmsConstants.PATIENT_LIST_PARAMS.ANNOTATION_TEXT, getString(R.string.enter_annotation) + mAnnotationEditText.getText().toString());
-                    }
-
-                    //----------
-                    ArrayList<Object> selectedAnnotations = getSelectedAnnotations();
-                    for (Object dataValue :
-                            selectedAnnotations) {
-                        //--- hashMap PatientNameListData : childName|id
-                        if (dataValue instanceof DocTypeList) {
-                            String dataValueString = getString(R.string.documenttype) + ((DocTypeList) dataValue).getTypeName() + "|" + String.valueOf(((DocTypeList) dataValue).getTypeId());
-                            mAddedTagsForFiltering.put(dataValueString, dataValue);
-                        } else if (dataValue instanceof AnnotationList) {
-                            String dataValueString = getString(R.string.documenttype) + ((AnnotationList) dataValue).getCategoryName() + "|" + String.valueOf(((AnnotationList) dataValue).getCategoryId());
-                            mAddedTagsForFiltering.put(dataValueString, dataValue);
-                        }
-                    }
-
-                    mTagsAdapter = new TagAdapter(mContext, mAddedTagsForFiltering, mAddedTagsEventHandler);
-                    mRecycleTag.setAdapter(mTagsAdapter);
-                    mDrawer.closeDrawer(GravityCompat.END);
-                    doGetPatientList();
-
+                mTagsAdapter = new TagAdapter(mContext, mAddedTagsForFiltering, mAddedTagsEventHandler);
+                mRecycleTag.setAdapter(mTagsAdapter);
+                mDrawer.closeDrawer(GravityCompat.END);
+                doGetPatientList();
 
 
                 break;
@@ -738,10 +751,8 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
                 if (enteredString.equals("")) {
                     mClearPatientNameButton.setBackground(getResources().getDrawable(R.mipmap.user));
 
-                }
-
-                else {
-                   mClearPatientNameButton.setBackground(getResources().getDrawable(R.mipmap.crosswithcircle));
+                } else {
+                    mClearPatientNameButton.setBackground(getResources().getDrawable(R.mipmap.crosswithcircle));
 
                 }
 
