@@ -3,26 +3,21 @@
     android:id="@+id/rowLay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
-        android:baselineAligned="false"
         android:id="@+id/opdLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp42"
+        android:layout_height="@dimen/dp44"
         android:orientation="horizontal"
         android:padding="@dimen/dp2">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".95"
+            android:layout_weight=".9"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="@dimen/uhid"
-                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/opd"
@@ -30,7 +25,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded_button"
                 android:gravity="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/opdValue"
@@ -39,7 +35,8 @@
                 android:layout_marginLeft="@dimen/dp5"
                 android:layout_marginStart="@dimen/dp5"
                 android:gravity="center_vertical"
-                android:text="@string/user_name" />
+                android:text="@string/user_name"
+                android:textSize="@dimen/sp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -54,7 +51,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/visit_date" />
+                android:text="@string/visit_date"
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/opdVisitDateValue"
@@ -62,8 +60,15 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/visit_date" />
+                android:text="@string/visit_date"
+                android:textSize="@dimen/sp14" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,35 +80,32 @@
             <CheckBox
                 android:id="@+id/opdCheckBox"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:button="@null"
                 android:drawableEnd="@drawable/checkbox_selector"
                 android:drawableRight="@drawable/checkbox_selector"
+                android:paddingBottom="@dimen/dp10"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin" />
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/dp10" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:baselineAligned="false"
         android:id="@+id/ipdLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp42"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:padding="@dimen/dp2">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".8"
+            android:layout_weight=".9"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="@dimen/uhid"
-                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/ipd"
@@ -111,7 +113,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded_button"
                 android:gravity="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/ipdValue"
@@ -120,7 +123,8 @@
                 android:layout_marginLeft="@dimen/dp5"
                 android:layout_marginStart="@dimen/dp5"
                 android:gravity="center_vertical"
-                android:text="@string/user_name" />
+                android:text="@string/user_name"
+                android:textSize="@dimen/sp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -135,7 +139,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/admission_date" />
+                android:text="@string/admission_date"
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/ipdAdmissionDateValue"
@@ -143,7 +148,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/visit_date" />
+                android:text="@string/visit_date"
+                android:textSize="@dimen/sp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -158,7 +164,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/discharge_date" />
+                android:text="@string/discharge_date"
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/ipdDischargeDateValue"
@@ -166,7 +173,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/visit_date" />
+                android:text="@string/visit_date"
+                android:textSize="@dimen/sp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -179,14 +187,16 @@
             <CheckBox
                 android:id="@+id/ipdCheckBox"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:button="@null"
                 android:drawableEnd="@drawable/checkbox_selector"
                 android:drawableRight="@drawable/checkbox_selector"
+                android:paddingBottom="@dimen/dp10"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin" />
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/dp10" />
         </LinearLayout>
     </LinearLayout>
 
@@ -195,12 +205,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginRight="@dimen/dp4"
         android:layout_marginEnd="@dimen/dp4"
+        android:layout_marginRight="@dimen/dp4"
         android:gravity="end"
         android:padding="@dimen/dp4"
         android:text="@string/more"
-        android:textColor="@color/cobalt_blue" />
+        android:textColor="@color/cobalt_blue"
+        android:textSize="@dimen/sp14" />
 
     <View
         android:id="@+id/dividerLineMore"

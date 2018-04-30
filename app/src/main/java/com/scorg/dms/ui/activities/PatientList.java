@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -246,7 +245,7 @@ public class PatientList extends AppCompatActivity implements HelperResponse, Vi
 
     // register all views
     private void bindView() {
-        int width = getResources().getDisplayMetrics().widthPixels / 2;
+        int width = (int) (getResources().getDisplayMetrics().widthPixels / (CommonMethods.isTablet(mContext) ? 1.6 : 1.2));
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);

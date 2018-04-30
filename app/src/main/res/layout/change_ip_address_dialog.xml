@@ -32,15 +32,11 @@
                     android:layout_centerInParent="true"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="@string/app_name"
-                    android:textSize="@dimen/sp14"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    />
-
+                    android:textSize="@dimen/sp14"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
-
-
 
         </LinearLayout>
 
@@ -50,32 +46,33 @@
             android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="@dimen/dp10"
-            android:paddingLeft="@dimen/dp15"
-            android:paddingRight="@dimen/dp15"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp10">
 
+            <TextView
+                android:id="@+id/textview_ipaddress_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:id="@+id/textview_ipaddress_label"
-                android:textColor="@color/black"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:visibility="invisible"
                 android:id="@+id/textview_change_ip"
-                android:textColor="@color/black"
-                />
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:id="@+id/textview_change_ip_address"
                 android:textColor="@color/black"
-                />
+                android:textSize="@dimen/sp14"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/textview_change_ip_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp14" />
 
         </LinearLayout>
 
@@ -85,54 +82,51 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/dp10"
-            android:paddingLeft="@dimen/dp15"
-            android:paddingRight="@dimen/dp15"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp10">
 
 
-
             <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_weight="0.5"
-                android:background="@color/tagColor"
-                android:text="@string/yes"
                 android:id="@+id/button_yes"
-                android:layout_margin="@dimen/dp4"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                />
-            <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_margin="@dimen/dp4"
                 android:layout_weight="0.5"
                 android:background="@color/tagColor"
-                android:text="@string/no"
+                android:gravity="center"
+                android:text="@string/yes"
                 android:textAllCaps="false"
-                android:visibility="invisible"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp14" />
+
+            <Button
                 android:id="@+id/button_n1o"
-                android:textColor="@color/black"
-                />
-            <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_margin="@dimen/dp4"
                 android:layout_weight="0.5"
                 android:background="@color/tagColor"
+                android:gravity="center"
                 android:text="@string/no"
                 android:textAllCaps="false"
-                android:id="@+id/button_no"
                 android:textColor="@color/black"
-                />
+                android:textSize="@dimen/sp14"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/button_no"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp4"
+                android:layout_weight="0.5"
+                android:background="@color/tagColor"
+                android:gravity="center"
+                android:text="@string/no"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp14" />
         </LinearLayout>
-
-
-
-
 
     </LinearLayout>
 </LinearLayout>

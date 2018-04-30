@@ -3,9 +3,8 @@ package com.scorg.dms.ui.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.DateFormat;
-import android.os.Handler;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.scorg.dms.R;
@@ -13,7 +12,6 @@ import com.scorg.dms.helpers.login.LoginHelper;
 import com.scorg.dms.interfaces.CheckIpConnection;
 import com.scorg.dms.interfaces.CustomResponse;
 import com.scorg.dms.interfaces.HelperResponse;
-import com.scorg.dms.model.responsemodel.Common;
 import com.scorg.dms.model.responsemodel.iptestresponsemodel.IpTestResponseModel;
 import com.scorg.dms.preference.DmsPreferencesManager;
 import com.scorg.dms.util.CommonMethods;
@@ -25,7 +23,6 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
     private static final String TAG = "SplashScreenActivity";
 
     private Context mContext;
-    Boolean isEnteredServerPath;
     Dialog mDialog;
     private LoginHelper mLoginHelper;
 
@@ -39,13 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
         mContext = this;
         mLoginHelper = new LoginHelper(this, this);
 
-
-        if (CommonMethods.isTablet(this)) {
-            doAppCheckLogin();
-        } else {
-            CommonMethods.showToast(this, getString(R.string.run_only_on_tablet));
-            finish();
-        }
+        doAppCheckLogin();
     }
 
     private void doAppCheckLogin() {
@@ -69,8 +60,6 @@ public class SplashScreenActivity extends AppCompatActivity implements HelperRes
                                 mContext = context;
                                 DmsPreferencesManager.putString(DmsPreferencesManager.DMS_PREFERENCES_KEY.SERVER_PATH, serverPath, context);
                                 mLoginHelper.checkConnectionToServer(serverPath);
-
-
                             }
                         });
                     } else {

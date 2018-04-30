@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:id="@+id/txt_contact_name"
-        android:textSize="20sp"/>
+        android:textSize="@dimen/sp18"/>
 
 
 </LinearLayout>

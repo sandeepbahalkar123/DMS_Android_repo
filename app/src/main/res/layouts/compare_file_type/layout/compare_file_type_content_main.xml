@@ -14,7 +14,7 @@
         android:id="@+id/firstPdfViewFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="@dimen/dp8"
         android:layout_weight="1"
         android:background="@drawable/pdfdecoration"
         android:padding="1.5dp">
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="@dimen/filenotfoundmessagetextsize"
+            android:textSize="@dimen/sp24"
             android:visibility="gone" />
     </FrameLayout>
 
@@ -37,7 +37,7 @@
         android:id="@+id/secondPdfViewFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="@dimen/dp8"
         android:layout_weight="1.0"
         android:background="@drawable/pdfdecoration"
         android:padding="1.5dp"
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="@dimen/filenotfoundmessagetextsize"
+            android:textSize="@dimen/sp24"
             android:visibility="visible" />
 
     </FrameLayout>

@@ -220,7 +220,7 @@ public class FileTypeViewerActivity extends AppCompatActivity implements View.On
     }
 
     private void bindView() {
-        int width = getResources().getDisplayMetrics().widthPixels / 2;
+        int width = (int) (getResources().getDisplayMetrics().widthPixels / (CommonMethods.isTablet(mContext) ? 1.6 : 1.2));
 
         //---------
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);

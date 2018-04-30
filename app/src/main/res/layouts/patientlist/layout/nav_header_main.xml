@@ -23,8 +23,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dp10"
         android:id="@+id/userName"
+        android:textSize="@dimen/sp14"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-
 
 </LinearLayout>
